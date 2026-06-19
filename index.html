@@ -78,6 +78,22 @@
     </div>
 
     <script>
+        // Função para buscar o evento que está "Ativo" no Google Sheets
+async function buscarEventoAtivo() {
+    const urlScript = "URL_DO_SEU_GOOGLE_APPS_SCRIPT_PARA_LER"; 
+    
+    try {
+        const resposta = await fetch(urlScript + "?acao=buscarAtivo");
+        const evento = await resposta.json();
+        
+        // Atualiza a tela
+        document.getElementById('nome-campanha-ativa').innerText = evento.nome;
+        // Salva o ID do evento para usar no envio do voto
+        window.idEventoAtual = evento.id; 
+    } catch (erro) {
+        console.error("Erro ao buscar evento:", erro);
+        document.getElementById('nome-campanha-ativa').innerText = "Erro ao carregar evento";
+        
         // 1. Identifica o evento pela URL (Ex: meutotem.vercel.app/?evento=Treinamento_CIPA)
         const urlParams = new URLSearchParams(window.location.search);
         const eventoAtual = urlParams.get('evento') || "Ação ArcelorMittal";
