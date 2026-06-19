@@ -78,35 +78,39 @@
     </div>
 
     <script>
-        // Função para buscar o evento que está "Ativo" no Google Sheets
-async function buscarEventoAtivo() {
-    const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
-    try {
-        const resposta = await fetch(urlScript + "?acao=buscarAtivo");
-        const evento = await resposta.json();
-        
-        // Atualiza a tela
-        document.getElementById('nome-campanha-ativa').innerText = evento.nome;
-        // Salva o ID do evento para usar no envio do voto
-        window.idEventoAtual = evento.id; 
-    } catch (erro) {
-        console.error("Erro ao buscar evento:", erro);
-        document.getElementById('nome-campanha-ativa').innerText = "Erro ao carregar evento";
-        
-        // 1. Identifica o evento pela URL (Ex: meutotem.vercel.app/?evento=Treinamento_CIPA)
-        const urlParams = new URLSearchParams(window.location.search);
-        const eventoAtual = urlParams.get('evento') || "Ação ArcelorMittal";
-
-        // 2. Troca o "CARREGANDO..." pelo nome real do evento
-        document.getElementById('nome-campanha-ativa').innerText = eventoAtual;
-
-        // 3. Função que leva para a Tela 2 levando os dados na mochila
-        function escolherSentimento(sentimentoEscolhido) {
-            // Cria o link para a próxima tela com as informações seguras (encodeURIComponent)
-            const proximaTela = `avaliacao.html?evento=${encodeURIComponent(eventoAtual)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
+        // FUNÇÃO 1: Busca o evento no Google Sheets
+        async function buscarEventoAtivo() {
+            // A sua URL específica do Google Apps Script
+            const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
             
-            // Faz o redirecionamento
-            window.location.href = proximaTela;
+            try {
+                const resposta = await fetch(urlScript + "?acao=buscarAtivo");
+                const evento = await resposta.json();
+                
+                if (evento && evento.nome) {
+                    document.getElementById('nome-campanha-ativa').innerText = evento.nome;
+                    window.idEventoAtual = evento.id;
+                } else {
+                    throw new Error("Evento não encontrado");
+                }
+            } catch (erro) {
+                console.error("Erro ao buscar evento, usando padrão:", erro);
+                // Fallback: Se a internet piscar ou a planilha falhar, usa o que tá na URL ou o nome genérico.
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
+                document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
+            }
+        }
+
+        // FUNÇÃO 2: Dispara a busca quando a página carrega
+        window.onload = function() {
+            buscarEventoAtivo();
+        };
+
+        // FUNÇÃO 3: Quando clica no emoji, leva para a tela de avaliação
+        function escolherSentimento(sentimentoEscolhido) {
+            const evento = document.getElementById('nome-campanha-ativa').innerText;
+            window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
         }
     </script>
 </body>
