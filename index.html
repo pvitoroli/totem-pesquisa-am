@@ -80,8 +80,7 @@
     <script>
         // Função para buscar o evento que está "Ativo" no Google Sheets
 async function buscarEventoAtivo() {
-    const urlScript = "URL_DO_SEU_GOOGLE_APPS_SCRIPT_PARA_LER"; 
-    
+    const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
     try {
         const resposta = await fetch(urlScript + "?acao=buscarAtivo");
         const evento = await resposta.json();
