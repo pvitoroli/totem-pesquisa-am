@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Sentimento - AMP</title>
+    
+    <link rel="stylesheet" href="style-index.css">
+
+    <style>
+        body {
+            background-color: #1b1e27; /* Fundo escuro corporativo */
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
+        <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
+            <img src="AMLogoWhiteRGB 3.png" alt="Logo" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; object-fit: contain;" />
+        </div>
+        <div class="header-right-text" style="display: flex;">
+            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
+        </div>
+      </div>
+      
+      <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        <h3 id="nome-campanha-ativa" style="text-align: center; color: var(--portalThemeColor1); font-weight: bold; position: relative;">CARREGANDO...</h3>
+        <h5 style="text-align: center; font-size: 15px; color: var(--portalThemeColor11); font-family: Helvetica;">
+          ​​<span style="font-weight: normal; color: white;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
+        </h5>
+        
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
+            <span class="pulse-dot" style="width: 6px; height: 6px; background-color: #4bb543; border-radius: 50%; box-shadow: rgba(75, 181, 67, 0.7) 0px 0px 0px 0px; animation: pulse 1.5s infinite;"></span>
+            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Virtual</span>
+        </div>
+      </div>
+
+      <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
+        
+        <a href="#" onclick="escolherSentimento('Aprendi algo novo')" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px;">Aprendi algo novo</span>
+        </a>
+
+        <a href="#" onclick="escolherSentimento('Fiquei feliz')" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px;">Fiquei feliz</span>
+        </a>
+
+        <a href="#" onclick="escolherSentimento('Quero saber mais')" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px;">Quero saber mais</span>
+        </a>
+
+        <a href="#" onclick="escolherSentimento('Poderia ser melhor')" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px;">Poderia ser melhor</span>
+        </a>
+      </div>
+    </div>
+
+    <script>
+        // 1. Identifica o evento pela URL (Ex: meutotem.vercel.app/?evento=Treinamento_CIPA)
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventoAtual = urlParams.get('evento') || "Ação ArcelorMittal";
+
+        // 2. Troca o "CARREGANDO..." pelo nome real do evento
+        document.getElementById('nome-campanha-ativa').innerText = eventoAtual;
+
+        // 3. Função que leva para a Tela 2 levando os dados na mochila
+        function escolherSentimento(sentimentoEscolhido) {
+            // Cria o link para a próxima tela com as informações seguras (encodeURIComponent)
+            const proximaTela = `avaliacao.html?evento=${encodeURIComponent(eventoAtual)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
+            
+            // Faz o redirecionamento
+            window.location.href = proximaTela;
+        }
+    </script>
+</body>
+</html>

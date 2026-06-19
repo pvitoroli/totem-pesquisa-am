@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação - Pesquisa de Sentimento</title>
+    
+    <link rel="stylesheet" href="style-avaliacao.css">
+
+    <style>
+        body {
+            background-color: #1b1e27;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        /* Ajuste do visual do botão Voltar */
+        .btn-back {
+            color: #a0a5b0;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+        .btn-back:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
+        <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
+            <img src="AMLogoWhiteRGB 3.png" alt="Logo" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; object-fit: contain;" />
+        </div>
+        <div class="header-right-text" style="display: flex;">
+            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
+        </div>
+      </div>
+      
+      <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        <h3 id="sub-evento-nome" style="text-align: center; color: var(--portalThemeColor1); font-weight: bold;">AVALIAÇÃO</h3>
+        <h5 style="text-align: center; color: white; font-family: Helvetica; font-size: 15px; font-weight: normal;">
+          ​​Deixe aqui sua <b>NOTA GERAL</b> para a campanha!
+        </h5>
+        
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
+            <span class="pulse-dot" style="width: 6px; height: 6px; background-color: #4bb543; border-radius: 50%;"></span>
+            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Virtual</span>
+        </div>
+      </div>
+      
+      <div class="selected-sentiment-preview" style="background-color: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; text-align: center;">
+          <span id="label-sentimento-escolhido" class="preview-text-label" style="font-size: 13px; font-weight: 600; color: #ff3700;">Carregando voto...</span>
+      </div>
+      
+      <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
+            <button onclick="enviarDados(0)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">0</button>
+            <button onclick="enviarDados(1)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">1</button>
+            <button onclick="enviarDados(2)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">2</button>
+            <button onclick="enviarDados(3)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">3</button>
+            <button onclick="enviarDados(4)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">4</button>
+            <button onclick="enviarDados(5)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">5</button>
+        </div>
+        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
+            <button onclick="enviarDados(6)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">6</button>
+            <button onclick="enviarDados(7)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">7</button>
+            <button onclick="enviarDados(8)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">8</button>
+            <button onclick="enviarDados(9)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">9</button>
+            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #ff3700; border: 1px solid #ff3700; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.4);">10</button>
+        </div>
+      </div>
+      
+      <div class="action-footer" style="margin-top: auto; display: flex; justify-content: flex-start;">
+          <span id="link-voltar-dinamico"></span>
+      </div>
+    </div>
+
+    <script>
+        // 1. Pega os dados que vieram do clique da tela anterior (URL)
+        const urlParams = new URLSearchParams(window.location.search);
+        const sentimento = urlParams.get('sentimento') || "Geral";
+        const evento = urlParams.get('evento') || "Ação Integrada";
+
+        // 2. Escreve esses dados na tela para o usuário ver
+        document.getElementById('sub-evento-nome').innerText = "Ação: " + evento;
+        document.getElementById('label-sentimento-escolhido').innerText = "Sentimento: " + sentimento;
+
+        // 3. Configura o botão voltar para ir para o SEU index.html
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${encodeURIComponent(evento)}" class="btn-back">← Voltar</a>`;
+
+        // 4. A FUNÇÃO DE OURO: Grava no Google Sheets e muda de tela
+        function enviarDados(nota) {
+            
+            // 🔥 COLE A SUA URL DO GOOGLE APPS SCRIPT AQUI DENTRO DAS ASPAS 🔥
+            const urlWebhook = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
+            
+            // Muda o texto do botão clicado para mostrar que está carregando (opcional, detalhe de UX)
+            event.target.innerText = "...";
+            event.target.style.backgroundColor = "#ff3700";
+
+            // Envia o pacote completo (Evento + Sentimento da tela anterior + Nota clicada agora)
+            fetch(urlWebhook, {
+                method: 'POST',
+                mode: 'no-cors', // Evita bloqueio do navegador
+                body: JSON.stringify({
+                    "evento": evento,
+                    "sentimento": sentimento,
+                    "nota": nota
+                })
+            }).then(() => {
+                // Deu certo! Redireciona para a tela de Sucesso
+                window.location.href = `agradecimento.html?evento=${encodeURIComponent(evento)}`;
+            }).catch((erro) => {
+                console.error("Erro ao gravar:", erro);
+                // Mesmo dando erro no console, mandamos pra tela final pra não travar o totem
+                window.location.href = `agradecimento.html`;
+            });
+        }
+    </script>
+</body>
+</html>

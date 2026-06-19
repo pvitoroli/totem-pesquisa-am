@@ -1,0 +1,270 @@
+/* ========================================================= */
+/* 1. RESET E OCULTAÇÃO DO PADRÃO MICROSOFT POWER PAGES      */
+/* ========================================================= */
+header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site-footer {
+    display: none !important;
+}
+.site-body, .main-content, body {
+    background-color: #1f242d !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* ========================================================= */
+/* 2. VARIÁVEIS DE CORES ARCELORMITTAL (DARK MODE)           */
+/* ========================================================= */
+:root {
+    --color-bg-dark: #1f242d;
+    --color-card-bg: #2c323f;
+    --am-orange: #ff5f00;
+    --am-yellow: #ffb703;
+    --am-purple: #8338ec;
+    --am-pink: #ff006e;
+    --am-green: #4bb543;
+}
+
+/* ========================================================= */
+/* 3. ESTRUTURA PRINCIPAL DO APLICATIVO TELA INTEIRA         */
+/* ========================================================= */
+.totem-app-canvas {
+    background-color: var(--color-bg-dark) !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+    color: #ffffff !important;
+    max-width: 450px !important;
+    min-height: 88vh !important;
+    margin: 20px auto !important;
+    padding: 24px !important;
+    border-radius: 24px !important;
+    box-shadow: 0px 20px 40px rgba(0,0,0,0.4) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    box-sizing: border-box !important;
+}
+
+/* ========================================================= */
+/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                    */
+/* ========================================================= */
+.totem-header { 
+    display: flex !important; 
+    justify-content: space-between !important; 
+    align-items: center !important; 
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important; 
+    padding-bottom: 16px !important; 
+    margin-bottom: 24px !important; 
+}
+.company-logo-area {
+    display: flex !important;
+    align-items: center !important;
+    max-width: 140px !important;
+}
+.brand-logo-img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    filter: brightness(1.2); /* Sutil ganho de contraste no fundo escuro */
+}
+.header-right-text {
+    display: flex !important;
+}
+.brand-subtext {
+    font-size: 11px !important;
+    color: #a0a5b0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1.2px !important;
+    font-weight: 600 !important;
+}
+
+/* ========================================================= */
+/* 5. DIAGRAMAÇÃO DO TÍTULO E NOME DA CAMPANHA               */
+/* ========================================================= */
+.title-section { 
+    text-align: center !important; 
+    margin-bottom: 28px !important; 
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+.campaign-mini-label {
+    font-size: 11px !important;
+    text-transform: uppercase !important;
+    color: #a0a5b0 !important;
+    letter-spacing: 2px !important;
+    font-weight: 700 !important;
+    margin-bottom: 2px !important;
+}
+.main-title { 
+    font-size: 26px !important; 
+    font-weight: 900 !important; 
+    color: #ffffff !important; 
+    margin-bottom: 8px !important; 
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
+}
+.subtitle { 
+    font-size: 13px !important; 
+    color: #a0a5b0 !important; 
+    margin-bottom: 0 !important;
+}
+
+/* STATUS ONLINE DISCRETO */
+.status-online-area {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin-top: 12px !important;
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    padding: 4px 10px !important;
+    border-radius: 12px !important;
+}
+.status-text {
+    font-size: 10px !important;
+    color: #a0a5b0 !important;
+    font-weight: 600 !important;
+}
+.pulse-dot {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: var(--am-green) !important;
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7) !important;
+    animation: pulse 1.5s infinite !important;
+}
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
+}
+
+/* ========================================================= */
+/* 6. GRID DE VOTAÇÃO: CARDS VERTICAIS E RETANGULARES        */
+/* ========================================================= */
+.voting-grid { 
+    display: grid !important; 
+    grid-template-columns: repeat(2, 1fr) !important; 
+    gap: 16px !important; 
+    width: 100% !important; 
+}
+.vote-card { 
+    background-color: var(--color-card-bg) !important; 
+    border: 1.5px solid rgba(255,255,255,0.05) !important; 
+    border-radius: 20px !important; 
+    padding: 36px 12px !important; 
+    min-height: 170px !important;  
+    display: flex !important; 
+    flex-direction: column !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    text-decoration: none !important; 
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease !important;
+}
+.vote-card:active { transform: scale(0.95) !important; }
+
+/* AJUSTE DO TAMANHO DO EMOJI ANIMADO */
+.emoji-container { 
+    width: 80px !important;  
+    height: 80px !important; 
+    margin-bottom: 16px !important; 
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.emoji-img { 
+    width: 100% !important; 
+    height: 100% !important; 
+    object-fit: contain !important; 
+}
+
+/* CORREÇÃO DO FUNDO ESCURO NO TEXTO DOS BOTÕES */
+.card-label { 
+    font-size: 13px !important; 
+    font-weight: 700 !important; 
+    color: #ffffff !important; 
+    text-align: center !important; 
+    background-color: transparent !important; 
+    background: none !important;
+    display: block !important;
+    padding-top: 4px !important;
+}
+
+/* Bordas iluminadas no Foco/Hover */
+.border-orange:hover, .border-orange:focus { border-color: var(--am-orange) !important; box-shadow: 0 0 15px rgba(255, 95, 0, 0.2) !important; }
+.border-yellow:hover, .border-yellow:focus { border-color: var(--am-yellow) !important; box-shadow: 0 0 15px rgba(255, 183, 3, 0.2) !important; }
+.border-purple:hover, .border-purple:focus { border-color: var(--am-purple) !important; box-shadow: 0 0 15px rgba(131, 56, 236, 0.2) !important; }
+.border-pink:hover, .border-pink:focus { border-color: var(--am-pink) !important; box-shadow: 0 0 15px rgba(255, 0, 110, 0.2) !important; }
+
+/* ========================================================= */
+/* 7. GRID DE NOTA 0 A 10 E PREVIEW (TELA 2)                 */
+/* ========================================================= */
+.selected-sentiment-preview { 
+    background-color: rgba(255,255,255,0.03) !important; 
+    border-radius: 12px !important; 
+    padding: 12px 16px !important; 
+    margin-bottom: 24px !important; 
+    border-left: 4px solid var(--am-orange) !important; 
+    text-align: left !important;
+}
+.preview-text-label { font-size: 13px !important; font-weight: 600 !important; color: white !important;}
+
+.rating-container { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-bottom: 30px !important; }
+.rating-row { display: flex !important; justify-content: center !important; gap: 8px !important; }
+.rating-btn { 
+    background-color: var(--color-card-bg) !important; 
+    border: 1px solid rgba(255,255,255,0.1) !important; 
+    color: white !important; 
+    width: 42px !important; 
+    height: 42px !important; 
+    border-radius: 50% !important; 
+    font-size: 14px !important; 
+    font-weight: 700 !important; 
+    cursor: pointer !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    transition: all 0.15s ease !important;
+}
+.rating-btn:hover, .rating-btn:active { 
+    background-color: var(--am-orange) !important; 
+    border-color: var(--am-orange) !important; 
+    transform: scale(0.9) !important;
+}
+
+.action-footer { margin-top: auto !important; display: flex !important; justify-content: flex-start !important; }
+.btn-back { background: transparent !important; border: none !important; color: #a0a5b0 !important; font-size: 13px !important; font-weight: 600 !important; text-decoration: none !important; padding: 8px 0 !important; cursor: pointer !important;}
+.btn-back:hover { color: white !important; }
+
+/* ========================================================= */
+/* 8. ANIMAÇÃO DE SUCESSO E CHECKMARK (TELA 3)               */
+/* ========================================================= */
+.success-box { margin: auto !important; text-align: center !important; }
+.success-title { font-size: 22px !important; font-weight: 700 !important; margin-bottom: 8px !important; color: white !important;}
+.success-subtitle { font-size: 13px !important; color: #a0a5b0 !important; line-height: 1.5 !important; }
+.success-icon-wrapper { width: 80px !important; height: 80px !important; margin: 0 auto 20px !important; }
+
+.checkmark { 
+    width: 80px !important; 
+    height: 80px !important; 
+    border-radius: 50% !important; 
+    stroke-width: 4 !important; 
+    stroke: #fff !important; 
+    stroke-miterlimit: 10 !important; 
+    box-shadow: inset 0px 0px 0px var(--am-green) !important; 
+    animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s forwards !important; 
+}
+.checkmark__circle { 
+    border-dasharray: 166 !important; 
+    stroke-dashoffset: 166 !important; 
+    stroke-width: 2 !important; 
+    stroke: var(--am-green) !important; 
+    stroke-miterlimit: 10 !important; 
+    animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards !important; 
+}
+.checkmark__check { 
+    transform-origin: 50% 50% !important; 
+    stroke-dasharray: 48 !important; 
+    stroke-dashoffset: 48 !important; 
+    animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards !important; 
+}
+
+@keyframes stroke { 100% { stroke-dashoffset: 0; } }
+@keyframes fill { 100% { box-shadow: inset 0px 0px 0px 40px var(--am-green); } }
+@keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }

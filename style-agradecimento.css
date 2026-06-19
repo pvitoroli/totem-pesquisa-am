@@ -1,0 +1,33 @@
+$(document).ready(function() {
+    
+    // 🔴 O LINK DO SEU POWER AUTOMATE "LEITOR" (MÉTODO GET)
+    // Se o link lá no Automate for maior que esse, substitua aqui para não dar erro de permissão!
+    const urlBuscaEvento = "https://default37cd273a1cec4aaea29741480ea54f.8d.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/562a25fe5169474ba3241e33654a9a58/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=_ddm-3wRKrqAykOfhhtgHYuBw8grVyW1ZrHKU2EE8MI";
+
+    // O Totem acorda e vai perguntar ao SharePoint qual é a campanha atual
+    fetch(urlBuscaEvento)
+        .then(resposta => resposta.json())
+        .then(dados => {
+            // Pega o nome que o Automate devolveu e escreve na tela
+            $('#nome-campanha-ativa').text(dados.eventoAtivo);
+        })
+        .catch(erro => {
+            console.error("Erro ao buscar campanha no banco:", erro);
+            // Se der erro de internet, ele coloca um nome padrão para o Totem não parar
+            $('#nome-campanha-ativa').text("Ação Integrada"); 
+        });
+
+    // Escuta o clique nos botões de sentimento
+    $('.vote-card').on('click', function(event) {
+        event.preventDefault(); 
+        
+        // Pega o texto do sentimento clicado
+        const sentimento = $(this).find('.card-label').text().trim();
+        
+        // Apanha o nome da campanha que a inteligência artificial já escreveu na tela
+        const eventoAtual = $('#nome-campanha-ativa').text();
+
+        // Faz o redirecionamento com segurança para a Tela 2, levando o sentimento e o evento correto
+        window.location.href = "/Avaliacao?sentimento=" + encodeURIComponent(sentimento) + "&evento=" + encodeURIComponent(eventoAtual);
+    });
+});

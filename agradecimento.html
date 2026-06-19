@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucesso - Pesquisa de Sentimento</title>
+    
+    <link rel="stylesheet" href="style-agradecimento.css">
+
+    <style>
+        body {
+            background-color: #1b1e27;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        /* Animação Premium Sutil para o ícone de Sucesso */
+        .success-check-icon {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="totem-app-canvas" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
+      
+      <div class="success-box">
+        <div class="success-icon-wrapper" style="width: 90px; height: 90px; margin: 0 auto 24px auto; background-color: rgba(75, 181, 67, 0.1); border-radius: 50%; padding: 15px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#4bb543" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
+        
+        <h2 class="success-title" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: white;">VOTO REGISTRADO!</h2>
+        
+        <h5 style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal;">
+          Sua voz molda o nosso futuro!
+        </h5>
+        
+        <div style="margin-top: 40px; padding: 10px; border-radius: 8px; background-color: rgba(255,255,255,0.03);">
+            <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin: 0;">
+                Retornando à tela inicial em <span id="contador" style="color: white; font-weight: bold;">5</span> segundos...
+            </p>
+        </div>
+      </div>
+
+    </div>
+
+    <script>
+        // 1. Pega o evento que estava na URL para o Totem não esquecer qual evento está ativo
+        const urlParams = new URLSearchParams(window.location.search);
+        const eventoAtual = urlParams.get('evento') || "Ação ArcelorMittal";
+
+        // 2. Lógica do cronômetro
+        let tempoRestante = 5;
+        const contadorElemento = document.getElementById('contador');
+
+        const intervalo = setInterval(() => {
+            tempoRestante--;
+            contadorElemento.innerText = tempoRestante;
+            
+            // 3. Quando zerar, volta pra tela 1!
+            if (tempoRestante <= 0) {
+                clearInterval(intervalo);
+                window.location.href = `index.html?evento=${encodeURIComponent(eventoAtual)}`;
+            }
+        }, 1000); // 1000 milissegundos = 1 segundo
+    </script>
+
+</body>
+</html>
