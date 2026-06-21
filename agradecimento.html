@@ -17,25 +17,54 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Evita rolagens indesejadas no celular */
         }
         
-        /* Animação Premium Sutil para o ícone de Sucesso */
+        /* 1. Animação de entrada suave da caixa toda (Fade In Up) */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 2. Animação de pop do ícone */
         .success-check-icon {
             animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s; /* Espera a caixa subir um pouco */
+            opacity: 0;
+            transform: scale(0);
         }
 
         @keyframes popIn {
             0% { transform: scale(0); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
         }
+
+        /* 3. Efeito Glow (Neon pulsante) no círculo verde */
+        .glow-pulse {
+            box-shadow: 0 0 15px rgba(75, 181, 67, 0.3);
+            animation: pulseGlow 2s infinite alternate;
+        }
+
+        @keyframes pulseGlow {
+            from { box-shadow: 0 0 15px rgba(75, 181, 67, 0.2); }
+            to { box-shadow: 0 0 35px rgba(75, 181, 67, 0.6); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="totem-app-canvas" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
+    <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
       
       <div class="success-box">
-        <div class="success-icon-wrapper" style="width: 90px; height: 90px; margin: 0 auto 24px auto; background-color: rgba(75, 181, 67, 0.1); border-radius: 50%; padding: 15px;">
+        <div class="success-icon-wrapper glow-pulse" style="width: 90px; height: 90px; margin: 0 auto 24px auto; background-color: rgba(75, 181, 67, 0.1); border-radius: 50%; padding: 15px;">
           <svg viewBox="0 0 24 24" fill="none" stroke="#4bb543" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
@@ -48,9 +77,10 @@
           Sua voz molda o nosso futuro!
         </h5>
         
-        <div style="margin-top: 40px; padding: 10px; border-radius: 8px; background-color: rgba(255,255,255,0.03);">
-            <p style="color: rgba(255,255,255,0.4); font-size: 13px; margin: 0;">
-                Retornando à tela inicial em <span id="contador" style="color: white; font-weight: bold;">5</span> segundos...
+        <div style="margin-top: 40px; padding: 12px 20px; border-radius: 12px; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+            <p style="color: rgba(255,255,255,0.5); font-size: 13px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                Pode fechar esta página com segurança.
             </p>
         </div>
       </div>
@@ -58,24 +88,12 @@
     </div>
 
     <script>
-        // 1. Pega o evento que estava na URL para o Totem não esquecer qual evento está ativo
-        const urlParams = new URLSearchParams(window.location.search);
-        const eventoAtual = urlParams.get('evento') || "Ação ArcelorMittal";
-
-        // 2. Lógica do cronômetro
-        let tempoRestante = 5;
-        const contadorElemento = document.getElementById('contador');
-
-        const intervalo = setInterval(() => {
-            tempoRestante--;
-            contadorElemento.innerText = tempoRestante;
-            
-            // 3. Quando zerar, volta pra tela 1!
-            if (tempoRestante <= 0) {
-                clearInterval(intervalo);
-                window.location.href = `index.html?evento=${encodeURIComponent(eventoAtual)}`;
-            }
-        }, 1000); // 1000 milissegundos = 1 segundo
+        // Truque de UX: Substitui o histórico do navegador para que o usuário não consiga 
+        // apertar o botão "Voltar" do celular e votar novamente com facilidade.
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
+        };
     </script>
 
 </body>
