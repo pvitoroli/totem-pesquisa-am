@@ -6,6 +6,15 @@ function escolherSentimento(sentimentoEscolhido) {
     // Redireciona para a tela de avaliação levando os dados na URL
     window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
 }
+} finally {
+                // CALCULA O TIMING PERFEITO: MUDAMOS AQUI PARA 3500 👇
+                const tempoDecorrido = Date.now() - tempoInicio;
+                const tempoRestante = Math.max(3500 - tempoDecorrido, 0);
+
+                setTimeout(() => {
+                    document.getElementById('splash-screen').classList.add('hidden');
+                }, tempoRestante);
+            }
 
 // Injeção automática do nome do evento no cabeçalho
 window.onload = function() {
