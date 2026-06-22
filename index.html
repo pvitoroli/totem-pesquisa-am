@@ -9,7 +9,7 @@
 
     <style>
         body {
-            background-color: #1b1e27; /* Fundo escuro corporativo */
+            background-color: #1b1e27;
             margin: 0;
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -21,7 +21,7 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO PREMUM)
+           SPLASH SCREEN
            ========================================================================== */
         #splash-screen {
             position: fixed;
@@ -54,7 +54,6 @@
             width: 100%;
         }
 
-        /* AJUSTE TÁTICO: margin-top negativa para alterar a altura da posição (subir a logo) */
         .splash-logo-img {
             filter: brightness(1.2);
             max-width: 130px;
@@ -62,11 +61,10 @@
             width: 100%;
             height: auto;
             object-fit: contain;
-            margin-top: -40px;   /* Subiu a posição vertical da logo */
-            margin-bottom: 24px;  /* Espaçamento seguro antes do texto */
+            margin-top: -40px; 
+            margin-bottom: 24px; 
         }
 
-        /* Elemento complementar de carregamento (O seu símbolo) */
         .loading-bar-container {
             position: relative;
             width: 220px;
@@ -81,7 +79,6 @@
             display: block;
         }
 
-        /* Máscara animada que revela o símbolo da esquerda para a direita (4.5s) */
         .loading-mask {
             position: absolute;
             top: 0;
@@ -97,24 +94,22 @@
             100% { left: 100%; }
         }
 
-        /* Slogan Oficial posicionado EXATAMENTE abaixo do Símbolo */
         .splash-slogan {
             font-size: 11px;
             text-transform: uppercase;
             color: #a0a5b0;
             letter-spacing: 1.2px;
             font-weight: 600;
-            margin-top: 25px; /* Alinhamento impecável abaixo da barra */
+            margin-top: 25px;
             opacity: 0;
             animation: fadeInSlogan 1.5s ease forwards;
-            animation-delay: 1.2s; /* Surge de forma cinematográfica */
+            animation-delay: 1.2s; 
         }
 
         @keyframes fadeInSlogan {
             to { opacity: 1; }
         }
 
-        /* Aura Neon de fundo laranja */
         .splash-glow {
             position: absolute;
             width: 160px;
@@ -132,17 +127,25 @@
         }
 
         /* ==========================================================================
-           MICROINTERAÇÕES COMPLEMENTARES DAS TELAS DE VOTADO
+           MICROINTERAÇÕES DOS BOTÕES E TRANSIÇÃO HERÓI
            ========================================================================== */
+        .vote-card {
+            /* Adicionado transição suave para interações de hover e click */
+            transition: all 0.2s ease;
+        }
+
         .vote-card:active {
             transform: scale(0.95);
-            transition: transform 0.1s ease;
         }
 
         .vote-card:hover {
             box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15);
             transform: translateY(-5px);
-            transition: all 0.3s ease;
+        }
+
+        /* Transição global da tela para o fade-out quando clica no botão */
+        .totem-app-canvas {
+            transition: opacity 0.5s ease;
         }
     </style>
 </head>
@@ -151,24 +154,19 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
-
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" />
-
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
-            
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
-            
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img">
                 <div class="loading-mask"></div>
             </div>
-
             <div class="splash-slogan">A força da voz que molda o aço</div>
         </div>
     </div>
 
 
-    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
+    <div class="totem-app-canvas" id="main-interface" style="width: 100%; max-width: 600px;">
       <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
         <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
             <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
@@ -195,28 +193,28 @@
 
       <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
         
-        <a href="#" onclick="escolherSentimento('Aprendi algo novo')" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Aprendi algo novo', this)" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
           <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">APRENDI<br>ALGO NOVO</span>
         </a>
 
-        <a href="#" onclick="escolherSentimento('Fiquei feliz')" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Fiquei feliz', this)" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
           <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">FIQUEI<br>FELIZ</span>
         </a>
 
-        <a href="#" onclick="escolherSentimento('Quero saber mais')" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Quero saber mais', this)" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
           <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">QUERO<br>SABER MAIS</span>
         </a>
 
-        <a href="#" onclick="escolherSentimento('Poderia ser melhor')" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Poderia ser melhor', this)" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
@@ -246,7 +244,6 @@
                 const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
                 document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
             } finally {
-                // SINCRONIA DE TIMING: Segura a tela por 4.5s (4500ms) para fechar junto com a animação CSS
                 const tempoDecorrido = Date.now() - tempoInicio;
                 const tempoRestante = Math.max(4500 - tempoDecorrido, 0);
 
@@ -260,9 +257,52 @@
             buscarEventoAtivo();
         };
 
-        function escolherSentimento(sentimentoEscolhido) {
-            const evento = document.getElementById('nome-campanha-ativa').innerText;
-            window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
+        // A MÁGICA DA HERO TRANSITION
+        function escolherSentimento(event, sentimentoEscolhido, elementoClicado) {
+            // Evita que a página role para cima ao clicar num link
+            event.preventDefault();
+
+            // Bloqueia múltiplos cliques
+            if (window.animacaoEmAndamento) return;
+            window.animacaoEmAndamento = true;
+
+            const telaPrincipal = document.getElementById('main-interface');
+            
+            // 1. Pega as coordenadas exatas do botão que o usuário clicou na tela
+            const rect = elementoClicado.getBoundingClientRect();
+            
+            // 2. Cria uma cópia (clone) exata desse botão
+            const clone = elementoClicado.cloneNode(true);
+
+            // 3. Aplica estilos para o clone flutuar EXATAMENTE em cima do botão original
+            clone.style.position = 'fixed';
+            clone.style.top = rect.top + 'px';
+            clone.style.left = rect.left + 'px';
+            clone.style.width = rect.width + 'px';
+            clone.style.height = rect.height + 'px';
+            clone.style.margin = '0';
+            clone.style.zIndex = '99999'; // Deixa ele na frente de absolutamente tudo
+            clone.style.transition = 'all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; // Efeito elástico
+            
+            // Joga o clone no corpo da página
+            document.body.appendChild(clone);
+
+            // 4. Apaga o fundo e a tela original suavemente
+            telaPrincipal.style.opacity = '0';
+
+            // 5. No milissegundo seguinte, manda o clone voar para o centro e crescer!
+            requestAnimationFrame(() => {
+                clone.style.top = '50%';
+                clone.style.left = '50%';
+                clone.style.transform = 'translate(-50%, -50%) scale(1.4)'; // Aumenta 40%
+                clone.style.boxShadow = '0 20px 60px rgba(0, 0, 0, 0.8)';
+            });
+
+            // 6. Aguarda a animação brilhar por 900ms e aí sim vai pra tela de Nota
+            setTimeout(() => {
+                const evento = document.getElementById('nome-campanha-ativa').innerText;
+                window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
+            }, 900);
         }
     </script>
 </body>
