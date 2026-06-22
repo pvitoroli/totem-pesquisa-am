@@ -251,6 +251,49 @@
             const evento = document.getElementById('nome-campanha-ativa').innerText;
             window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
         }
+  <script>
+        async function buscarEventoAtivo() {
+            const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
+            
+            // Marca o tempo que a página começou a carregar
+            const tempoInicio = Date.now();
+
+            try {
+                const resposta = await fetch(urlScript + "?acao=buscarAtivo");
+                const evento = await resposta.json();
+                
+                if (evento && evento.nome) {
+                    document.getElementById('nome-campanha-ativa').innerText = evento.nome;
+                    window.idEventoAtual = evento.id;
+                } else {
+                    throw new Error("Evento não encontrado");
+                }
+            } catch (erro) {
+                console.error("Erro ao buscar evento, usando padrão:", erro);
+                const urlParams = new URLSearchParams(window.location.search);
+                const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
+                document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
+            } finally {
+                // SINCRONIA PERFEITA: 4500 milissegundos = 4.5 segundos (Igual ao seu CSS)
+                const tempoDecorrido = Date.now() - tempoInicio;
+                const tempoRestante = Math.max(4500 - tempoDecorrido, 0);
+
+                setTimeout(() => {
+                    document.getElementById('splash-screen').classList.add('hidden');
+                }, tempoRestante);
+            }
+        }
+
+        // Quando a página abre, ele roda a função acima
+        window.onload = function() {
+            buscarEventoAtivo();
+        };
+
+        // Quando clica no botão, vai para a tela de avaliação
+        function escolherSentimento(sentimentoEscolhido) {
+            const evento = document.getElementById('nome-campanha-ativa').innerText;
+            window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
+        }
     </script>
 </body>
 </html>
