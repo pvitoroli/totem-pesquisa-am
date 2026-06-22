@@ -9,7 +9,7 @@
 
     <style>
         body {
-            background-color: #1b1e27;
+            background-color: #1b1e27; /* Fundo escuro corporativo */
             margin: 0;
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -22,7 +22,7 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN
+           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO)
            ========================================================================== */
         #splash-screen {
             position: fixed;
@@ -66,13 +66,12 @@
             margin-bottom: 24px; 
         }
 
-     .loading-bar-container {
+        .loading-bar-container {
             position: relative;
             width: 220px;
-            height: auto; /* Garante que a altura acompanhe a imagem */
+            height: auto;
             margin-top: 35px;
             overflow: hidden;
-            display: block; /* Força o bloco a renderizar */
         }
 
         .loading-bar-img {
@@ -82,12 +81,18 @@
         }
 
         .loading-mask {
-            .loading-mask {
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    background-size: 200% 100%;
-    animation: shine 1.5s infinite linear;
-}
-@keyframes shine { to { background-position: -200% 0; } }
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #1b1e27;
+            animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes revealRight {
+            0% { left: 0%; }
+            100% { left: 100%; }
         }
 
         .splash-slogan {
@@ -123,10 +128,10 @@
         }
 
         /* ==========================================================================
-           ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
+           ANIMAÇÕES DE INTERAÇÃO E CINEMATIC BACKDROP
            ========================================================================== */
         .vote-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
         .vote-card:active {
@@ -138,32 +143,32 @@
             transform: translateY(-5px);
         }
 
-        /* Transição fluida para o fundo escurecer na hora do popup */
+        /* A interface principal ganha uma transição para desfoque e escurecimento tático */
         .totem-app-canvas {
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease;
+            transition: filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.6s ease;
         }
 
-        /* O Backdrop mais dramático: desfoque maior e cor profunda */
+        /* Camada escura e borrada que vai surgir por cima do app, imitando um sistema operacional nativo */
         #cinematic-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(6, 8, 12, 0.75); /* Mais escuro */
-            backdrop-filter: blur(0px); 
+            background-color: rgba(11, 13, 18, 0.6); /* Escurecimento */
+            backdrop-filter: blur(0px); /* Começa liso */
             -webkit-backdrop-filter: blur(0px);
             opacity: 0;
             visibility: hidden;
             z-index: 99990;
-            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease;
+            transition: opacity 0.5s ease, visibility 0.5s ease, backdrop-filter 0.5s ease, -webkit-backdrop-filter 0.5s ease;
         }
 
         #cinematic-overlay.active {
             opacity: 1;
             visibility: visible;
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px); /* Desfoque elegante de vidro */
+            -webkit-backdrop-filter: blur(12px);
         }
     </style>
 </head>
@@ -256,10 +261,10 @@
                     document.getElementById('nome-campanha-ativa').innerText = evento.nome;
                     window.idEventoAtual = evento.id;
                 } else {
-                    throw new Error("Formato inválido.");
+                    throw new Error("Formato inválido de resposta do servidor.");
                 }
             } catch (erro) {
-                console.error("Erro API:", erro);
+                console.error("Erro na API, usando barramento de segurança URL:", erro);
                 const urlParams = new URLSearchParams(window.location.search);
                 const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
                 document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
@@ -277,7 +282,7 @@
             buscarEventoAtivo();
         };
 
-        // 🚀 O NOVO "HERO TRANSITION" COM OFUSCAMENTO E CÁLCULO EXATO
+        // 🚀 ENGENHARIA DE TRANSIÇÃO PREMIUN (HERO TRANSITION COM BACKDROP POPUP)
         function escolherSentimento(event, sentimentoEscolhido, elementoClicado) {
             event.preventDefault();
 
@@ -287,55 +292,52 @@
             const telaPrincipal = document.getElementById('main-interface');
             const overlayCinematico = document.getElementById('cinematic-overlay');
             
-            // Pega a cor correspondente para brilhar
-            let glowColor = 'rgba(255, 81, 0, 0.6)'; 
+            // Descobre a cor de brilho ideal com base na classe da borda
+            let glowColor = 'rgba(255, 81, 0, 0.6)'; // Padrão Laranja Arcelor
             if (elementoClicado.classList.contains('border-yellow')) glowColor = 'rgba(255, 204, 0, 0.6)';
             if (elementoClicado.classList.contains('border-purple')) glowColor = 'rgba(163, 0, 255, 0.6)';
             if (elementoClicado.classList.contains('border-pink')) glowColor = 'rgba(255, 0, 128, 0.6)';
 
-            // 1. Pega as dimensões exatas de onde o card está agora
+            // 1. Mapeia a posição exata onde o usuário tocou
             const rect = elementoClicado.getBoundingClientRect();
             
-            // 2. Clona o card
+            // 2. Clona o botão mantendo o layout e as imagens idênticas
             const clone = elementoClicado.cloneNode(true);
 
-            // 3. TRUQUE MÁGICO: Esconde o botão original para parecer que ele voou!
-            elementoClicado.style.opacity = '0';
-
-            // 4. Crava o clone perfeitamente no lugar do original
+            // 3. Trava o clone na posição exata sobre o botão real antes dele voar
             clone.style.position = 'fixed';
             clone.style.top = rect.top + 'px';
             clone.style.left = rect.left + 'px';
             clone.style.width = rect.width + 'px';
             clone.style.height = rect.height + 'px';
             clone.style.margin = '0';
-            clone.style.zIndex = '99995'; 
-            clone.style.transform = 'translate(0px, 0px) scale(1)'; // Nasce no ponto zero
-            clone.style.transition = 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'; // Curva de aceleração Apple
+            clone.style.zIndex = '99995'; // Fica à frente do overlay
+            clone.style.transition = 'all 0.65s cubic-bezier(0.16, 1, 0.3, 1)'; // Curva de aceleração ultra suave (Apple Style)
             
             document.body.appendChild(clone);
 
-            // 5. OFUSCAMENTO DRASTICO: Fundo encolhe e fica nas sombras
+            // 4. EFEITO POPUP DE ALTO IMPACTO: Ativa o desfoque de vidro e escurece o fundo
             overlayCinematico.classList.add('active');
-            telaPrincipal.style.transform = 'scale(0.92)';
-            telaPrincipal.style.filter = 'blur(6px) brightness(0.3)'; // Apaga a luz dos outros itens!
+            
+            // Afasta a interface principal sutilmente para trás e aplica um leve desfoque complementar
+            telaPrincipal.style.transform = 'scale(0.96)';
+            telaPrincipal.style.filter = 'blur(4px)';
+            telaPrincipal.style.opacity = '0.4';
 
-            // 6. CÁLCULO FLIP: Descobre a exata distância X e Y do botão até o centro da tela
-            const moveX = (window.innerWidth / 2) - (rect.left + rect.width / 2);
-            const moveY = (window.innerHeight / 2) - (rect.top + rect.height / 2);
-
-            // 7. Dispara a viagem em linha reta perfeita e aumenta de tamanho!
+            // 5. No frame seguinte, faz o card voar para o centro, expandir e acender o neon de destaque!
             requestAnimationFrame(() => {
-                clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.4)`;
-                clone.style.boxShadow = `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${glowColor}`;
-                clone.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                clone.style.top = '50%';
+                clone.style.left = '50%';
+                clone.style.transform = 'translate(-50%, -50%) scale(1.35)'; // Centraliza e cresce 35%
+                clone.style.boxShadow = `0 30px 70px rgba(0, 0, 0, 0.9), 0 0 40px ${glowColor}`; // Super Glow Customizado
+                clone.style.borderColor = 'rgba(255, 255, 255, 0.2)'; // Suaviza a borda no destaque
             });
 
-            // 8. Segura o "Herói" na tela por 2 Segundos e muda de página!
+            // 6. Segura o impacto cinematográfico na tela por 1 segundo e redireciona
             setTimeout(() => {
                 const evento = document.getElementById('nome-campanha-ativa').innerText;
                 window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
-            }, 2000); // 2 Segundos fixos de apreciação
+            }, 2500);
         }
     </script>
 </body>
