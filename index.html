@@ -21,7 +21,7 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO SUPER MODERNA)
+           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO DINÂMICA PREMUM)
            ========================================================================== */
         #splash-screen {
             position: fixed;
@@ -40,23 +40,11 @@
             transition: opacity 0.5s ease, visibility 0.5s ease;
         }
 
-        /* Força o sumiço elegante após carregar */
         #splash-screen.hidden {
             opacity: 0;
             visibility: hidden;
         }
 
-        /* Cabeçalho isolado e centralizado na Splash */
-        .splash-header {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Container central de conteúdo */
         .splash-content {
             text-align: center;
             display: flex;
@@ -66,12 +54,23 @@
             width: 100%;
         }
 
+        /* Logo integrada ao fluxo e mais próxima do texto seguinte */
+        .splash-logo-img {
+            filter: brightness(1.2);
+            max-width: 130px;
+            max-height: 35px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-bottom: 16px; /* Aproximação calibrada */
+        }
+
         /* Elemento complementar de carregamento (O seu símbolo) */
         .loading-bar-container {
             position: relative;
-            width: 220px; /* Largura proporcional para o seu símbolo */
+            width: 220px;
             height: auto;
-            margin-top: 40px;
+            margin-top: 35px;
             overflow: hidden;
         }
 
@@ -88,21 +87,38 @@
             left: 0;
             height: 100%;
             width: 100%;
-            background-color: #1b1e27; /* Mesma cor do fundo para esconder */
+            background-color: #1b1e27;
             animation: revealRight 4.0s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes revealRight {
             0% { left: 0%; }
-            100% { left: 100%; } /* Empurra o bloco escuro totalmente para fora */
+            100% { left: 100%; }
         }
 
-        /* Efeito de brilho pulsante laranja de fundo no carregamento */
+        /* Estilização Premium do Slogan Corporativo abaixo do Símbolo */
+        .splash-slogan {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #a0a5b0;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeInSlogan 1.5s ease forwards;
+            animation-delay: 1s; /* Surge elegantemente no meio do carregamento */
+        }
+
+        @keyframes fadeInSlogan {
+            to { opacity: 1; }
+        }
+
+        /* Aura Neon de fundo laranja */
         .splash-glow {
             position: absolute;
-            width: 150px;
-            height: 150px;
-            background: rgba(255, 81, 0, 0.15);
+            width: 160px;
+            height: 160px;
+            background: rgba(255, 81, 0, 0.12);
             border-radius: 50%;
             filter: blur(40px);
             z-index: -1;
@@ -115,7 +131,7 @@
         }
 
         /* ==========================================================================
-           MICROINTERAÇÕES COMPLEMENTARES DAS TELAS DE VOTADO
+           MICROINTERAÇÕES COMPLEMENTARES DAS TELAS DE VOTAÇÃO
            ========================================================================== */
         .vote-card:active {
             transform: scale(0.95);
@@ -132,21 +148,21 @@
 <body>
 
     <div id="splash-screen">
-        <div class="splash-header">
-            <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
-        </div>
-        
         <div class="splash-content">
             <div class="splash-glow"></div>
 
+            <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" />
+
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
             
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE SENTIMENTO</h1>
             
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img">
                 <div class="loading-mask"></div>
             </div>
+
+            <div class="splash-slogan">A força da voz que molda o aço</div>
         </div>
     </div>
 
@@ -211,8 +227,6 @@
     <script>
         async function buscarEventoAtivo() {
             const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
-            
-            // Registra o exato momento em que o fetch começou
             const tempoInicio = Date.now();
 
             try {
@@ -227,28 +241,24 @@
                 }
             } catch (erro) {
                 console.error("Erro na API, usando barramento de segurança URL:", erro);
-                // Se o Google falhar, puxa o evento da URL ou assume o padrão ArcelorMittal
                 const urlParams = new URLSearchParams(window.location.search);
                 const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
                 document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
             } finally {
-                // SINCERIDADE VISUAL: Calcula o tempo restante para a barra terminar suavemente (4.5s = 4500ms)
+                // SINCRONIA DE TIMING: Segura a tela por 4.5s (4500ms) para fechar junto com a animação CSS
                 const tempoDecorrido = Date.now() - tempoInicio;
                 const tempoRestante = Math.max(4500 - tempoDecorrido, 0);
 
                 setTimeout(() => {
-                    // Revela a tela de votação aplicando o Fade-Out na Splash Screen
                     document.getElementById('splash-screen').classList.add('hidden');
                 }, tempoRestante);
             }
         }
 
-        // Gatilho imediato de carregamento de infraestrutura web
         window.onload = function() {
             buscarEventoAtivo();
         };
 
-        // Redirecionador tático para a tela 2 carregando o pacote de metadados
         function escolherSentimento(sentimentoEscolhido) {
             const evento = document.getElementById('nome-campanha-ativa').innerText;
             window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
