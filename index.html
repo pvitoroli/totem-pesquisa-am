@@ -81,7 +81,7 @@
             display: block;
         }
 
-        /* Máscara animada que revela o símbolo da esquerda para a direita */
+        /* Máscara animada que revela o símbolo da esquerda para a direita (4.5s) */
         .loading-mask {
             position: absolute;
             top: 0;
@@ -141,7 +141,7 @@
 
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
             
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE SENTIMENTO</h1>
             
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img">
@@ -212,7 +212,7 @@
         async function buscarEventoAtivo() {
             const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
             
-            // Registra o tempo em que a requisição começou para segurar o layout o tempo mínimo necessário
+            // Registra o exato momento em que o fetch começou
             const tempoInicio = Date.now();
 
             try {
@@ -223,73 +223,32 @@
                     document.getElementById('nome-campanha-ativa').innerText = evento.nome;
                     window.idEventoAtual = evento.id;
                 } else {
-                    throw new Error("Evento não encontrado");
+                    throw new Error("Formato inválido de resposta do servidor.");
                 }
             } catch (erro) {
-                console.error("Erro ao buscar evento, usando padrão:", erro);
+                console.error("Erro na API, usando barramento de segurança URL:", erro);
+                // Se o Google falhar, puxa o evento da URL ou assume o padrão ArcelorMittal
                 const urlParams = new URLSearchParams(window.location.search);
                 const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
                 document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
             } finally {
-                // CALCULA O TIMING PERFEITO: Garante que a Splash dure pelo menos 2.2 segundos
-                // para que a animação CSS da barra de carregamento termine perfeitamente.
-                const tempoDecorrido = Date.now() - tempoInicio;
-                const tempoRestante = Math.max(2200 - tempoDecorrido, 0);
-
-                setTimeout(() => {
-                    // Adiciona a classe que apaga a Splash Screen com Fade Out
-                    document.getElementById('splash-screen').classList.add('hidden');
-                }, tempoRestante);
-            }
-        }
-
-        window.onload = function() {
-            buscarEventoAtivo();
-        };
-
-        function escolherSentimento(sentimentoEscolhido) {
-            const evento = document.getElementById('nome-campanha-ativa').innerText;
-            window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
-        }
-  <script>
-        async function buscarEventoAtivo() {
-            const urlScript = "https://script.google.com/macros/s/AKfycbxL_QJbefuBjW-98jg1koOCXkutVqcSgFtxTkjMOIQ2giPPUacGVeg0YugzgMPNuHXE/exec";
-            
-            // Marca o tempo que a página começou a carregar
-            const tempoInicio = Date.now();
-
-            try {
-                const resposta = await fetch(urlScript + "?acao=buscarAtivo");
-                const evento = await resposta.json();
-                
-                if (evento && evento.nome) {
-                    document.getElementById('nome-campanha-ativa').innerText = evento.nome;
-                    window.idEventoAtual = evento.id;
-                } else {
-                    throw new Error("Evento não encontrado");
-                }
-            } catch (erro) {
-                console.error("Erro ao buscar evento, usando padrão:", erro);
-                const urlParams = new URLSearchParams(window.location.search);
-                const eventoPadrao = urlParams.get('evento') || "Ação ArcelorMittal";
-                document.getElementById('nome-campanha-ativa').innerText = eventoPadrao;
-            } finally {
-                // SINCRONIA PERFEITA: 4500 milissegundos = 4.5 segundos (Igual ao seu CSS)
+                // SINCERIDADE VISUAL: Calcula o tempo restante para a barra terminar suavemente (4.5s = 4500ms)
                 const tempoDecorrido = Date.now() - tempoInicio;
                 const tempoRestante = Math.max(4500 - tempoDecorrido, 0);
 
                 setTimeout(() => {
+                    // Revela a tela de votação aplicando o Fade-Out na Splash Screen
                     document.getElementById('splash-screen').classList.add('hidden');
                 }, tempoRestante);
             }
         }
 
-        // Quando a página abre, ele roda a função acima
+        // Gatilho imediato de carregamento de infraestrutura web
         window.onload = function() {
             buscarEventoAtivo();
         };
 
-        // Quando clica no botão, vai para a tela de avaliação
+        // Redirecionador tático para a tela 2 carregando o pacote de metadados
         function escolherSentimento(sentimentoEscolhido) {
             const evento = document.getElementById('nome-campanha-ativa').innerText;
             window.location.href = `avaliacao.html?evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}`;
