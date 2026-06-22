@@ -21,7 +21,7 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO DINÂMICA PREMUM)
+           ESTILOS DA SPLASH SCREEN (TELA DE CARREGAMENTO PREMUM)
            ========================================================================== */
         #splash-screen {
             position: fixed;
@@ -54,15 +54,16 @@
             width: 100%;
         }
 
-        /* Logo integrada ao fluxo e mais próxima do texto seguinte */
+        /* AJUSTE TÁTICO: margin-top negativa para alterar a altura da posição (subir a logo) */
         .splash-logo-img {
             filter: brightness(1.2);
-            max-width: 180px;
-            max-height: 55px;
+            max-width: 130px;
+            max-height: 35px;
             width: 100%;
             height: auto;
             object-fit: contain;
-            margin-bottom: 16px; /* Aproximação calibrada */
+            margin-top: -40px;   /* Subiu a posição vertical da logo */
+            margin-bottom: 24px;  /* Espaçamento seguro antes do texto */
         }
 
         /* Elemento complementar de carregamento (O seu símbolo) */
@@ -96,17 +97,17 @@
             100% { left: 100%; }
         }
 
-        /* Estilização Premium do Slogan Corporativo abaixo do Símbolo */
+        /* Slogan Oficial posicionado EXATAMENTE abaixo do Símbolo */
         .splash-slogan {
             font-size: 11px;
             text-transform: uppercase;
             color: #a0a5b0;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
             font-weight: 600;
-            margin-top: 20px;
+            margin-top: 25px; /* Alinhamento impecável abaixo da barra */
             opacity: 0;
             animation: fadeInSlogan 1.5s ease forwards;
-            animation-delay: 1s; /* Surge elegantemente no meio do carregamento */
+            animation-delay: 1.2s; /* Surge de forma cinematográfica */
         }
 
         @keyframes fadeInSlogan {
@@ -131,7 +132,7 @@
         }
 
         /* ==========================================================================
-           MICROINTERAÇÕES COMPLEMENTARES DAS TELAS DE VOTAÇÃO
+           MICROINTERAÇÕES COMPLEMENTARES DAS TELAS DE VOTADO
            ========================================================================== */
         .vote-card:active {
             transform: scale(0.95);
