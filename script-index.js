@@ -9,7 +9,7 @@ function escolherSentimento(sentimentoEscolhido) {
 } finally {
                 // CALCULA O TIMING PERFEITO: MUDAMOS AQUI PARA 3500 👇
                 const tempoDecorrido = Date.now() - tempoInicio;
-                const tempoRestante = Math.max(3500 - tempoDecorrido, 0);
+                const tempoRestante = Math.max(4000 - tempoDecorrido, 0);
 
                 setTimeout(() => {
                     document.getElementById('splash-screen').classList.add('hidden');
