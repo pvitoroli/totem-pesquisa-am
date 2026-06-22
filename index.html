@@ -254,7 +254,8 @@
             const tempoInicio = Date.now();
 
             try {
-                const resposta = await fetch(urlScript + "?acao=buscarAtivo");
+                // O "&t=" + Date.now() cria um número único que força a atualização em tempo real!
+const resposta = await fetch(urlScript + "?acao=buscarAtivo&t=" + Date.now());
                 const evento = await resposta.json();
                 
                 if (evento && evento.nome) {
