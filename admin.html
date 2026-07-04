@@ -206,95 +206,93 @@
         </div>
     </div>
         <script>
-    // 1. A URL correta do seu projeto Supabase (Extraída do seu token)
-    const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co';
-    const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-';
+    // 1. Configuração (DÊ UM CTRL+C CTRL+V COM CUIDADO)
+    const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co'; // APENAS A URL, SEM BARRAS NO FIM
+    const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-'; 
+
+    console.log("Iniciando conexão...");
     
-    // Inicializa o cliente (a biblioteca 'supabase' já estará disponível pelo script do CDN)
+    // 2. Inicializa o banco
+    // A biblioteca 'supabase' é carregada pelo CDN
     const db = supabase.createClient(supabaseUrl, supabaseKey);
+    console.log("Cliente Supabase criado:", db);
 
-    // 2. Carregar lista de eventos
+    // 3. Carregar lista de eventos com logs de erro detalhados
     async function carregarEventos() {
-        console.log("Buscando eventos...");
+        console.log("Executando carregarEventos()...");
         
-        const { data, error } = await db
-            .from('eventos')
-            .select('*')
-            .order('data_criacao', { ascending: false });
-        
-        if (error) {
-            console.error("Erro ao buscar:", error);
-            alert("Erro ao buscar eventos: " + error.message);
-            return;
+        try {
+            const { data, error } = await db
+                .from('eventos')
+                .select('*')
+                .order('data_criacao', { ascending: false });
+            
+            if (error) {
+                console.error("Erro retornado pelo Supabase:", error);
+                alert("Erro ao buscar eventos: " + error.message);
+                return;
+            }
+
+            console.log("Dados recebidos do banco:", data);
+            
+            const lista = document.getElementById('listaEventos');
+            lista.innerHTML = '';
+            
+            if(!data || data.length === 0) {
+                lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
+                return;
+            }
+
+            data.forEach(evento => {
+                let badgeClass = evento.status === 'ativo' ? 'status-ativo' : (evento.status === 'rascunho' ? 'status-rascunho' : 'status-encerrado');
+                let actionText = evento.status === 'ativo' ? 'Encerrar' : 'Ativar';
+                let nextStatus = evento.status === 'ativo' ? 'encerrado' : 'ativo';
+
+                lista.innerHTML += `
+                    <tr>
+                        <td class="nome-evento">${evento.nome_campanha}</td>
+                        <td><span class="status-badge ${badgeClass}">${evento.status}</span></td>
+                        <td>
+                            <button class="btn-action" onclick="alterarStatus('${evento.id}', '${nextStatus}')">
+                                ${actionText}
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+        } catch (e) {
+            console.error("Erro crítico no bloco catch:", e);
         }
-
-        const lista = document.getElementById('listaEventos');
-        lista.innerHTML = '';
-        
-        if(!data || data.length === 0) {
-            lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
-            return;
-        }
-
-        data.forEach(evento => {
-            let badgeClass = evento.status === 'ativo' ? 'status-ativo' : (evento.status === 'rascunho' ? 'status-rascunho' : 'status-encerrado');
-            let actionText = evento.status === 'ativo' ? 'Encerrar Ação' : 'Ativar no Totem';
-            let nextStatus = evento.status === 'ativo' ? 'encerrado' : 'ativo';
-
-            lista.innerHTML += `
-                <tr>
-                    <td class="nome-evento">${evento.nome_campanha}</td>
-                    <td><span class="status-badge ${badgeClass}">${evento.status}</span></td>
-                    <td>
-                        <button class="btn-action" onclick="alterarStatus('${evento.id}', '${nextStatus}')">
-                            ${actionText}
-                        </button>
-                    </td>
-                </tr>
-            `;
-        });
     }
 
-    // 3. Criar Novo Evento
+    // 4. Criar evento
     async function criarEvento() {
-        const nomeInput = document.getElementById('nomeEvento');
-        const nome = nomeInput.value.trim();
-        const btnSalvar = document.getElementById('btnSalvar');
+        const nome = document.getElementById('nomeEvento').value.trim();
+        if (!nome) return;
 
-        if (!nome) { alert('Digite um nome!'); return; }
-
-        btnSalvar.innerText = "Salvando...";
-        btnSalvar.disabled = true;
-
-        const { error } = await db
-            .from('eventos')
-            .insert([{ nome_campanha: nome, status: 'rascunho' }]);
-
+        console.log("Criando evento:", nome);
+        const { error } = await db.from('eventos').insert([{ nome_campanha: nome, status: 'rascunho' }]);
+        
         if (error) {
+            console.error("Erro na criação:", error);
             alert("Erro ao criar: " + error.message);
         } else {
-            nomeInput.value = '';
+            document.getElementById('nomeEvento').value = '';
             carregarEventos();
         }
-
-        btnSalvar.innerText = "Salvar Evento";
-        btnSalvar.disabled = false;
     }
 
-    // 4. Alterar Status
+    // 5. Alterar status
     async function alterarStatus(id, novoStatus) {
-        const { error } = await db
-            .from('eventos')
-            .update({ status: novoStatus })
-            .eq('id', id);
-
+        const { error } = await db.from('eventos').update({ status: novoStatus }).eq('id', id);
         if (error) {
+            console.error("Erro na atualização:", error);
             alert("Erro ao atualizar: " + error.message);
         } else {
             carregarEventos();
         }
     }
 
-    // Roda ao carregar a página
+    // Inicia ao carregar
     carregarEventos();
-</script>
+</script>>
