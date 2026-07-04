@@ -2,15 +2,33 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel Administrativo - Sentimento</title>
+    <title>Admin - Sentimento AMP</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body { background-color: #1b1e27; color: white; font-family: sans-serif; padding: 20px; }
+        .card { background-color: #2a2f3a; border-radius: 20px; padding: 20px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        input { padding: 10px; border-radius: 8px; border: none; width: 250px; }
+        button { padding: 10px 20px; border-radius: 8px; border: none; background: #ff5100; color: white; cursor: pointer; font-weight: bold; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #333; }
+        .btn-status { cursor: pointer; padding: 5px 10px; border-radius: 5px; font-size: 12px; }
+    </style>
 </head>
 <body>
-    <h1>Painel de Gestão de Eventos</h1>
-    
-    <div id="admin-form">
-        <input type="text" id="nomeEvento" placeholder="Nome da Campanha">
-        <button onclick="criarEvento()">Criar Evento</button>
+    <div class="card">
+        <h1>Painel Administrativo</h1>
+        <input type="text" id="nomeEvento" placeholder="Nome do Novo Evento">
+        <button onclick="criarEvento()">+ Criar Evento</button>
+    </div>
+
+    <div class="card">
+        <h2>Eventos Atuais</h2>
+        <table id="tabelaEventos">
+            <thead>
+                <tr><th>Nome</th><th>Status</th><th>Ações</th></tr>
+            </thead>
+            <tbody id="listaEventos"></tbody>
+        </table>
     </div>
 
     <script>
@@ -19,22 +37,37 @@
         const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-';
         const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
 
+        // Carregar eventos ao abrir
+        async function carregarEventos() {
+            const { data, error } = await supabase.from('eventos').select('*');
+            const lista = document.getElementById('listaEventos');
+            lista.innerHTML = '';
+            
+            data.forEach(evento => {
+                lista.innerHTML += `<tr>
+                    <td>${evento.nome_campanha}</td>
+                    <td>${evento.status}</td>
+                    <td>
+                        <button class="btn-status" onclick="alterarStatus('${evento.id}', '${evento.status === 'ativo' ? 'rascunho' : 'ativo'}')">
+                            ${evento.status === 'ativo' ? 'Encerrar' : 'Ativar'}
+                        </button>
+                    </td>
+                </tr>`;
+            });
+        }
+
         async function criarEvento() {
             const nome = document.getElementById('nomeEvento').value;
-            
-            const { data, error } = await supabase
-                .from('eventos')
-                .insert([
-                    { nome_campanha: nome, status: 'rascunho' }
-                ]);
-
-            if (error) {
-                alert("Erro ao criar: " + error.message);
-            } else {
-                alert("Evento criado com sucesso!");
-                location.reload();
-            }
+            await supabase.from('eventos').insert([{ nome_campanha: nome, status: 'rascunho' }]);
+            carregarEventos();
         }
+
+        async function alterarStatus(id, novoStatus) {
+            await supabase.from('eventos').update({ status: novoStatus }).eq('id', id);
+            carregarEventos();
+        }
+
+        carregarEventos();
     </script>
 </body>
 </html>
