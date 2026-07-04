@@ -207,16 +207,16 @@
     </div>
 
     <script>
-        // Inicializando a conexão
-        const supabaseUrl = 'https://sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-.supabase.co';
+        // === INSIRA SUAS CHAVES AQUI ===
+        const supabaseUrl = 'https://sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-.supabase.co'; 
         const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-'; 
         
-        // CORRIGIDO: supabase.createClient (sem a palavra Client no meio)
-        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+        // 🔥 CORREÇÃO: Mudamos o nome para 'db' e usamos 'window.supabase' para evitar conflito!
+        const db = window.supabase.createClient(supabaseUrl, supabaseKey);
 
         // 1. Carregar lista de eventos do Banco de Dados
         async function carregarEventos() {
-            const { data, error } = await supabase
+            const { data, error } = await db
                 .from('eventos')
                 .select('*')
                 .order('data_criacao', { ascending: false }); // Traz os mais recentes primeiro
@@ -230,7 +230,7 @@
             const lista = document.getElementById('listaEventos');
             lista.innerHTML = '';
             
-            if(data.length === 0) {
+            if(!data || data.length === 0) {
                 lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
                 return;
             }
@@ -285,7 +285,7 @@
             btnSalvar.innerText = "Salvando...";
             btnSalvar.disabled = true;
 
-            const { data, error } = await supabase
+            const { data, error } = await db
                 .from('eventos')
                 .insert([{ nome_campanha: nome, status: 'rascunho' }]);
 
@@ -303,7 +303,7 @@
 
         // 3. Alterar Status (Play / Pause)
         async function alterarStatus(id, novoStatus) {
-            const { error } = await supabase
+            const { error } = await db
                 .from('eventos')
                 .update({ status: novoStatus })
                 .eq('id', id);
@@ -318,6 +318,3 @@
 
         // Roda a função de carregar assim que a página abre
         carregarEventos();
-    </script>
-</body>
-</html>
