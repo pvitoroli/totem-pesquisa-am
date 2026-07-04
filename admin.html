@@ -206,36 +206,25 @@
         </div>
     </div>
         <script>
-    // 1. Carrega a biblioteca do Supabase primeiro
-    const script = document.createElement('script');
-    script.src = "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
-    script.onload = iniciarApp; // Só roda o app quando carregar
-    document.head.appendChild(script);
+    // 1. A URL correta do seu projeto Supabase (Extraída do seu token)
+    const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co';
+    const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-';
+    
+    // Inicializa o cliente (a biblioteca 'supabase' já estará disponível pelo script do CDN)
+    const db = supabase.createClient(supabaseUrl, supabaseKey);
 
-    function iniciarApp() {
-        // === INSIRA SUAS CHAVES AQUI (MANTENHA AS ASPAS) ===
-        const supabaseUrl = 'https://pesquisa-sentimento-am.supabase.co'; // Substitua pelo link real do seu projeto
-        const supabaseKey = 'sb_publishable_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcXhwaXJ2cnVyaXBscmh2b3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxMTA3OTMsImV4cCI6MjA5ODY4Njc5M30._Xd282qWa8g65baEX5KMHlaRL9XjBlJgw3u_VzYMTs0'; 
-        
-        // Inicializa o cliente corretamente
-        window.db = supabase.createClient(supabaseUrl, supabaseKey);
-        
-        // Começa a carregar os dados
-        carregarEventos();
-    }
-
-    // 2. Carregar lista de eventos do Banco de Dados
+    // 2. Carregar lista de eventos
     async function carregarEventos() {
-        if (!window.db) return;
-
-        const { data, error } = await window.db
+        console.log("Buscando eventos...");
+        
+        const { data, error } = await db
             .from('eventos')
             .select('*')
             .order('data_criacao', { ascending: false });
         
         if (error) {
-            console.error("Erro ao carregar:", error);
-            alert("Erro ao carregar: " + error.message);
+            console.error("Erro ao buscar:", error);
+            alert("Erro ao buscar eventos: " + error.message);
             return;
         }
 
@@ -277,7 +266,7 @@
         btnSalvar.innerText = "Salvando...";
         btnSalvar.disabled = true;
 
-        const { error } = await window.db
+        const { error } = await db
             .from('eventos')
             .insert([{ nome_campanha: nome, status: 'rascunho' }]);
 
@@ -294,7 +283,7 @@
 
     // 4. Alterar Status
     async function alterarStatus(id, novoStatus) {
-        const { error } = await window.db
+        const { error } = await db
             .from('eventos')
             .update({ status: novoStatus })
             .eq('id', id);
@@ -305,4 +294,7 @@
             carregarEventos();
         }
     }
+
+    // Roda ao carregar a página
+    carregarEventos();
 </script>
