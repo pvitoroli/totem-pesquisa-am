@@ -206,93 +206,33 @@
         </div>
     </div>
         <script>
-    // 1. Configuração (DÊ UM CTRL+C CTRL+V COM CUIDADO)
-    const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co'; // APENAS A URL, SEM BARRAS NO FIM
-    const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-'; 
-
-    console.log("Iniciando conexão...");
+    // 1. URL e Key (Verifique se não há espaços!)
+    const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co'; 
+    const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-';
     
-    // 2. Inicializa o banco
-    // A biblioteca 'supabase' é carregada pelo CDN
+    // 2. Inicializa o cliente
     const db = supabase.createClient(supabaseUrl, supabaseKey);
-    console.log("Cliente Supabase criado:", db);
 
-    // 3. Carregar lista de eventos com logs de erro detalhados
-    async function carregarEventos() {
-        console.log("Executando carregarEventos()...");
-        
+    // 3. Teste de Conexão Puro
+    async function testarConexao() {
+        console.log("Iniciando teste de conexão...");
         try {
-            const { data, error } = await db
-                .from('eventos')
-                .select('*')
-                .order('data_criacao', { ascending: false });
+            // Tenta buscar apenas uma linha para ver se o servidor responde
+            const { data, error } = await db.from('eventos').select('*').limit(1);
             
             if (error) {
-                console.error("Erro retornado pelo Supabase:", error);
-                alert("Erro ao buscar eventos: " + error.message);
-                return;
+                console.error("🔴 Erro de Supabase:", error);
+                alert("O Supabase respondeu com erro: " + error.message);
+            } else {
+                console.log("🟢 Conexão com Supabase SUCESSO! Dados:", data);
+                alert("Conectado com sucesso!");
             }
-
-            console.log("Dados recebidos do banco:", data);
-            
-            const lista = document.getElementById('listaEventos');
-            lista.innerHTML = '';
-            
-            if(!data || data.length === 0) {
-                lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
-                return;
-            }
-
-            data.forEach(evento => {
-                let badgeClass = evento.status === 'ativo' ? 'status-ativo' : (evento.status === 'rascunho' ? 'status-rascunho' : 'status-encerrado');
-                let actionText = evento.status === 'ativo' ? 'Encerrar' : 'Ativar';
-                let nextStatus = evento.status === 'ativo' ? 'encerrado' : 'ativo';
-
-                lista.innerHTML += `
-                    <tr>
-                        <td class="nome-evento">${evento.nome_campanha}</td>
-                        <td><span class="status-badge ${badgeClass}">${evento.status}</span></td>
-                        <td>
-                            <button class="btn-action" onclick="alterarStatus('${evento.id}', '${nextStatus}')">
-                                ${actionText}
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
         } catch (e) {
-            console.error("Erro crítico no bloco catch:", e);
+            console.error("🔴 Erro de Rede:", e);
+            alert("Erro de rede ou bloqueio de firewall.");
         }
     }
 
-    // 4. Criar evento
-    async function criarEvento() {
-        const nome = document.getElementById('nomeEvento').value.trim();
-        if (!nome) return;
-
-        console.log("Criando evento:", nome);
-        const { error } = await db.from('eventos').insert([{ nome_campanha: nome, status: 'rascunho' }]);
-        
-        if (error) {
-            console.error("Erro na criação:", error);
-            alert("Erro ao criar: " + error.message);
-        } else {
-            document.getElementById('nomeEvento').value = '';
-            carregarEventos();
-        }
-    }
-
-    // 5. Alterar status
-    async function alterarStatus(id, novoStatus) {
-        const { error } = await db.from('eventos').update({ status: novoStatus }).eq('id', id);
-        if (error) {
-            console.error("Erro na atualização:", error);
-            alert("Erro ao atualizar: " + error.message);
-        } else {
-            carregarEventos();
-        }
-    }
-
-    // Inicia ao carregar
-    carregarEventos();
-</script>>
+    // Chama o teste
+    testarConexao();
+</script>
