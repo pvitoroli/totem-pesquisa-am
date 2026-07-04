@@ -207,114 +207,58 @@
     </div>
 
     <script>
-        // === INSIRA SUAS CHAVES AQUI ===
-        const supabaseUrl = 'https://sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-.supabase.com'; 
+        <script>
+        console.log("🟢 1. O script começou a rodar.");
+
+        // === INSIRA SUAS CHAVES AQUI (MANTENHA AS ASPAS) ===
+        const supabaseUrl = 'https://sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-.supabase.co'; 
         const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-'; 
         
-        // 🔥 CORREÇÃO: Mudamos o nome para 'db' e usamos 'window.supabase' para evitar conflito!
-        const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+        console.log("🟢 2. Chaves lidas. URL configurada:", supabaseUrl);
 
-        // 1. Carregar lista de eventos do Banco de Dados
-        async function carregarEventos() {
-            const { data, error } = await db
-                .from('eventos')
-                .select('*')
-                .order('data_criacao', { ascending: false }); // Traz os mais recentes primeiro
-            
-            if (error) {
-                console.error("Erro ao carregar:", error);
-                alert("Erro de conexão com o banco.");
-                return;
-            }
+        try {
+            const db = window.supabase.createClient(supabaseUrl, supabaseKey);
+            console.log("🟢 3. Motor do Supabase conectado no navegador.");
 
-            const lista = document.getElementById('listaEventos');
-            lista.innerHTML = '';
-            
-            if(!data || data.length === 0) {
-                lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
-                return;
-            }
+            async function carregarEventos() {
+                console.log("🟢 4. Tentando buscar eventos no banco de dados...");
+                
+                try {
+                    const { data, error } = await db.from('eventos').select('*');
+                    
+                    console.log("🟢 5. O Banco de Dados respondeu!");
 
-            // Pinta a tabela com os dados
-            data.forEach(evento => {
-                let badgeClass = '';
-                let actionText = '';
-                let nextStatus = '';
+                    if (error) {
+                        console.error("🔴 ERRO DO BANCO:", error);
+                        alert("O banco recusou a conexão: " + error.message);
+                        return;
+                    }
 
-                // Lógica dos Botões e Cores baseada no status
-                if (evento.status === 'ativo') {
-                    badgeClass = 'status-ativo';
-                    actionText = 'Encerrar Ação';
-                    nextStatus = 'encerrado';
-                } else if (evento.status === 'rascunho') {
-                    badgeClass = 'status-rascunho';
-                    actionText = 'Ativar no Totem';
-                    nextStatus = 'ativo';
-                } else {
-                    badgeClass = 'status-encerrado';
-                    actionText = 'Reativar';
-                    nextStatus = 'ativo';
+                    console.log("🟢 6. Dados recebidos:", data);
+                    const lista = document.getElementById('listaEventos');
+                    
+                    if (!data || data.length === 0) {
+                        lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
+                    } else {
+                        lista.innerHTML = '';
+                        data.forEach(evento => {
+                            lista.innerHTML += `<tr>
+                                <td>${evento.nome_campanha}</td>
+                                <td>${evento.status}</td>
+                                <td><button onclick="alert('Botão teste')">Teste</button></td>
+                            </tr>`;
+                        });
+                    }
+                } catch(errFetch) {
+                    console.error("🔴 ERRO DE REDE/FETCH:", errFetch);
+                    alert("Erro na rede. O firewall pode estar bloqueando.");
                 }
-
-                lista.innerHTML += `
-                    <tr>
-                        <td class="nome-evento">${evento.nome_campanha}</td>
-                        <td><span class="status-badge ${badgeClass}">${evento.status}</span></td>
-                        <td>
-                            <button class="btn-action" onclick="alterarStatus('${evento.id}', '${nextStatus}')">
-                                ${actionText}
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
-        }
-
-        // 2. Criar Novo Evento
-        async function criarEvento() {
-            const nomeInput = document.getElementById('nomeEvento');
-            const nome = nomeInput.value.trim();
-            const btnSalvar = document.getElementById('btnSalvar');
-
-            if (!nome) {
-                alert('Por favor, digite um nome para a campanha!');
-                return;
             }
 
-            // Feedback visual de carregamento
-            btnSalvar.innerText = "Salvando...";
-            btnSalvar.disabled = true;
+            carregarEventos();
 
-            const { data, error } = await db
-                .from('eventos')
-                .insert([{ nome_campanha: nome, status: 'rascunho' }]);
-
-            if (error) {
-                alert("Erro ao criar campanha: " + error.message);
-                console.error(error);
-            } else {
-                nomeInput.value = ''; // Limpa o campo
-                carregarEventos();    // Atualiza a tabela instantaneamente
-            }
-
-            btnSalvar.innerText = "Salvar Evento";
-            btnSalvar.disabled = false;
+        } catch (errGeral) {
+            console.error("🔴 ERRO FATAL AO CRIAR CLIENTE:", errGeral);
+            alert("A biblioteca do Supabase não carregou. Veja o F12.");
         }
-
-        // 3. Alterar Status (Play / Pause)
-        async function alterarStatus(id, novoStatus) {
-            const { error } = await db
-                .from('eventos')
-                .update({ status: novoStatus })
-                .eq('id', id);
-
-            if (error) {
-                alert("Erro ao atualizar o status: " + error.message);
-                console.error(error);
-            } else {
-                carregarEventos(); // Atualiza a tabela instantaneamente
-            }
-        }
-
-        // Roda a função de carregar assim que a página abre
-        carregarEventos();
+    </script>
