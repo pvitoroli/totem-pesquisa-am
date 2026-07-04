@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Painel Administrativo - Sentimento</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Painel de Gestão de Eventos</h1>
+    
+    <div id="admin-form">
+        <input type="text" id="nomeEvento" placeholder="Nome da Campanha">
+        <button onclick="criarEvento()">Criar Evento</button>
+    </div>
+
+    <script>
+        // Inicializando a conexão
+        const supabaseUrl = 'https://sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-.supabase.co';
+        const supabaseKey = 'sb_publishable_pMWd7GViysXMxBhFxUEgNQ_Vn3IpU8-';
+        const supabase = supabaseClient.createClient(supabaseUrl, supabaseKey);
+
+        async function criarEvento() {
+            const nome = document.getElementById('nomeEvento').value;
+            
+            const { data, error } = await supabase
+                .from('eventos')
+                .insert([
+                    { nome_campanha: nome, status: 'rascunho' }
+                ]);
+
+            if (error) {
+                alert("Erro ao criar: " + error.message);
+            } else {
+                alert("Evento criado com sucesso!");
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
