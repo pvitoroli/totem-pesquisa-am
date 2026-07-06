@@ -56,7 +56,7 @@
         const urlGoogleScript = "https://script.google.com/macros/s/AKfycbxkV75w5Dg3zSg8aHxE-B5URe569hd_FYct2_xaxm2RKY6WdMB0Z7eKP2aUy4khmNA/exec";
 
         async function carregarEventos() {
-            const lista = document.getElementById('listaEventos');
+            const lista = document.getElementById('Eventos');
             lista.innerHTML = '<tr><td colspan="4">Carregando...</td></tr>';
             
             const response = await fetch(urlGoogleScript + "?acao=listar");
