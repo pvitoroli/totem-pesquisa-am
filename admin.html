@@ -2,95 +2,107 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão - Sentimento AMP</title>
     <style>
-        body { background-color: #1b1e27; margin: 0; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .admin-container { width: 100%; max-width: 800px; }
-        .totem-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 16px; margin-bottom: 32px; }
-        .brand-subtext { font-size: 12px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
-        .card { background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 30px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-        h2 { font-size: 18px; margin-bottom: 20px; color: white; }
-        .input-group { display: flex; gap: 12px; flex-wrap: wrap; }
-        input[type="text"], select { flex: 1; min-width: 200px; background-color: rgba(0, 0, 0, 0.25); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px; color: white; }
-        .btn-primary { background-color: #ff5100; color: white; border: none; border-radius: 12px; padding: 16px 28px; font-weight: bold; cursor: pointer; }
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 16px 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-        .status-badge { padding: 6px 12px; border-radius: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .status-ativo { background-color: #1a4d1a; color: #4bb543; }
-        .status-rascunho { background-color: #554411; color: #ffcc00; }
-        .btn-action { background-color: transparent; border: 1px solid white; color: white; padding: 8px 16px; cursor: pointer; border-radius: 8px; margin-right: 5px; }
+        :root { --primary: #ff5100; --bg: #1b1e27; --card: #2a2f3a; --text: #ffffff; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .logo { width: 130px; }
+        .card { background: var(--card); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
+        .form-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; }
+        input, select, button { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #373e4d; color: white; }
+        button { background: var(--primary); font-weight: bold; cursor: pointer; border: none; }
+        .filters { margin-bottom: 15px; display: flex; gap: 10px; }
+        .filter-btn { background: #373e4d; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; }
+        .filter-btn.active { background: var(--primary); }
+        .table-wrap { max-height: 400px; overflow-y: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: #a0a5b0; font-size: 12px; padding: 10px; }
+        td { padding: 12px; border-bottom: 1px solid #444; }
+        .status-pill { padding: 4px 10px; border-radius: 10px; font-size: 10px; text-transform: uppercase; }
+        .ativo { background: #1a4d1a; color: #4bb543; }
+        .rascunho { background: #554411; color: #ffcc00; }
+        .encerrado { background: #444; color: #ccc; }
+        .btn-action { margin-right: 5px; padding: 5px 10px; font-size: 11px; }
     </style>
 </head>
 <body>
-    <div class="admin-container">
-        <div class="totem-header">
-            <div><img src="logo-arcelormittal.png" alt="Logo" style="max-width: 130px;"></div>
-            <span class="brand-subtext">Painel de Gestão - AMP</span>
-        </div>
+    <div class="container">
+        <header class="header">
+            <img src="logo-arcelormittal.png" class="logo">
+            <span class="brand-subtext">Painel de Gestão - Pro Edition</span>
+        </header>
 
-        <div class="card">
-            <h2>Criar Nova Campanha</h2>
-            <div class="input-group">
-                <input type="text" id="nomeEvento" placeholder="Nome da Campanha">
-                <select id="setorEvento">
-                    <option value="RH">RH</option>
-                    <option value="Manutenção">Manutenção</option>
-                    <option value="Segurança">Segurança</option>
-                </select>
-                <button class="btn-primary" id="btnSalvar" onclick="criarEvento()">Salvar</button>
+        <section class="card">
+            <h2>Nova Campanha</h2>
+            <div class="form-row">
+                <input type="text" id="nomeEvento" placeholder="Nome da Ação">
+                <select id="setorEvento"><option>RH</option><option>Manutenção</option><option>Segurança</option></select>
+                <input type="date" id="dataEvento">
+                <button onclick="criarEvento()">Salvar</button>
             </div>
-        </div>
+        </section>
 
-        <div class="card">
-            <h2>Campanhas Ativas</h2>
-            <table id="tabelaEventos">
-                <thead><tr><th>Nome</th><th>Setor</th><th>Status</th><th>Ações</th></tr></thead>
-                <tbody id="listaEventos"></tbody>
-            </table>
-        </div>
+        <section class="card">
+            <div class="filters">
+                <span class="filter-btn active" onclick="filtrar('todos')">Todos</span>
+                <span class="filter-btn" onclick="filtrar('ativo')">Ativos</span>
+                <span class="filter-btn" onclick="filtrar('rascunho')">Rascunhos</span>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Campanha</th><th>Setor</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="listaEventos"></tbody>
+                </table>
+            </div>
+        </section>
     </div>
 
     <script>
-        // 👇 COLE A SUA URL DO WEB APP AQUI 👇
-        const urlGoogleScript = "https://script.google.com/macros/s/AKfycbxkV75w5Dg3zSg8aHxE-B5URe569hd_FYct2_xaxm2RKY6WdMB0Z7eKP2aUy4khmNA/exec";
+        const url = "https://script.google.com/macros/s/AKfycbxkV75w5Dg3zSg8aHxE-B5URe569hd_FYct2_xaxm2RKY6WdMB0Z7eKP2aUy4khmNA/exec";
+        let dadosCampanhas = [];
 
-        async function carregarEventos() {
-            const lista = document.getElementById('Eventos');
-            lista.innerHTML = '<tr><td colspan="4">Carregando...</td></tr>';
-            
-            const response = await fetch(urlGoogleScript + "?acao=listar");
-            const data = await response.json();
-            
-            lista.innerHTML = '';
-            data.forEach(ev => {
-                let statusClass = ev.status === 'ativo' ? 'status-ativo' : 'status-rascunho';
-                lista.innerHTML += `<tr>
-                    <td>${ev.nome_campanha}</td>
-                    <td>${ev.setor}</td>
-                    <td><span class="status-badge ${statusClass}">${ev.status}</span></td>
+        async function carregar() {
+            const res = await fetch(url + "?acao=listar");
+            dadosCampanhas = await res.json();
+            renderizar(dadosCampanhas);
+        }
+
+        function renderizar(lista) {
+            const tbody = document.getElementById('listaEventos');
+            tbody.innerHTML = '';
+            lista.forEach(ev => {
+                tbody.innerHTML += `<tr>
+                    <td>${ev.nome_campanha}</td><td>${ev.setor}</td>
+                    <td><span class="status-pill ${ev.status}">${ev.status}</span></td>
                     <td>
-                        <button class="btn-action" onclick="alterarStatus('${ev.id}', '${ev.status === 'ativo' ? 'rascunho' : 'ativo'}')">
-                            ${ev.status === 'ativo' ? 'Encerrar' : 'Ativar'}
-                        </button>
+                        <button class="btn-action" onclick="alterar('${ev.id}', 'ativo')">Ativar</button>
+                        <button class="btn-action" onclick="alterar('${ev.id}', 'encerrado')">Finalizar</button>
                     </td>
                 </tr>`;
             });
         }
 
+        function filtrar(status) {
+            if(status === 'todos') renderizar(dadosCampanhas);
+            else renderizar(dadosCampanhas.filter(c => c.status === status));
+        }
+
         async function criarEvento() {
             const nome = document.getElementById('nomeEvento').value;
             const setor = document.getElementById('setorEvento').value;
-            await fetch(`${urlGoogleScript}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}`);
-            carregarEventos();
+            const data = document.getElementById('dataEvento').value;
+            await fetch(`${url}?acao=criar&nome=${nome}&setor=${setor}&dataInicio=${data}`);
+            carregar();
         }
 
-        async function alterarStatus(id, novoStatus) {
-            await fetch(`${urlGoogleScript}?acao=alterarStatus&id=${id}&status=${novoStatus}`);
-            carregarEventos();
+        async function alterar(id, status) {
+            await fetch(`${url}?acao=alterarStatus&id=${id}&status=${status}`);
+            carregar();
         }
 
-        carregarEventos();
+        carregar();
     </script>
 </body>
 </html>
