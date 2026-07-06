@@ -4,131 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel de Gestão - Sentimento AMP</title>
-    
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <style>
-        body { background-color: #1b1e27; margin: 0; padding: 40px 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        body { background-color: #1b1e27; margin: 0; padding: 40px 20px; font-family: 'Segoe UI', sans-serif; color: white; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .admin-container { width: 100%; max-width: 800px; }
         .totem-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 16px; margin-bottom: 32px; }
         .brand-subtext { font-size: 12px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; }
         .card { background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 30px; margin-bottom: 24px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); }
-        h2 { font-size: 18px; margin-top: 0; margin-bottom: 20px; color: white; font-weight: 700; letter-spacing: 0.5px; }
-        .input-group { display: flex; gap: 16px; }
-        input[type="text"] { flex: 1; background-color: rgba(0, 0, 0, 0.25); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px; color: white; font-size: 15px; outline: none; }
-        input[type="text"]:focus { border-color: #ff5100; }
-        .btn-primary { background-color: #ff5100; color: white; border: none; border-radius: 12px; padding: 0 28px; font-size: 14px; font-weight: bold; cursor: pointer; }
+        h2 { font-size: 18px; margin-bottom: 20px; color: white; }
+        .input-group { display: flex; gap: 12px; flex-wrap: wrap; }
+        input[type="text"], select { flex: 1; min-width: 200px; background-color: rgba(0, 0, 0, 0.25); border: 1.5px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 16px; color: white; }
+        .btn-primary { background-color: #ff5100; color: white; border: none; border-radius: 12px; padding: 16px 28px; font-weight: bold; cursor: pointer; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { padding: 16px 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 14px; }
-        th { color: #a0a5b0; text-transform: uppercase; font-size: 11px; font-weight: 700; }
+        th, td { padding: 16px 12px; text-align: left; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
         .status-badge { padding: 6px 12px; border-radius: 12px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .status-ativo { background-color: rgba(75, 181, 67, 0.15); color: #4bb543; border: 1px solid rgba(75, 181, 67, 0.3); }
-        .status-rascunho { background-color: rgba(255, 204, 0, 0.15); color: #ffcc00; border: 1px solid rgba(255, 204, 0, 0.3); }
-        .status-encerrado { background-color: rgba(160, 165, 176, 0.15); color: #a0a5b0; border: 1px solid rgba(160, 165, 176, 0.3); }
-        .btn-action { background-color: transparent; border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 8px 16px; font-size: 11px; font-weight: 700; border-radius: 8px; cursor: pointer; text-transform: uppercase; }
-        .btn-action:hover { background-color: rgba(255, 255, 255, 0.1); border-color: white; }
+        .status-ativo { background-color: #1a4d1a; color: #4bb543; }
+        .status-rascunho { background-color: #554411; color: #ffcc00; }
+        .btn-action { background-color: transparent; border: 1px solid white; color: white; padding: 8px 16px; cursor: pointer; border-radius: 8px; margin-right: 5px; }
     </style>
 </head>
 <body>
     <div class="admin-container">
         <div class="totem-header">
-            <div class="company-logo-area">
-                <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" style="filter: brightness(1.2); max-width: 130px; object-fit: contain;" />
-            </div>
-            <div class="header-right-text">
-                <span class="brand-subtext">Painel de Gestão - AMP</span>
-            </div>
+            <div><img src="logo-arcelormittal.png" alt="Logo" style="max-width: 130px;"></div>
+            <span class="brand-subtext">Painel de Gestão - AMP</span>
         </div>
 
         <div class="card">
             <h2>Criar Nova Campanha</h2>
             <div class="input-group">
-                <input type="text" id="nomeEvento" placeholder="Ex: Semana da Segurança, Pesquisa de Clima..." autocomplete="off">
-                <button class="btn-primary" id="btnSalvar" onclick="criarEvento()">Salvar Evento</button>
+                <input type="text" id="nomeEvento" placeholder="Nome da Campanha">
+                <select id="setorEvento">
+                    <option value="RH">RH</option>
+                    <option value="Manutenção">Manutenção</option>
+                    <option value="Segurança">Segurança</option>
+                </select>
+                <button class="btn-primary" id="btnSalvar" onclick="criarEvento()">Salvar</button>
             </div>
         </div>
 
         <div class="card">
-            <h2>Gerenciamento de Eventos</h2>
-            <table>
-                <thead>
-                    <tr><th>Nome da Campanha</th><th>Status</th><th>Ações RÁPIDAS</th></tr>
-                </thead>
-                <tbody id="listaEventos">
-                    <tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Conectando ao servidor...</td></tr>
-                </tbody>
+            <h2>Campanhas Ativas</h2>
+            <table id="tabelaEventos">
+                <thead><tr><th>Nome</th><th>Setor</th><th>Status</th><th>Ações</th></tr></thead>
+                <tbody id="listaEventos"></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // AS CHAVES CORRETAS E DEFINITIVAS
-        const supabaseUrl = 'https://tjqxpivrvuriplrhvoxj.supabase.co';
-        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqcXhwaXJ2cnVyaXBscmh2b3hqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMxMTA3OTMsImV4cCI6MjA5ODY4Njc5M30._Xd282qWa8g65baEX5KMHlaRL9XjBlJgw3u_VzYMTs0';
-
-        let db;
-
-        // Aguarda a biblioteca carregar antes de iniciar
-        window.onload = () => {
-            if (window.supabase) {
-                db = window.supabase.createClient(supabaseUrl, supabaseKey);
-                carregarEventos();
-            } else {
-                alert("Erro: A rede está bloqueando o download das bibliotecas (CDN).");
-            }
-        };
+        // 👇 COLE A SUA URL DO WEB APP AQUI 👇
+        const urlGoogleScript = "https://script.google.com/macros/s/AKfycbxkV75w5Dg3zSg8aHxE-B5URe569hd_FYct2_xaxm2RKY6WdMB0Z7eKP2aUy4khmNA/exec";
 
         async function carregarEventos() {
-            try {
-                const { data, error } = await db.from('eventos').select('*').order('data_criacao', { ascending: false });
-                
-                if (error) throw error;
-
-                const lista = document.getElementById('listaEventos');
-                lista.innerHTML = '';
-                
-                if (!data || data.length === 0) {
-                    lista.innerHTML = '<tr><td colspan="3" style="text-align: center; color: #a0a5b0;">Nenhuma campanha criada ainda.</td></tr>';
-                    return;
-                }
-
-                data.forEach(evento => {
-                    let badgeClass = evento.status === 'ativo' ? 'status-ativo' : (evento.status === 'rascunho' ? 'status-rascunho' : 'status-encerrado');
-                    let actionText = evento.status === 'ativo' ? 'Encerrar Ação' : 'Ativar no Totem';
-                    let nextStatus = evento.status === 'ativo' ? 'encerrado' : 'ativo';
-
-                    lista.innerHTML += `
-                        <tr>
-                            <td style="font-weight: 700;">${evento.nome_campanha}</td>
-                            <td><span class="status-badge ${badgeClass}">${evento.status}</span></td>
-                            <td><button class="btn-action" onclick="alterarStatus('${evento.id}', '${nextStatus}')">${actionText}</button></td>
-                        </tr>
-                    `;
-                });
-            } catch (e) {
-                document.getElementById('listaEventos').innerHTML = `<tr><td colspan="3" style="text-align: center; color: #ff5100;">Erro de Conexão: O Firewall da rede está bloqueando o acesso ao banco de dados.</td></tr>`;
-            }
+            const lista = document.getElementById('listaEventos');
+            lista.innerHTML = '<tr><td colspan="4">Carregando...</td></tr>';
+            
+            const response = await fetch(urlGoogleScript + "?acao=listar");
+            const data = await response.json();
+            
+            lista.innerHTML = '';
+            data.forEach(ev => {
+                let statusClass = ev.status === 'ativo' ? 'status-ativo' : 'status-rascunho';
+                lista.innerHTML += `<tr>
+                    <td>${ev.nome_campanha}</td>
+                    <td>${ev.setor}</td>
+                    <td><span class="status-badge ${statusClass}">${ev.status}</span></td>
+                    <td>
+                        <button class="btn-action" onclick="alterarStatus('${ev.id}', '${ev.status === 'ativo' ? 'rascunho' : 'ativo'}')">
+                            ${ev.status === 'ativo' ? 'Encerrar' : 'Ativar'}
+                        </button>
+                    </td>
+                </tr>`;
+            });
         }
 
         async function criarEvento() {
-            const nomeInput = document.getElementById('nomeEvento');
-            const nome = nomeInput.value.trim();
-            if (!nome) return;
-
-            document.getElementById('btnSalvar').innerText = "Salvando...";
-            const { error } = await db.from('eventos').insert([{ nome_campanha: nome, status: 'rascunho' }]);
-            
-            if (error) alert("Erro ao criar: " + error.message);
-            else { nomeInput.value = ''; carregarEventos(); }
-            
-            document.getElementById('btnSalvar').innerText = "Salvar Evento";
+            const nome = document.getElementById('nomeEvento').value;
+            const setor = document.getElementById('setorEvento').value;
+            await fetch(`${urlGoogleScript}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}`);
+            carregarEventos();
         }
 
         async function alterarStatus(id, novoStatus) {
-            const { error } = await db.from('eventos').update({ status: novoStatus }).eq('id', id);
-            if (error) alert("Erro ao atualizar: " + error.message);
-            else carregarEventos();
+            await fetch(`${urlGoogleScript}?acao=alterarStatus&id=${id}&status=${novoStatus}`);
+            carregarEventos();
         }
+
+        carregarEventos();
     </script>
 </body>
 </html>
