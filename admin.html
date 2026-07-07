@@ -337,12 +337,21 @@
             renderizarLista();
         }
 
-        function abrirModalJornada(id) {
+       function abrirModalJornada(id) {
             campSelecionada = dbCampanhas.find(c => c.id === id);
             if(!campSelecionada) return;
             
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
-            document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status Atual: ${campSelecionada.status.toUpperCase()}`;
+            document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
+            
+            // 🔥 MÁGICA DO QR CODE AQUI 🔥
+            // Pega o link público da campanha
+            const linkPublico = pegarLinkPublico(); 
+            // Conecta na API gratuita para gerar a imagem na hora
+            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(linkPublico)}`;
+            // Joga a imagem direto no painel
+            document.getElementById('qrCodeImg').src = qrCodeUrl;
+
             document.getElementById('modalJornada').style.display = 'flex';
         }
 
@@ -352,7 +361,7 @@
             }
         }
 
-        // FUNÇÕES DE LINKS ATUALIZADAS AQUI
+        // FUNÇÕES DE LINKS
         function pegarLinkTotem() {
             return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`;
         }
@@ -367,7 +376,7 @@
 
         function gerarLinkPublico() {
             navigator.clipboard.writeText(pegarLinkPublico()).then(() => {
-                alert("✅ Link PÚBLICO (Mobile) copiado com sucesso! Transforme-o em QR Code.");
+                alert("✅ Link PÚBLICO (Mobile) copiado com sucesso!");
             });
         }
     </script>
