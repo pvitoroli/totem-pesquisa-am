@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avaliação - Pesquisa Pública</title>
+    <style>
+        body {
+            background-color: #1b1e27; margin: 0; padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; overflow-x: hidden; text-align: center;
+        }
+        .totem-app-canvas { width: 100%; max-width: 600px; }
+        .logo-img { max-width: 130px; margin-bottom: 30px; filter: brightness(1.2); }
+        h3 { color: #f39c12; margin: 0; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; } /* Amarelo Público */
+        h2 { color: white; margin-top: 10px; font-size: 22px; font-weight: 800; }
+        p { color: #a0a5b0; margin-bottom: 40px; font-size: 14px; }
+        
+        .nps-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 20px; }
+        .nps-btn {
+            background: #2a2f3a; color: white; border: 1.5px solid rgba(255,255,255,0.05);
+            border-radius: 12px; width: 55px; height: 55px; font-size: 20px; font-weight: bold;
+            cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nps-btn:hover, .nps-btn:active { transform: scale(1.1); color: #1b1e27; }
+        .nps-red:hover, .nps-red:active { background: #e74c3c; border-color: #e74c3c; box-shadow: 0 0 15px rgba(231, 76, 60, 0.5); }
+        .nps-yellow:hover, .nps-yellow:active { background: #f1c40f; border-color: #f1c40f; box-shadow: 0 0 15px rgba(241, 196, 15, 0.5); }
+        .nps-green:hover, .nps-green:active { background: #2ecc71; border-color: #2ecc71; box-shadow: 0 0 15px rgba(46, 204, 113, 0.5); }
+    </style>
+</head>
+<body>
+
+    <div class="totem-app-canvas">
+        <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo-img" onerror="this.style.display='none'">
+        <h3>Pesquisa Pública</h3>
+        <h2>De 0 a 10, que nota você dá para a ação de hoje?</h2>
+        <p>Sua avaliação nos ajuda a melhorar continuamente.</p>
+        
+        <div class="nps-grid">
+            <button class="nps-btn nps-red" onclick="escolherNota(0)">0</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(1)">1</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(2)">2</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(3)">3</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(4)">4</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(5)">5</button>
+            <button class="nps-btn nps-red" onclick="escolherNota(6)">6</button>
+            <button class="nps-btn nps-yellow" onclick="escolherNota(7)">7</button>
+            <button class="nps-btn nps-yellow" onclick="escolherNota(8)">8</button>
+            <button class="nps-btn nps-green" onclick="escolherNota(9)">9</button>
+            <button class="nps-btn nps-green" onclick="escolherNota(10)">10</button>
+        </div>
+    </div>
+
+    <script>
+        // Trava de botão voltar
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () { window.history.go(1); };
+
+        function escolherNota(notaEscolhida) {
+            document.querySelectorAll('.nps-btn').forEach(b => b.style.pointerEvents = 'none');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const evento = urlParams.get('evento') || '';
+            const id = urlParams.get('id') || '';
+            const sentimento = urlParams.get('sentimento') || '';
+            const setor = urlParams.get('setor') || 'Geral';
+
+            // ATENÇÃO AQUI: Ele manda direto para o agradecimento_publico.html
+            window.location.replace(`agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${id}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${notaEscolhida}`);
+        }
+    </script>
+</body>
+</html>
