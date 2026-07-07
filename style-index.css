@@ -112,7 +112,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     align-items: center !important;
     gap: 6px !important;
     margin-top: 12px !important;
-    background-color: rgba(75, 181, 67, 0.7) !important;
+    background-color: rgba(44, 50, 63, 1) !important;
     padding: 4px 10px !important;
     border-radius: 12px !important;
 }
