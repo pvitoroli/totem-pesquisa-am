@@ -249,6 +249,42 @@
     </div>
 
     <script>
+        // Adicione essa leitura de URL no início do script do seu index.html
+const urlParams = new URLSearchParams(window.location.search);
+let idEventoAtual = urlParams.get('evento');
+let setorAtual = urlParams.get('setor') || "Geral";
+let nomeCampanhaExibicao = "Pesquisa Corporativa";
+
+window.onload = async () => {
+    if (idEventoAtual) {
+        // MÁGICA PRO: Se o link tem ID, o Totem se auto-configura na hora!
+        try {
+            // Buscamos o nome real da campanha para exibir na tela do totem
+            const res = await fetch("SUA_URL_DO_WEB_APP_AQUI?acao=buscarPorId&id=" + idEventoAtual);
+            const dados = await res.json();
+            if(dados.sucesso) {
+                nomeCampanhaExibicao = dados.nome;
+                setorAtual = dados.setor;
+                // Altere o elemento h1 ou h2 do seu Totem para mostrar o nome da campanha na tela!
+                document.getElementById('tituloCampanhaTotem').innerText = nomeCampanhaExibicao;
+            }
+        } catch(e) {
+            console.log("Modo autônomo ativo via parâmetros locais.");
+        }
+    } else {
+        alert("Atenção: Este totem precisa ser aberto através do link parametrizado gerado pelo Painel Admin!");
+    }
+};
+
+// Na hora em que a função de voto do seu Totem der o 'fetch' (doPost) para salvar,
+// garanta que o objeto enviado (payload) envie as variáveis coletadas da URL:
+/* var dadosVoto = {
+     evento: idEventoAtual,   // Passa o ID único (ou nomeCampanhaExibicao)
+     setor: setorAtual,       // Passa o setor mapeado na URL
+     sentimento: "Feliz",
+     nota: 10
+  };
+*/
         async function buscarEventoAtivo() {
             const urlScript = "https://script.google.com/macros/s/AKfycbxT8wam8HGMDr3Wg888dkXNj2HIMBysbMiopMw6IbIwBumpNvViFgSlLDq76Jq0v51R/exec";
             const tempoInicio = Date.now();
