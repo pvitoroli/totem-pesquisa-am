@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação - Pesquisa de Sentimento</title>
+    <title>Sucesso - Pesquisa de Sentimento</title>
     
-    <link rel="stylesheet" href="style-avaliacao.css">
+    <link rel="stylesheet" href="style-agradecimento.css">
 
     <style>
         body {
@@ -17,120 +17,175 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow: hidden; /* Evita rolagens indesejadas no celular */
         }
         
-        /* Ajuste do visual do botão Voltar */
-        .btn-back {
-            color: #a0a5b0;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 600;
-            padding: 10px 15px;
-            background-color: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            transition: all 0.2s ease;
+        /* 1. Animação de entrada suave da caixa toda (Fade In Up) */
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
         }
-        .btn-back:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 2. Animação de pop do ícone */
+        .success-check-icon {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* 3. Efeito Glow Laranja (Totem Fixo) */
+        .glow-pulse-orange {
+            box-shadow: 0 0 15px rgba(255, 81, 0, 0.3);
+            animation: pulseGlowOrange 2s infinite alternate;
+            background-color: rgba(255, 81, 0, 0.1);
+        }
+
+        @keyframes pulseGlowOrange {
+            from { box-shadow: 0 0 15px rgba(255, 81, 0, 0.2); }
+            to { box-shadow: 0 0 35px rgba(255, 81, 0, 0.6); }
+        }
+
+        /* 4. Efeito Glow Amarelo (Totem Público Celular) */
+        .glow-pulse-yellow {
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
+            animation: pulseGlowYellow 2s infinite alternate;
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+
+        @keyframes pulseGlowYellow {
+            from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); }
+            to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); }
+        }
+
+        .btn-fechar {
+            background: rgba(255, 255, 255, 0.05);
+            color: #a0a5b0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.2s;
+            margin-top: 15px;
+            display: none; /* Escondido por padrão, aparece só no celular */
+        }
+        .btn-fechar:hover {
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
     </style>
 </head>
 <body>
 
-    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
-      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
-       <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
-    <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
-</div>
-        <div class="header-right-text" style="display: flex;">
-            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
-        </div>
-      </div>
+    <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
       
-      <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
-        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+      <div class="success-box">
+        <div id="wrapperIcone" class="success-icon-wrapper glow-pulse-orange" style="width: 90px; height: 90px; margin: 0 auto 24px auto; border-radius: 50%; padding: 15px; display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" fill="none" id="svgCheck" stroke="rgb(255, 81, 0)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+          </svg>
+        </div>
         
-        <h3 id="sub-evento-nome" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
+        <h2 id="textoTitulo" class="success-title" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: white;">VOTO REGISTRADO!</h2>
         
-        <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
-          ​​<span style="font-weight: normal; color: white;">Deixe aqui sua <b>NOTA GERAL</b> para a campanha!</span>
+        <h5 id="textoSubtitulo" style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal; margin-top: 0;">
+          Sua voz molda o nosso futuro!
         </h5>
         
-        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
-            <span class="pulse-dot" style="width: 6px; height: 6px; background-color: #4bb543; border-radius: 50%; box-shadow: rgba(75, 181, 67, 0.7) 0px 0px 0px 0px; animation: pulse 1.5s infinite;"></span>
-            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Virtual</span>
+        <div id="caixaRodape" style="margin-top: 40px; padding: 12px 20px; border-radius: 12px; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+            <p id="textoStatus" style="color: rgba(255,255,255,0.5); font-size: 13px; margin: 0; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgb(255, 81, 0)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                Retornando à tela inicial...
+            </p>
+            <button id="btnFecharAbas" class="btn-fechar" onclick="window.close()">Fechar Página</button>
         </div>
       </div>
-      
-      <div class="selected-sentiment-preview" style="background-color: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; text-align: center;">
-          <span id="label-sentimento-escolhido" class="preview-text-label" style="font-size: 13px; font-weight: 600; color: #ff3700;">Carregando voto...</span>
-      </div>
-      
-      <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
-        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(0)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">0</button>
-            <button onclick="enviarDados(1)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">1</button>
-            <button onclick="enviarDados(2)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">2</button>
-            <button onclick="enviarDados(3)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">3</button>
-            <button onclick="enviarDados(4)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">4</button>
-            <button onclick="enviarDados(5)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">5</button>
-        </div>
-        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(6)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">6</button>
-            <button onclick="enviarDados(7)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">7</button>
-            <button onclick="enviarDados(8)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">8</button>
-            <button onclick="enviarDados(9)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">9</button>
-            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #ff3700; border: 1px solid #ff3700; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.4);">10</button>
-        </div>
-      </div>
-      
-      <div class="action-footer" style="margin-top: auto; display: flex; justify-content: flex-start;">
-          <span id="link-voltar-dinamico"></span>
-      </div>
+
     </div>
 
     <script>
-        // 1. Pega os dados que vieram do clique da tela anterior (URL)
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbyJf8Gk7xyV4xD5H27__euX5_eYNMRRimBOF7UroXh7dVhHU7rh-EdX2pDZsq-fYWss/exec";
+
+        // Captura os parâmetros enviados pela URL
         const urlParams = new URLSearchParams(window.location.search);
-        const sentimento = urlParams.get('sentimento') || "Geral";
-        const evento = urlParams.get('evento') || "Ação Integrada";
+        const nomeEvento = urlParams.get('evento');
+        const idEvento = urlParams.get('id');
+        const sentimento = urlParams.get('sentimento');
+        const setor = urlParams.get('setor') || "Geral";
+        
+        // 🚨 O PULO DO GATO: Se na URL vier o parâmetro "modo=publico", sabemos que é o celular!
+        const ehModoPublico = window.location.href.includes('publico.html') || urlParams.get('modo') === 'publico' || document.referrer.includes('publico.html');
 
-        // 2. Escreve esses dados na tela para o usuário ver (Agora igual à Tela 1)
-        document.getElementById('sub-evento-nome').innerText = evento;
-        document.getElementById('label-sentimento-escolhido').innerText = "Sentimento: " + sentimento;
+        // Trava do botão voltar para o celular (Anti-Fraude)
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
+        };
 
-        // 3. Configura o botão voltar para ir para o SEU index.html
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${encodeURIComponent(evento)}" class="btn-back">← Voltar</a>`;
+        async function executarFluxoAgradecimento() {
+            // 1. EXECUTA A LÓGICA VISUAL BASEADA NO MODO (FIXO VS CELULAR)
+            if (ehModoPublico) {
+                // Configura a tela com a cara do MODO PÚBLICO (Amarelo e Estático)
+                document.getElementById('wrapperIcone').className = "success-icon-wrapper glow-pulse-yellow";
+                document.getElementById('svgCheck').setAttribute('stroke', 'rgb(243, 156, 18)');
+                document.getElementById('textoTitulo').innerText = "SENTIMENTO REGISTRADO!";
+                document.getElementById('textoSubtitulo').innerHTML = "Muito obrigado por participar.<br>Sua voz molda o nosso futuro!";
+                document.getElementById('textoStatus').parentElement.style.backgroundColor = "rgba(255,255,255,0.02)";
+                document.getElementById('textoStatus').innerHTML = "Sua resposta foi salva de forma anônima e segura. Você já pode sair desta tela.";
+                document.getElementById('btnFecharAbas').style.display = "inline-block"; // Mostra o botão fechar
+                
+                // Grava no histórico do celular para não deixar votar de novo se ele reabrir o link
+                if (idEvento) {
+                    localStorage.setItem('votou_' + idEvento, 'sim');
+                }
+            } else {
+                // Fluxo normal do TOTEM FIXO: Ativa o timer de 2 segundos para voltar pro index.html
+                setTimeout(function() {
+                    window.location.href = "index.html"; 
+                }, 2000); 
+            }
 
-        // 4. A FUNÇÃO DE OURO: Grava no Google Sheets e muda de tela
-        function enviarDados(nota) {
-            
-            // 🔥 COLE A SUA URL DO GOOGLE APPS SCRIPT AQUI DENTRO DAS ASPAS 🔥
-            const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
-            
-            // Muda o texto do botão clicado para mostrar que está carregando (opcional, detalhe de UX)
-            event.target.innerText = "...";
-            event.target.style.backgroundColor = "#ff3700";
+            // 2. GRAVA O VOTO DE VERDADE NA PLANILHA
+            if (!nomeEvento || !sentimento) return;
 
-            // Envia o pacote completo (Evento + Sentimento da tela anterior + Nota clicada agora)
-            fetch(urlWebhook, {
-                method: 'POST',
-                mode: 'no-cors', // Evita bloqueio do navegador
-                body: JSON.stringify({
-                    "evento": evento,
-                    "sentimento": sentimento,
-                    "nota": nota
-                })
-            }).then(() => {
-                // Deu certo! Redireciona para a tela de Sucesso
-                window.location.href = `agradecimento.html?evento=${encodeURIComponent(evento)}`;
-            }).catch((erro) => {
-                console.error("Erro ao gravar:", erro);
-                // Mesmo dando erro no console, mandamos pra tela final pra não travar o totem
-                window.location.href = `agradecimento.html`;
-            });
+            let nota = 10;
+            if (sentimento === 'Quero saber mais') nota = 8;
+            if (sentimento === 'Poderia ser melhor') nota = 5;
+
+            const payload = {
+                evento: nomeEvento,
+                sentimento: sentimento,
+                nota: nota,
+                setor: setor
+            };
+
+            try {
+                await fetch(URL_BACKEND, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                console.log("Voto salvo na planilha.");
+            } catch (e) {
+                console.error("Voto processado.");
+            }
         }
+
+        window.onload = executarFluxoAgradecimento;
     </script>
+
 </body>
 </html>
