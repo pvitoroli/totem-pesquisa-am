@@ -130,8 +130,8 @@
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px;"></p>
             
             <div class="modal-actions">
-                <button class="btn btn-primary" onclick="iniciarTotem()">💻 Iniciar Modo Totem</button>
-                <button class="btn btn-outline" onclick="gerarLink()">🔗 Copiar Link Direto</button>
+                <button class="btn btn-primary" onclick="iniciarTotem()">💻 Iniciar Totem Fixo</button>
+                <button class="btn btn-outline" onclick="gerarLinkPublico()">📱 Copiar Link (QR Code)</button>
             </div>
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 10px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
         </div>
@@ -347,17 +347,22 @@
             }
         }
 
-        function pegarLinkCompleto() {
+        // FUNÇÕES DE LINKS ATUALIZADAS AQUI
+        function pegarLinkTotem() {
             return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`;
         }
 
-        function iniciarTotem() {
-            window.open(pegarLinkCompleto(), '_blank');
+        function pegarLinkPublico() {
+            return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`;
         }
 
-        function gerarLink() {
-            navigator.clipboard.writeText(pegarLinkCompleto()).then(() => {
-                alert("✅ Link parametrizado copiado com sucesso!");
+        function iniciarTotem() {
+            window.open(pegarLinkTotem(), '_blank');
+        }
+
+        function gerarLinkPublico() {
+            navigator.clipboard.writeText(pegarLinkPublico()).then(() => {
+                alert("✅ Link PÚBLICO (Mobile) copiado com sucesso! Transforme-o em QR Code.");
             });
         }
     </script>
