@@ -77,8 +77,8 @@
 
     <div class="container">
         <header>
-            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo">
-            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted);">PAINEL DE GESTÃO CORPORATIVO</span>
+            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo" onerror="this.style.display='none'">
+            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px;">PAINEL DE GESTÃO CORPORATIVO</span>
         </header>
 
         <section class="card">
@@ -136,7 +136,7 @@
     </div>
 
     <script>
-        // CONFIGURAÇÕES DIRETAS (Ajuste os links abaixo)
+        // CONFIGURAÇÕES DIRETAS
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbyJf8Gk7xyV4xD5H27__euX5_eYNMRRimBOF7UroXh7dVhHU7rh-EdX2pDZsq-fYWss/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -151,7 +151,9 @@
 
         async function buscarDados() {
             try {
-                const res = await fetch(URL_BACKEND + "?acao=listar");
+                // Adicionando Trava Anti-Cache na leitura também para garantir dados frescos
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
                 renderizarLista();
             } catch (e) {
@@ -173,13 +175,20 @@
 
             btn.innerText = "Gravando..."; btn.disabled = true;
 
-            const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}`);
-            const resposta = await res.json();
+            try {
+                // 🔥 Trava Anti-Cache no Salvamento
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&t=${antiCache}`);
+                const resposta = await res.json();
+                
+                if (!resposta.sucesso) alert(resposta.erro || "Erro desconhecido ao salvar.");
+            } catch (e) {
+                alert("Erro de conexão ao salvar.");
+            }
 
             btn.innerText = "Gravar na Base"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
             
-            // Atualização automática imediata ao salvar!
             buscarDados(); 
         }
 
@@ -267,11 +276,18 @@
         async function alterarStatus(id, novoStatus) {
             if(!id) return alert("Erro: Campanha legada sem ID. Aguarde a sincronização atualizar a planilha.");
             
+            // UI Otimista: Atualiza a interface primeiro
             let camp = dbCampanhas.find(c => c.id === id);
             if(camp) camp.status = novoStatus;
             renderizarLista();
             
-            await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}`);
+            try {
+                // 🔥 Trava Anti-Cache na Alteração de Status
+                const antiCache = new Date().getTime();
+                await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
+            } catch (e) {
+                console.error("Erro ao alterar status:", e);
+            }
         }
 
         function toggleSublist(el) {
