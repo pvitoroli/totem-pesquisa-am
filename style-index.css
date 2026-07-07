@@ -124,7 +124,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 .pulse-dot {
     width: 6px !important;
     height: 6px !important;
-    background-color: var(--am-yellow) !important;
+    background-color: var(--am-green) !important;
     border-radius: 50% !important;
     box-shadow: 0 0 0 0 rgba(255, 189, 89, 1) !important;
     animation: pulse 1.5s infinite !important;
