@@ -45,12 +45,12 @@
         .item-title { font-weight: 600; font-size: 15px; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
+        /* CSS alinhado com as nomenclaturas exatas da planilha */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
-        .badge.ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
-        .badge.espera, .badge.em.espera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
-        .badge.encerrado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
+        .badge.Ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
+        .badge.EmEspera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
+        .badge.Finalizado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
 
-        /* NOVOS BOTÕES DE AÇÃO DIRETA */
         .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
         .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface-hover); color: white; transition: 0.2s; text-transform: uppercase; }
         .btn-action:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.2); }
@@ -109,9 +109,9 @@
             
             <div class="filters-bar">
                 <div class="filter-pill active" onclick="aplicarFiltroStatus('todas', this)">Todas</div>
-                <div class="filter-pill" onclick="aplicarFiltroStatus('ativo', this)">Ativas</div>
-                <div class="filter-pill" onclick="aplicarFiltroStatus('em espera', this)">Em Espera</div>
-                <div class="filter-pill" onclick="aplicarFiltroStatus('encerrado', this)">Finalizadas</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Finalizadas</div>
                 
                 <input type="date" class="filter-date" id="filtroData" onchange="renderizarLista()">
             </div>
@@ -138,8 +138,8 @@
     </div>
 
     <script>
-        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzHRUulip6FjLInrcn9E-s4WpGBehevNBRQFAPghsQ4KiXQh8DhiaY01gWEampcDgLG/exec"; 
-        const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html";
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
+        const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
         let dbCampanhas = [];
         let stateFiltroStatus = 'todas';
@@ -156,9 +156,11 @@
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
                 
-                // Conversão forçada no Front-end: Qualquer rascunho vira "em espera"
+                // Limpeza Frontend de dados antigos para manter o visual limpo
                 dbCampanhas.forEach(c => {
-                    if(c.status === 'rascunho') c.status = 'em espera';
+                    if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
+                    if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
+                    if(c.status.toLowerCase() === 'encerrado') c.status = 'Finalizado';
                 });
                 
                 renderizarLista();
@@ -249,14 +251,17 @@
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR') : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
             
-            // BOTÕES DE AÇÃO DIRETA (FIM DA LISTA DE SELEÇÃO)
+            // Aqui enviamos as palavras exatas que a planilha aceita: Ativo, Em Espera e Finalizado
             let botoesAcao = `
                 <div class="action-bar" onclick="event.stopPropagation()">
-                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'ativo', this)">▶ Ativar</button>
-                    <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'em espera', this)">⏸ Pausar</button>
-                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'encerrado', this)">⏹ Encerrar</button>
+                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">▶ Ativar</button>
+                    <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">⏸ Pausar</button>
+                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">⏹ Finalizar</button>
                 </div>
             `;
+
+            // Classe CSS sanitizada para não bugar com os espaços do "Em Espera"
+            let statusClass = ev.status.replace(/\s+/g, '');
 
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
@@ -264,7 +269,7 @@
                         <div class="item-info" style="width: 100%;">
                             <div style="display:flex; justify-content:space-between; width:100%;">
                                 <div class="item-title">${ev.nome_campanha}</div>
-                                <span class="badge ${ev.status.replace(" ", "")}">${ev.status}</span>
+                                <span class="badge ${statusClass}">${ev.status}</span>
                             </div>
                             <div class="item-meta">
                                 <span>${ev.setor}</span>•<span>${dataFormatada}</span>
@@ -276,17 +281,15 @@
             `;
         }
 
-        // 🔥 FUNÇÃO DE CLIQUE DIRETO (BLINDADA) 🔥
         async function alterarStatus(id, novoStatus, btnElement) {
             if(!id) return alert("Erro: Campanha sem ID válido.");
             
-            // Trava todos os botões daquela campanha para não dar bug de click duplo
             const painelBotoes = btnElement.parentElement;
             const botoes = painelBotoes.querySelectorAll('button');
             botoes.forEach(b => b.disabled = true);
 
             const textoOriginal = btnElement.innerText;
-            btnElement.innerText = "⏳ Salvando...";
+            btnElement.innerText = "⏳...";
 
             try {
                 const antiCache = new Date().getTime();
@@ -296,7 +299,6 @@
                 const json = await res.json();
 
                 if(json.sucesso === true) {
-                    // Atualiza a tela perfeitamente
                     let camp = dbCampanhas.find(c => c.id === id);
                     if(camp) camp.status = novoStatus;
                     renderizarLista();
@@ -306,7 +308,6 @@
             } catch (e) {
                 alert("❌ Erro de rede ao comunicar com a planilha.");
             } finally {
-                // Destrava a tela
                 botoes.forEach(b => b.disabled = false);
                 btnElement.innerText = textoOriginal;
             }
