@@ -266,14 +266,14 @@
                 return; // Trava tudo, a tela não abre de jeito nenhum
             }
 
-            // 2. Se não votou, abre a tela mais rápido (1.5 segundos em vez de 4.5)
+            // 2. Se não votou, abre a tela no tempo padrão de 4.5 segundos
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.classList.add('hidden');
                     setTimeout(() => splash.style.display = 'none', 500); 
                 }
-            }, 1500); 
+            }, 4500); // <-- MUDOU AQUI DE 1500 PARA 4500
         });
 
         // BUSCA O NOME REAL NO GOOGLE
