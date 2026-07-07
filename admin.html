@@ -9,14 +9,13 @@
             --bg: #12141a; --surface: #1e222d; --surface-hover: #2a2f3a;
             --primary: #ff5100; --primary-hover: #e04700;
             --text: #ffffff; --text-muted: #9aa0a6; --border: rgba(255,255,255,0.08);
-            --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6; --status-rascunho: #3498db;
+            --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
         body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         
         .container { max-width: 1000px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
-        
         .logo { max-width: 130px; max-height: 35px; width: 100%; object-fit: contain; }
         
         .card { background: var(--surface); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
@@ -40,7 +39,7 @@
         .list-container { max-height: 450px; overflow-y: auto; padding-right: 5px; transition: max-height 0.4s ease; }
         .list-container.expanded { max-height: none; overflow: visible; }
         
-        .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; display: flex; flex-direction: column; }
+        .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; }
         .item-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
         .item-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
         .item-title { font-weight: 600; font-size: 15px; }
@@ -48,15 +47,21 @@
         
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .badge.ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
-        .badge.espera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
+        .badge.espera, .badge.em.espera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
         .badge.encerrado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
-        .badge.rascunho { background: rgba(52,152,219,0.15); color: var(--status-rascunho); border: 1px solid rgba(52,152,219,0.3); }
 
-        .action-select { background: var(--surface); border: 1px solid var(--border); color: white; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
+        /* NOVOS BOTÕES DE AÇÃO DIRETA */
+        .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+        .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface-hover); color: white; transition: 0.2s; text-transform: uppercase; }
+        .btn-action:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.2); }
+        .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-action.ativo { border-color: var(--status-ativo); color: var(--status-ativo); }
+        .btn-action.espera { border-color: var(--status-espera); color: var(--status-espera); }
+        .btn-action.encerrado { border-color: var(--status-encerrado); color: var(--status-encerrado); }
 
         .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
         .sub-list.open { display: block; }
-        .sub-item { padding: 12px 16px 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; }
+        .sub-item { padding: 12px 16px 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; }
         .sub-item:last-child { border-bottom: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
@@ -68,7 +73,6 @@
             .item-header { flex-direction: column; align-items: flex-start; }
             .filter-date { margin-left: 0; width: 100%; margin-top: 10px; }
             .modal-actions { grid-template-columns: 1fr; }
-            .action-wrapper { width: 100%; justify-content: space-between; margin-top: 10px; }
         }
     </style>
 </head>
@@ -93,7 +97,7 @@
                     <option value="Operação">Operação</option>
                 </select>
                 <input type="date" id="dataCampanha">
-                <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Gravar na Base</button>
+                <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
             </div>
         </section>
 
@@ -106,8 +110,7 @@
             <div class="filters-bar">
                 <div class="filter-pill active" onclick="aplicarFiltroStatus('todas', this)">Todas</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('ativo', this)">Ativas</div>
-                <div class="filter-pill" onclick="aplicarFiltroStatus('espera', this)">Em Espera</div>
-                <div class="filter-pill" onclick="aplicarFiltroStatus('rascunho', this)">Rascunhos</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('em espera', this)">Em Espera</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('encerrado', this)">Finalizadas</div>
                 
                 <input type="date" class="filter-date" id="filtroData" onchange="renderizarLista()">
@@ -115,7 +118,7 @@
 
             <div class="list-container" id="containerLista">
                 <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    Sincronizando com os servidores Google...
+                    Conectando ao servidor Google...
                 </div>
             </div>
         </section>
@@ -135,9 +138,8 @@
     </div>
 
     <script>
-        // AS SUAS URLS OFICIAIS
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzHRUulip6FjLInrcn9E-s4WpGBehevNBRQFAPghsQ4KiXQh8DhiaY01gWEampcDgLG/exec"; 
-        const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html";
+        const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
         let dbCampanhas = [];
         let stateFiltroStatus = 'todas';
@@ -153,6 +155,12 @@
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
+                
+                // Conversão forçada no Front-end: Qualquer rascunho vira "em espera"
+                dbCampanhas.forEach(c => {
+                    if(c.status === 'rascunho') c.status = 'em espera';
+                });
+                
                 renderizarLista();
             } catch (e) {
                 document.getElementById('renderArea').innerHTML = "Falha ao ler dados da planilha.";
@@ -171,18 +179,18 @@
                 return alert("⚠️ Uma campanha com esse nome já existe na base de dados.");
             }
 
-            btn.innerText = "Gravando..."; btn.disabled = true;
+            btn.innerText = "⏳ Criando..."; btn.disabled = true;
 
             try {
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&t=${antiCache}`);
                 const resposta = await res.json();
-                if (!resposta.sucesso) alert(resposta.erro || "Erro desconhecido ao salvar.");
+                if (!resposta.sucesso) alert(resposta.erro);
             } catch (e) {
                 alert("Erro de conexão ao salvar.");
             }
 
-            btn.innerText = "Gravar na Base"; btn.disabled = false;
+            btn.innerText = "Criar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
             buscarDados(); 
         }
@@ -241,43 +249,44 @@
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR') : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
             
-            // O Menu agora tem um botão "Salvar" ao lado dele
-            let menuStatus = `
-                <div class="action-wrapper" style="display:flex; align-items:center; gap:8px;" onclick="event.stopPropagation()">
-                    <select id="status-${ev.id}" class="action-select">
-                        <option value="rascunho" ${ev.status==='rascunho'?'selected':''}>Rascunho</option>
-                        <option value="ativo" ${ev.status==='ativo'?'selected':''}>🟢 Ativo</option>
-                        <option value="espera" ${ev.status==='espera'?'selected':''}>🟡 Em Espera</option>
-                        <option value="encerrado" ${ev.status==='encerrado'?'selected':''}>⚪ Encerrado</option>
-                    </select>
-                    <button class="btn" style="background: var(--primary); color: white; padding: 8px 12px; font-size: 11px;" onclick="alterarStatus('${ev.id}', document.getElementById('status-${ev.id}').value, this)">Salvar</button>
+            // BOTÕES DE AÇÃO DIRETA (FIM DA LISTA DE SELEÇÃO)
+            let botoesAcao = `
+                <div class="action-bar" onclick="event.stopPropagation()">
+                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'ativo', this)">▶ Ativar</button>
+                    <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'em espera', this)">⏸ Pausar</button>
+                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'encerrado', this)">⏹ Encerrar</button>
                 </div>
             `;
 
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
                     <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: 14px 16px;">
-                        <div class="item-info">
-                            <div class="item-title">${ev.nome_campanha}</div>
+                        <div class="item-info" style="width: 100%;">
+                            <div style="display:flex; justify-content:space-between; width:100%;">
+                                <div class="item-title">${ev.nome_campanha}</div>
+                                <span class="badge ${ev.status.replace(" ", "")}">${ev.status}</span>
+                            </div>
                             <div class="item-meta">
                                 <span>${ev.setor}</span>•<span>${dataFormatada}</span>
-                                <span class="badge ${ev.status}">${ev.status}</span>
                             </div>
+                            ${botoesAcao}
                         </div>
-                        ${menuStatus}
                     </div>
                 </div>
             `;
         }
 
-        // 🔥 FUNÇÃO DE SALVAMENTO BLINDADA COM FEEDBACK 🔥
+        // 🔥 FUNÇÃO DE CLIQUE DIRETO (BLINDADA) 🔥
         async function alterarStatus(id, novoStatus, btnElement) {
             if(!id) return alert("Erro: Campanha sem ID válido.");
             
-            // Dá feedback visual de que está trabalhando
+            // Trava todos os botões daquela campanha para não dar bug de click duplo
+            const painelBotoes = btnElement.parentElement;
+            const botoes = painelBotoes.querySelectorAll('button');
+            botoes.forEach(b => b.disabled = true);
+
             const textoOriginal = btnElement.innerText;
-            btnElement.innerText = "⏳ Gravando...";
-            btnElement.disabled = true;
+            btnElement.innerText = "⏳ Salvando...";
 
             try {
                 const antiCache = new Date().getTime();
@@ -286,22 +295,20 @@
                 const res = await fetch(url);
                 const json = await res.json();
 
-                if(json.sucesso !== false) {
-                    // Atualiza a tela instantaneamente
+                if(json.sucesso === true) {
+                    // Atualiza a tela perfeitamente
                     let camp = dbCampanhas.find(c => c.id === id);
                     if(camp) camp.status = novoStatus;
                     renderizarLista();
-                    alert("✅ Status atualizado com sucesso na planilha!");
                 } else {
-                    alert("⚠️ A planilha não conseguiu atualizar. Atualize a página e tente de novo.");
+                    alert("⚠️ Falha do Google: " + json.erro);
                 }
             } catch (e) {
-                console.error("Erro ao alterar status:", e);
-                alert("❌ Erro de conexão ao tentar salvar.");
+                alert("❌ Erro de rede ao comunicar com a planilha.");
             } finally {
-                // Devolve o botão ao estado normal
+                // Destrava a tela
+                botoes.forEach(b => b.disabled = false);
                 btnElement.innerText = textoOriginal;
-                btnElement.disabled = false;
             }
         }
 
@@ -349,7 +356,7 @@
 
         function gerarLink() {
             navigator.clipboard.writeText(pegarLinkCompleto()).then(() => {
-                alert("✅ Link parametrizado copiado com sucesso! Pronto para colar no gerador de QR Code.");
+                alert("✅ Link parametrizado copiado com sucesso!");
             });
         }
     </script>
