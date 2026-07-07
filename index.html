@@ -338,10 +338,10 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-            // REDIRECIONA ENVIANDO O NOME REAL DA CAMPANHA
+           // REDIRECIONA PARA A AVALIAÇÃO LEVANDO O ID E SETOR PARA NÃO SE PERDEREM
             setTimeout(() => { 
-                window.location.href = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`; 
-            }, 1500); 
+                window.location.href = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`; 
+            }, 1500);
         }
     </script>
 </body>
