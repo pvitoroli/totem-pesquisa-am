@@ -250,23 +250,34 @@
 
     <script>
         <script>
-        // 1. A sua URL Oficial do Banco de Dados
+        // 1. A tua URL Oficial do Backend
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
         
+        // 2. Parâmetros da URL
         const urlParams = new URLSearchParams(window.location.search); 
         let idEventoAtual = urlParams.get('evento'); 
         let setorAtual = urlParams.get('setor') || "Geral"; 
         let nomeRealDaCampanha = "Carregando..."; 
 
         // ========================================================
-        // 🛡️ TRAVA DE SEGURANÇA: Garante que a tela de espera feche SEMPRE!
+        // 🛡️ TRAVA DE SEGURANÇA ABSOLUTA DO ECRÃ DE ABERTURA
+        // Isto garante que o Splash Screen desaparece em 4.5s independentemente
+        // de problemas de rede ou falhas no Google.
         // ========================================================
-        setTimeout(() => {
-            const splash = document.getElementById('splash-screen');
-            if (splash) splash.classList.add('hidden');
-        }, 4500); 
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.classList.add('hidden');
+                    // Força bruta para garantir que desaparece caso o CSS falhe
+                    setTimeout(() => splash.style.display = 'none', 500); 
+                }
+            }, 4500);
+        });
 
-        // 2. BUSCA O NOME REAL INVISIVELMENTE
+        // ========================================================
+        // 🧠 INTELIGÊNCIA: IR BUSCAR O NOME REAL DA CAMPANHA
+        // ========================================================
         async function buscarEventoAtivo() { 
             if (idEventoAtual) { 
                 try { 
@@ -281,22 +292,27 @@
                         nomeRealDaCampanha = "Campanha Inativa"; 
                     } 
                 } catch (e) { 
-                    nomeRealDaCampanha = "Erro de Rede"; 
+                    console.error("Erro ao traduzir ID:", e); 
+                    nomeRealDaCampanha = "Erro de Conexão"; 
                 } 
             } else { 
-                nomeRealDaCampanha = "Ação Corporativa Geral"; 
+                nomeRealDaCampanha = "Ação Geral ArcelorMittal"; 
             } 
             
-            const elementoTitulo = document.getElementById('nome-campanha-ativa'); 
-            if (elementoTitulo) { 
-                elementoTitulo.innerText = nomeRealDaCampanha; 
-            } 
+            // Abordagem à prova de falhas: procura os dois IDs que usaste anteriormente
+            const elementoTitulo1 = document.getElementById('tituloCampanhaTotem'); 
+            const elementoTitulo2 = document.getElementById('nome-campanha-ativa'); 
+            
+            if (elementoTitulo1) elementoTitulo1.innerText = nomeRealDaCampanha; 
+            if (elementoTitulo2) elementoTitulo2.innerText = nomeRealDaCampanha; 
         } 
         
-        // Dispara assim que a página é lida (muito mais rápido que o onload)
-        document.addEventListener('DOMContentLoaded', buscarEventoAtivo);
+        // Garante que o fetch arranca de forma segura
+        window.addEventListener('load', buscarEventoAtivo); 
 
-        // 3. O SEU "HERO TRANSITION" COM O REDIRECIONAMENTO CORRETO
+        // ========================================================
+        // 🚀 O TEU "HERO TRANSITION" COM O REDIRECIONAMENTO CORRETO
+        // ========================================================
         function escolherSentimento(event, sentimentoEscolhido, elementoClicado) { 
             event.preventDefault(); 
             
@@ -327,9 +343,11 @@
             clone.style.transition = 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'; 
             document.body.appendChild(clone); 
             
-            overlayCinematico.classList.add('active'); 
-            telaPrincipal.style.transform = 'scale(0.92)'; 
-            telaPrincipal.style.filter = 'blur(6px) brightness(0.3)'; 
+            if (overlayCinematico) overlayCinematico.classList.add('active'); 
+            if (telaPrincipal) {
+                telaPrincipal.style.transform = 'scale(0.92)'; 
+                telaPrincipal.style.filter = 'blur(6px) brightness(0.3)'; 
+            }
             
             const moveX = (window.innerWidth / 2) - (rect.left + rect.width / 2); 
             const moveY = (window.innerHeight / 2) - (rect.top + rect.height / 2); 
@@ -340,7 +358,7 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-            // Redireciona repassando o NOME REAL e o SETOR
+            // REDIRECIONA PARA A AVALIAÇÃO REPASSANDO O NOME REAL DA CAMPANHA
             setTimeout(() => { 
                 window.location.href = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`; 
             }, 1500); 
