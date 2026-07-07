@@ -260,7 +260,7 @@ window.onload = async () => {
         // MÁGICA PRO: Se o link tem ID, o Totem se auto-configura na hora!
         try {
             // Buscamos o nome real da campanha para exibir na tela do totem
-            const res = await fetch("https://script.google.com/macros/s/AKfycbzHRUulip6FjLInrcn9E-s4WpGBehevNBRQFAPghsQ4KiXQh8DhiaY01gWEampcDgLG/exec" + idEventoAtual);
+            const res = await fetch("https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec" + idEventoAtual);
             const dados = await res.json();
             if(dados.sucesso) {
                 nomeCampanhaExibicao = dados.nome;
