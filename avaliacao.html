@@ -91,40 +91,43 @@
     </div>
 
     <script>
+        // 1. Pega os dados completos que vieram da tela inicial (URL)
         const urlParams = new URLSearchParams(window.location.search);
         const sentimento = urlParams.get('sentimento') || "Geral";
         const evento = urlParams.get('evento') || "Ação Integrada";
-        const id = urlParams.get('id') || "";
-        const setor = urlParams.get('setor') || "Geral";
+        const id = urlParams.get('id') || ""; // Captura o ID importante para o loop
+        const setor = urlParams.get('setor') || "Geral"; // Captura o setor correto
 
+        // 2. Escreve esses dados na tela
         document.getElementById('sub-evento-nome').innerText = evento;
         document.getElementById('label-sentimento-escolhido').innerText = "Sentimento: " + sentimento;
 
-        // Botão voltar funcional
+        // 3. Configura o botão voltar mantendo as credenciais da campanha
         document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
+        // 4. Grava tudo no Sheets coletando Setor e Origem
         function enviarDados(nota) {
-            // 🔥 COLE A SUA URL DO GOOGLE APPS SCRIPT ABAIXO 🔥
             const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
             
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
 
-            // AGORA SIM, ELE ENVIA O SETOR E A ORIGEM PRO GOOGLE
+            // Envia o pacote com os novos campos auditáveis
             fetch(urlWebhook, {
                 method: 'POST',
-                mode: 'no-cors',
+                mode: 'no-cors', 
                 body: JSON.stringify({
                     "evento": evento,
                     "sentimento": sentimento,
                     "nota": nota,
-                    "setor": setor,
-                    "origem": "Totem Fixo"
+                    "setor": setor,       // Registra o setor no Totem Fixo
+                    "origem": "Totem Fixo" // Registra a origem do dispositivo
                 })
             }).then(() => {
-                // REDIRECIONA PARA O AGRADECIMENTO PASSANDO O ID PARA O LOOP NÃO QUEBRAR
+                // Redireciona para o agradecimento REPASSANDO o ID e o Setor para o loop não quebrar!
                 window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             }).catch((erro) => {
+                console.error("Erro ao gravar:", erro);
                 window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             });
         }
