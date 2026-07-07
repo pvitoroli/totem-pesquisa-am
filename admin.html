@@ -17,7 +17,6 @@
         .container { max-width: 1000px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
         
-        /* 🔥 Correção do tamanho da logo solicitada */
         .logo { max-width: 130px; max-height: 35px; width: 100%; object-fit: contain; }
         
         .card { background: var(--surface); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
@@ -47,7 +46,6 @@
         .item-title { font-weight: 600; font-size: 15px; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        /* Cores corrigidas e vibrantes para os status */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .badge.ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
         .badge.espera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
@@ -70,6 +68,7 @@
             .item-header { flex-direction: column; align-items: flex-start; }
             .filter-date { margin-left: 0; width: 100%; margin-top: 10px; }
             .modal-actions { grid-template-columns: 1fr; }
+            .action-wrapper { width: 100%; justify-content: space-between; margin-top: 10px; }
         }
     </style>
 </head>
@@ -136,7 +135,7 @@
     </div>
 
     <script>
-        // CONFIGURAÇÕES DIRETAS
+        // AS SUAS URLS OFICIAIS
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbyJf8Gk7xyV4xD5H27__euX5_eYNMRRimBOF7UroXh7dVhHU7rh-EdX2pDZsq-fYWss/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -151,7 +150,6 @@
 
         async function buscarDados() {
             try {
-                // Adicionando Trava Anti-Cache na leitura também para garantir dados frescos
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
@@ -176,11 +174,9 @@
             btn.innerText = "Gravando..."; btn.disabled = true;
 
             try {
-                // 🔥 Trava Anti-Cache no Salvamento
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&t=${antiCache}`);
                 const resposta = await res.json();
-                
                 if (!resposta.sucesso) alert(resposta.erro || "Erro desconhecido ao salvar.");
             } catch (e) {
                 alert("Erro de conexão ao salvar.");
@@ -188,7 +184,6 @@
 
             btn.innerText = "Gravar na Base"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
-            
             buscarDados(); 
         }
 
@@ -246,18 +241,22 @@
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR') : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
             
+            // O Menu agora tem um botão "Salvar" ao lado dele
             let menuStatus = `
-                <select class="action-select" onchange="alterarStatus('${ev.id}', this.value)" onclick="event.stopPropagation()">
-                    <option value="rascunho" ${ev.status==='rascunho'?'selected':''}>Rascunho</option>
-                    <option value="ativo" ${ev.status==='ativo'?'selected':''}>🟢 Ativo</option>
-                    <option value="espera" ${ev.status==='espera'?'selected':''}>🟡 Em Espera</option>
-                    <option value="encerrado" ${ev.status==='encerrado'?'selected':''}>⚪ Encerrado</option>
-                </select>
+                <div class="action-wrapper" style="display:flex; align-items:center; gap:8px;" onclick="event.stopPropagation()">
+                    <select id="status-${ev.id}" class="action-select">
+                        <option value="rascunho" ${ev.status==='rascunho'?'selected':''}>Rascunho</option>
+                        <option value="ativo" ${ev.status==='ativo'?'selected':''}>🟢 Ativo</option>
+                        <option value="espera" ${ev.status==='espera'?'selected':''}>🟡 Em Espera</option>
+                        <option value="encerrado" ${ev.status==='encerrado'?'selected':''}>⚪ Encerrado</option>
+                    </select>
+                    <button class="btn" style="background: var(--primary); color: white; padding: 8px 12px; font-size: 11px;" onclick="alterarStatus('${ev.id}', document.getElementById('status-${ev.id}').value, this)">Salvar</button>
+                </div>
             `;
 
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
-                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; padding: 14px 16px;">
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: 14px 16px;">
                         <div class="item-info">
                             <div class="item-title">${ev.nome_campanha}</div>
                             <div class="item-meta">
@@ -265,28 +264,44 @@
                                 <span class="badge ${ev.status}">${ev.status}</span>
                             </div>
                         </div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            ${menuStatus}
-                        </div>
+                        ${menuStatus}
                     </div>
                 </div>
             `;
         }
 
-        async function alterarStatus(id, novoStatus) {
-            if(!id) return alert("Erro: Campanha legada sem ID. Aguarde a sincronização atualizar a planilha.");
+        // 🔥 FUNÇÃO DE SALVAMENTO BLINDADA COM FEEDBACK 🔥
+        async function alterarStatus(id, novoStatus, btnElement) {
+            if(!id) return alert("Erro: Campanha sem ID válido.");
             
-            // UI Otimista: Atualiza a interface primeiro
-            let camp = dbCampanhas.find(c => c.id === id);
-            if(camp) camp.status = novoStatus;
-            renderizarLista();
-            
+            // Dá feedback visual de que está trabalhando
+            const textoOriginal = btnElement.innerText;
+            btnElement.innerText = "⏳ Gravando...";
+            btnElement.disabled = true;
+
             try {
-                // 🔥 Trava Anti-Cache na Alteração de Status
                 const antiCache = new Date().getTime();
-                await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
+                const url = `${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`;
+                
+                const res = await fetch(url);
+                const json = await res.json();
+
+                if(json.sucesso !== false) {
+                    // Atualiza a tela instantaneamente
+                    let camp = dbCampanhas.find(c => c.id === id);
+                    if(camp) camp.status = novoStatus;
+                    renderizarLista();
+                    alert("✅ Status atualizado com sucesso na planilha!");
+                } else {
+                    alert("⚠️ A planilha não conseguiu atualizar. Atualize a página e tente de novo.");
+                }
             } catch (e) {
                 console.error("Erro ao alterar status:", e);
+                alert("❌ Erro de conexão ao tentar salvar.");
+            } finally {
+                // Devolve o botão ao estado normal
+                btnElement.innerText = textoOriginal;
+                btnElement.disabled = false;
             }
         }
 
@@ -334,7 +349,7 @@
 
         function gerarLink() {
             navigator.clipboard.writeText(pegarLinkCompleto()).then(() => {
-                alert("✅ Link parametrizado do Setor copiado com sucesso! Pronto para colar no gerador de QR Code.");
+                alert("✅ Link parametrizado copiado com sucesso! Pronto para colar no gerador de QR Code.");
             });
         }
     </script>
