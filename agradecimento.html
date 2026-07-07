@@ -82,6 +82,25 @@
                 window.location.href = "index.html"; 
             }, 2000); 
         };
+    <script>
+        // Bloqueio do botão voltar para evitar votos duplicados no celular
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
+        };
+
+        // Pega os dados para reiniciar o loop certinho
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id') || "";
+        const setor = urlParams.get('setor') || "Geral";
+
+        // Cronômetro que conta 2 segundos e redireciona PARA A CAMPANHA ESPECÍFICA
+        window.onload = function() {
+            setTimeout(function() {
+                // VOLTA PRO INDEX REPASSANDO O EVENTO
+                window.location.href = `index.html?evento=${id}&setor=${encodeURIComponent(setor)}`; 
+            }, 2000); 
+        };
     </script>
 </body>
 </html>
