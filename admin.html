@@ -127,21 +127,24 @@
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
         <div class="modal" style="text-align: center;">
             <h3 id="modTitle" style="margin-bottom: 5px;">Nome da Campanha</h3>
-            <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 15px;"></p>
+            <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
-            <div id="qrCodeContainer" style="background: var(--bg); padding: 15px; border-radius: 12px; display: inline-block; border: 1px solid var(--border); margin-bottom: 15px;">
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
+                <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
+            </div>
+
+            <div id="qrCodeContainer" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;">
                 <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">QR Code do Totem Público</p>
-                <img id="qrCodeImg" src="" alt="QR Code" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white;">
+                
+                <div id="qrCodeLoading" style="height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px;">Gerando QR Code...</div>
+                <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none;" alt="QR Code">
             </div>
             
-            <div class="modal-actions">
-                <button class="btn btn-primary" onclick="iniciarTotem()">💻 Iniciar Totem Fixo</button>
-                <button class="btn btn-outline" onclick="gerarLinkPublico()">🔗 Copiar Link Público</button>
-            </div>
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
         </div>
     </div>
-
+    
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
