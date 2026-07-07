@@ -2,107 +2,356 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <title>Painel de Gestão - Sentimento AMP</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Gestão Pro - ArcelorMittal</title>
     <style>
-        :root { --primary: #ff5100; --bg: #1b1e27; --card: #2a2f3a; --text: #ffffff; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Segoe UI', sans-serif; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .logo { width: 130px; }
-        .card { background: var(--card); border-radius: 16px; padding: 25px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .form-row { display: grid; grid-template-columns: 2fr 1fr 1fr auto; gap: 10px; }
-        input, select, button { padding: 12px; border-radius: 8px; border: 1px solid #444; background: #373e4d; color: white; }
-        button { background: var(--primary); font-weight: bold; cursor: pointer; border: none; }
-        .filters { margin-bottom: 15px; display: flex; gap: 10px; }
-        .filter-btn { background: #373e4d; padding: 8px 15px; border-radius: 20px; font-size: 12px; cursor: pointer; }
-        .filter-btn.active { background: var(--primary); }
-        .table-wrap { max-height: 400px; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #a0a5b0; font-size: 12px; padding: 10px; }
-        td { padding: 12px; border-bottom: 1px solid #444; }
-        .status-pill { padding: 4px 10px; border-radius: 10px; font-size: 10px; text-transform: uppercase; }
-        .ativo { background: #1a4d1a; color: #4bb543; }
-        .rascunho { background: #554411; color: #ffcc00; }
-        .encerrado { background: #444; color: #ccc; }
-        .btn-action { margin-right: 5px; padding: 5px 10px; font-size: 11px; }
+        /* ================= VARIÁVEIS & RESET ================= */
+        :root {
+            --bg: #12141a; --surface: #1e222d; --surface-hover: #2a2f3a;
+            --primary: #ff5100; --primary-hover: #e04700;
+            --text: #ffffff; --text-muted: #9aa0a6; --border: rgba(255,255,255,0.08);
+            --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6; --status-rascunho: #3498db;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        
+        /* ================= ESTRUTURA GLOBAL ================= */
+        .container { max-width: 1000px; margin: 0 auto; }
+        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
+        .logo { max-width: 130px; max-height: 35px; width: 100%; object-fit: contain; }
+        .card { background: var(--surface); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+        h2 { font-size: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+
+        /* ================= FORMULÁRIOS & BOTÕES ================= */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; transition: 0.3s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255,81,0,0.1); }
+        .btn { padding: 14px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-align: center; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+        .btn-outline:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
+
+        /* ================= FILTROS ================= */
+        .filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
+        .filter-pill { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .filter-pill.active { background: rgba(255,255,255,0.1); color: white; border-color: var(--text); }
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; }
+
+        /* ================= LISTA & AGRUPAMENTO ================= */
+        .list-container { transition: max-height 0.4s ease; max-height: 450px; overflow-y: auto; padding-right: 5px; }
+        .list-container.expanded { max-height: none; overflow: visible; }
+        
+        .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 10px; display: flex; flex-direction: column; transition: 0.2s; }
+        .list-item:hover { border-color: rgba(255,255,255,0.2); }
+        
+        /* Cabeçalho do Item / Grupo */
+        .item-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
+        .item-info { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+        .item-title { font-weight: 600; font-size: 15px; }
+        .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; }
+        
+        /* Status Badges */
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .badge.ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
+        .badge.espera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
+        .badge.encerrado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
+        .badge.rascunho { background: rgba(52,152,219,0.15); color: var(--status-rascunho); border: 1px solid rgba(52,152,219,0.3); }
+
+        /* Menu de Ações Inteligente */
+        .action-select { background: transparent; border: 1px solid var(--border); color: white; padding: 6px 10px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; appearance: none; }
+        .action-select option { background: var(--surface); color: white; }
+
+        /* Sub-itens (Agrupamento) */
+        .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+        .sub-list.open { display: block; }
+        .sub-item { padding: 12px 16px 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
+        .sub-item:last-child { border-bottom: none; }
+
+        /* ================= MODAL JORNADA ================= */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); transform: translateY(20px); transition: 0.3s; }
+        .modal.show { transform: translateY(0); }
+        .modal h3 { margin-bottom: 5px; }
+        .modal p { color: var(--text-muted); font-size: 13px; margin-bottom: 25px; }
+        .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+        
+        /* Scrollbar customizada */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #373e4d; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4a5366; }
+
+        @media(max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .item-header { flex-direction: column; align-items: flex-start; }
+            .item-actions { width: 100%; display: flex; justify-content: space-between; margin-top: 10px; }
+            .modal-actions { grid-template-columns: 1fr; }
+            .filter-date { margin-left: 0; width: 100%; }
+        }
     </style>
 </head>
 <body>
+
     <div class="container">
-        <header class="header">
-            <img src="logo-arcelormittal.png" class="logo">
-            <span class="brand-subtext">Painel de Gestão - Pro Edition</span>
+        <header>
+            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo" onerror="this.style.display='none'">
+            <span style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--text-muted);">GESTOR DE EXPERIÊNCIA</span>
         </header>
 
         <section class="card">
-            <h2>Nova Campanha</h2>
-            <div class="form-row">
-                <input type="text" id="nomeEvento" placeholder="Nome da Ação">
-                <select id="setorEvento"><option>RH</option><option>Manutenção</option><option>Segurança</option></select>
-                <input type="date" id="dataEvento">
-                <button onclick="criarEvento()">Salvar</button>
+            <h2>Lançar Nova Campanha</h2>
+            <div class="form-grid">
+                <input type="text" id="nomeCampanha" placeholder="Ex: Maio Amarelo Dia 1" autocomplete="off">
+                <select id="setorCampanha">
+                    <option value="" disabled selected>Setor Responsável</option>
+                    <option value="Comunicação">Comunicação</option>
+                    <option value="RH">Recursos Humanos</option>
+                    <option value="Manutenção">Manutenção</option>
+                    <option value="Saúde e Segurança">Saúde e Segurança</option>
+                    <option value="Operação">Operação</option>
+                </select>
+                <input type="date" id="dataCampanha">
+                <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
             </div>
         </section>
 
         <section class="card">
-            <div class="filters">
-                <span class="filter-btn active" onclick="filtrar('todos')">Todos</span>
-                <span class="filter-btn" onclick="filtrar('ativo')">Ativos</span>
-                <span class="filter-btn" onclick="filtrar('rascunho')">Rascunhos</span>
+            <h2>
+                <span>Campanhas Ativas</span>
+                <button class="btn-outline" style="padding: 6px 12px; font-size: 11px; border-radius: 8px;" onclick="toggleExpand()" id="btnExpand">Expandir Lista ▼</button>
+            </h2>
+            
+            <div class="filters-bar">
+                <div class="filter-pill active" onclick="aplicarFiltroStatus('todas', this)">Todas</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('ativo', this)">Ativas</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('espera', this)">Em Espera</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('rascunho', this)">Rascunhos</div>
+                <div class="filter-pill" onclick="aplicarFiltroStatus('encerrado', this)">Finalizadas</div>
+                
+                <input type="date" class="filter-date" id="filtroData" onchange="renderizarLista()">
             </div>
-            <div class="table-wrap">
-                <table>
-                    <thead><tr><th>Campanha</th><th>Setor</th><th>Status</th><th>Ações</th></tr></thead>
-                    <tbody id="listaEventos"></tbody>
-                </table>
+
+            <div class="list-container" id="containerLista">
+                <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 20px;">
+                    Sincronizando com a base de dados...
+                </div>
             </div>
         </section>
     </div>
 
-    <script>
-        const url = "https://script.google.com/macros/s/AKfycbxkV75w5Dg3zSg8aHxE-B5URe569hd_FYct2_xaxm2RKY6WdMB0Z7eKP2aUy4khmNA/exec";
-        let dadosCampanhas = [];
+    <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
+        <div class="modal" id="modalContent">
+            <h3 id="modTitle">Nome da Campanha</h3>
+            <p id="modMeta">Setor • Data</p>
+            
+            <div class="modal-actions">
+                <button class="btn btn-primary" onclick="iniciarTotem()">💻 Iniciar Modo Totem</button>
+                <button class="btn btn-outline" onclick="gerarLink()">🔗 Copiar Link / QR Code</button>
+            </div>
+            <button class="btn btn-outline" style="width: 100%; border: none;" onclick="document.getElementById('modalJornada').style.display='none'">Cancelar</button>
+        </div>
+    </div>
 
-        async function carregar() {
-            const res = await fetch(url + "?acao=listar");
-            dadosCampanhas = await res.json();
-            renderizar(dadosCampanhas);
+    <script>
+        // ================= CONFIGURAÇÕES =================
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbyJf8Gk7xyV4xD5H27__euX5_eYNMRRimBOF7UroXh7dVhHU7rh-EdX2pDZsq-fYWss/exec"; 
+        const URL_TOTEM = "https://pesquisa-sentimento-amp.vercel.app/index.html";
+        
+        let dbCampanhas = [];
+        let stateFiltroStatus = 'todas';
+        let campSelecionada = null; // Guarda o ID da campanha no Modal
+
+        // ================= INICIALIZAÇÃO =================
+        window.onload = async () => {
+            document.getElementById('dataCampanha').valueAsDate = new Date();
+            await buscarDados();
+        };
+
+        async function buscarDados() {
+            try {
+                const res = await fetch(URL_BACKEND + "?acao=listar");
+                dbCampanhas = await res.json();
+                renderizarLista();
+            } catch (e) {
+                document.getElementById('renderArea').innerHTML = "Erro de conexão de rede.";
+            }
         }
 
-        function renderizar(lista) {
-            const tbody = document.getElementById('listaEventos');
-            tbody.innerHTML = '';
-            lista.forEach(ev => {
-                tbody.innerHTML += `<tr>
-                    <td>${ev.nome_campanha}</td><td>${ev.setor}</td>
-                    <td><span class="status-pill ${ev.status}">${ev.status}</span></td>
-                    <td>
-                        <button class="btn-action" onclick="alterar('${ev.id}', 'ativo')">Ativar</button>
-                        <button class="btn-action" onclick="alterar('${ev.id}', 'encerrado')">Finalizar</button>
-                    </td>
-                </tr>`;
+        // ================= LÓGICA DE SALVAMENTO =================
+        async function salvarCampanha() {
+            const nome = document.getElementById('nomeCampanha').value.trim();
+            const setor = document.getElementById('setorCampanha').value;
+            const data = document.getElementById('dataCampanha').value;
+            const btn = document.getElementById('btnSalvar');
+
+            if (!nome || !setor || !data) return alert("Preencha todos os campos!");
+
+            // Inteligência 1: Trava de duplicidade instantânea (Front-end)
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) {
+                return alert("⚠️ Erro: Já existe uma campanha exatamente com este nome.");
+            }
+
+            btn.innerText = "Sincronizando..."; btn.disabled = true;
+
+            const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}`);
+            const resposta = await res.json();
+
+            if(!resposta.sucesso) alert(resposta.erro);
+
+            document.getElementById('nomeCampanha').value = '';
+            btn.innerText = "Criar Campanha"; btn.disabled = false;
+            
+            // Inteligência 2: Atualização automática e imediata da lista
+            buscarDados(); 
+        }
+
+        // ================= INTELIGÊNCIA DE AGRUPAMENTO (Regex) =================
+        function agruparCampanhas(lista) {
+            let grupos = {};
+            lista.forEach(c => {
+                // Remove sufixos como "Dia 1", "- Turma A", "Parte 2" para achar o "Nome Base"
+                let baseName = c.nome_campanha.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)\s*[a-z0-9]+$/i, '').trim();
+                
+                if (!grupos[baseName]) grupos[baseName] = [];
+                grupos[baseName].push(c);
+            });
+            return grupos;
+        }
+
+        // ================= RENDERIZAÇÃO INTELIGENTE =================
+        function renderizarLista() {
+            const area = document.getElementById('renderArea');
+            const dataFiltro = document.getElementById('filtroData').value;
+            
+            // Filtros encadeados (Status + Data)
+            let filtrados = dbCampanhas.filter(c => {
+                let passaStatus = (stateFiltroStatus === 'todas' || c.status === stateFiltroStatus);
+                let passaData = (!dataFiltro || c.data_inicio.includes(dataFiltro)); // Simplificado para data
+                return passaStatus && passaData;
+            });
+
+            if (filtrados.length === 0) return area.innerHTML = "Nenhuma campanha encontrada.";
+
+            const grupos = agruparCampanhas(filtrados);
+            area.innerHTML = '';
+
+            for (let baseName in grupos) {
+                const itens = grupos[baseName];
+                
+                if (itens.length === 1) {
+                    // Item Único
+                    area.innerHTML += criarTemplateItem(itens[0]);
+                } else {
+                    // Grupo Colapsável (Sublista)
+                    let subHtml = itens.map(i => criarTemplateItem(i, true)).join('');
+                    area.innerHTML += `
+                        <div class="list-item">
+                            <div class="item-header" onclick="toggleSublist(this)">
+                                <div class="item-info">
+                                    <div class="item-title">📂 Coleção: ${baseName} (${itens.length} ações)</div>
+                                    <div class="item-meta">Múltiplos status • Clique para expandir</div>
+                                </div>
+                                <span>▼</span>
+                            </div>
+                            <div class="sub-list">${subHtml}</div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        // Template HTML do Card de Campanha
+        function criarTemplateItem(ev, isSub = false) {
+            let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR') : 'Sem data';
+            let classeSub = isSub ? 'sub-item' : 'list-item';
+            
+            // Menu dropdown moderno para status
+            let selectStatus = `
+                <select class="action-select" onchange="alterarStatus('${ev.id}', this.value)" onclick="event.stopPropagation()">
+                    <option value="rascunho" ${ev.status==='rascunho'?'selected':''}>Rascunho</option>
+                    <option value="ativo" ${ev.status==='ativo'?'selected':''}>🟢 Ativar</option>
+                    <option value="espera" ${ev.status==='espera'?'selected':''}>🟡 Pausar</option>
+                    <option value="encerrado" ${ev.status==='encerrado'?'selected':''}>⚪ Encerrar</option>
+                </select>
+            `;
+
+            return `
+                <div class="${classeSub}" onclick="abrirJornada('${ev.id}')" style="cursor:pointer;">
+                    <div class="${!isSub ? 'item-header' : ''}" style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
+                        <div class="item-info">
+                            <div class="item-title">${ev.nome_campanha}</div>
+                            <div class="item-meta">${ev.setor} • ${dataFormatada} <span class="badge ${ev.status}">${ev.status}</span></div>
+                        </div>
+                        <div class="item-actions">
+                            ${selectStatus}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ================= AÇÕES =================
+        async function alterarStatus(id, novoStatus) {
+            // Atualiza UI instantaneamente (Otimista)
+            let camp = dbCampanhas.find(c => c.id === id);
+            camp.status = novoStatus;
+            renderizarLista();
+            
+            // Grava no banco invisívelmente
+            await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}`);
+        }
+
+        function toggleSublist(element) {
+            element.nextElementSibling.classList.toggle('open');
+            element.querySelector('span').innerText = element.nextElementSibling.classList.contains('open') ? '▲' : '▼';
+        }
+
+        function toggleExpand() {
+            const cont = document.getElementById('containerLista');
+            const btn = document.getElementById('btnExpand');
+            cont.classList.toggle('expanded');
+            btn.innerText = cont.classList.contains('expanded') ? 'Recolher Lista ▲' : 'Expandir Lista ▼';
+        }
+
+        function aplicarFiltroStatus(status, element) {
+            stateFiltroStatus = status;
+            document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
+            element.classList.add('active');
+            renderizarLista();
+        }
+
+        // ================= JORNADA & MODAL =================
+        function abrirJornada(id) {
+            campSelecionada = dbCampanhas.find(c => c.id === id);
+            document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
+            let d = campSelecionada.data_inicio ? new Date(campSelecionada.data_inicio).toLocaleDateString() : '';
+            document.getElementById('modMeta').innerText = `${campSelecionada.setor} • Configurada para ${d}`;
+            
+            const modal = document.getElementById('modalJornada');
+            modal.style.display = 'flex';
+            setTimeout(() => document.getElementById('modalContent').classList.add('show'), 10);
+        }
+
+        function fecharModal(e) {
+            if(e.target.id === 'modalJornada') {
+                document.getElementById('modalContent').classList.remove('show');
+                setTimeout(() => document.getElementById('modalJornada').style.display = 'none', 300);
+            }
+        }
+
+        function iniciarTotem() {
+            if(!campSelecionada) return;
+            window.open(`${URL_TOTEM}?evento=${campSelecionada.id}&setor=${encodeURIComponent(campSelecionada.setor)}`, '_blank');
+        }
+
+        function gerarLink() {
+            if(!campSelecionada) return;
+            const link = `${URL_TOTEM}?evento=${campSelecionada.id}&setor=${encodeURIComponent(campSelecionada.setor)}`;
+            navigator.clipboard.writeText(link).then(() => {
+                alert("✅ Link copiado para a área de transferência! Cole em um gerador de QR Code ou mande para o tablet do setor.");
             });
         }
-
-        function filtrar(status) {
-            if(status === 'todos') renderizar(dadosCampanhas);
-            else renderizar(dadosCampanhas.filter(c => c.status === status));
-        }
-
-        async function criarEvento() {
-            const nome = document.getElementById('nomeEvento').value;
-            const setor = document.getElementById('setorEvento').value;
-            const data = document.getElementById('dataEvento').value;
-            await fetch(`${url}?acao=criar&nome=${nome}&setor=${setor}&dataInicio=${data}`);
-            carregar();
-        }
-
-        async function alterar(id, status) {
-            await fetch(`${url}?acao=alterarStatus&id=${id}&status=${status}`);
-            carregar();
-        }
-
-        carregar();
     </script>
 </body>
 </html>
