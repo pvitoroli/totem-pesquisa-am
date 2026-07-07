@@ -347,13 +347,22 @@
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
             document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
             
-            // 🔥 MÁGICA DO QR CODE AQUI 🔥
-            // Pega o link público da campanha
+            // Controle da Imagem do QR Code
+            const img = document.getElementById('qrCodeImg');
+            const loading = document.getElementById('qrCodeLoading');
+            
+            // Esconde a imagem e mostra o loading toda vez que abre o modal
+            img.style.display = 'none';
+            loading.style.display = 'flex';
+            
+            // Só mostra a imagem quando ela terminar de carregar da API
+            img.onload = function() {
+                loading.style.display = 'none';
+                img.style.display = 'inline-block';
+            };
+
             const linkPublico = pegarLinkPublico(); 
-            // Conecta na API gratuita para gerar a imagem na hora
-            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(linkPublico)}`;
-            // Joga a imagem direto no painel
-            document.getElementById('qrCodeImg').src = qrCodeUrl;
+            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(linkPublico)}`;
 
             document.getElementById('modalJornada').style.display = 'flex';
         }
