@@ -340,7 +340,7 @@
             renderizarLista();
         }
 
-      function abrirModalJornada(id) {
+       function abrirModalJornada(id) {
             campSelecionada = dbCampanhas.find(c => c.id === id);
             if(!campSelecionada) return;
             
@@ -351,28 +351,15 @@
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
             
-            // Reseta para o estado de "Carregando"
+            // Esconde a imagem e mostra o loading toda vez que abre o modal
             img.style.display = 'none';
             loading.style.display = 'flex';
-            loading.innerText = "Gerando QR Code...";
             
-            // Se carregar com sucesso, esconde o texto e mostra a imagem
+            // Só mostra a imagem quando ela terminar de carregar da API
             img.onload = function() {
                 loading.style.display = 'none';
                 img.style.display = 'inline-block';
             };
-
-            // Se o firewall bloquear ou a internet falhar, avisa do erro
-            img.onerror = function() {
-                loading.innerText = "⚠️ Bloqueado pela rede ou falha na conexão.";
-            };
-
-            // Pega o link público e gera usando a API QuickChart (mais rápida e estável)
-            const linkPublico = pegarLinkPublico(); 
-            img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(linkPublico)}`;
-
-            document.getElementById('modalJornada').style.display = 'flex';
-        }
 
             const linkPublico = pegarLinkPublico(); 
             img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(linkPublico)}`;
