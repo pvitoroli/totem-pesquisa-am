@@ -22,8 +22,8 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN
-           ========================================================================== */
+            ESTILOS DA SPLASH SCREEN
+            ========================================================================== */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -87,7 +87,7 @@
             height: 100%;
             width: 100%;
             background-color: #1b1e27;
-            animation: revealRight 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Acelerado para Mobile */
+            animation: revealRight 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes revealRight {
@@ -104,7 +104,7 @@
             margin-top: 25px;
             opacity: 0;
             animation: fadeInSlogan 1.5s ease forwards;
-            animation-delay: 0.8s; /* Acelerado para Mobile */
+            animation-delay: 0.8s;
         }
 
         @keyframes fadeInSlogan {
@@ -128,8 +128,8 @@
         }
 
         /* ==========================================================================
-           ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
-           ========================================================================== */
+            ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
+            ========================================================================== */
         .vote-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
         }
@@ -253,9 +253,7 @@
         let setorAtual = urlParams.get('setor') || "Geral"; 
         let nomeRealDaCampanha = "Carregando..."; 
 
-        // 🔥 LÓGICA DE ABERTURA E ANTI-FRAUDE 🔥
         window.addEventListener('DOMContentLoaded', () => {
-            // 1. Verifica no histórico do celular se a pessoa já votou
             if(idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
                 document.body.innerHTML = `
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px;">
@@ -263,20 +261,18 @@
                         <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
                         <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
                     </div>`;
-                return; // Trava tudo, a tela não abre de jeito nenhum
+                return;
             }
 
-            // 2. Se não votou, abre a tela no tempo padrão de 4.5 segundos
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
                     splash.classList.add('hidden');
                     setTimeout(() => splash.style.display = 'none', 500); 
                 }
-            }, 4500); // <-- MUDOU AQUI DE 1500 PARA 4500
+            }, 4500); 
         });
 
-        // BUSCA O NOME REAL NO GOOGLE
         async function buscarEventoAtivo() { 
             if (idEventoAtual) { 
                 try { 
@@ -304,7 +300,6 @@
         
         window.addEventListener('load', buscarEventoAtivo); 
 
-        // O HERO TRANSITION
         function escolherSentimento(event, sentimentoEscolhido, elementoClicado) { 
             event.preventDefault(); 
             
@@ -350,11 +345,10 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-            // 🔥 ALTERAÇÃO AQUI: REDIRECIONAMENTO DEFINITIVO (REPLACE) PARA AGRADECIMENTO.HTML 🔥
+            // REDIRECIONA PARA A AVALIAÇÃO REPASSANDO O MODO PUBLICO
             setTimeout(() => { 
-                // Usamos o location.replace() para o usuário não conseguir clicar em "Voltar" no celular
-                window.location.replace(`agradecimento.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`); 
-            }, 1500); 
+                window.location.replace(`avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}&modo=publico`); 
+            }, 1500);
         }
     </script>
 </body>
