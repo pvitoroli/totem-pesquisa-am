@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pesquisa de Sentimento - AMP (Público)</title>
+    
+    <link rel="stylesheet" href="style-index.css">
+
+    <style>
+        body {
+            background-color: #1b1e27;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ==========================================================================
+           ESTILOS DA SPLASH SCREEN
+           ========================================================================== */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1b1e27;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .splash-content {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .splash-logo-img {
+            filter: brightness(1.2);
+            max-width: 130px;
+            max-height: 35px;
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+            margin-top: -40px; 
+            margin-bottom: 24px; 
+        }
+
+        .loading-bar-container {
+            position: relative;
+            width: 220px;
+            height: auto;
+            margin-top: 35px;
+            overflow: hidden;
+        }
+
+        .loading-bar-img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .loading-mask {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            background-color: #1b1e27;
+            animation: revealRight 1.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; /* Acelerado para Mobile */
+        }
+
+        @keyframes revealRight {
+            0% { left: 0%; }
+            100% { left: 100%; }
+        }
+
+        .splash-slogan {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: #a0a5b0;
+            letter-spacing: 1.2px;
+            font-weight: 600;
+            margin-top: 25px;
+            opacity: 0;
+            animation: fadeInSlogan 1.5s ease forwards;
+            animation-delay: 0.8s; /* Acelerado para Mobile */
+        }
+
+        @keyframes fadeInSlogan {
+            to { opacity: 1; }
+        }
+
+        .splash-glow {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background: rgba(255, 81, 0, 0.12);
+            border-radius: 50%;
+            filter: blur(40px);
+            z-index: -1;
+            animation: pulseGlow 1.5s alternate infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            from { transform: scale(0.9); opacity: 0.5; }
+            to { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* ==========================================================================
+           ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
+           ========================================================================== */
+        .vote-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        }
+
+        .vote-card:active {
+            transform: scale(0.95);
+        }
+
+        .vote-card:hover {
+            box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .totem-app-canvas {
+            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease;
+        }
+
+        #cinematic-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(6, 8, 12, 0.75);
+            backdrop-filter: blur(0px); 
+            -webkit-backdrop-filter: blur(0px);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 99990;
+            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease;
+        }
+
+        #cinematic-overlay.active {
+            opacity: 1;
+            visibility: visible;
+            backdrop-filter: blur(10px); 
+            -webkit-backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="cinematic-overlay"></div>
+
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-glow"></div>
+            <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <div class="loading-bar-container">
+                <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
+                <div class="loading-mask"></div>
+            </div>
+            <div class="splash-slogan">A força da voz que molda o aço</div>
+        </div>
+    </div>
+
+    <div class="totem-app-canvas" id="main-interface" style="width: 100%; max-width: 600px;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
+        <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
+            <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" onerror="this.style.display='none'"/>
+        </div>
+        <div class="header-right-text" style="display: flex;">
+            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
+        </div>
+      </div>
+      
+      <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        
+        <h3 id="nome-campanha-ativa" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
+        
+        <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
+          ​​<span style="font-weight: normal; color: white;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
+        </h5>
+        
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
+            <span class="pulse-dot" style="width: 6px; height: 6px; background-color: #f39c12; border-radius: 50%; box-shadow: rgba(243, 156, 18, 0.7) 0px 0px 0px 0px; animation: pulse 1.5s infinite;"></span>
+            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Público</span>
+        </div>
+      </div>
+
+      <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
+        
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Aprendi algo novo', this)" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">APRENDI<br>ALGO NOVO</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Fiquei feliz', this)" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">FIQUEI<br>FELIZ</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Quero saber mais', this)" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">QUERO<br>SABER MAIS</span>
+        </a>
+
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Poderia ser melhor', this)" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+          <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+          </div>
+          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">PODERIA<br>SER MELHOR</span>
+        </a>
+      </div>
+    </div>
+
+    <script>
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
+        
+        const urlParams = new URLSearchParams(window.location.search); 
+        let idEventoAtual = urlParams.get('evento'); 
+        let setorAtual = urlParams.get('setor') || "Geral"; 
+        let nomeRealDaCampanha = "Carregando..."; 
+
+        // 🔥 LÓGICA DE ABERTURA E ANTI-FRAUDE 🔥
+        window.addEventListener('DOMContentLoaded', () => {
+            // 1. Verifica no histórico do celular se a pessoa já votou
+            if(idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
+                document.body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px;">
+                        <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
+                        <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
+                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
+                    </div>`;
+                return; // Trava tudo, a tela não abre de jeito nenhum
+            }
+
+            // 2. Se não votou, abre a tela mais rápido (1.5 segundos em vez de 4.5)
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.classList.add('hidden');
+                    setTimeout(() => splash.style.display = 'none', 500); 
+                }
+            }, 1500); 
+        });
+
+        // BUSCA O NOME REAL NO GOOGLE
+        async function buscarEventoAtivo() { 
+            if (idEventoAtual) { 
+                try { 
+                    const antiCache = Date.now(); 
+                    const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
+                    const dados = await res.json(); 
+                    
+                    if (dados.sucesso) { 
+                        nomeRealDaCampanha = dados.nome; 
+                        setorAtual = dados.setor || setorAtual; 
+                    } else { 
+                        nomeRealDaCampanha = "Campanha Inativa"; 
+                    } 
+                } catch (e) { 
+                    console.error("Erro ao buscar dados:", e);
+                    nomeRealDaCampanha = "Ação Corporativa"; 
+                } 
+            } else { 
+                nomeRealDaCampanha = "Pesquisa Pública"; 
+            } 
+            
+            const elementoTitulo = document.getElementById('nome-campanha-ativa'); 
+            if (elementoTitulo) elementoTitulo.innerText = nomeRealDaCampanha; 
+        } 
+        
+        window.addEventListener('load', buscarEventoAtivo); 
+
+        // O HERO TRANSITION
+        function escolherSentimento(event, sentimentoEscolhido, elementoClicado) { 
+            event.preventDefault(); 
+            
+            if (window.animacaoEmAndamento) return; 
+            window.animacaoEmAndamento = true; 
+            
+            const telaPrincipal = document.getElementById('main-interface'); 
+            const overlayCinematico = document.getElementById('cinematic-overlay'); 
+            
+            let glowColor = 'rgba(255, 81, 0, 0.6)'; 
+            if (elementoClicado.classList.contains('border-yellow')) glowColor = 'rgba(255, 204, 0, 0.6)'; 
+            if (elementoClicado.classList.contains('border-purple')) glowColor = 'rgba(163, 0, 255, 0.6)'; 
+            if (elementoClicado.classList.contains('border-pink')) glowColor = 'rgba(255, 0, 128, 0.6)'; 
+            
+            const rect = elementoClicado.getBoundingClientRect(); 
+            const clone = elementoClicado.cloneNode(true); 
+            
+            elementoClicado.style.opacity = '0'; 
+            
+            clone.style.position = 'fixed'; 
+            clone.style.top = rect.top + 'px'; 
+            clone.style.left = rect.left + 'px'; 
+            clone.style.width = rect.width + 'px'; 
+            clone.style.height = rect.height + 'px'; 
+            clone.style.margin = '0'; 
+            clone.style.zIndex = '99995'; 
+            clone.style.transform = 'translate(0px, 0px) scale(1)'; 
+            clone.style.transition = 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'; 
+            document.body.appendChild(clone); 
+            
+            if (overlayCinematico) overlayCinematico.classList.add('active'); 
+            if (telaPrincipal) {
+                telaPrincipal.style.transform = 'scale(0.92)'; 
+                telaPrincipal.style.filter = 'blur(6px) brightness(0.3)'; 
+            }
+            
+            const moveX = (window.innerWidth / 2) - (rect.left + rect.width / 2); 
+            const moveY = (window.innerHeight / 2) - (rect.top + rect.height / 2); 
+            
+            requestAnimationFrame(() => { 
+                clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.4)`; 
+                clone.style.boxShadow = `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${glowColor}`; 
+                clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
+            }); 
+            
+            // 🔥 ALTERAÇÃO AQUI: REDIRECIONAMENTO DEFINITIVO (REPLACE) PARA AGRADECIMENTO.HTML 🔥
+            setTimeout(() => { 
+                // Usamos o location.replace() para o usuário não conseguir clicar em "Voltar" no celular
+                window.location.replace(`agradecimento.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`); 
+            }, 1500); 
+        }
+    </script>
+</body>
+</html>
