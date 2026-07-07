@@ -91,46 +91,41 @@
     </div>
 
     <script>
-        // 1. Pega os dados que vieram do clique da tela anterior (URL)
         const urlParams = new URLSearchParams(window.location.search);
         const sentimento = urlParams.get('sentimento') || "Geral";
         const evento = urlParams.get('evento') || "Ação Integrada";
+        const id = urlParams.get('id') || "";
+        const setor = urlParams.get('setor') || "Geral";
 
-        // 2. Escreve esses dados na tela para o usuário ver (Agora igual à Tela 1)
         document.getElementById('sub-evento-nome').innerText = evento;
         document.getElementById('label-sentimento-escolhido').innerText = "Sentimento: " + sentimento;
 
-        // 3. Configura o botão voltar para ir para o SEU index.html
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${encodeURIComponent(evento)}" class="btn-back">← Voltar</a>`;
+        // Botão voltar funcional
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
-        // 4. A FUNÇÃO DE OURO: Grava no Google Sheets e muda de tela
         function enviarDados(nota) {
-            
-            // 🔥 COLE A SUA URL DO GOOGLE APPS SCRIPT AQUI DENTRO DAS ASPAS 🔥
+            // 🔥 COLE A SUA URL DO GOOGLE APPS SCRIPT ABAIXO 🔥
             const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
             
-            // Muda o texto do botão clicado para mostrar que está carregando (opcional, detalhe de UX)
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
 
-            // Envia o pacote completo (Evento + Sentimento da tela anterior + Nota clicada agora)
+            // AGORA SIM, ELE ENVIA O SETOR E A ORIGEM PRO GOOGLE
             fetch(urlWebhook, {
                 method: 'POST',
-                mode: 'no-cors', // Evita bloqueio do navegador
+                mode: 'no-cors',
                 body: JSON.stringify({
                     "evento": evento,
                     "sentimento": sentimento,
-                    "nota": nota
+                    "nota": nota,
+                    "setor": setor,
+                    "origem": "Totem Fixo"
                 })
             }).then(() => {
-                // Deu certo! Redireciona para a tela de Sucesso
-                window.location.href = `agradecimento.html?evento=${encodeURIComponent(evento)}`;
+                // REDIRECIONA PARA O AGRADECIMENTO PASSANDO O ID PARA O LOOP NÃO QUEBRAR
+                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             }).catch((erro) => {
-                console.error("Erro ao gravar:", erro);
-                // Mesmo dando erro no console, mandamos pra tela final pra não travar o totem
-                window.location.href = `agradecimento.html`;
+                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             });
         }
     </script>
-</body>
-</html>
