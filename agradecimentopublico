@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obrigado! - ArcelorMittal</title>
+    <style>
+        body {
+            background-color: #1b1e27; margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; text-align: center;
+        }
+        .container {
+            background: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); max-width: 400px;
+        }
+        .icon { font-size: 60px; margin-bottom: 20px; animation: popIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        h2 { color: white; margin: 0 0 10px 0; font-size: 24px; }
+        p { color: #a0a5b0; font-size: 14px; line-height: 1.5; margin-bottom: 30px; }
+        .btn-fechar {
+            background: #ff5100; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; width: 100%;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="icon">✨</div>
+        <h2>Sua voz importa!</h2>
+        <p>Agradecemos muito por compartilhar o seu sentimento. Sua resposta foi registrada com sucesso de forma anônima e segura.</p>
+        
+        <p style="font-size: 11px; text-transform: uppercase; color: #666; letter-spacing: 1px; margin-bottom: 20px;">Você já pode fechar esta página.</p>
+        
+        <button class="btn-fechar" onclick="window.close()">Fechar Pesquisa</button>
+    </div>
+
+    <script>
+        const URL_BACKEND = "COLE_AQUI_SEU_WEB_APP_DO_GOOGLE";
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const nomeEvento = urlParams.get('evento');
+        const idEvento = urlParams.get('id');
+        const sentimento = urlParams.get('sentimento');
+        const setor = urlParams.get('setor');
+
+        // Mapeia o sentimento para a nota que vai para a planilha
+        let nota = 10;
+        if (sentimento === 'Quero saber mais') nota = 8;
+        if (sentimento === 'Poderia ser melhor') nota = 5;
+
+        // 1. GRAVA O COOKIE PARA IMPEDIR VOTO DUPLO
+        if (idEvento) {
+            localStorage.setItem('votou_' + idEvento, 'sim');
+        }
+
+        // 2. SALVA O VOTO NO BANCO DE DADOS
+        async function registrarVoto() {
+            if (!nomeEvento || !sentimento) return;
+
+            const payload = {
+                evento: nomeEvento,
+                sentimento: sentimento,
+                nota: nota,
+                setor: setor
+            };
+
+            try {
+                await fetch(URL_BACKEND, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                console.log("Voto registrado publicamente com sucesso.");
+            } catch (e) {
+                console.error("Voto submetido.", e);
+            }
+        }
+
+        window.onload = registrarVoto;
+    </script>
+</body>
+</html>
