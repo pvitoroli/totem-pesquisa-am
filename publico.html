@@ -345,9 +345,9 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-            // REDIRECIONA PARA A AVALIAÇÃO REPASSANDO O MODO PUBLICO
+           // REDIRECIONA PARA A AVALIAÇÃO PÚBLICA (RODOVIA EXCLUSIVA)
             setTimeout(() => { 
-                window.location.replace(`avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}&modo=publico`); 
+                window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`); 
             }, 1500);
         }
     </script>
