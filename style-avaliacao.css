@@ -203,37 +203,49 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* ========================================================= */
 .selected-sentiment-preview { 
     background-color: rgba(255,255,255,0.03) !important; 
-    border-radius: 16px !important; 
-    padding: 16px 24px !important; 
-    /* Margem auto para centralizar a caixa e max-width para limitar o esticamento */
-    margin: 0 auto 30px auto !important; 
-    max-width: 480px !important;
+    border-radius: 12px !important; 
+    padding: 12px 16px !important; 
+    margin-bottom: 24px !important; 
+    border-left: 4px solid var(--am-orange) !important; 
+    text-align: left !important;
+}
+.preview-text-label { font-size: 13px !important; font-weight: 600 !important; color: white !important;}
+
+.rating-container { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-bottom: 30px !important; }
+
+/* 🔥 MUDANÇA AQUI: flex-wrap: wrap faz os botões se alinharem sozinhos em qualquer tela */
+.rating-row { 
+    display: flex !important; 
+    justify-content: center !important; 
+    gap: 12px !important; 
+    flex-wrap: wrap !important;
     width: 100% !important;
-    border: 1px solid rgba(255,255,255,0.05) !important;
-    border-left: 5px solid var(--am-orange) !important; 
-    /* Flexbox para alinhar o emoji e o texto lado a lado no centro */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 15px !important;
-    box-sizing: border-box !important;
 }
 
-.preview-text-label { 
-    font-size: 16px !important; /* Texto maior */
+.rating-btn { 
+    background-color: var(--color-card-bg) !important; 
+    border: 1px solid rgba(255,255,255,0.1) !important; 
+    color: white !important; 
+    width: 42px !important; 
+    height: 42px !important; 
+    border-radius: 50% !important; 
+    font-size: 14px !important; 
     font-weight: 700 !important; 
-    color: white !important;
-    text-transform: uppercase !important;
-    letter-spacing: 1px !important;
+    cursor: pointer !important; 
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important; 
+    transition: all 0.15s ease !important;
+}
+.rating-btn:hover, .rating-btn:active { 
+    background-color: var(--am-orange) !important; 
+    border-color: var(--am-orange) !important; 
+    transform: scale(0.9) !important;
 }
 
-/* Nova classe para o mini-emoji animado */
-.emoji-preview-img {
-    width: 40px !important;
-    height: 40px !important;
-    object-fit: contain !important;
-    filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)) !important;
-}
+.action-footer { margin-top: auto !important; display: flex !important; justify-content: flex-start !important; }
+.btn-back { background: transparent !important; border: none !important; color: #a0a5b0 !important; font-size: 13px !important; font-weight: 600 !important; text-decoration: none !important; padding: 8px 0 !important; cursor: pointer !important;}
+.btn-back:hover { color: white !important; }
 
 /* ========================================================= */
 /* 8. ANIMAÇÃO DE SUCESSO E CHECKMARK (TELA 3)               */
