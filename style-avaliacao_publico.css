@@ -30,7 +30,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: var(--color-bg-dark) !important;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
     color: #ffffff !important;
-    max-width: 100% !important; /* 🔥 Libera pra TV/Tablet */
+    max-width: 100% !important; /* 🔥 MUDANÇA AQUI: Quebra a barreira do celular e libera pra TV/Tablet */
     min-height: 88vh !important;
     margin: 20px auto !important;
     padding: 24px !important;
@@ -51,21 +51,21 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     border-bottom: 1px solid rgba(255,255,255,0.08) !important; 
     padding-bottom: 12px !important; 
     margin-bottom: 24px !important; 
-    height: 50px !important;
+    height: 50px !important; /* TRAVA A ALTURA DO CABEÇALHO PARA NÃO ESTICAR */
     min-height: 50px !important;
 }
 .company-logo-area {
     display: flex !important;
     align-items: center !important;
     max-width: 140px !important;
-    height: 100% !important;
+    height: 100% !important; /* Força a área da logo a respeitar a altura do cabeçalho */
 }
 .brand-logo-img {
-    max-width: 130px !important;
-    max-height: 35px !important;
+    max-width: 130px !important; /* Controla a largura máxima da logo da ArcelorMittal */
+    max-height: 35px !important; /* CONTROLA A ALTURA MÁXIMA DA IMAGEM */
     width: auto !important;
     height: auto !important;
-    object-fit: contain !important;
+    object-fit: contain !important; /* Garante que a imagem mude de tamanho sem distorcer */
     filter: brightness(1.2);
 }
 .header-right-text {
@@ -136,9 +136,9 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     animation: pulse 1.5s infinite !important;
 }
 @keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
 }
 
 /* ========================================================= */
@@ -146,6 +146,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* ========================================================= */
 .voting-grid { 
     display: grid !important; 
+    /* 🔥 MUDANÇA AQUI: Responsividade fluida para os cards */
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; 
     gap: 20px !important; 
     width: 100% !important; 
@@ -165,6 +166,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 .vote-card:active { transform: scale(0.95) !important; }
 
+/* AJUSTE DO TAMANHO DO EMOJI ANIMADO */
 .emoji-container { 
     width: 80px !important;  
     height: 80px !important; 
@@ -179,6 +181,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     object-fit: contain !important; 
 }
 
+/* CORREÇÃO DO FUNDO ESCURO NO TEXTO DOS BOTÕES */
 .card-label { 
     font-size: 13px !important; 
     font-weight: 700 !important; 
@@ -190,6 +193,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     padding-top: 4px !important;
 }
 
+/* Bordas iluminadas no Foco/Hover */
 .border-orange:hover, .border-orange:focus { border-color: var(--am-orange) !important; box-shadow: 0 0 15px rgba(255, 95, 0, 0.2) !important; }
 .border-yellow:hover, .border-yellow:focus { border-color: var(--am-yellow) !important; box-shadow: 0 0 15px rgba(255, 183, 3, 0.2) !important; }
 .border-purple:hover, .border-purple:focus { border-color: var(--am-purple) !important; box-shadow: 0 0 15px rgba(131, 56, 236, 0.2) !important; }
@@ -202,11 +206,13 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: rgba(255,255,255,0.03) !important; 
     border-radius: 16px !important; 
     padding: 16px 24px !important; 
+    /* Margem auto para centralizar a caixa e max-width para limitar o esticamento */
     margin: 0 auto 30px auto !important; 
     max-width: 480px !important;
     width: 100% !important;
     border: 1px solid rgba(255,255,255,0.05) !important;
     border-left: 5px solid var(--am-orange) !important; 
+    /* Flexbox para alinhar o emoji e o texto lado a lado no centro */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
@@ -215,57 +221,20 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 
 .preview-text-label { 
-    font-size: 16px !important; 
+    font-size: 16px !important; /* Texto maior */
     font-weight: 700 !important; 
     color: white !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
 }
 
+/* Nova classe para o mini-emoji animado */
 .emoji-preview-img {
     width: 40px !important;
     height: 40px !important;
     object-fit: contain !important;
     filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)) !important;
 }
-
-.rating-container { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-bottom: 30px !important; }
-
-/* Adicionado wrap para adaptar em telas de todos os tamanhos */
-.rating-row { display: flex !important; justify-content: center !important; gap: 8px !important; flex-wrap: wrap !important; }
-
-.rating-btn { 
-    background-color: var(--color-card-bg) !important; 
-    border: 1px solid rgba(255,255,255,0.1) !important; 
-    color: white !important; 
-    width: 42px !important; 
-    height: 42px !important; 
-    border-radius: 50% !important; 
-    font-size: 14px !important; 
-    font-weight: 700 !important; 
-    cursor: pointer !important; 
-    display: flex !important; 
-    align-items: center !important; 
-    justify-content: center !important; 
-    transition: all 0.15s ease !important;
-    box-shadow: none !important; /* 🔥 MATA A SOMBRA LARANJA FORÇADA PELO HTML INLINE */
-}
-
-/* 🔥 REGRA EXCLUSIVA PARA A NOTA 10: Retira o preenchimento laranja do HTML */
-.rating-row:last-child button:last-child {
-    background-color: var(--color-card-bg) !important; /* Fundo limpo (escuro) */
-    border: 1.5px solid var(--am-orange) !important; /* Apenas o contorno laranja */
-}
-
-.rating-btn:hover, .rating-btn:active { 
-    background-color: var(--am-orange) !important; 
-    border-color: var(--am-orange) !important; 
-    transform: scale(0.9) !important;
-}
-
-.action-footer { margin-top: auto !important; display: flex !important; justify-content: flex-start !important; }
-.btn-back { background: transparent !important; border: none !important; color: #a0a5b0 !important; font-size: 13px !important; font-weight: 600 !important; text-decoration: none !important; padding: 8px 0 !important; cursor: pointer !important;}
-.btn-back:hover { color: white !important; }
 
 /* ========================================================= */
 /* 8. ANIMAÇÃO DE SUCESSO E CHECKMARK (TELA 3)               */
@@ -307,6 +276,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* 🔥 REGRA DE RESPONSIVIDADE PARA CELULARES E TABLETS NA VERTICAL 🔥 */
 @media (max-width: 650px) {
     .voting-grid {
+        /* Força a grade 2x2 */
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 12px !important;
     }
@@ -322,6 +292,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     .card-label {
         font-size: 11px !important;
     }
+    /* Ajuste para os botões de nota não "espremerem" no celular */
     .rating-btn {
         width: 38px !important; 
         height: 38px !important; 
