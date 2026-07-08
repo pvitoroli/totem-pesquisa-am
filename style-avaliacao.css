@@ -30,7 +30,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: var(--color-bg-dark) !important;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
     color: #ffffff !important;
-    max-width: 450px !important;
+    max-width: 100% !important; /* 🔥 MUDANÇA AQUI: Quebra a barreira do celular e libera pra TV/Tablet */
     min-height: 88vh !important;
     margin: 20px auto !important;
     padding: 24px !important;
@@ -42,7 +42,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 
 /* ========================================================= */
-/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                    */
+/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                   */
 /* ========================================================= */
 .totem-header { 
   display: flex !important; 
@@ -67,17 +67,6 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     height: auto !important;
     object-fit: contain !important; /* Garante que a imagem mude de tamanho sem distorcer */
     filter: brightness(1.2);
-}
-.company-logo-area {
-    display: flex !important;
-    align-items: center !important;
-    max-width: 140px !important;
-}
-.brand-logo-img {
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
-    filter: brightness(1.2); /* Sutil ganho de contraste no fundo escuro */
 }
 .header-right-text {
     display: flex !important;
@@ -156,8 +145,9 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* ========================================================= */
 .voting-grid { 
     display: grid !important; 
-    grid-template-columns: repeat(2, 1fr) !important; 
-    gap: 16px !important; 
+    /* 🔥 MUDANÇA AQUI: Responsividade fluida para os cards */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; 
+    gap: 20px !important; 
     width: 100% !important; 
 }
 .vote-card { 
@@ -222,7 +212,16 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 .preview-text-label { font-size: 13px !important; font-weight: 600 !important; color: white !important;}
 
 .rating-container { display: flex !important; flex-direction: column !important; gap: 12px !important; margin-bottom: 30px !important; }
-.rating-row { display: flex !important; justify-content: center !important; gap: 8px !important; }
+
+/* 🔥 MUDANÇA AQUI: flex-wrap: wrap faz os botões se alinharem sozinhos em qualquer tela */
+.rating-row { 
+    display: flex !important; 
+    justify-content: center !important; 
+    gap: 12px !important; 
+    flex-wrap: wrap !important;
+    width: 100% !important;
+}
+
 .rating-btn { 
     background-color: var(--color-card-bg) !important; 
     border: 1px solid rgba(255,255,255,0.1) !important; 
@@ -284,3 +283,30 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 @keyframes stroke { 100% { stroke-dashoffset: 0; } }
 @keyframes fill { 100% { box-shadow: inset 0px 0px 0px 40px var(--am-green); } }
 @keyframes scale { 0%, 100% { transform: none; } 50% { transform: scale3d(1.1, 1.1, 1); } }
+
+/* 🔥 REGRA DE RESPONSIVIDADE PARA CELULARES E TABLETS NA VERTICAL 🔥 */
+@media (max-width: 650px) {
+    .voting-grid {
+        /* Força a grade 2x2 */
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .vote-card {
+        padding: 24px 8px !important;
+        min-height: 150px !important;
+    }
+    .emoji-container {
+        width: 60px !important;
+        height: 60px !important;
+        margin-bottom: 12px !important;
+    }
+    .card-label {
+        font-size: 11px !important;
+    }
+    /* Ajuste para os botões de nota não "espremerem" no celular */
+    .rating-btn {
+        width: 38px !important; 
+        height: 38px !important; 
+        font-size: 13px !important;
+    }
+}
