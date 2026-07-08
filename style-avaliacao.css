@@ -205,47 +205,29 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: rgba(255,255,255,0.03) !important; 
     border-radius: 16px !important; 
     padding: 16px 24px !important; 
+    /* Margem auto para centralizar a caixa e max-width para limitar o esticamento */
     margin: 0 auto 30px auto !important; 
     max-width: 480px !important;
     width: 100% !important;
     border: 1px solid rgba(255,255,255,0.05) !important;
     border-left: 5px solid var(--am-orange) !important; 
-    
-    /* Alterado para flex-direction column para empilhar */
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 8px !important; /* Espaçamento entre o label e o conteúdo */
-    box-sizing: border-box !important;
-}
-
-/* Nova classe para o rótulo */
-.preview-label-text {
-    font-size: 11px !important;
-    font-weight: 400 !important;
-    color: #a0a5b0 !important; /* Cor mais suave para o rótulo */
-    text-transform: none !important; /* Sem caixa alta */
-    letter-spacing: 0.5px !important;
-    margin-bottom: 0 !important;
-}
-
-/* Container do emoji e texto que fica abaixo do rótulo */
-.preview-main-content {
+    /* Flexbox para alinhar o emoji e o texto lado a lado no centro */
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 15px !important;
+    box-sizing: border-box !important;
 }
 
 .preview-text-label { 
-    font-size: 16px !important; 
+    font-size: 16px !important; /* Texto maior */
     font-weight: 700 !important; 
     color: white !important;
     text-transform: uppercase !important;
     letter-spacing: 1px !important;
 }
 
+/* Nova classe para o mini-emoji animado */
 .emoji-preview-img {
     width: 40px !important;
     height: 40px !important;
