@@ -112,14 +112,13 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 
 /* STATUS ONLINE DISCRETO */
-.status-online-area {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    margin-top: 12px !important;
-    background-color: rgba(255, 183, 3, 0.7) !important;
-    padding: 4px 10px !important;
-    border-radius: 12px !important;
+.pulse-dot {
+    width: 6px !important;
+    height: 6px !important;
+    background-color: #ffb703 !important; /* Forçando o amarelo */
+    border-radius: 50% !important;
+    box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7) !important; /* Sombra amarela */
+    animation: pulse 1.5s infinite !important;
 }
 .status-text {
     font-size: 10px !important;
