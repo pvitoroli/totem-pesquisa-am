@@ -63,8 +63,9 @@
         </div>
       </div>
       
-      <div class="selected-sentiment-preview" style="background-color: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px 16px; margin-bottom: 24px; text-align: center;">
-          <span id="label-sentimento-escolhido" class="preview-text-label" style="font-size: 13px; font-weight: 600; color: #ff3700;">Carregando voto...</span>
+      <div class="selected-sentiment-preview">
+          <img id="emoji-preview" src="" alt="Emoji" class="emoji-preview-img" style="display: none;">
+          <span id="label-sentimento-escolhido" class="preview-text-label">Carregando voto...</span>
       </div>
       
       <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
@@ -94,16 +95,28 @@
         const urlParams = new URLSearchParams(window.location.search);
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
-        const sentimento = urlParams.get('sentimento') || "";
+        const sentimento = urlParams.get('sentimento') || "Geral";
         const setor = urlParams.get('setor') || "Geral";
 
-        document.getElementById('sub-evento-nome').innerText = evento;
-        document.getElementById('label-sentimento-escolhido').innerText = "Sentimento: " + sentimento;
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${setor}" class="btn-back">← Voltar</a>`;
+        // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+        const linksEmojis = {
+            "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
+            "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
+            "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
+            "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
+        };
 
-        function enviarDados(nota) {
-            // Redireciona para o agradecimento público levando os dados
-            window.location.replace(`agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${id}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&modo=publico`);
+        // Preenche o Titulo
+        document.getElementById('sub-evento-nome').innerText = evento;
+        
+        // Preenche o nome do sentimento
+        document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+
+        // Injeta a imagem animada correspondente, se ela existir no dicionário
+        const imgEmoji = document.getElementById('emoji-preview');
+        if (linksEmojis[sentimento]) {
+            imgEmoji.src = linksEmojis[sentimento];
+            imgEmoji.style.display = 'block'; // Mostra a imagem
         }
     </script>
 </body>
