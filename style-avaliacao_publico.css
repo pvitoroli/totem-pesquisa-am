@@ -136,9 +136,9 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     animation: pulse 1.5s infinite !important;
 }
 @keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
 }
 
 /* ========================================================= */
