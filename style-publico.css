@@ -30,7 +30,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: var(--color-bg-dark) !important;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
     color: #ffffff !important;
-    max-width: 450px !important;
+    max-width: 100% !important; /* 🔥 MUDANÇA AQUI: Libera a tela toda */
     min-height: 88vh !important;
     margin: 20px auto !important;
     padding: 24px !important;
@@ -42,7 +42,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 
 /* ========================================================= */
-/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                    */
+/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                   */
 /* ========================================================= */
 .totem-header { 
     display: flex !important; 
@@ -140,8 +140,9 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* ========================================================= */
 .voting-grid { 
     display: grid !important; 
-    grid-template-columns: repeat(2, 1fr) !important; 
-    gap: 16px !important; 
+    /* Telas grandes: espalha lado a lado automaticamente */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; 
+    gap: 20px !important; 
     width: 100% !important; 
 }
 .vote-card { 
@@ -191,6 +192,27 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 .border-yellow:hover, .border-yellow:focus { border-color: var(--am-yellow) !important; box-shadow: 0 0 15px rgba(255, 183, 3, 0.2) !important; }
 .border-purple:hover, .border-purple:focus { border-color: var(--am-purple) !important; box-shadow: 0 0 15px rgba(131, 56, 236, 0.2) !important; }
 .border-pink:hover, .border-pink:focus { border-color: var(--am-pink) !important; box-shadow: 0 0 15px rgba(255, 0, 110, 0.2) !important; }
+
+/* 🔥 REGRA DE RESPONSIVIDADE PARA CELULARES E TABLETS NA VERTICAL 🔥 */
+@media (max-width: 650px) {
+    .voting-grid {
+        /* Força a grade 2x2 */
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important; /* Diminui o espaço entre os cards para caber na tela */
+    }
+    .vote-card {
+        padding: 24px 8px !important; /* Tira um pouco do preenchimento interno */
+        min-height: 150px !important;
+    }
+    .emoji-container {
+        width: 60px !important; /* Diminui o emoji para não estourar a caixa */
+        height: 60px !important;
+        margin-bottom: 12px !important;
+    }
+    .card-label {
+        font-size: 11px !important; /* Fonte um pouco menor para não quebrar a linha */
+    }
+}
 
 /* ========================================================= */
 /* 7. GRID DE NOTA 0 A 10 E PREVIEW (TELA 2)                 */
