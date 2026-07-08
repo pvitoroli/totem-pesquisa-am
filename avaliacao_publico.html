@@ -92,13 +92,14 @@
     </div>
 
     <script>
+        // 1. Pega os dados da URL
         const urlParams = new URLSearchParams(window.location.search);
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
         const setor = urlParams.get('setor') || "Geral";
 
-        // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+        // 2. DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
         const linksEmojis = {
             "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
             "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
@@ -106,18 +107,38 @@
             "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
         };
 
-        // Preenche o Titulo
+        // 3. Preenche os textos e o botão voltar
         document.getElementById('sub-evento-nome').innerText = evento;
-        
-        // Preenche o nome do sentimento
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
-        // Injeta a imagem animada correspondente, se ela existir no dicionário
+        // 4. Injeta a imagem animada
         const imgEmoji = document.getElementById('emoji-preview');
         if (linksEmojis[sentimento]) {
             imgEmoji.src = linksEmojis[sentimento];
-            imgEmoji.style.display = 'block'; // Mostra a imagem
+            imgEmoji.style.display = 'block'; 
         }
+
+        // 5. A FUNÇÃO QUE ESTAVA FALTANDO! (Redireciona para o agradecimento público)
+        function enviarDados(nota) {
+            // Trava os botões para não dar clique duplo
+            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
+            
+            // Dá um feedback visual no botão clicado
+            event.target.innerText = "...";
+            event.target.style.backgroundColor = "#ff3700";
+            event.target.style.borderColor = "#ff3700";
+
+            // Monta o link para a tela final (amarela) levando a NOTA
+            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${id}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&modo=publico`;
+            
+            // Vai para a última tela (usando replace para bloquear o botão voltar do celular)
+            window.location.replace(linkDestino);
+        }
+        
+        // Trava de segurança extra para o botão voltar do próprio navegador
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () { window.history.go(1); };
     </script>
 </body>
 </html>
