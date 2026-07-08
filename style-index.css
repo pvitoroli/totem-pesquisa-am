@@ -30,7 +30,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     background-color: var(--color-bg-dark) !important;
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
     color: #ffffff !important;
-    max-width: 450px !important;
+    max-width: 100% !important; /* 🔥 MUDANÇA AQUI: Libera a tela toda */
     min-height: 88vh !important;
     margin: 20px auto !important;
     padding: 24px !important;
@@ -42,7 +42,7 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 }
 
 /* ========================================================= */
-/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                    */
+/* 4. CABEÇALHO CORPORATIVO COM LOGO MARCA                   */
 /* ========================================================= */
 .totem-header { 
     display: flex !important; 
@@ -140,8 +140,8 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
 /* ========================================================= */
 .voting-grid { 
     display: grid !important; 
-    grid-template-columns: repeat(2, 1fr) !important; 
-    gap: 16px !important; 
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important; /* 🔥 MUDANÇA AQUI: Grade Inteligente */
+    gap: 20px !important; /* Ajuste no gap para respiro */
     width: 100% !important; 
 }
 .vote-card { 
