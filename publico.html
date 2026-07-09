@@ -265,6 +265,23 @@
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
         
+        // 🔍 CERCA ELÉTRICA ANTI-FRAUDE: Verifica se o dispositivo já votou nesta campanha
+    const urlParamsCheck = new URLSearchParams(window.location.search);
+    const idCampanhaCheck = urlParamsCheck.get('evento'); // O link público injeta o ID no parâmetro 'evento'
+    
+    if (idCampanhaCheck && localStorage.getItem('votou_' + idCampanhaCheck) === 'sim') {
+        // Se já votou, apaga a tela inteira e mostra o bloqueio corporativo
+        document.body.innerHTML = `
+            <div style="background-color:#1f242d; color:white; font-family:sans-serif; text-align:center; padding:40px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
+                <h2 style="color:#ff5f00; font-weight:800; margin-bottom:10px;">PARTICIPAÇÃO CONCLUÍDA</h2>
+                <p style="color:#a0a5b0; max-width:400px; line-height:1.6; font-size:14px;">
+                    Obrigado pelo seu interesse! Este dispositivo já registrou uma resposta para a campanha atual. Para manter a integridade da pesquisa, é permitido apenas um voto por colaborador.
+                </p>
+            </div>
+        `;
+        throw new Error("Acesso bloqueado: Colaborador já participou desta campanha.");
+    }
         const urlParams = new URLSearchParams(window.location.search); 
         let idEventoAtual = urlParams.get('evento'); 
         let setorAtual = urlParams.get('setor') || "Geral"; 
