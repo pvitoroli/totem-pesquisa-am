@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Gestão Pro - ArcelorMittal</title>
+    <title>Painel Gestão - ArcelorMittal</title>
     <style>
         :root {
             --bg: #12141a; --surface: #1e222d; --surface-hover: #2a2f3a;
@@ -84,7 +84,7 @@
         </header>
 
         <section class="card">
-            <h2>Lançar Nova Campanha</h2>
+            <h2>Nova Campanha</h2>
             <div class="form-grid">
                 <input type="text" id="nomeCampanha" placeholder="Ex: Siderurgia 3" autocomplete="off">
                 
@@ -126,7 +126,7 @@
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">Iniciar Totem Fixo</button>
                 <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
             </div>
 
@@ -335,7 +335,7 @@
                     if(camp) camp.status = novoStatus;
                     renderizarLista();
                 } else {
-                    alert("⚠️ Falha do Google: " + json.erro);
+                    alert("⚠️ Falha " + json.erro);
                 }
             } catch (e) {
                 alert("❌ Erro de rede ao comunicar com a planilha.");
