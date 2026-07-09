@@ -184,7 +184,7 @@
         0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
         70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
         100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
-    }
+        }
     </style>
 </head>
 <body>
@@ -263,41 +263,38 @@
     </div>
 
     <script>
-        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
-        
-        // 🔍 CERCA ELÉTRICA ANTI-FRAUDE: Verifica se o dispositivo já votou nesta campanha
-    const urlParamsCheck = new URLSearchParams(window.location.search);
-    const idCampanhaCheck = urlParamsCheck.get('evento'); // O link público injeta o ID no parâmetro 'evento'
-    
-    if (idCampanhaCheck && localStorage.getItem('votou_' + idCampanhaCheck) === 'sim') {
-        // Se já votou, apaga a tela inteira e mostra o bloqueio corporativo
-        document.body.innerHTML = `
-            <div style="background-color:#1f242d; color:white; font-family:sans-serif; text-align:center; padding:40px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                <div style="font-size: 50px; margin-bottom: 20px;">🔒</div>
-                <h2 style="color:#ff5f00; font-weight:800; margin-bottom:10px;">PARTICIPAÇÃO CONCLUÍDA</h2>
-                <p style="color:#a0a5b0; max-width:400px; line-height:1.6; font-size:14px;">
-                    Obrigado pelo seu interesse! Este dispositivo já registrou uma resposta para a campanha atual. Para manter a integridade da pesquisa, é permitido apenas um voto por colaborador.
-                </p>
-            </div>
-        `;
-        throw new Error("Acesso bloqueado: Colaborador já participou desta campanha.");
-    }
-        const urlParams = new URLSearchParams(window.location.search); 
-        let idEventoAtual = urlParams.get('evento'); 
-        let setorAtual = urlParams.get('setor') || "Geral"; 
-        let nomeRealDaCampanha = "Carregando..."; 
+        // 🚨 1. CERCA ELÉTRICA BLINDADA CONTRA O BOTÃO "VOLTAR" (Bfcache) 🚨
+        const urlParams = new URLSearchParams(window.location.search);
+        const idEventoAtual = urlParams.get('evento');
+        let setorAtual = urlParams.get('setor') || "Geral";
+        let nomeRealDaCampanha = "Carregando...";
 
-        window.addEventListener('DOMContentLoaded', () => {
-            if(idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
+        function checarBloqueio() {
+            if (idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
+                // Se já votou, DESTRÓI a tela na hora para impedir que a Splash Screen ou os emojis apareçam
                 document.body.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px;">
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
                         <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
                         <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
-                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
+                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif; max-width: 400px; line-height: 1.5;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
                     </div>`;
-                return;
+                throw new Error("Acesso Bloqueado: Usuário já votou."); // Para a execução do restante do código
             }
+        }
 
+        // Executa no exato milissegundo que o script é lido (Garante o bloqueio inicial)
+        checarBloqueio();
+
+        // Executa caso o peão use o botão "Voltar" do celular e o navegador tente descongelar a página
+        window.addEventListener('pageshow', checarBloqueio);
+
+
+        // -----------------------------------------------------------
+        // 2. RESTANTE DO CÓDIGO NORMAL
+        // -----------------------------------------------------------
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec"; 
+
+        window.addEventListener('DOMContentLoaded', () => {
             setTimeout(() => {
                 const splash = document.getElementById('splash-screen');
                 if (splash) {
