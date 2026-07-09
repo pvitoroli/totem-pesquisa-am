@@ -117,7 +117,7 @@
 
             <div class="list-container" id="containerLista">
                 <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    Conectando ao servidor Google...
+                    Conectando ao servidor...
                 </div>
             </div>
         </section>
@@ -129,7 +129,7 @@
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">Iniciar Totem Fixo</button>
                 <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
             </div>
 
@@ -399,7 +399,7 @@
 
         function gerarLinkPublico() {
             navigator.clipboard.writeText(pegarLinkPublico()).then(() => {
-                alert("✅ Link PÚBLICO (Mobile) copiado com sucesso!");
+                alert("✅ Link PÚBLICO copiado com sucesso!");
             });
         }
     </script>
