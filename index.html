@@ -168,6 +168,23 @@
             backdrop-filter: blur(10px); 
             -webkit-backdrop-filter: blur(10px);
         }
+        
+        /* STATUS ONLINE DISCRETO - Corrigido para Verde */
+
+    .pulse-dot-verde {
+        width: 6px !important;
+        height: 6px !important;
+        background-color: #4bb543 !important; /* Verde exato */
+        border-radius: 50% !important;
+        display: inline-block !important;
+        animation: pulseVerde 1.5s infinite !important;
+    }
+
+    @keyframes pulseVerde {
+        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
+        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
+    }
     </style>
 </head>
 <body>
