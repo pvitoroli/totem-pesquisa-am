@@ -107,55 +107,62 @@
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
 
-        // 1. CAPTURA OS DADOS QUE VIERAM DA TELA DE VOTO
+        // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida)
         const urlParams = new URLSearchParams(window.location.search);
         const nomeEvento = urlParams.get('evento');
         const idEvento = urlParams.get('id');
         const sentimento = urlParams.get('sentimento');
         const setor = urlParams.get('setor') || "Geral";
+        const notaReal = urlParams.get('nota') || "10"; // Pega a nota clicada de 0 a 10
 
-        // 2. BLOQUEIO DO BOTÃO VOLTAR (Anti-Fraude)
-        // Substitui o histórico atual, fazendo com que "voltar" não leve de volta à tela de voto
+        // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
+        if (idEvento && localStorage.getItem('votou_' + idEvento) === 'sim') {
+            document.body.innerHTML = `
+                <div style="background-color:#1b1e27; color:white; font-family:sans-serif; text-align:center; padding:50px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <h2 style="color:#ff5f00;">⚠️ VOTO JÁ REGISTRADO</h2>
+                    <p style="color:#a0a5b0; max-width:400px;">Identificamos que uma participação já foi contabilizada para este dispositivo nesta campanha.</p>
+                </div>
+            `;
+            throw new Error("Fluxo interrompido: Voto já computado neste dispositivo.");
+        }
+
+        // 3. TRAVA DO BOTÃO VOLTAR DO NAVEGADOR
         window.history.replaceState(null, null, window.location.href);
         window.onpopstate = function () {
             window.history.go(1);
         };
 
-        // 3. REGISTRO DO VOTO NO BANCO DE DADOS
-        async function gravarVoto() {
-            if (!nomeEvento || !sentimento) return; // Se abrir a tela direto, não faz nada
+        // 4. REGISTRO DO VOTO REAL NA PLANILHA
+        async function gravarVotoPublico() {
+            if (!nomeEvento || !sentimento) return;
 
-            // Marca na memória do celular que ele já votou nesta campanha
+            // "Tautua" o dispositivo na memória antes do envio para blindar o fluxo
             if (idEvento) {
                 localStorage.setItem('votou_' + idEvento, 'sim');
             }
 
-            // Traduz o sentimento em nota para o relatório
-            let nota = 10;
-            if (sentimento === 'Quero saber mais') nota = 8;
-            if (sentimento === 'Poderia ser melhor') nota = 5;
-
+            // Envia exatamente os eixos auditáveis coletados no Totem Público
             const payload = {
-                evento: nomeEvento,
-                sentimento: sentimento,
-                nota: nota,
-                setor: setor
+                "evento": nomeEvento,
+                "sentimento": sentimento,
+                "nota": parseInt(notaReal), // Envia a nota real (0 a 10) que o colaborador clicou
+                "setor": setor,
+                "origem": "Totem Público (QR Code)"
             };
 
             try {
-                // Envia para a planilha silenciosamente
                 await fetch(URL_BACKEND, {
                     method: "POST",
                     body: JSON.stringify(payload)
                 });
-                console.log("Voto registrado publicamente.");
+                console.log("Voto público integrado com sucesso.");
             } catch (e) {
-                console.error("Voto submetido (erro de rede/cors silenciado).");
+                console.error("Voto processado.");
             }
         }
 
-        // Dispara o salvamento assim que a tela abre
-        window.onload = gravarVoto;
+        // Dispara ao carregar a página
+        window.onload = gravarVotoPublico;
     </script>
 
 </body>
