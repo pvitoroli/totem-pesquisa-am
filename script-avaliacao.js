@@ -1,6 +1,6 @@
 function enviarDados(nota) {
     // 🔥 COLA AQUI A URL DO SEU GOOGLE APPS SCRIPT 🔥
-    const urlWebhook = "https://script.google.com/macros/s/AKfycbzQDIltRr5fah169bC6xcL34kVHtc0pvX-7TZAQC7LXPSRaGKQHlf31tu2jIcaJC98V/exec"; 
+    const urlWebhook = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
     
     const urlParams = new URLSearchParams(window.location.search);
     const sentimento = urlParams.get('sentimento');
