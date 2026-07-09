@@ -45,7 +45,6 @@
         .item-title { font-weight: 600; font-size: 15px; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        /* CSS alinhado com as nomenclaturas exatas da planilha */
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
         .badge.Ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
         .badge.EmEspera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
@@ -87,7 +86,7 @@
         <section class="card">
             <h2>Lançar Nova Campanha</h2>
             <div class="form-grid">
-                <input type="text" id="nomeCampanha" placeholder="Ex: Maio Amarelo Dia 1" autocomplete="off">
+                <input type="text" id="nomeCampanha" placeholder="Ex: Siderurgia 3" autocomplete="off">
                 <select id="setorCampanha">
                     <option value="" disabled selected>Selecione o Setor</option>
                     <option value="Comunicação">Comunicação</option>
@@ -164,7 +163,6 @@
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
                 
-                // Limpeza Frontend de dados antigos para manter o visual limpo
                 dbCampanhas.forEach(c => {
                     if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
                     if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
@@ -205,10 +203,18 @@
             buscarDados(); 
         }
 
+        // 🔥 FUNÇÃO INTELIGENTE DE AGRUPAMENTO (REGEX)
+        function normalizarNomeCampanha(nome) {
+            if (!nome) return "Campanha Sem Nome";
+            // Remove: traços extras, palavras como dia/turma (opcional), números, ordinais (º,ª) e "dias" no final.
+            return nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim();
+        }
+
         function agruparCampanhas(lista) {
             let grupos = {};
             lista.forEach(c => {
-                let baseName = c.nome_campanha.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)\s*[a-z0-9]+$/i, '').trim();
+                // Usa a nova função para criar o Base Name limpo (Ex: "Siderurgia 3" vira "Siderurgia")
+                let baseName = normalizarNomeCampanha(c.nome_campanha);
                 if (!grupos[baseName]) grupos[baseName] = [];
                 grupos[baseName].push(c);
             });
@@ -235,18 +241,22 @@
 
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
+                
+                // Se só tem 1 item, mostra o card normal
                 if (itens.length === 1) {
                     area.innerHTML += criarCardHTML(itens[0]);
-                } else {
+                } 
+                // Se tem mais de 1, cria a pasta de Coleção
+                else {
                     let subHtml = itens.map(i => criarCardHTML(i, true)).join('');
                     area.innerHTML += `
                         <div class="list-item">
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
-                                    <div class="item-title">📂 Coleção Agrupada: ${baseName}</div>
-                                    <div class="item-meta">Contém ${itens.length} sub-campanhas cadastradas</div>
+                                    <div class="item-title">📂 Coleção: ${baseName}</div>
+                                    <div class="item-meta">Contém ${itens.length} ações/dias cadastradas</div>
                                 </div>
-                                <span style="font-size:12px;">Expandir ▼</span>
+                                <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
                             </div>
                             <div class="sub-list">${subHtml}</div>
                         </div>
@@ -256,10 +266,9 @@
         }
 
         function criarCardHTML(ev, isSub = false) {
-            let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR') : 'Sem data';
+            let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
             
-            // Aqui enviamos as palavras exatas que a planilha aceita: Ativo, Em Espera e Finalizado
             let botoesAcao = `
                 <div class="action-bar" onclick="event.stopPropagation()">
                     <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">▶ Ativar</button>
@@ -268,7 +277,6 @@
                 </div>
             `;
 
-            // Classe CSS sanitizada para não bugar com os espaços do "Em Espera"
             let statusClass = ev.status.replace(/\s+/g, '');
 
             return `
@@ -276,7 +284,7 @@
                     <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: 14px 16px;">
                         <div class="item-info" style="width: 100%;">
                             <div style="display:flex; justify-content:space-between; width:100%;">
-                                <div class="item-title">${ev.nome_campanha}</div>
+                                <div class="item-title" style="color: ${isSub ? 'var(--text-muted)' : 'white'};">${ev.nome_campanha}</div>
                                 <span class="badge ${statusClass}">${ev.status}</span>
                             </div>
                             <div class="item-meta">
@@ -316,8 +324,7 @@
             } catch (e) {
                 alert("❌ Erro de rede ao comunicar com a planilha.");
             } finally {
-                botoes.forEach(b => b.disabled = false);
-                btnElement.innerText = textoOriginal;
+                // A UI será reconstruída pelo renderizarLista()
             }
         }
 
@@ -351,18 +358,22 @@
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
             
-            // Esconde a imagem e mostra o loading toda vez que abre o modal
             img.style.display = 'none';
             loading.style.display = 'flex';
+            loading.innerText = "Gerando QR Code...";
             
-            // Só mostra a imagem quando ela terminar de carregar da API
             img.onload = function() {
                 loading.style.display = 'none';
                 img.style.display = 'inline-block';
             };
 
+            img.onerror = function() {
+                loading.innerText = "⚠️ Bloqueado pela rede ou falha na conexão.";
+            };
+
             const linkPublico = pegarLinkPublico(); 
-            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(linkPublico)}`;
+            // 🔥 RESTAURADO PARA QUICKCHART (À prova de travamentos corporativos)
+            img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(linkPublico)}`;
 
             document.getElementById('modalJornada').style.display = 'flex';
         }
