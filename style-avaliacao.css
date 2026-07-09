@@ -111,29 +111,16 @@ header, footer, .header, .footer, .navbar, #header, #footer, .site-header, .site
     margin-bottom: 0 !important;
 }
 
-/* STATUS ONLINE DISCRETO */
-.status-online-area {
-    display: inline-flex !important;
-    align-items: center !important;
-    gap: 6px !important;
-    margin-top: 12px !important;
-    background-color: rgba(255, 255, 255, 0.03) !important;
-    padding: 4px 10px !important;
-    border-radius: 12px !important;
-}
-.status-text {
-    font-size: 10px !important;
-    color: #a0a5b0 !important;
-    font-weight: 600 !important;
-}
+/* STATUS ONLINE DISCRETO - Corrigido para Verde */
 .pulse-dot {
     width: 6px !important;
     height: 6px !important;
-    background-color: var(--am-green) !important;
+    background-color: #4bb543 !important; /* Verde ArcelorMittal */
     border-radius: 50% !important;
-    box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7) !important;
+    box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7) !important; /* Sombra Verde */
     animation: pulse 1.5s infinite !important;
 }
+
 @keyframes pulse {
     0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
     70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
