@@ -138,7 +138,7 @@
         }
 
         // 3. Configura o botão voltar mantendo as credenciais da campanha
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
         // 4. Grava tudo no Sheets coletando Setor e Origem
         function enviarDados(nota) {
