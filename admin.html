@@ -87,14 +87,11 @@
             <h2>Lançar Nova Campanha</h2>
             <div class="form-grid">
                 <input type="text" id="nomeCampanha" placeholder="Ex: Siderurgia 3" autocomplete="off">
+                
                 <select id="setorCampanha">
-                    <option value="" disabled selected>Selecione o Setor</option>
-                    <option value="Comunicação">Comunicação</option>
-                    <option value="RH">Recursos Humanos</option>
-                    <option value="Manutenção">Manutenção</option>
-                    <option value="Saúde e Segurança">Saúde e Segurança</option>
-                    <option value="Operação">Operação</option>
+                    <option value="" disabled selected>⏳ Carregando setores da base...</option>
                 </select>
+
                 <input type="date" id="dataCampanha">
                 <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
             </div>
@@ -129,7 +126,7 @@
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">Iniciar Totem Fixo</button>
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
                 <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
             </div>
 
@@ -152,10 +149,32 @@
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
 
+        // 🔥 PASSO 3 B) Atualização do gatilho inicial
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
+            buscarSetores(); 
             await buscarDados();
         };
+
+        // 🔥 PASSO 3 B) Nova função que puxa os setores da planilha
+        async function buscarSetores() {
+            const selectSetor = document.getElementById('setorCampanha');
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
+                const setores = await res.json();
+                
+                // Limpa o aviso de carregando e coloca a opção padrão
+                selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
+                
+                // Injeta cada setor que veio da planilha como uma opção
+                setores.forEach(setor => {
+                    selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`;
+                });
+            } catch (e) {
+                console.error("Erro ao carregar setores", e);
+                selectSetor.innerHTML = '<option value="" disabled selected>⚠️ Erro ao carregar setores</option>';
+            }
+        }
 
         async function buscarDados() {
             try {
@@ -200,20 +219,19 @@
 
             btn.innerText = "Criar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
+            // Reseta o select para a opção desabilitada ("Selecione o Setor")
+            document.getElementById('setorCampanha').selectedIndex = 0;
             buscarDados(); 
         }
 
-        // 🔥 FUNÇÃO INTELIGENTE DE AGRUPAMENTO (REGEX)
         function normalizarNomeCampanha(nome) {
             if (!nome) return "Campanha Sem Nome";
-            // Remove: traços extras, palavras como dia/turma (opcional), números, ordinais (º,ª) e "dias" no final.
             return nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim();
         }
 
         function agruparCampanhas(lista) {
             let grupos = {};
             lista.forEach(c => {
-                // Usa a nova função para criar o Base Name limpo (Ex: "Siderurgia 3" vira "Siderurgia")
                 let baseName = normalizarNomeCampanha(c.nome_campanha);
                 if (!grupos[baseName]) grupos[baseName] = [];
                 grupos[baseName].push(c);
@@ -242,11 +260,9 @@
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
                 
-                // Se só tem 1 item, mostra o card normal
                 if (itens.length === 1) {
                     area.innerHTML += criarCardHTML(itens[0]);
                 } 
-                // Se tem mais de 1, cria a pasta de Coleção
                 else {
                     let subHtml = itens.map(i => criarCardHTML(i, true)).join('');
                     area.innerHTML += `
@@ -354,7 +370,6 @@
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
             document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
             
-            // Controle da Imagem do QR Code
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
             
@@ -372,7 +387,6 @@
             };
 
             const linkPublico = pegarLinkPublico(); 
-            // 🔥 RESTAURADO PARA QUICKCHART (À prova de travamentos corporativos)
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(linkPublico)}`;
 
             document.getElementById('modalJornada').style.display = 'flex';
@@ -384,7 +398,6 @@
             }
         }
 
-        // FUNÇÕES DE LINKS
         function pegarLinkTotem() {
             return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`;
         }
