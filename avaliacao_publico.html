@@ -160,10 +160,10 @@
                 })
             }).then(() => {
                 // Redireciona para o agradecimento REPASSANDO o ID e o Setor para o loop não quebrar!
-                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
+                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             }).catch((erro) => {
                 console.error("Erro ao gravar:", erro);
-                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
+                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             });
         }
     </script>
