@@ -110,60 +110,69 @@
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const evento = urlParams.get('evento') || "";
-        const id = urlParams.get('id') || "";
-        const sentimento = urlParams.get('sentimento') || "Geral";
-        const setor = urlParams.get('setor') || "Geral";
+    // --- 🚨 BLOQUEIO DE VOTO DUPLO (IMEDIATO) ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id') || "";
 
-        // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
-        const linksEmojis = {
-            "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
-            "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
-            "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
-            "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
-        };
+    // Verifica se já existe marcação de voto para este ID específico
+    if (id && localStorage.getItem(`votou_${id}`)) {
+        document.body.innerHTML = "<h1>Você já registrou seu voto neste evento.</h1>";
+        throw new Error("Voto já registrado"); // Interrompe a execução do restante do script
+    }
 
-        // Preenche o Titulo
-        document.getElementById('sub-evento-nome').innerText = evento;
+    const evento = urlParams.get('evento') || "";
+    const sentimento = urlParams.get('sentimento') || "Geral";
+    const setor = urlParams.get('setor') || "Geral";
+
+    // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+    const linksEmojis = {
+        "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
+        "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
+        "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
+        "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
+    };
+
+    // Preenche o Titulo
+    document.getElementById('sub-evento-nome').innerText = evento;
+    
+    // Preenche o nome do sentimento
+    document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+
+    // Injeta a imagem animada
+    const imgEmoji = document.getElementById('emoji-preview');
+    if (linksEmojis[sentimento]) {
+        imgEmoji.src = linksEmojis[sentimento];
+        imgEmoji.style.display = 'block';
+    }
+
+    // Botão voltar
+    document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
+
+    // Grava tudo no Sheets
+    function enviarDados(nota) {
+        const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
         
-        // Preenche o nome do sentimento
-        document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+        event.target.innerText = "...";
+        event.target.style.backgroundColor = "#ff3700";
 
-        // Injeta a imagem animada correspondente, se ela existir no dicionário
-        const imgEmoji = document.getElementById('emoji-preview');
-        if (linksEmojis[sentimento]) {
-            imgEmoji.src = linksEmojis[sentimento];
-            imgEmoji.style.display = 'block'; // Mostra a imagem
-        }
+        // Grava no localStorage antes de enviar
+        if(id) localStorage.setItem(`votou_${id}`, "true");
 
-        // 3. Configura o botão voltar mantendo as credenciais da campanha
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
-
-        // 4. Grava tudo no Sheets coletando Setor e Origem
-        function enviarDados(nota) {
-            const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
-            
-            event.target.innerText = "...";
-            event.target.style.backgroundColor = "#ff3700";
-
-            // Envia o pacote com os novos campos auditáveis
-            fetch(urlWebhook, {
-                method: 'POST',
-                mode: 'no-cors', 
-                body: JSON.stringify({
-                    "evento": evento,
-                    "sentimento": sentimento,
-                    "nota": nota,
-                    "setor": setor,       // Registra o setor no Totem Público
-                    "origem": "Totem Público" // Registra a origem do dispositivo
-                })
-            }).then(() => {
-                // Redireciona para o agradecimento REPASSANDO o ID e o Setor para o loop não quebrar!
-                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            }).catch((erro) => {
-                console.error("Erro ao gravar:", erro);
-                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            });
-        }
-    </script>
+        fetch(urlWebhook, {
+            method: 'POST',
+            mode: 'no-cors', 
+            body: JSON.stringify({
+                "evento": evento,
+                "sentimento": sentimento,
+                "nota": nota,
+                "setor": setor,
+                "origem": "Totem Público"
+            })
+        }).then(() => {
+            window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
+        }).catch((erro) => {
+            console.error("Erro ao gravar:", erro);
+            window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
+        });
+    }
+</script>
