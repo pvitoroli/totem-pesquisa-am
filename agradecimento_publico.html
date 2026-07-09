@@ -105,65 +105,59 @@
     </div>
 
     <script>
-    const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const idEvento = urlParams.get('id');
-
-    // 1. BLOQUEIO IMEDIATO: Antes mesmo de carregar a página
-    // Se ele já votou, nem deixa ele ver o "Agradecimento"
-    if (idEvento && localStorage.getItem('votou_' + idEvento)) {
-        document.body.innerHTML = "<div style='text-align:center; padding-top:50px;'><h1>Você já registrou seu sentimento!</h1><p>Obrigado pela sua colaboração.</p></div>";
-    }
-
-    // 2. BLOQUEIO DO BOTÃO VOLTAR
-    window.history.replaceState(null, null, window.location.href);
-    window.onpopstate = function () {
-        window.history.go(1);
-    };
-
-    // 3. REGISTRO DO VOTO (Apenas se ainda não votou)
-    async function gravarVoto() {
+        // 1. CAPTURA OS DADOS QUE VIERAM DA TELA DE VOTO
+        const urlParams = new URLSearchParams(window.location.search);
         const nomeEvento = urlParams.get('evento');
+        const idEvento = urlParams.get('id');
         const sentimento = urlParams.get('sentimento');
         const setor = urlParams.get('setor') || "Geral";
 
-        if (!nomeEvento || !sentimento) return; 
-
-        // Tatuagem no dispositivo
-        if (idEvento) {
-            localStorage.setItem('votou_' + idEvento, 'sim');
-        }
-
-        let nota = 10;
-        if (sentimento === 'Quero saber mais') nota = 8;
-        if (sentimento === 'Poderia ser melhor') nota = 5;
-
-        const payload = {
-            evento: nomeEvento,
-            sentimento: sentimento,
-            nota: nota,
-            setor: setor,
-            origem: "Totem Público"
+        // 2. BLOQUEIO DO BOTÃO VOLTAR (Anti-Fraude)
+        // Substitui o histórico atual, fazendo com que "voltar" não leve de volta à tela de voto
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () {
+            window.history.go(1);
         };
 
-        try {
-            await fetch(URL_BACKEND, {
-                method: "POST",
-                mode: 'no-cors', // Adicionado para evitar erro de CORS
-                body: JSON.stringify(payload)
-            });
-            console.log("Voto registrado.");
-        } catch (e) {
-            console.error("Erro no envio:", e);
-        }
-    }
+        // 3. REGISTRO DO VOTO NO BANCO DE DADOS
+        async function gravarVoto() {
+            if (!nomeEvento || !sentimento) return; // Se abrir a tela direto, não faz nada
 
-    // Dispara apenas se não estiver bloqueado
-    if (!(idEvento && localStorage.getItem('votou_' + idEvento))) {
+            // Marca na memória do celular que ele já votou nesta campanha
+            if (idEvento) {
+                localStorage.setItem('votou_' + idEvento, 'sim');
+            }
+
+            // Traduz o sentimento em nota para o relatório
+            let nota = 10;
+            if (sentimento === 'Quero saber mais') nota = 8;
+            if (sentimento === 'Poderia ser melhor') nota = 5;
+
+            const payload = {
+                evento: nomeEvento,
+                sentimento: sentimento,
+                nota: nota,
+                setor: setor,
+                origem: "Totem Público" // REGISTRA O DISPOSITIVO AQUI
+            };
+
+            try {
+                // Envia para a planilha silenciosamente
+                await fetch(URL_BACKEND, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                console.log("Voto registrado publicamente.");
+            } catch (e) {
+                console.error("Voto submetido (erro de rede/cors silenciado).");
+            }
+        }
+
+        // Dispara o salvamento assim que a tela abre
         window.onload = gravarVoto;
-    }
-</script>
+    </script>
 
 </body>
 </html>
