@@ -35,23 +35,21 @@
             color: white;
         }
     
-    /* Ajuste status de conexão pulsedot */
+        /* STATUS ONLINE DISCRETO - RESTAURADO PARA AMARELO (#ffb703) */
+        .pulse-dot-amarelo {
+            width: 6px !important;
+            height: 6px !important;
+            background-color: #ffb703 !important; 
+            border-radius: 50% !important;
+            display: inline-block !important;
+            animation: pulseAmarelo 1.5s infinite !important;
+        }
 
-    .pulse-dot-amarelo {
-        width: 6px !important;
-        height: 6px !important;
-        background-color: #ffb703 !important; /* Amarelo exato */
-        border-radius: 50% !important;
-        display: inline-block !important;
-        animation: pulseAmarelo 1.5s infinite !important;
-    }
-
-    @keyframes pulseAmarelo {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
-    }
-</style>
+        @keyframes pulseAmarelo {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+        }
     </style>
 </head>
 <body>
@@ -59,8 +57,8 @@
     <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
       <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
        <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
-    <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
-</div>
+            <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
+       </div>
         <div class="header-right-text" style="display: flex;">
             <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
         </div>
@@ -76,7 +74,7 @@
         </h5>
         
         <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
-            <span class="pulse-dot-amarelo" style="width: 6px; height: 6px; background-color: #ffb703; border-radius: 50%; box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); animation: pulseAmarelo 1.5s infinite;"></span>
+            <span class="pulse-dot-amarelo"></span>
             <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Público</span>
         </div>
       </div>
@@ -100,7 +98,7 @@
             <button onclick="enviarDados(7)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">7</button>
             <button onclick="enviarDados(8)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">8</button>
             <button onclick="enviarDados(9)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">9</button>
-            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #ff3700; border: 1px solid #ff3700; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.4);">10</button>
+            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">10</button>
         </div>
       </div>
       
@@ -110,26 +108,30 @@
     </div>
 
     <script>
-        function checarBloqueio() {
-            if (idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
-                // Se já votou, DESTRÓI a tela na hora para impedir que a Splash Screen ou os emojis apareçam
-                document.body.innerHTML = `
-                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
-                        <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
-                        <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
-                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif; max-width: 400px; line-height: 1.5;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
-                    </div>`;
-                throw new Error("Acesso Bloqueado: Usuário já votou."); // Para a execução do restante do código
-            }
-        }
-        
+        // 1. CAPTURA DOS PARÂMETROS DA URL
         const urlParams = new URLSearchParams(window.location.search);
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
         const setor = urlParams.get('setor') || "Geral";
 
-        // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+        // 2. CERCA ELÉTRICA (BLOQUEIO ANTI-F5/VOLTAR)
+        function checarBloqueio() {
+            if (id && localStorage.getItem('votou_' + id) === 'sim') {
+                document.body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
+                        <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
+                        <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
+                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif; max-width: 400px; line-height: 1.5;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
+                    </div>`;
+                throw new Error("Acesso Bloqueado: Usuário já votou.");
+            }
+        }
+        
+        checarBloqueio(); // Roda ao ler o script
+        window.addEventListener('pageshow', checarBloqueio); // Roda se o usuário usar o voltar do celular
+
+        // 3. DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
         const linksEmojis = {
             "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
             "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
@@ -137,46 +139,39 @@
             "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
         };
 
-        // Preenche o Titulo
+        // 4. PREENCHIMENTO DA TELA
         document.getElementById('sub-evento-nome').innerText = evento;
-        
-        // Preenche o nome do sentimento
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+        
+        // O Botão agora volta para a tela pública correta mantendo o ID.
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
-        // Injeta a imagem animada correspondente, se ela existir no dicionário
         const imgEmoji = document.getElementById('emoji-preview');
         if (linksEmojis[sentimento]) {
             imgEmoji.src = linksEmojis[sentimento];
-            imgEmoji.style.display = 'block'; // Mostra a imagem
+            imgEmoji.style.display = 'block'; 
         }
 
-        // 3. Configura o botão voltar mantendo as credenciais da campanha
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
-
-        // 4. Grava tudo no Sheets coletando Setor e Origem
+        // 5. FUNÇÃO DE ENVIO - SEM FETCH! (Apenas roteamento)
         function enviarDados(nota) {
-            const urlWebhook = "https://script.google.com/macros/s/AKfycbzJOLquqH2vlrywz83CAV5hEHUqmGc-VDqacyqxZVWl9uGqpt4NabKcK4HpvpmCMAeT/exec";
+            // Trava os botões
+            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
             
+            // Feedback visual
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
+            event.target.style.borderColor = "#ff3700";
 
-            // Envia o pacote com os novos campos auditáveis
-            fetch(urlWebhook, {
-                method: 'POST',
-                mode: 'no-cors', 
-                body: JSON.stringify({
-                    "evento": evento,
-                    "sentimento": sentimento,
-                    "nota": nota,
-                    "setor": setor,       // Registra o setor no Totem Público
-                    "origem": "Totem Público" // Registra a origem do dispositivo
-                })
-            }).then(() => {
-                // Redireciona para o agradecimento REPASSANDO o ID e o Setor para o loop não quebrar!
-                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            }).catch((erro) => {
-                console.error("Erro ao gravar:", erro);
-                window.location.href = `agradecimento_publico.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            });
+            // Monta a URL completa para a tela final pública, passando TUDO que ela precisa
+            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}`;
+            
+            // Vai para a tela amarela pública usando replace (não joga pro totem fixo!)
+            window.location.replace(linkDestino);
         }
+        
+        // Bloqueio extra do histórico
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () { window.history.go(1); };
     </script>
+</body>
+</html>
