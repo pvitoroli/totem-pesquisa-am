@@ -71,7 +71,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
 
-        /* ================= DASHBOARD OVERLAY ================= */
+        /* ================= DASHBOARD OVERLAY VISUAL ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -83,31 +83,34 @@
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .kpi-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; transition: all 0.3s ease; }
-        .kpi-card:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        .kpi-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; }
         .kpi-value { font-size: 32px; font-weight: 800; color: white; margin: 10px 0 5px 0; }
         .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
-        /* Ajuste do Gráfico e Análise (Responsividade e Respiro) */
+        /* Gráfico e Relatório - Corrigidos para Celular */
         .chart-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
         .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; min-height: 420px; }
-        .chart-container-inner { position: relative; flex: 1; width: 100%; min-height: 280px; display: flex; justify-content: center; align-items: center; }
+        
+        /* O Segredo da responsividade do Gráfico: min-height e position relative */
+        .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; }
         .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
         .report-text ul { list-style: none; margin-bottom: 15px; }
         .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
-        .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+        .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
-            .chart-card { min-height: 380px; padding: 20px; }
+            .chart-card { min-height: auto; padding: 20px; }
         }
         @media(max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .item-header { flex-direction: column; align-items: flex-start; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .dash-header .btn-action-group { width: 100%; display: flex; gap: 10px;}
+            .btn-action-group { width: 100%; display: flex; gap: 10px; }
+            .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
+            .chart-container-inner { min-height: 220px; } /* Impede que o gráfico fique esmagado */
         }
     </style>
 </head>
@@ -170,7 +173,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
-                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Relatório Executivo</button>
+                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Painel Analítico</button>
             </div>
             
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
@@ -178,21 +181,21 @@
     </div>
 
     <div class="dash-overlay" id="dashboardTela">
-        <div class="container" style="max-width: 1100px;">
+        <div class="container" style="max-width: 1100px;" id="areaImpressaoPDF">
             <div class="dash-header">
                 <div>
                     <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Inteligência de Dados ArcelorMittal</span>
                     <h1 id="dashNomeCampanha">Carregando...</h1>
                 </div>
-                <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDF()">📄 Exportar PDF Oficial</button>
+                <div class="btn-action-group" id="dashBotoesTop">
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFOriginal()">📄 Exportar Relatório</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar</button>
                 </div>
             </div>
 
             <div id="dashLoading" class="loader-container">
                 <div class="spinner"></div>
-                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">Processando Microdados...</p>
+                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">A Processar Microdados...</p>
             </div>
 
             <div id="conteudoDashInterface" style="display: none;">
@@ -221,67 +224,23 @@
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição de Sentimentos</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição Visual</h3>
                         <div class="chart-container-inner">
                             <canvas id="sentimentoChart"></canvas>
                         </div>
                     </div>
                     
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Relatório Estratégico</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Síntese Executiva</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-    <div id="wrapper-pdf" style="position: absolute; top: -9999px; left: -9999px; display: block;">
-        <div id="pdf-template" style="width: 800px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #12141a;">
-            
-            <div style="border-bottom: 2px solid #ff5100; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
-                <img src="logo-arcelormittal.png" style="height: 40px;" alt="ArcelorMittal" onerror="this.style.display='none'">
-                <div style="text-align: right;">
-                    <h2 style="margin: 0; color: #12141a; font-size: 20px; font-weight: 800;">RELATÓRIO DE INTELIGÊNCIA</h2>
-                    <p style="margin: 5px 0 0 0; color: #666; font-size: 12px; text-transform: uppercase; font-weight: bold;">Pesquisa de Sentimento Corporativa</p>
-                </div>
-            </div>
-
-            <h1 id="pdf-titulo" style="color: #ff5100; font-size: 26px; margin-bottom: 5px; font-weight: 900; text-transform: uppercase;">Nome da Campanha</h1>
-            <p id="pdf-meta" style="color: #666; font-size: 14px; margin-bottom: 30px; font-weight: bold;">Setor: X | Status: Y</p>
-
-            <div style="display: flex; gap: 20px; margin-bottom: 40px;">
-                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #ff5100; padding: 20px; border-radius: 8px; text-align: center;">
-                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Total de Votos</p>
-                    <h3 id="pdf-votos" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0</h3>
-                </div>
-                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #4bb543; padding: 20px; border-radius: 8px; text-align: center;">
-                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Score Geral</p>
-                    <h3 id="pdf-media" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0.0 / 10</h3>
-                </div>
-                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 8px; text-align: center;">
-                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Volume de Dados</p>
-                    <h3 id="pdf-dados" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0</h3>
-                </div>
-            </div>
-
-            <h3 style="color: #12141a; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">ANÁLISE ESTRATÉGICA DE ENGAJAMENTO</h3>
-            <div id="pdf-analise" style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 40px;">
-                </div>
-
-            <h3 style="color: #12141a; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">DISTRIBUIÇÃO VISUAL DE SENTIMENTOS</h3>
-            <div style="background-color: #1e222d; padding: 20px; border-radius: 12px; text-align: center; max-width: 500px; margin: 0 auto;">
-                <img id="pdf-chart-img" style="max-width: 100%; height: auto;">
-            </div>
-
-            <div style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center; font-size: 10px; color: #999;">
-                Documento gerado automaticamente pelo Painel de Gestão ArcelorMittal - Data da exportação: <span id="pdf-data"></span>
-            </div>
-        </div>
-    </div>
     
     <script>
-        // Ativa o plugin de porcentagens no gráfico
+        // Ativação do plugin DataLabels (Para exibir porcentagens no gráfico)
         Chart.register(ChartDataLabels);
 
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
@@ -302,7 +261,6 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
                 const setores = await res.json();
-                
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
@@ -316,7 +274,6 @@
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
-                
                 dbCampanhas.forEach(c => {
                     if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
                     if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
@@ -391,7 +348,6 @@
 
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
-                
                 if (itens.length === 1) {
                     area.innerHTML += criarCardHTML(itens[0]);
                 } else {
@@ -502,7 +458,6 @@
             
             img.style.display = 'none';
             loading.style.display = 'flex';
-            loading.innerText = "Gerando QR Code...";
             
             img.onload = function() {
                 loading.style.display = 'none';
@@ -522,12 +477,10 @@
         function pegarLinkTotem() { return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
-        function gerarLinkPublico() {
-            navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link PÚBLICO copiado com sucesso!"));
-        }
+        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link PÚBLICO copiado com sucesso!")); }
 
         // =======================================================
-        // MOTOR DO DASHBOARD E PDF EXPORT
+        // MOTOR DO DASHBOARD (O Preferido com Dark Mode)
         // =======================================================
         let meuGrafico = null; 
 
@@ -584,7 +537,7 @@
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
                 renderizarGrafico(0, 0, 0, 0);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>Nenhum dado capturado. A campanha ainda não recebeu interações válidas.</em>";
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
                 return;
             }
 
@@ -610,7 +563,7 @@
 
             renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
 
-            // Geração de Relatório de Inteligência
+            // Relatório Executivo Moderno (Igual à Penúltima Versão que você gostou)
             let relatorioHTML = `
                 <p>A campanha <strong>${campSelecionada.nome_campanha}</strong> registrou um volume de <strong>${totalVotos} interações</strong> até o presente momento. O score de aceitação geral da ação encontra-se em <strong>${media}/10</strong>, refletindo a percepção quantitativa direta do público.</p>
                 
@@ -650,7 +603,7 @@
                         data: [feliz, aprendi, saberMais, melhor],
                         backgroundColor: ['#ffbd59', '#ff5100', '#a300ff', '#ff0080'],
                         borderWidth: 0,
-                        hoverOffset: 0 // Retirado o hover offset para não "pular" e encostar na borda no celular
+                        hoverOffset: 0 // Removido para não encostar na borda no mobile
                     }]
                 },
                 options: {
@@ -658,14 +611,9 @@
                     maintainAspectRatio: false,
                     layout: { padding: 15 }, 
                     plugins: {
-                        legend: { 
-                            position: 'bottom', 
-                            onClick: null, // Desativa o clique de ocultar fatia
-                            labels: { color: '#ffffff', padding: 20, font: { family: 'Segoe UI', size: 12 } } 
-                        },
+                        legend: { position: 'bottom', onClick: null, labels: { color: '#ffffff', padding: 20, font: { family: 'Segoe UI', size: 12 } } },
                         datalabels: {
-                            color: '#ffffff',
-                            font: { weight: 'bold', size: 14 },
+                            color: '#ffffff', font: { weight: 'bold', size: 14 },
                             formatter: (value, context) => {
                                 if(value === 0) return ''; 
                                 let total = context.chart._metasets[context.datasetIndex].total;
@@ -677,38 +625,45 @@
             });
         }
 
-        function baixarPDF() {
+        // =========================================================================
+        // A SOLUÇÃO MÁGICA PARA O PDF NÃO SAIR EM BRANCO (SEM GAMBIARRA HTML)
+        // =========================================================================
+        function baixarPDFOriginal() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ Gerando Relatório...";
+            btn.innerText = "⏳ A Gerar Relatório...";
 
-            // 1. Povoar o Template do PDF Oculto
-            document.getElementById('pdf-titulo').innerText = campSelecionada.nome_campanha;
-            document.getElementById('pdf-meta').innerText = `Setor Origem: ${campSelecionada.setor} | Status de Coleta: ${campSelecionada.status.toUpperCase()}`;
-            document.getElementById('pdf-votos').innerText = document.getElementById('dashTotalVotos').innerText;
-            document.getElementById('pdf-media').innerText = document.getElementById('dashMedia').innerText + " / 10";
-            document.getElementById('pdf-dados').innerText = document.getElementById('dashMicrodados').innerText;
+            // Capturamos os blocos que precisamos
+            const overlay = document.getElementById('dashboardTela');
+            const botoes = document.getElementById('dashBotoesTop');
+            const areaImpressao = document.getElementById('areaImpressaoPDF');
+
+            // 1. O TRUQUE: O motor do PDF não consegue ler telas flutuantes (position: fixed)
+            // Então, por 1 milissegundo, transformamos a tela em uma página longa normal
+            const estiloAntigo = overlay.style.position;
+            const scrollAntigo = overlay.style.overflow;
             
-            // Copiar a análise escrita
-            document.getElementById('pdf-analise').innerHTML = document.getElementById('dashAnaliseTexto').innerHTML;
-            document.getElementById('pdf-data').innerText = new Date().toLocaleString('pt-BR');
-
-            // 2. Extrair "Foto" do Gráfico do Chart.js
-            const canvas = document.getElementById('sentimentoChart');
-            document.getElementById('pdf-chart-img').src = canvas.toDataURL('image/png');
-
-            // 3. Montar e Salvar o PDF Oficial
-            const elemento = document.getElementById('wrapper-pdf');
+            overlay.style.position = 'absolute';
+            overlay.style.overflow = 'visible';
+            botoes.style.display = 'none'; // Esconde os botões para eles não saírem na foto
             
+            // Subimos a tela para o topo absoluto para o PDF não cortar a cabeça
+            window.scrollTo(0, 0);
+
+            // 2. Disparamos a captura em alta qualidade (scale 2 e fundo escuro)
             const opt = {
-                margin:       [10, 10, 10, 10], // Margem A4
+                margin:       10,
                 filename:     `Relatorio_Inteligencia_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                html2canvas:  { scale: 2, backgroundColor: '#12141a', scrollY: 0 },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             
-            html2pdf().set(opt).from(elemento).save().then(() => {
-                btn.innerText = "📄 Exportar PDF Oficial";
+            html2pdf().set(opt).from(areaImpressao).save().then(() => {
+                // 3. Após baixar, devolvemos tudo ao normal instantaneamente
+                overlay.style.position = estiloAntigo;
+                overlay.style.overflow = scrollAntigo;
+                botoes.style.display = 'flex';
+                btn.innerText = "📄 Exportar Relatório";
             });
         }
 
