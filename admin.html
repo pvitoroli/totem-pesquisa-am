@@ -149,12 +149,65 @@
 
             <div id="qrCodeContainer" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;">
                 <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">QR Code do Totem Público</p>
-                
+
                 <div id="qrCodeLoading" style="height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px;">Gerando QR Code...</div>
                 <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none;" alt="QR Code">
             </div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Dashboard Analítico</button>
+                
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
+                <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
+            </div>
             
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
+        </div>
+        <div class="dash-overlay" id="dashboardTela">
+        <div class="container" style="max-width: 1200px;">
+            <div class="dash-header">
+                <div>
+                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Relatório Analítico</span>
+                    <h1 id="dashNomeCampanha">Carregando...</h1>
+                </div>
+                <button class="btn btn-outline" onclick="fecharDashboard()">✕ Fechar Painel</button>
+            </div>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-label">Status da Campanha</div>
+                    <div class="kpi-value" id="dashStatus" style="font-size: 20px; color: var(--status-ativo);">ATIVO</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;" id="dashTempo">Há X dias</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Total de Votos</div>
+                    <div class="kpi-value" id="dashTotalVotos">0</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Colaboradores Únicos</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Média Geral (0 a 10)</div>
+                    <div class="kpi-value" id="dashMedia">0.0</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Score de Satisfação</div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-label">Microdados Capturados</div>
+                    <div class="kpi-value" id="dashMicrodados">0</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 5px;">Pontos de dados processados</div>
+                </div>
+            </div>
+
+            <div class="chart-section">
+                <div class="chart-card">
+                    <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px; width: 100%; text-align: left;">DISTRIBUIÇÃO DE SENTIMENTOS</h3>
+                    <canvas id="sentimentoChart"></canvas>
+                </div>
+                <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
+                    <h3 style="font-size: 14px; color: var(--text-muted); margin-bottom: 20px;">ANÁLISE DE ENGAJAMENTO</h3>
+                    <p style="color: var(--text-muted); font-size: 14px; line-height: 1.8;" id="dashAnaliseTexto">
+                        Aguardando dados para gerar análise...
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -431,6 +484,149 @@
             navigator.clipboard.writeText(pegarLinkPublico()).then(() => {
                 alert("✅ Link PÚBLICO copiado com sucesso!");
             });
+        }
+
+        // =======================================================
+        // MOTOR DO DASHBOARD ANALÍTICO (CHART.JS)
+        // =======================================================
+        let meuGrafico = null; // Variável para destruir o gráfico antigo se abrir outro
+
+        async function abrirDashboardAnalytics() {
+            if(!campSelecionada) return;
+            
+            // Abre a tela e esconde o modal menor
+            document.getElementById('modalJornada').style.display = 'none';
+            document.getElementById('dashboardTela').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+            
+            document.getElementById('dashNomeCampanha').innerText = campSelecionada.nome_campanha;
+            
+            // 1. Cálculos de Tempo e Status
+            const dataInicio = new Date(campSelecionada.data_inicio);
+            const hoje = new Date();
+            const diasAtivo = Math.max(0, Math.floor((hoje - dataInicio) / (1000 * 60 * 60 * 24)));
+            
+            const elStatus = document.getElementById('dashStatus');
+            const elTempo = document.getElementById('dashTempo');
+            
+            if(campSelecionada.status === "Ativo") {
+                elStatus.innerText = "EM ANDAMENTO";
+                elStatus.style.color = "var(--status-ativo)";
+                elTempo.innerText = `Ativo há ${diasAtivo} dia(s)`;
+            } else if(campSelecionada.status === "Finalizado") {
+                elStatus.innerText = "FINALIZADO";
+                elStatus.style.color = "var(--status-encerrado)";
+                elTempo.innerText = `Duração total: ${diasAtivo} dia(s)`;
+            } else {
+                elStatus.innerText = "EM ESPERA";
+                elStatus.style.color = "var(--status-espera)";
+                elTempo.innerText = "Aguardando inicialização";
+            }
+
+            // 2. Resetar Valores Visuais
+            document.getElementById('dashTotalVotos').innerText = "⏳";
+            document.getElementById('dashMedia').innerText = "⏳";
+            document.getElementById('dashMicrodados').innerText = "⏳";
+            
+            // 3. Buscar os Votos no Backend
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`);
+                const dados = await res.json();
+                
+                if(dados.sucesso) {
+                    processarEstatisticas(dados.votos);
+                } else {
+                    alert("Erro ao buscar dados: " + dados.erro);
+                }
+            } catch (e) {
+                console.error("Erro no dashboard:", e);
+                alert("Falha de conexão ao carregar o dashboard.");
+            }
+        }
+
+        function processarEstatisticas(votos) {
+            const totalVotos = votos.length;
+            document.getElementById('dashTotalVotos').innerText = totalVotos;
+            
+            // Microdados = Total de Votos * 6 variáveis (Data, Evento, Sentimento, Nota, Setor, Origem)
+            document.getElementById('dashMicrodados').innerText = totalVotos * 6;
+
+            if(totalVotos === 0) {
+                document.getElementById('dashMedia').innerText = "0.0";
+                renderizarGrafico(0, 0, 0, 0);
+                document.getElementById('dashAnaliseTexto').innerHTML = "Nenhum voto registrado para esta campanha ainda. Divulgue o QR Code para iniciar a captação.";
+                return;
+            }
+
+            // Variáveis de contagem
+            let somaNotas = 0;
+            let countFeliz = 0, countAprendi = 0, countSaberMais = 0, countMelhor = 0;
+
+            votos.forEach(v => {
+                somaNotas += v.nota;
+                const s = v.sentimento.toLowerCase();
+                if(s.includes("feliz")) countFeliz++;
+                else if(s.includes("aprendi")) countAprendi++;
+                else if(s.includes("saber")) countSaberMais++;
+                else if(s.includes("melhor")) countMelhor++;
+            });
+
+            const media = (somaNotas / totalVotos).toFixed(1);
+            document.getElementById('dashMedia').innerText = media;
+
+            renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
+
+            // Análise Dinâmica Simples
+            const percentFeliz = Math.round((countFeliz / totalVotos) * 100);
+            let analise = `O evento registrou <b>${totalVotos} interações</b> até o momento. A percepção média da qualidade é de <b>${media}/10</b>.<br><br>`;
+            
+            if(percentFeliz >= 60) {
+                analise += `A taxa de satisfação primária é excelente, com ${percentFeliz}% do público indicando que ficou feliz. O conteúdo ressoou muito bem.`;
+            } else if (countMelhor > countFeliz) {
+                analise += `Alerta: Há uma forte indicação de que o evento "Poderia ser melhor". Recomenda-se revisão na abordagem.`;
+            } else {
+                analise += `O sentimento está bem distribuído. Analise os resultados de "Aprendizado" e "Dúvidas" para calibrar as próximas ações.`;
+            }
+
+            document.getElementById('dashAnaliseTexto').innerHTML = analise;
+        }
+
+        function renderizarGrafico(feliz, aprendi, saberMais, melhor) {
+            const ctx = document.getElementById('sentimentoChart').getContext('2d');
+            
+            // Destrói o gráfico anterior se existir (evita bug de sobreposição ao abrir campanhas diferentes)
+            if (meuGrafico) { meuGrafico.destroy(); }
+
+            meuGrafico = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Fiquei Feliz', 'Aprendi Algo Novo', 'Quero Saber Mais', 'Poderia Ser Melhor'],
+                    datasets: [{
+                        data: [feliz, aprendi, saberMais, melhor],
+                        backgroundColor: [
+                            '#ffbd59', // Amarelo
+                            '#ff5100', // Laranja AM
+                            '#a300ff', // Roxo
+                            '#ff0080'  // Rosa
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#a0a5b0', font: { family: 'Segoe UI', size: 12 } } }
+                    }
+                }
+            });
+        }
+
+        function fecharDashboard() {
+            document.getElementById('dashboardTela').style.display = 'none';
+            document.body.style.overflow = 'auto'; // Devolve o scroll
+            // document.getElementById('modalJornada').style.display = 'flex'; // Opcional: Reabre o modal anterior
         }
     </script>
 </body>
