@@ -71,7 +71,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
 
-        /* ================= DASHBOARD OVERLAY VISUAL ================= */
+        /* ================= DASHBOARD OVERLAY ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -84,35 +84,30 @@
         
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .kpi-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; transition: all 0.3s ease; }
+        .kpi-card:hover { transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.2); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .kpi-value { font-size: 32px; font-weight: 800; color: white; margin: 10px 0 5px 0; }
         .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
+        /* Ajuste do Gráfico e Análise (Responsividade e Respiro) */
         .chart-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
-        .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; }
-        
-        /* Correção Responsiva do Gráfico */
-        .chart-container-inner { position: relative; width: 100%; height: 350px; display: flex; justify-content: center; align-items: center; }
+        .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; min-height: 420px; }
+        .chart-container-inner { position: relative; flex: 1; width: 100%; min-height: 280px; display: flex; justify-content: center; align-items: center; }
         
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; }
         .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .report-text ul { list-style: none; margin-bottom: 15px; }
+        .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
+        .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
 
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
+            .chart-card { min-height: 380px; padding: 20px; }
         }
         @media(max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
             .item-header { flex-direction: column; align-items: flex-start; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .dash-header .btn-action-group { width: 100%; display: flex; gap: 10px;}
-            /* Ajuste mobile do gráfico para não achatar */
-            .chart-container-inner { height: 300px; }
-        }
-
-        /* ================= ESTILOS ESPECÍFICOS DO PDF ================= */
-        /* Mantemos o PDF renderizado no navegador, mas "atrás" da tela principal para que o html2canvas consiga lê-lo perfeitamente */
-        #wrapper-pdf {
-            position: fixed; top: 0; left: 200vw; /* Joga pra fora da tela, mas mantém visível no DOM */
-            width: 800px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #12141a; z-index: -100;
         }
     </style>
 </head>
@@ -175,7 +170,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
-                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Painel Analítico</button>
+                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Relatório Executivo</button>
             </div>
             
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
@@ -190,14 +185,14 @@
                     <h1 id="dashNomeCampanha">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDF()">📄 Exportar Relatório Executivo</button>
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDF()">📄 Exportar PDF Oficial</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar</button>
                 </div>
             </div>
 
             <div id="dashLoading" class="loader-container">
                 <div class="spinner"></div>
-                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">A Processar Microdados...</p>
+                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">Processando Microdados...</p>
             </div>
 
             <div id="conteudoDashInterface" style="display: none;">
@@ -226,14 +221,14 @@
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição Visual</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição de Sentimentos</h3>
                         <div class="chart-container-inner">
                             <canvas id="sentimentoChart"></canvas>
                         </div>
                     </div>
                     
-                    <div class="chart-card">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Síntese Executiva</h3>
+                    <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Relatório Estratégico</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
@@ -241,48 +236,52 @@
         </div>
     </div>
 
-    <div id="wrapper-pdf">
-        <div style="border-bottom: 3px solid #ff5100; padding-bottom: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
-            <img src="logo-arcelormittal.png" style="height: 35px;" alt="ArcelorMittal" onerror="this.style.display='none'">
-            <div style="text-align: right;">
-                <h2 style="margin: 0; color: #12141a; font-size: 18px; font-weight: 800;">RELATÓRIO DE INTELIGÊNCIA</h2>
-                <p style="margin: 5px 0 0 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold;">Pesquisa de Sentimento Corporativa</p>
-            </div>
-        </div>
-
-        <h1 id="pdf-titulo" style="color: #ff5100; font-size: 24px; margin-bottom: 5px; font-weight: 900; text-transform: uppercase;">Nome da Campanha</h1>
-        <p id="pdf-meta" style="color: #666; font-size: 12px; margin-bottom: 25px; font-weight: bold; padding-bottom: 15px; border-bottom: 1px solid #eee;">Setor: X | Status: Y</p>
-
-        <div style="display: flex; gap: 15px; margin-bottom: 30px;">
-            <div style="flex: 1; background: #f8f9fa; border-left: 4px solid #ff5100; padding: 15px; border-radius: 6px;">
-                <p style="margin: 0 0 5px 0; font-size: 11px; color: #666; text-transform: uppercase; font-weight: bold;">Total de Votos</p>
-                <h3 id="pdf-votos" style="margin: 0; font-size: 26px; color: #12141a; font-weight: 900;">0</h3>
-            </div>
-            <div style="flex: 1; background: #f8f9fa; border-left: 4px solid #4bb543; padding: 15px; border-radius: 6px;">
-                <p style="margin: 0 0 5px 0; font-size: 11px; color: #666; text-transform: uppercase; font-weight: bold;">Score Geral</p>
-                <h3 id="pdf-media" style="margin: 0; font-size: 26px; color: #12141a; font-weight: 900;">0.0 / 10</h3>
-            </div>
-            <div style="flex: 1; background: #f8f9fa; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 6px;">
-                <p style="margin: 0 0 5px 0; font-size: 11px; color: #666; text-transform: uppercase; font-weight: bold;">Volume de Dados</p>
-                <h3 id="pdf-dados" style="margin: 0; font-size: 26px; color: #12141a; font-weight: 900;">0</h3>
-            </div>
-        </div>
-
-        <h3 style="color: #12141a; font-size: 16px; margin-bottom: 15px; text-transform: uppercase;">1. Relatório Analítico Detalhado</h3>
-        <div id="pdf-analise" style="font-size: 13px; line-height: 1.7; color: #333; margin-bottom: 30px; text-align: justify;">
+    <div id="wrapper-pdf" style="position: absolute; top: -9999px; left: -9999px; display: block;">
+        <div id="pdf-template" style="width: 800px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #12141a;">
+            
+            <div style="border-bottom: 2px solid #ff5100; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+                <img src="logo-arcelormittal.png" style="height: 40px;" alt="ArcelorMittal" onerror="this.style.display='none'">
+                <div style="text-align: right;">
+                    <h2 style="margin: 0; color: #12141a; font-size: 20px; font-weight: 800;">RELATÓRIO DE INTELIGÊNCIA</h2>
+                    <p style="margin: 5px 0 0 0; color: #666; font-size: 12px; text-transform: uppercase; font-weight: bold;">Pesquisa de Sentimento Corporativa</p>
+                </div>
             </div>
 
-        <h3 style="color: #12141a; font-size: 16px; margin-bottom: 15px; text-transform: uppercase;">2. Mapeamento Visual</h3>
-        <div style="display: flex; justify-content: center; align-items: center; background: #fafafa; padding: 20px; border-radius: 8px; border: 1px solid #eee;">
-            <img id="pdf-chart-img" style="max-height: 280px; width: auto;" alt="Gráfico de Sentimentos">
-        </div>
+            <h1 id="pdf-titulo" style="color: #ff5100; font-size: 26px; margin-bottom: 5px; font-weight: 900; text-transform: uppercase;">Nome da Campanha</h1>
+            <p id="pdf-meta" style="color: #666; font-size: 14px; margin-bottom: 30px; font-weight: bold;">Setor: X | Status: Y</p>
 
-        <div style="margin-top: 40px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
-            Documento processado pelo Motor de Inteligência ArcelorMittal - Emitido em: <span id="pdf-data"></span>
+            <div style="display: flex; gap: 20px; margin-bottom: 40px;">
+                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #ff5100; padding: 20px; border-radius: 8px; text-align: center;">
+                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Total de Votos</p>
+                    <h3 id="pdf-votos" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0</h3>
+                </div>
+                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #4bb543; padding: 20px; border-radius: 8px; text-align: center;">
+                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Score Geral</p>
+                    <h3 id="pdf-media" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0.0 / 10</h3>
+                </div>
+                <div style="flex: 1; background: #f4f5f7; border-left: 5px solid #3b82f6; padding: 20px; border-radius: 8px; text-align: center;">
+                    <p style="margin: 0 0 5px 0; font-size: 12px; color: #666; text-transform: uppercase; font-weight: bold;">Volume de Dados</p>
+                    <h3 id="pdf-dados" style="margin: 0; font-size: 32px; color: #12141a; font-weight: 900;">0</h3>
+                </div>
+            </div>
+
+            <h3 style="color: #12141a; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">ANÁLISE ESTRATÉGICA DE ENGAJAMENTO</h3>
+            <div id="pdf-analise" style="font-size: 14px; line-height: 1.6; color: #333; margin-bottom: 40px;">
+                </div>
+
+            <h3 style="color: #12141a; font-size: 18px; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 10px;">DISTRIBUIÇÃO VISUAL DE SENTIMENTOS</h3>
+            <div style="background-color: #1e222d; padding: 20px; border-radius: 12px; text-align: center; max-width: 500px; margin: 0 auto;">
+                <img id="pdf-chart-img" style="max-width: 100%; height: auto;">
+            </div>
+
+            <div style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 20px; text-align: center; font-size: 10px; color: #999;">
+                Documento gerado automaticamente pelo Painel de Gestão ArcelorMittal - Data da exportação: <span id="pdf-data"></span>
+            </div>
         </div>
     </div>
     
     <script>
+        // Ativa o plugin de porcentagens no gráfico
         Chart.register(ChartDataLabels);
 
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
@@ -291,9 +290,6 @@
         let dbCampanhas = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
-
-        // Variaveis para segurar os dados para o PDF
-        let dadosParaPDF = {};
 
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
@@ -306,6 +302,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
                 const setores = await res.json();
+                
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
@@ -319,6 +316,7 @@
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`);
                 dbCampanhas = await res.json();
+                
                 dbCampanhas.forEach(c => {
                     if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
                     if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
@@ -403,7 +401,7 @@
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
                                     <div class="item-title">📂 Coleção: ${baseName}</div>
-                                    <div class="item-meta">Contém ${itens.length} ações cadastradas</div>
+                                    <div class="item-meta">Contém ${itens.length} ações/dias cadastradas</div>
                                 </div>
                                 <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
                             </div>
@@ -504,6 +502,7 @@
             
             img.style.display = 'none';
             loading.style.display = 'flex';
+            loading.innerText = "Gerando QR Code...";
             
             img.onload = function() {
                 loading.style.display = 'none';
@@ -523,7 +522,9 @@
         function pegarLinkTotem() { return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
-        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link PÚBLICO copiado com sucesso!")); }
+        function gerarLinkPublico() {
+            navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link PÚBLICO copiado com sucesso!"));
+        }
 
         // =======================================================
         // MOTOR DO DASHBOARD E PDF EXPORT
@@ -577,15 +578,13 @@
 
         function processarEstatisticas(votos) {
             const totalVotos = votos.length;
-            const volumeDados = totalVotos * 6;
-            
             document.getElementById('dashTotalVotos').innerText = totalVotos;
-            document.getElementById('dashMicrodados').innerText = volumeDados;
+            document.getElementById('dashMicrodados').innerText = totalVotos * 6;
 
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
                 renderizarGrafico(0, 0, 0, 0);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em>Nenhum dado capturado. A campanha ainda não recebeu interações válidas.</em>";
                 return;
             }
 
@@ -609,26 +608,34 @@
             const pSaberMais = Math.round((countSaberMais / totalVotos) * 100) || 0;
             const pMelhor = Math.round((countMelhor / totalVotos) * 100) || 0;
 
-            // Renderiza o gráfico do Painel Escuro
             renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
 
-            // Salva as variáveis para a exportação do PDF Oficial
-            dadosParaPDF = {
-                totalVotos, volumeDados, media,
-                feliz: countFeliz, aprendi: countAprendi, saberMais: countSaberMais, melhor: countMelhor,
-                pFeliz, pAprendi, pSaberMais, pMelhor
-            };
+            // Geração de Relatório de Inteligência
+            let relatorioHTML = `
+                <p>A campanha <strong>${campSelecionada.nome_campanha}</strong> registrou um volume de <strong>${totalVotos} interações</strong> até o presente momento. O score de aceitação geral da ação encontra-se em <strong>${media}/10</strong>, refletindo a percepção quantitativa direta do público.</p>
+                
+                <h4>Mapeamento Qualitativo</h4>
+                <ul>
+                    <li><span class="dot" style="background:#ffbd59;"></span> <strong>${pFeliz}%</strong> (${countFeliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
+                    <li><span class="dot" style="background:#ff5100;"></span> <strong>${pAprendi}%</strong> (${countAprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
+                    <li><span class="dot" style="background:#a300ff;"></span> <strong>${pSaberMais}%</strong> (${countSaberMais} votos) - Demonstraram forte curiosidade ou interesse em aprofundamento.</li>
+                    <li><span class="dot" style="background:#ff0080;"></span> <strong>${pMelhor}%</strong> (${countMelhor} votos) - Indicaram que a abordagem não atingiu as expectativas.</li>
+                </ul>
 
-            // Gera o Texto Curto para o Painel Web
-            let resumoWeb = `<p>O evento registrou <b>${totalVotos} interações</b> até o momento. A percepção média da qualidade é de <b>${media}/10</b>.</p>`;
-            document.getElementById('dashAnaliseTexto').innerHTML = resumoWeb + getRecomendacao(pFeliz, pAprendi, pSaberMais, pMelhor);
-        }
+                <h4>Insight Estratégico</h4>
+            `;
+            
+            if(pFeliz + pAprendi >= 70) {
+                relatorioHTML += `<p>O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso.</p>`;
+            } else if (pMelhor > pFeliz) {
+                relatorioHTML += `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> O sentimento de frustração superou a satisfação. Recomenda-se revisão imediata do conteúdo ou da logística do evento.</p>`;
+            } else if (pSaberMais > 30) {
+                relatorioHTML += `<p>Alto índice de curiosidade gerado. É altamente recomendável programar um <strong>DDS subsequente ou material de apoio</strong> para sanar as dúvidas deixadas por esta campanha.</p>`;
+            } else {
+                relatorioHTML += `<p>A campanha teve um impacto mediano e pulverizado. Analisar os comentários qualitativos pode ajudar a direcionar as próximas pautas com mais precisão.</p>`;
+            }
 
-        function getRecomendacao(pFeliz, pAprendi, pSaberMais, pMelhor) {
-            if(pFeliz + pAprendi >= 70) return `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação gerou excelente receptividade e o formato deve ser mantido.</p>`;
-            if(pMelhor > pFeliz) return `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> O sentimento de frustração superou a satisfação. Recomenda-se revisão da abordagem.</p>`;
-            if(pSaberMais > 30) return `<p style="color: #3b82f6;">Alto índice de curiosidade gerado. É recomendável programar material de apoio extra.</p>`;
-            return `<p>A campanha teve um impacto mediano e pulverizado. Analise o contexto qualitativo para os próximos passos.</p>`;
+            document.getElementById('dashAnaliseTexto').innerHTML = relatorioHTML;
         }
 
         function renderizarGrafico(feliz, aprendi, saberMais, melhor) {
@@ -642,17 +649,23 @@
                     datasets: [{
                         data: [feliz, aprendi, saberMais, melhor],
                         backgroundColor: ['#ffbd59', '#ff5100', '#a300ff', '#ff0080'],
-                        borderWidth: 0
+                        borderWidth: 0,
+                        hoverOffset: 0 // Retirado o hover offset para não "pular" e encostar na borda no celular
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    layout: { padding: 10 }, 
+                    layout: { padding: 15 }, 
                     plugins: {
-                        legend: { position: 'bottom', onClick: null, labels: { color: '#ffffff', padding: 15, font: { family: 'Segoe UI', size: 11 } } },
+                        legend: { 
+                            position: 'bottom', 
+                            onClick: null, // Desativa o clique de ocultar fatia
+                            labels: { color: '#ffffff', padding: 20, font: { family: 'Segoe UI', size: 12 } } 
+                        },
                         datalabels: {
-                            color: '#ffffff', font: { weight: 'bold', size: 14 },
+                            color: '#ffffff',
+                            font: { weight: 'bold', size: 14 },
                             formatter: (value, context) => {
                                 if(value === 0) return ''; 
                                 let total = context.chart._metasets[context.datasetIndex].total;
@@ -664,71 +677,39 @@
             });
         }
 
-        // =========================================================================
-        // O SEGREDO DO SUCESSO: GERAÇÃO DO PDF COM TEXTO EXTENSO E QUICKCHART
-        // =========================================================================
         function baixarPDF() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ A Gerar Documento...";
+            btn.innerText = "⏳ Gerando Relatório...";
 
-            // 1. Gera o URL do Gráfico Perfeito via API Externa (QuickChart)
-            const configGrafico = {
-                type: 'doughnut',
-                data: {
-                    labels: ['Fiquei Feliz', 'Aprendi Algo Novo', 'Quero Saber Mais', 'Poderia Ser Melhor'],
-                    datasets: [{
-                        data: [dadosParaPDF.feliz, dadosParaPDF.aprendi, dadosParaPDF.saberMais, dadosParaPDF.melhor],
-                        backgroundColor: ['#ffbd59', '#ff5100', '#a300ff', '#ff0080']
-                    }]
-                },
-                options: {
-                    plugins: {
-                        datalabels: { color: '#ffffff', font: { weight: 'bold', size: 18 } },
-                        legend: { position: 'right', labels: { fontSize: 14, fontColor: '#333', padding: 20 } }
-                    }
-                }
-            };
-            const chartUrl = `https://quickchart.io/chart?w=600&h=300&c=${encodeURIComponent(JSON.stringify(configGrafico))}`;
-
-            // 2. Preenche os Dados Base
+            // 1. Povoar o Template do PDF Oculto
             document.getElementById('pdf-titulo').innerText = campSelecionada.nome_campanha;
-            document.getElementById('pdf-meta').innerText = `Setor Analisado: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
-            document.getElementById('pdf-votos').innerText = dadosParaPDF.totalVotos;
-            document.getElementById('pdf-media').innerText = dadosParaPDF.media + " / 10";
-            document.getElementById('pdf-dados').innerText = dadosParaPDF.volumeDados;
+            document.getElementById('pdf-meta').innerText = `Setor Origem: ${campSelecionada.setor} | Status de Coleta: ${campSelecionada.status.toUpperCase()}`;
+            document.getElementById('pdf-votos').innerText = document.getElementById('dashTotalVotos').innerText;
+            document.getElementById('pdf-media').innerText = document.getElementById('dashMedia').innerText + " / 10";
+            document.getElementById('pdf-dados').innerText = document.getElementById('dashMicrodados').innerText;
+            
+            // Copiar a análise escrita
+            document.getElementById('pdf-analise').innerHTML = document.getElementById('dashAnaliseTexto').innerHTML;
             document.getElementById('pdf-data').innerText = new Date().toLocaleString('pt-BR');
 
-            // 3. Preenche o Relatório Extenso e Oficial
-            const relatorioExtenso = `
-                <p><strong>1. Contexto Operacional e Engajamento</strong><br>
-                A campanha corporativa supracitada processou com sucesso um volume exato de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente industrial. Como reflexo destas participações, o Score Global de Satisfação estabilizou-se na margem de <strong>${dadosParaPDF.media} em 10 pontos possíveis</strong>. Todo o fluxo captou um total de ${dadosParaPDF.volumeDados} pontos de dados estruturados, fornecendo significância estatística que valida e ratifica as observações a seguir.</p>
-                
-                <p style="margin-top: 15px;"><strong>2. Desdobramento Qualitativo da Experiência</strong><br>
-                A distribuição analítica dos microdados comportamentais revela que <strong>${dadosParaPDF.pFeliz}%</strong> do público obteve uma experiência altamente positiva (classificada primariamente como "Fiquei Feliz"). O aspeto educacional do evento ("Aprendi Algo Novo") obteve <strong>${dadosParaPDF.pAprendi}%</strong> de retenção. No espetro de melhoria contínua, nota-se que <strong>${dadosParaPDF.pSaberMais}%</strong> declararam interesse em aprofundar conhecimentos, enquanto <strong>${dadosParaPDF.pMelhor}%</strong> sinalizaram atrito ou falha nas expectativas organizacionais.</p>
+            // 2. Extrair "Foto" do Gráfico do Chart.js
+            const canvas = document.getElementById('sentimentoChart');
+            document.getElementById('pdf-chart-img').src = canvas.toDataURL('image/png');
 
-                <p style="margin-top: 15px;"><strong>3. Recomendações e Plano de Ação Estratégico</strong><br>
-                ${getRecomendacao(dadosParaPDF.pFeliz, dadosParaPDF.pAprendi, dadosParaPDF.pSaberMais, dadosParaPDF.pMelhor).replace(/<[^>]*>?/gm, '')} Com base nos números absolutos apresentados no gráfico abaixo, a Gestão deverá orientar as futuras campanhas deste Setor alinhando a comunicação ao sentimento predominante aferido nesta amostragem oficial.</p>
-            `;
-            document.getElementById('pdf-analise').innerHTML = relatorioExtenso;
+            // 3. Montar e Salvar o PDF Oficial
+            const elemento = document.getElementById('wrapper-pdf');
             
-            // 4. Injeta a Imagem Limpa do QuickChart no PDF
-            document.getElementById('pdf-chart-img').src = chartUrl;
-
-            // Aguarda meio segundo para a imagem carregar na memória e imprime
-            setTimeout(() => {
-                const elemento = document.getElementById('wrapper-pdf');
-                const opt = {
-                    margin:       [15, 10, 15, 10], 
-                    filename:     `Relatorio_Inteligencia_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
-                    image:        { type: 'jpeg', quality: 1 },
-                    html2canvas:  { scale: 2 },
-                    jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                };
-                
-                html2pdf().set(opt).from(elemento).save().then(() => {
-                    btn.innerText = "📄 Exportar Relatório Executivo";
-                });
-            }, 600);
+            const opt = {
+                margin:       [10, 10, 10, 10], // Margem A4
+                filename:     `Relatorio_Inteligencia_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 1 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#ffffff' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            
+            html2pdf().set(opt).from(elemento).save().then(() => {
+                btn.innerText = "📄 Exportar PDF Oficial";
+            });
         }
 
         function fecharDashboard() {
