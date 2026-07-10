@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Gestão - ArcelorMittal</title>
+    <title>Painel Gestão Pro - ArcelorMittal</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
@@ -68,13 +68,7 @@
         .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
         .modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; margin-bottom: 10px; }
 
-        @media(max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .item-header { flex-direction: column; align-items: flex-start; }
-            .filter-date { margin-left: 0; width: 100%; margin-top: 10px; }
-            .modal-actions { grid-template-columns: 1fr; }
-
-            /* ================= DASHBOARD OVERLAY ================= */
+        /* ================= DASHBOARD OVERLAY (CORRIGIDO PARA FICAR GLOBAL) ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -87,8 +81,15 @@
         .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
         
         .chart-section { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media(max-width: 800px) { .chart-section { grid-template-columns: 1fr; } }
         .chart-card { background: var(--surface); padding: 24px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: center; height: 350px;}
+
+        /* Ajustes Mobile */
+        @media(max-width: 800px) { .chart-section { grid-template-columns: 1fr; } }
+        @media(max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .item-header { flex-direction: column; align-items: flex-start; }
+            .filter-date { margin-left: 0; width: 100%; margin-top: 10px; }
+            .modal-actions { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -143,7 +144,7 @@
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">Iniciar Totem Fixo</button>
+                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
                 <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
             </div>
 
@@ -154,16 +155,15 @@
                 <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none;" alt="QR Code">
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
+            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
                 <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Dashboard Analítico</button>
-                
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
-                <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
             </div>
             
             <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
         </div>
-        <div class="dash-overlay" id="dashboardTela">
+    </div>
+
+    <div class="dash-overlay" id="dashboardTela">
         <div class="container" style="max-width: 1200px;">
             <div class="dash-header">
                 <div>
@@ -219,24 +219,20 @@
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
 
-        // 🔥 PASSO 3 B) Atualização do gatilho inicial
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
             buscarSetores(); 
             await buscarDados();
         };
 
-        // 🔥 PASSO 3 B) Nova função que puxa os setores da planilha
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
                 const setores = await res.json();
                 
-                // Limpa o aviso de carregando e coloca a opção padrão
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
                 
-                // Injeta cada setor que veio da planilha como uma opção
                 setores.forEach(setor => {
                     selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`;
                 });
@@ -289,7 +285,6 @@
 
             btn.innerText = "Criar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
-            // Reseta o select para a opção desabilitada ("Selecione o Setor")
             document.getElementById('setorCampanha').selectedIndex = 0;
             buscarDados(); 
         }
@@ -489,7 +484,7 @@
         // =======================================================
         // MOTOR DO DASHBOARD ANALÍTICO (CHART.JS)
         // =======================================================
-        let meuGrafico = null; // Variável para destruir o gráfico antigo se abrir outro
+        let meuGrafico = null; 
 
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
@@ -497,7 +492,7 @@
             // Abre a tela e esconde o modal menor
             document.getElementById('modalJornada').style.display = 'none';
             document.getElementById('dashboardTela').style.display = 'block';
-            document.body.style.overflow = 'hidden'; // Trava o scroll do fundo
+            document.body.style.overflow = 'hidden'; 
             
             document.getElementById('dashNomeCampanha').innerText = campSelecionada.nome_campanha;
             
@@ -548,7 +543,6 @@
             const totalVotos = votos.length;
             document.getElementById('dashTotalVotos').innerText = totalVotos;
             
-            // Microdados = Total de Votos * 6 variáveis (Data, Evento, Sentimento, Nota, Setor, Origem)
             document.getElementById('dashMicrodados').innerText = totalVotos * 6;
 
             if(totalVotos === 0) {
@@ -558,7 +552,6 @@
                 return;
             }
 
-            // Variáveis de contagem
             let somaNotas = 0;
             let countFeliz = 0, countAprendi = 0, countSaberMais = 0, countMelhor = 0;
 
@@ -576,7 +569,6 @@
 
             renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
 
-            // Análise Dinâmica Simples
             const percentFeliz = Math.round((countFeliz / totalVotos) * 100);
             let analise = `O evento registrou <b>${totalVotos} interações</b> até o momento. A percepção média da qualidade é de <b>${media}/10</b>.<br><br>`;
             
@@ -594,7 +586,6 @@
         function renderizarGrafico(feliz, aprendi, saberMais, melhor) {
             const ctx = document.getElementById('sentimentoChart').getContext('2d');
             
-            // Destrói o gráfico anterior se existir (evita bug de sobreposição ao abrir campanhas diferentes)
             if (meuGrafico) { meuGrafico.destroy(); }
 
             meuGrafico = new Chart(ctx, {
@@ -626,7 +617,6 @@
         function fecharDashboard() {
             document.getElementById('dashboardTela').style.display = 'none';
             document.body.style.overflow = 'auto'; // Devolve o scroll
-            // document.getElementById('modalJornada').style.display = 'flex'; // Opcional: Reabre o modal anterior
         }
     </script>
 </body>
