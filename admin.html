@@ -17,7 +17,7 @@
             --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; position: relative; }
         
         .container { max-width: 1000px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
@@ -71,7 +71,7 @@
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
 
-        /* ================= DASHBOARD OVERLAY VISUAL (MODO ESCURO WEB) ================= */
+        /* ================= DASHBOARD OVERLAY VISUAL (WEB) ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -92,8 +92,12 @@
         
         .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
+        /* RESTAURADO: Textos Detalhados da Síntese na WEB */
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; }
-        .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; }
+        .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
+        .report-text ul { list-style: none; margin-bottom: 15px; }
+        .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
+        .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
@@ -107,6 +111,25 @@
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
             .chart-container-inner { min-height: 220px; }
         }
+
+        /* ================= ESTILOS ESPECÍFICOS DO PDF ================= */
+        /* Para o gerador de PDF não tirar foto em branco, o molde A4 fica escondido 
+           atrás da tela preta do Dashboard (z-index: 10) */
+        #wrapper-pdf {
+            position: absolute; top: 0; left: 0; z-index: 10;
+        }
+        
+        #pdf-template {
+            width: 790px; background: #ffffff; padding: 50px; font-family: 'Segoe UI', Arial, sans-serif; color: #333333; line-height: 1.6;
+        }
+
+        /* Faz a sintese ficar perfeita no PDF usando o mesmo HTML da web */
+        #pdf-template h4 { color: #ff5100; margin-top: 20px; margin-bottom: 10px; font-size: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+        #pdf-template ul { list-style: none; margin-bottom: 20px; padding: 0;}
+        #pdf-template li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px;}
+        #pdf-template .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+        #pdf-template p { font-size: 13px; line-height: 1.6; margin-bottom: 10px; text-align: justify; }
+
     </style>
 </head>
 <body>
@@ -234,8 +257,8 @@
         </div>
     </div>
 
-    <div id="wrapper-pdf" style="position: absolute; top: -9999px; left: -9999px; display: block; z-index: -100;">
-        <div id="pdf-template" style="width: 790px; background: #ffffff; padding: 50px; font-family: 'Segoe UI', Arial, sans-serif; color: #333333; line-height: 1.6;">
+    <div id="wrapper-pdf">
+        <div id="pdf-template">
             
             <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                 <img src="logo-arcelormittal.png" style="height: 35px;" alt="ArcelorMittal" onerror="this.style.display='none'">
@@ -259,13 +282,13 @@
                 <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> <span id="pdf-dados">0</span> pontos de dados estruturados na base.</li>
             </ul>
 
-            <h3 style="color: #ff5100; font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Nível de Engajamento</h3>
-            <div id="pdf-analise" style="font-size: 13px; line-height: 1.8; color: #333; margin-bottom: 35px; text-align: justify;">
+            <h3 style="color: #ff5100; font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Engajamento</h3>
+            <div id="pdf-analise">
                 </div>
 
             <h3 style="color: #ff5100; font-size: 14px; margin-bottom: 20px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">3. Mapeamento Visual de Percepção</h3>
             <div style="text-align: center; margin-bottom: 20px;">
-                <img id="pdf-chart-img" style="max-height: 280px; width: auto;" alt="Gráfico Oficial de Sentimentos">
+                <img id="pdf-chart-img" crossOrigin="anonymous" style="max-height: 280px; width: auto;" alt="Gráfico Oficial de Sentimentos">
             </div>
 
             <div style="margin-top: 50px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 9px; color: #999;">
@@ -284,8 +307,6 @@
         let dbCampanhas = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
-
-        // Variavel p/ guardar os cálculos da Sessão
         let dadosParaPDF = {};
 
         window.onload = async () => {
@@ -302,7 +323,6 @@
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
-                console.error("Erro", e);
                 selectSetor.innerHTML = '<option value="" disabled selected>⚠️ Erro ao carregar setores</option>';
             }
         }
@@ -431,7 +451,6 @@
             if(!id) return;
             const botoes = btnElement.parentElement.querySelectorAll('button');
             botoes.forEach(b => b.disabled = true);
-            const txtOriginal = btnElement.innerText;
             btnElement.innerText = "⏳...";
 
             try {
@@ -478,7 +497,7 @@
             loading.style.display = 'flex';
             
             img.onload = function() { loading.style.display = 'none'; img.style.display = 'inline-block'; };
-            img.onerror = function() { loading.innerText = "⚠️ Erro ao gerar QR."; };
+            img.onerror = function() { loading.innerText = "⚠️ Erro ao gerar."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
             document.getElementById('modalJornada').style.display = 'flex';
@@ -570,16 +589,32 @@
             // Salva dados para o PDF
             dadosParaPDF = { totalVotos, volumeDados, media, pFeliz, pAprendi, pSaberMais, pMelhor, countFeliz, countAprendi, countSaberMais, countMelhor };
 
-            // O Texto Curto para o Painel Escuro na Web
-            let resumoWeb = `<p>O evento registrou <b>${totalVotos} interações</b> até o momento. A percepção média da qualidade é de <b>${media}/10</b>.</p>`;
-            document.getElementById('dashAnaliseTexto').innerHTML = resumoWeb + getRecomendacaoSimples(pFeliz, pAprendi, pSaberMais, pMelhor);
-        }
+            // TEXTO LONGO E DETALHADO (RESTAURADO PARA A TELA DA WEB)
+            let relatorioHTML = `
+                <p>A campanha <strong>${campSelecionada.nome_campanha}</strong> registrou um volume de <strong>${totalVotos} interações</strong> até o presente momento. O score de aceitação geral da ação encontra-se em <strong>${media}/10</strong>.</p>
+                
+                <h4>Mapeamento Qualitativo</h4>
+                <ul>
+                    <li><span class="dot" style="background:#ffbd59;"></span> <strong>${pFeliz}%</strong> (${countFeliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
+                    <li><span class="dot" style="background:#ff5100;"></span> <strong>${pAprendi}%</strong> (${countAprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
+                    <li><span class="dot" style="background:#a300ff;"></span> <strong>${pSaberMais}%</strong> (${countSaberMais} votos) - Demonstraram curiosidade ou interesse em aprofundamento.</li>
+                    <li><span class="dot" style="background:#ff0080;"></span> <strong>${pMelhor}%</strong> (${countMelhor} votos) - Indicaram que a abordagem não atingiu as expectativas.</li>
+                </ul>
 
-        function getRecomendacaoSimples(pFeliz, pAprendi, pSaberMais, pMelhor) {
-            if(pFeliz + pAprendi >= 70) return `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>.</p>`;
-            if(pMelhor > pFeliz) return `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> Frustração superou a satisfação.</p>`;
-            if(pSaberMais > 30) return `<p style="color: #3b82f6;">Alto índice de curiosidade gerado na ação.</p>`;
-            return `<p>A campanha teve um impacto mediano e pulverizado.</p>`;
+                <h4>Insight Estratégico</h4>
+            `;
+            
+            if(pFeliz + pAprendi >= 70) {
+                relatorioHTML += `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso.</p>`;
+            } else if (pMelhor > pFeliz) {
+                relatorioHTML += `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> O sentimento de frustração superou a satisfação. Recomenda-se revisão imediata do conteúdo ou da logística do evento.</p>`;
+            } else if (pSaberMais > 30) {
+                relatorioHTML += `<p style="color: #3b82f6;">Alto índice de curiosidade gerado. É altamente recomendável programar um <strong>DDS subsequente ou material de apoio</strong> para sanar as dúvidas deixadas.</p>`;
+            } else {
+                relatorioHTML += `<p>A campanha teve um impacto mediano e pulverizado. Analisar os comentários qualitativos pode ajudar a direcionar as próximas pautas com mais precisão.</p>`;
+            }
+
+            document.getElementById('dashAnaliseTexto').innerHTML = relatorioHTML;
         }
 
         function renderizarGrafico(feliz, aprendi, saberMais, melhor) {
@@ -614,13 +649,13 @@
         }
 
         // =========================================================================
-        // GERAÇÃO DO DOCUMENTO PDF OFICIAL (A4 RETRATO - TEXTO CORRIDO)
+        // GERAÇÃO DO DOCUMENTO PDF OFICIAL SEM ESPAÇOS EM BRANCO
         // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
             btn.innerText = "⏳ Gerando Documento...";
 
-            // 1. Gera o Gráfico Estático Oficial
+            // 1. O SEGREDO 1: Solicita a Imagem Limpa do QuickChart
             const configGrafico = {
                 type: 'doughnut',
                 data: {
@@ -649,41 +684,30 @@
             document.getElementById('pdf-media').innerText = dadosParaPDF.media;
             document.getElementById('pdf-dados').innerText = dadosParaPDF.volumeDados;
 
-            // 3. Preenche o Relatório Textual Elegante
-            let reco = "";
-            if(dadosParaPDF.pFeliz + dadosParaPDF.pAprendi >= 70) reco = "O engajamento é considerado <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.";
-            else if(dadosParaPDF.pMelhor > dadosParaPDF.pFeliz) reco = "Constata-se uma <strong>Rejeição Preocupante</strong>. O sentimento de frustração superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.";
-            else if(dadosParaPDF.pSaberMais > 30) reco = "Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS (Diálogo Diário de Segurança) subsequente ou disparo de material de apoio complementar para sanar a lacuna deixada.";
-            else reco = "A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.";
+            // 3. Copia a Análise Rica e Bonita da Web Diretamente para o PDF
+            document.getElementById('pdf-analise').innerHTML = document.getElementById('dashAnaliseTexto').innerHTML;
 
-            const relatorioExtenso = `
-                <p><strong>Contexto Operacional:</strong><br>
-                A campanha corporativa supracitada processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} pontos de dados (Microdados), fornecendo base analítica consolidada e auditável para as decisões de Gestão.</p>
-                
-                <p style="margin-top: 15px;"><strong>Desdobramento Qualitativo:</strong><br>
-                A análise demográfica do sentimento revela que <strong>${dadosParaPDF.pFeliz}%</strong> (${dadosParaPDF.feliz} votos) do público experimentou uma perceção altamente positiva ("Fiquei Feliz"). O caráter instrucional do evento alcançou <strong>${dadosParaPDF.pAprendi}%</strong> ("Aprendi Algo Novo"). Como métrica de engajamento ativo, <strong>${dadosParaPDF.pSaberMais}%</strong> declararam interesse em aprofundar conhecimentos, enquanto a margem de atrito/frustração foi isolada em <strong>${dadosParaPDF.pMelhor}%</strong>.</p>
-
-                <p style="margin-top: 15px;"><strong>Recomendações e Parecer Final:</strong><br>
-                ${reco}</p>
-            `;
-            document.getElementById('pdf-analise').innerHTML = relatorioExtenso;
-            document.getElementById('pdf-chart-img').src = chartUrl;
-
-            // 4. Imprime o PDF formatado como Documento A4
-            setTimeout(() => {
+            // 4. O SEGREDO 2: O PDF só é gerado QUANDO a imagem termina de carregar!
+            const imgPdf = document.getElementById('pdf-chart-img');
+            imgPdf.crossOrigin = "Anonymous"; // Essencial para o html2canvas não bloquear a foto
+            
+            imgPdf.onload = function() {
                 const elemento = document.getElementById('pdf-template');
                 const opt = {
                     margin:       [10, 0, 10, 0], 
                     filename:     `Relatorio_Inteligencia_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
                     image:        { type: 'jpeg', quality: 1 },
-                    html2canvas:  { scale: 2 },
+                    html2canvas:  { scale: 2, useCORS: true },
                     jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
                 };
                 
                 html2pdf().set(opt).from(elemento).save().then(() => {
                     btn.innerText = "📄 Exportar Relatório Oficial";
                 });
-            }, 600);
+            };
+
+            // Ao injetar o src, o navegador começa a baixar. Assim que termina, dispara o onload acima.
+            imgPdf.src = chartUrl;
         }
 
         function fecharDashboard() {
