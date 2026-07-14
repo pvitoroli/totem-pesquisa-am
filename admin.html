@@ -17,7 +17,7 @@
             --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; position: relative; }
+        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         
         .container { max-width: 1000px; margin: 0 auto; }
         header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
@@ -93,7 +93,7 @@
         .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
         /* Textos Detalhados da Síntese na WEB */
-        .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; }
+        .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; text-align: left; }
         .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
         .report-text ul { list-style: none; margin-bottom: 15px; }
         .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
@@ -111,23 +111,6 @@
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
             .chart-container-inner { min-height: 220px; }
         }
-
-        /* ================= RESOLVIDO O BUG DE OVERLAY NO PDF ================= */
-        /* display: none garante que ele não existe na tela e nunca vai cobrir o painel */
-        #wrapper-pdf {
-            display: none; 
-        }
-        
-        #pdf-template {
-            width: 790px; background: #ffffff; padding: 50px; font-family: 'Segoe UI', Arial, sans-serif; color: #333333; line-height: 1.6;
-        }
-
-        /* Mantém o texto rico no PDF */
-        #pdf-template h4 { color: #ff5100; margin-top: 20px; margin-bottom: 10px; font-size: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-        #pdf-template ul { list-style: none; margin-bottom: 20px; padding: 0;}
-        #pdf-template li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px; font-size: 13px;}
-        #pdf-template .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
-        #pdf-template p { font-size: 13px; line-height: 1.6; margin-bottom: 10px; text-align: justify; }
     </style>
 </head>
 <body>
@@ -251,41 +234,6 @@
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="wrapper-pdf">
-        <div id="pdf-template">
-            
-            <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
-                <img src="logo-arcelormittal.png" style="height: 35px;" alt="ArcelorMittal" onerror="this.style.display='none'">
-                <div style="text-align: right;">
-                    <h2 style="margin: 0; color: #ff5100; font-size: 20px; font-weight: 900; text-transform: uppercase;">Pesquisa de Sentimento</h2>
-                    <p style="margin: 2px 0 0 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold;">Relatório Executivo de Resultados</p>
-                </div>
-            </div>
-
-            <h1 id="pdf-titulo" style="color: #12141a; font-size: 22px; margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">Nome da Campanha</h1>
-            <p style="color: #555; font-size: 12px; margin-bottom: 30px;">
-                <strong>Setor Analisado:</strong> <span id="pdf-setor">X</span> &nbsp;|&nbsp; 
-                <strong>Status da Coleta:</strong> <span id="pdf-status">Y</span> &nbsp;|&nbsp; 
-                <strong>Data de Extração:</strong> <span id="pdf-data"></span>
-            </p>
-
-            <h3 style="color: #12141a; font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Síntese Quantitativa (Métricas Principais)</h3>
-            <ul style="list-style-type: none; padding: 0; margin: 0 0 35px 0; font-size: 14px;">
-                <li style="margin-bottom: 10px;">• <strong>Total de Interações Válidas:</strong> <span id="pdf-votos">0</span> colaborações diretas.</li>
-                <li style="margin-bottom: 10px;">• <strong>Score Global de Satisfação:</strong> <span id="pdf-media">0.0</span> <span style="font-size: 12px; color: #666;">(Média Ponderada em escala 0-10)</span>.</li>
-                <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> <span id="pdf-dados">0</span> pontos de dados estruturados na base.</li>
-            </ul>
-
-            <h3 style="color: #12141a; font-size: 14px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Engajamento</h3>
-            <div id="pdf-analise">
-                </div>
-
-            <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 9px; color: #999;">
-                Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
             </div>
         </div>
     </div>
@@ -508,7 +456,7 @@
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link copiado com sucesso!")); }
 
         // =======================================================
-        // MOTOR DO DASHBOARD WEB & CÁLCULOS
+        // MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
         // =======================================================
         let meuGrafico = null; 
 
@@ -557,7 +505,7 @@
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
                 renderizarGrafico(0, 0, 0, 0);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>Nenhum dado capturado ainda.</em>";
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
                 return;
             }
 
@@ -581,31 +529,33 @@
 
             renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
 
-            // Salva dados para o PDF
+            // Salva dados na memória para o PDF
             dadosParaPDF = { totalVotos, volumeDados, media, pFeliz, pAprendi, pSaberMais, pMelhor, countFeliz, countAprendi, countSaberMais, countMelhor };
 
-            // TEXTO LONGO E DETALHADO (WEB)
+            // =========================================================
+            // TEXTO RICO PARA A WEB (IGUALZINHO A PENÚLTIMA VERSÃO)
+            // =========================================================
             let relatorioHTML = `
-                <p>A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas no ambiente. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
+                <p>A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
                 
-                <h4>Desdobramento Qualitativo</h4>
-                <p style="margin-bottom: 10px;">A análise do sentimento revelou a seguinte distribuição:</p>
+                <h4>Mapeamento Qualitativo</h4>
+                <p style="margin-bottom: 10px;">A análise de sentimento revelou a seguinte distribuição:</p>
                 <ul>
-                    <li><span class="dot" style="background:#ffbd59;"></span> <strong>Fiquei Feliz:</strong> ${pFeliz}% (${countFeliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
-                    <li><span class="dot" style="background:#ff5100;"></span> <strong>Aprendi Algo Novo:</strong> ${pAprendi}% (${countAprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
-                    <li><span class="dot" style="background:#a300ff;"></span> <strong>Quero Saber Mais:</strong> ${pSaberMais}% (${countSaberMais} votos) - Demonstraram curiosidade ou interesse em aprofundamento.</li>
-                    <li><span class="dot" style="background:#ff0080;"></span> <strong>Poderia Ser Melhor:</strong> ${pMelhor}% (${countMelhor} votos) - Indicaram que a abordagem não atingiu as expectativas.</li>
+                    <li><span class="dot" style="background:#ffbd59;"></span> <strong>Fiquei Feliz:</strong> ${pFeliz}% (${countFeliz} votos) - Experiência positiva.</li>
+                    <li><span class="dot" style="background:#ff5100;"></span> <strong>Aprendi Algo Novo:</strong> ${pAprendi}% (${countAprendi} votos) - Caráter educativo.</li>
+                    <li><span class="dot" style="background:#a300ff;"></span> <strong>Quero Saber Mais:</strong> ${pSaberMais}% (${countSaberMais} votos) - Demonstrou curiosidade.</li>
+                    <li><span class="dot" style="background:#ff0080;"></span> <strong>Poderia Ser Melhor:</strong> ${pMelhor}% (${countMelhor} votos) - Expectativa não atingida.</li>
                 </ul>
 
                 <h4>Recomendações e Parecer</h4>
             `;
             
             if(pFeliz + pAprendi >= 70) {
-                relatorioHTML += `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para futuras ações institucionais.</p>`;
+                relatorioHTML += `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso.</p>`;
             } else if (pMelhor > pFeliz) {
                 relatorioHTML += `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> O sentimento de frustração superou a satisfação. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem.</p>`;
             } else if (pSaberMais > 30) {
-                relatorioHTML += `<p style="color: #3b82f6;">Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS subsequente ou disparo de material de apoio complementar para sanar a lacuna deixada.</p>`;
+                relatorioHTML += `<p style="color: #3b82f6;">Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS subsequente ou disparo de material de apoio complementar para sanar a lacuna.</p>`;
             } else {
                 relatorioHTML += `<p>A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.</p>`;
             }
@@ -645,68 +595,92 @@
         }
 
         // =========================================================================
-        // GERAÇÃO DO DOCUMENTO PDF OFICIAL (A4 RETRATO - TEXTO CORRIDO CLONADO)
+        // GERADOR INFALÍVEL DE PDF (Cria um DOM puro apenas na hora de imprimir)
         // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ Gerando Documento...";
+            btn.innerText = "⏳ Gerando Documento Oficial...";
 
-            // 1. Preenche os Dados Base do Molde
-            document.getElementById('pdf-titulo').innerText = campSelecionada.nome_campanha;
-            document.getElementById('pdf-setor').innerText = campSelecionada.setor;
-            document.getElementById('pdf-status').innerText = campSelecionada.status.toUpperCase();
-            document.getElementById('pdf-data').innerText = new Date().toLocaleString('pt-BR');
-            
-            document.getElementById('pdf-votos').innerText = dadosParaPDF.totalVotos;
-            document.getElementById('pdf-media').innerText = dadosParaPDF.media;
-            document.getElementById('pdf-dados').innerText = dadosParaPDF.volumeDados;
-
-            // 2. Preenche o Relatório Textual Elegante
+            // Recomendação estática
             let reco = "";
             if(dadosParaPDF.pFeliz + dadosParaPDF.pAprendi >= 70) reco = "O engajamento é considerado <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.";
             else if(dadosParaPDF.pMelhor > dadosParaPDF.pFeliz) reco = "Constata-se uma <strong>Rejeição Preocupante</strong>. O sentimento de frustração superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.";
             else if(dadosParaPDF.pSaberMais > 30) reco = "Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS (Diálogo Diário de Segurança) subsequente ou disparo de material de apoio complementar para sanar a lacuna deixada.";
             else reco = "A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.";
 
-            const relatorioExtenso = `
-                <p><strong>Contexto Operacional:</strong><br>
-                A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} pontos de dados (Microdados), fornecendo base analítica consolidada e auditável para as decisões de Gestão.</p>
-                
-                <p style="margin-top: 15px;"><strong>Desdobramento Qualitativo:</strong><br>
-                A análise demográfica do sentimento revelou a seguinte distribuição entre os participantes:</p>
-                <ul style="list-style: none; padding: 0; margin: 15px 0;">
-                    <li style="margin-bottom: 8px; font-size: 13px;"><span style="background:#ffbd59; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Fiquei Feliz:</strong> ${dadosParaPDF.pFeliz}% (${dadosParaPDF.feliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
-                    <li style="margin-bottom: 8px; font-size: 13px;"><span style="background:#ff5100; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Aprendi Algo Novo:</strong> ${dadosParaPDF.pAprendi}% (${dadosParaPDF.aprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
-                    <li style="margin-bottom: 8px; font-size: 13px;"><span style="background:#a300ff; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Quero Saber Mais:</strong> ${dadosParaPDF.pSaberMais}% (${dadosParaPDF.saberMais} votos) - Demonstraram curiosidade ou interesse em aprofundamento.</li>
-                    <li style="margin-bottom: 8px; font-size: 13px;"><span style="background:#ff0080; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Poderia Ser Melhor:</strong> ${dadosParaPDF.pMelhor}% (${dadosParaPDF.melhor} votos) - Indicaram que a abordagem não atingiu as expectativas.</li>
-                </ul>
+            // CONSTRÓI O HTML DO PDF DO ZERO (Isto previne 100% dos bugs de CSS e display)
+            const htmlDoPDF = `
+                <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
+                    
+                    <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
+                        <h1 style="margin: 0; color: #ff5100; font-size: 26px; font-weight: 900; text-transform: uppercase;">ArcelorMittal</h1>
+                        <div style="text-align: right;">
+                            <h2 style="margin: 0; color: #12141a; font-size: 16px; font-weight: 800; text-transform: uppercase;">PESQUISA DE SENTIMENTO</h2>
+                            <p style="margin: 2px 0 0 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold;">Relatório Executivo de Resultados</p>
+                        </div>
+                    </div>
 
-                <p style="margin-top: 15px;"><strong>Recomendações e Parecer Final:</strong><br>
-                ${reco}</p>
+                    <h1 style="color: #12141a; font-size: 24px; margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">${campSelecionada.nome_campanha}</h1>
+                    <p style="color: #555; font-size: 13px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+                        <strong>Setor Analisado:</strong> ${campSelecionada.setor} &nbsp;|&nbsp; 
+                        <strong>Status da Coleta:</strong> ${campSelecionada.status.toUpperCase()} &nbsp;|&nbsp; 
+                        <strong>Data de Extração:</strong> ${new Date().toLocaleString('pt-BR')}
+                    </p>
+
+                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Síntese Quantitativa (Métricas Principais)</h3>
+                    <ul style="list-style-type: none; padding: 0; margin: 0 0 35px 0; font-size: 14px;">
+                        <li style="margin-bottom: 10px;">• <strong>Total de Interações Válidas:</strong> ${dadosParaPDF.totalVotos} colaborações diretas.</li>
+                        <li style="margin-bottom: 10px;">• <strong>Score Global de Satisfação:</strong> ${dadosParaPDF.media} / 10 <span style="font-size: 12px; color: #666;">(Média Ponderada)</span>.</li>
+                        <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> ${dadosParaPDF.volumeDados} pontos de dados estruturados na base.</li>
+                    </ul>
+
+                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Engajamento</h3>
+                    
+                    <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Contexto Operacional:</strong><br>
+                    A campanha corporativa processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} pontos de dados (Microdados), fornecendo base analítica consolidada e auditável para as decisões de Gestão.</p>
+                    
+                    <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Desdobramento Qualitativo da Experiência:</strong><br>
+                    A análise demográfica do sentimento revelou a seguinte distribuição de satisfação entre os colaboradores participantes:</p>
+                    
+                    <ul style="list-style: none; padding: 0; margin: 15px 0 25px 0;">
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ffbd59; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Fiquei Feliz:</strong> ${dadosParaPDF.pFeliz}% (${dadosParaPDF.feliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff5100; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Aprendi Algo Novo:</strong> ${dadosParaPDF.pAprendi}% (${dadosParaPDF.aprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#a300ff; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Quero Saber Mais:</strong> ${dadosParaPDF.pSaberMais}% (${dadosParaPDF.saberMais} votos) - Demonstraram curiosidade ou forte interesse em aprofundamento.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff0080; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Poderia Ser Melhor:</strong> ${dadosParaPDF.pMelhor}% (${dadosParaPDF.melhor} votos) - Indicaram que a abordagem não atingiu as expectativas geradas.</li>
+                    </ul>
+
+                    <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final:</strong><br>
+                    ${reco}</p>
+
+                    <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
+                        Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
+                    </div>
+                </div>
             `;
-            document.getElementById('pdf-analise').innerHTML = relatorioExtenso;
 
-            // 3. O SEGREDO DEFINITIVO DA RENDERIZAÇÃO: Clonar o molde, atirá-lo para o ecrã momentaneamente, tirar a foto e eliminar
-            const elemento = document.getElementById('pdf-template');
-            const clone = elemento.cloneNode(true);
-            document.body.appendChild(clone);
-            clone.style.position = 'absolute';
-            clone.style.left = '0px';
-            clone.style.top = '0px';
-            clone.style.zIndex = '-9999'; // Fica totalmente escondido atrás do fundo da página
-            
+            // Criar uma div temporária invisível (totalmente imune ao CSS da tela)
+            const divTemp = document.createElement('div');
+            divTemp.innerHTML = htmlDoPDF;
+            divTemp.style.position = 'absolute';
+            divTemp.style.top = '-9999px';
+            divTemp.style.left = '-9999px';
+            document.body.appendChild(divTemp);
+
+            // Nome oficial do arquivo solicitado
+            const nomeDoArquivo = `Relatório Pesquisa de Sentimento (${campSelecionada.nome_campanha.trim()}).pdf`;
+
             const opt = {
                 margin:       [10, 0, 10, 0], 
-                filename:     `Relatorio_Inteligencia_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
+                filename:     nomeDoArquivo,
                 image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2, windowWidth: 800 },
+                html2canvas:  { scale: 2 },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // 4. Imprime o PDF a partir do clone fantasma e depois limpa o ecrã
-            html2pdf().set(opt).from(clone).save().then(() => {
+            // Renderiza, baixa, apaga a div temporária e volta o botão ao normal
+            html2pdf().set(opt).from(divTemp).save().then(() => {
+                document.body.removeChild(divTemp);
                 btn.innerText = "📄 Exportar Relatório Oficial";
-                document.body.removeChild(clone); 
             });
         }
 
