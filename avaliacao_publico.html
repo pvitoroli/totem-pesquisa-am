@@ -114,6 +114,9 @@
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
         const setor = urlParams.get('setor') || "Geral";
+        
+        // 🔥 NOVO: CAPTURA DO ID DO MONDAY (Proposta) 🔥
+        const proposta = urlParams.get('proposta') || "Geral";
 
         // 2. CERCA ELÉTRICA (BLOQUEIO ANTI-F5/VOLTAR)
         function checarBloqueio() {
@@ -143,8 +146,8 @@
         document.getElementById('sub-evento-nome').innerText = evento;
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
         
-        // O Botão agora volta para a tela pública correta mantendo o ID.
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
+        // O Botão agora volta para a tela pública correta mantendo o ID e também a proposta para não perder se o cara voltar
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}&proposta=${encodeURIComponent(proposta)}" class="btn-back">← Voltar</a>`;
 
         const imgEmoji = document.getElementById('emoji-preview');
         if (linksEmojis[sentimento]) {
@@ -162,10 +165,10 @@
             event.target.style.backgroundColor = "#ff3700";
             event.target.style.borderColor = "#ff3700";
 
-            // Monta a URL completa para a tela final pública, passando TUDO que ela precisa
-            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}`;
+            // 🔥 NOVO: Monta a URL completa e agora repassa a "proposta" do Monday 🔥
+            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
             
-            // Vai para a tela amarela pública usando replace (não joga pro totem fixo!)
+            // Vai para a tela amarela pública usando replace
             window.location.replace(linkDestino);
         }
         
