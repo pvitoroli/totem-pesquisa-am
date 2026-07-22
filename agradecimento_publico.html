@@ -114,6 +114,9 @@
         const sentimento = urlParams.get('sentimento');
         const setor = urlParams.get('setor') || "Geral";
         const notaReal = urlParams.get('nota') || "10"; // Pega a nota clicada de 0 a 10
+        
+        // 🔥 NOVO: CAPTURA A PROPOSTA DO MONDAY (Que veio da tela anterior) 🔥
+        const proposta = urlParams.get('proposta') || "Geral";
 
         // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
         if (idEvento && localStorage.getItem('votou_' + idEvento) === 'sim') {
@@ -141,13 +144,14 @@
                 localStorage.setItem('votou_' + idEvento, 'sim');
             }
 
-            // Envia exatamente os eixos auditáveis coletados no Totem Público
+            // Envia exatamente os eixos auditáveis coletados no Totem Público + Dados Monday
             const payload = {
                 "evento": nomeEvento,
                 "sentimento": sentimento,
                 "nota": parseInt(notaReal), // Envia a nota real (0 a 10) que o colaborador clicou
                 "setor": setor,
-                "origem": "Totem Público"
+                "origem": "Totem Público",
+                "proposta": proposta // 🔥 NOVO: Insere a proposta no envio para o Google Sheets 🔥
             };
 
             try {
