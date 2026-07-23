@@ -118,9 +118,13 @@
         // 🔥 NOVO: CAPTURA DO ID DO MONDAY (Proposta) 🔥
         const proposta = urlParams.get('proposta') || "Geral";
 
+        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
+        const chaveBloqueio = proposta !== "Geral" ? 'votou_' + id + '_' + proposta : 'votou_' + id;
+
         // 2. CERCA ELÉTRICA (BLOQUEIO ANTI-F5/VOLTAR)
         function checarBloqueio() {
-            if (id && localStorage.getItem('votou_' + id) === 'sim') {
+            // Usa a nova chaveBloqueio que leva em consideração a proposta do Monday
+            if (id && localStorage.getItem(chaveBloqueio) === 'sim') {
                 document.body.innerHTML = `
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
                         <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
@@ -176,5 +180,3 @@
         window.history.replaceState(null, null, window.location.href);
         window.onpopstate = function () { window.history.go(1); };
     </script>
-</body>
-</html>
