@@ -105,7 +105,7 @@
     </div>
 
     <script>
-        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3 সুবিধাDn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
 
         // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida)
         const urlParams = new URLSearchParams(window.location.search);
@@ -118,8 +118,11 @@
         // 🔥 NOVO: CAPTURA A PROPOSTA DO MONDAY (Que veio da tela anterior) 🔥
         const proposta = urlParams.get('proposta') || "Geral";
 
+        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
+        const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
+
         // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
-        if (idEvento && localStorage.getItem('votou_' + idEvento) === 'sim') {
+        if (idEvento && localStorage.getItem(chaveBloqueio) === 'sim') {
             document.body.innerHTML = `
                 <div style="background-color:#1b1e27; color:white; font-family:sans-serif; text-align:center; padding:50px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
                     <h2 style="color:#ff5f00;">⚠️ VOTO JÁ REGISTRADO</h2>
@@ -139,9 +142,9 @@
         async function gravarVotoPublico() {
             if (!nomeEvento || !sentimento) return;
 
-            // "Tautua" o dispositivo na memória antes do envio para blindar o fluxo
+            // 🔥 "Tatuagem" dinâmica com o ID do Monday (bloqueia apenas esta proposta específica) 🔥
             if (idEvento) {
-                localStorage.setItem('votou_' + idEvento, 'sim');
+                localStorage.setItem(chaveBloqueio, 'sim');
             }
 
             // Envia exatamente os eixos auditáveis coletados no Totem Público + Dados Monday
@@ -151,7 +154,7 @@
                 "nota": parseInt(notaReal), // Envia a nota real (0 a 10) que o colaborador clicou
                 "setor": setor,
                 "origem": "Totem Público",
-                "proposta": proposta // 🔥 NOVO: Insere a proposta no envio para o Google Sheets 🔥
+                "proposta": proposta // Insere a proposta no envio para o Google Sheets
             };
 
             try {
@@ -168,6 +171,3 @@
         // Dispara ao carregar a página
         window.onload = gravarVotoPublico;
     </script>
-
-</body>
-</html>
