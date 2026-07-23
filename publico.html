@@ -267,6 +267,10 @@
         const urlParams = new URLSearchParams(window.location.search);
         const idEventoAtual = urlParams.get('evento');
         let setorAtual = urlParams.get('setor') || "Geral";
+        
+        // 🔥 NOVO: CAPTURAMOS A PROPOSTA AQUI PARA NÃO PERDÊ-LA 🔥
+        let propostaAtual = urlParams.get('proposta') || "Geral";
+        
         let nomeRealDaCampanha = "Carregando...";
 
         function checarBloqueio() {
@@ -376,9 +380,9 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-           // REDIRECIONA PARA A AVALIAÇÃO PÚBLICA (RODOVIA EXCLUSIVA)
+           // 🔥 NOVO: REDIRECIONA PARA A AVALIAÇÃO PÚBLICA (E AGORA LEVA A PROPOSTA JUNTO) 🔥
             setTimeout(() => { 
-                window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}`); 
+                window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}&proposta=${encodeURIComponent(propostaAtual)}`); 
             }, 1500);
         }
     </script>
