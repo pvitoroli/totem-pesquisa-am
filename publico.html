@@ -21,9 +21,6 @@
             overflow-x: hidden;
         }
 
-        /* ==========================================================================
-            ESTILOS DA SPLASH SCREEN
-            ========================================================================== */
         #splash-screen {
             position: fixed;
             top: 0;
@@ -127,9 +124,6 @@
             to { transform: scale(1.1); opacity: 1; }
         }
 
-        /* ==========================================================================
-            ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
-            ========================================================================== */
         .vote-card {
             transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
         }
@@ -169,21 +163,19 @@
             -webkit-backdrop-filter: blur(10px);
         }
 
-        /* Ajuste status de conexão pulsedot */
+        .pulse-dot-amarelo {
+            width: 6px !important;
+            height: 6px !important;
+            background-color: #ffb703 !important; 
+            border-radius: 50% !important;
+            display: inline-block !important;
+            animation: pulseAmarelo 1.5s infinite !important;
+        }
 
-    .pulse-dot-amarelo {
-        width: 6px !important;
-        height: 6px !important;
-        background-color: #ffb703 !important; /* Amarelo exato */
-        border-radius: 50% !important;
-        display: inline-block !important;
-        animation: pulseAmarelo 1.5s infinite !important;
-    }
-
-    @keyframes pulseAmarelo {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+        @keyframes pulseAmarelo {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
         }
     </style>
 </head>
@@ -221,7 +213,7 @@
         <h3 id="nome-campanha-ativa" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
         
         <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
-          ​​<span style="font-weight: normal; color: white;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
+          ​​<span id="pergunta-principal-txt" style="font-weight: normal; color: white;">O que você <b>SENTIU</b> no evento ou ação de hoje?</span>
         </h5>
         
         <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
@@ -232,32 +224,32 @@
 
       <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
         
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Aprendi algo novo', this)" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 1, this)" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
-            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+            <img id="gif-s1" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">APRENDI<br>ALGO NOVO</span>
+          <span id="label-s1" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">APRENDI<br>ALGO NOVO</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Fiquei feliz', this)" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 2, this)" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
-            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+            <img id="gif-s2" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">FIQUEI<br>FELIZ</span>
+          <span id="label-s2" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">FIQUEI<br>FELIZ</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Quero saber mais', this)" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 3, this)" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
-            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+            <img id="gif-s3" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">QUERO<br>SABER MAIS</span>
+          <span id="label-s3" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">QUERO<br>SABER MAIS</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 'Poderia ser melhor', this)" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 4, this)" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
-            <img src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
+            <img id="gif-s4" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">PODERIA<br>SER MELHOR</span>
+          <span id="label-s4" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">PODERIA<br>SER MELHOR</span>
         </a>
       </div>
     </div>
@@ -267,38 +259,37 @@
         const urlParams = new URLSearchParams(window.location.search);
         const idEventoAtual = urlParams.get('evento');
         let setorAtual = urlParams.get('setor') || "Geral";
-        
-        // 🔥 NOVO: CAPTURAMOS A PROPOSTA AQUI PARA NÃO PERDÊ-LA 🔥
         let propostaAtual = urlParams.get('proposta') || "Geral";
         
-        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
         const chaveBloqueio = propostaAtual !== "Geral" ? 'votou_' + idEventoAtual + '_' + propostaAtual : 'votou_' + idEventoAtual;
         
         let nomeRealDaCampanha = "Carregando...";
 
+        // Objeto para guardar os textos dos sentimentos carregados dinamicamente
+        let sentimentosAtivos = {
+            1: "Aprendi algo novo",
+            2: "Fiquei feliz",
+            3: "Quero saber mais",
+            4: "Poderia ser melhor"
+        };
+
         function checarBloqueio() {
-            // Usa a nova chaveBloqueio que leva em consideração a proposta do Monday
             if (idEventoAtual && localStorage.getItem(chaveBloqueio) === 'sim') {
-                // Se já votou, DESTRÓI a tela na hora para impedir que a Splash Screen ou os emojis apareçam
                 document.body.innerHTML = `
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
                         <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
                         <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
                         <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif; max-width: 400px; line-height: 1.5;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
                     </div>`;
-                throw new Error("Acesso Bloqueado: Usuário já votou."); // Para a execução do restante do código
+                throw new Error("Acesso Bloqueado: Usuário já votou."); 
             }
         }
 
-        // Executa no exato milissegundo que o script é lido (Garante o bloqueio inicial)
         checarBloqueio();
-
-        // Executa caso o peão use o botão "Voltar" do celular e o navegador tente descongelar a página
         window.addEventListener('pageshow', checarBloqueio);
 
-
         // -----------------------------------------------------------
-        // 2. RESTANTE DO CÓDIGO NORMAL
+        // 2. RESTANTE DO CÓDIGO NORMAL & CARREGAMENTO DO TEMPLATE
         // -----------------------------------------------------------
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
 
@@ -322,6 +313,42 @@
                     if (dados.sucesso) { 
                         nomeRealDaCampanha = dados.nome; 
                         setorAtual = dados.setor || setorAtual; 
+                        
+                        // 🔥 APLICA O TEMPLATE DINÂMICO SE VIER DO GOOGLE SHEETS 🔥
+                        if (dados.template) {
+                            const t = dados.template;
+                            
+                            // 1. Atualiza Pergunta
+                            if (t.pergunta) {
+                                document.getElementById('pergunta-principal-txt').innerText = t.pergunta;
+                            }
+                            
+                            // 2. Atualiza Sentimentos e GIFs
+                            if (t.s1_texto) {
+                                sentimentosAtivos[1] = t.s1_texto;
+                                document.getElementById('label-s1').innerText = t.s1_texto;
+                            }
+                            if (t.s1_gif) document.getElementById('gif-s1').src = t.s1_gif;
+
+                            if (t.s2_texto) {
+                                sentimentosAtivos[2] = t.s2_texto;
+                                document.getElementById('label-s2').innerText = t.s2_texto;
+                            }
+                            if (t.s2_gif) document.getElementById('gif-s2').src = t.s2_gif;
+
+                            if (t.s3_texto) {
+                                sentimentosAtivos[3] = t.s3_texto;
+                                document.getElementById('label-s3').innerText = t.s3_texto;
+                            }
+                            if (t.s3_gif) document.getElementById('gif-s3').src = t.s3_gif;
+
+                            if (t.s4_texto) {
+                                sentimentosAtivos[4] = t.s4_texto;
+                                document.getElementById('label-s4').innerText = t.s4_texto;
+                            }
+                            if (t.s4_gif) document.getElementById('gif-s4').src = t.s4_gif;
+                        }
+
                     } else { 
                         nomeRealDaCampanha = "Campanha Inativa"; 
                     } 
@@ -339,11 +366,12 @@
         
         window.addEventListener('load', buscarEventoAtivo); 
 
-        function escolherSentimento(event, sentimentoEscolhido, elementoClicado) { 
+        function escolherSentimento(event, numeroSentimento, elementoClicado) { 
             event.preventDefault(); 
-            
             if (window.animacaoEmAndamento) return; 
             window.animacaoEmAndamento = true; 
+            
+            const sentimentoEscolhido = sentimentosAtivos[numeroSentimento] || "Geral";
             
             const telaPrincipal = document.getElementById('main-interface'); 
             const overlayCinematico = document.getElementById('cinematic-overlay'); 
@@ -355,7 +383,6 @@
             
             const rect = elementoClicado.getBoundingClientRect(); 
             const clone = elementoClicado.cloneNode(true); 
-            
             elementoClicado.style.opacity = '0'; 
             
             clone.style.position = 'fixed'; 
@@ -384,9 +411,10 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-           // 🔥 NOVO: REDIRECIONA PARA A AVALIAÇÃO PÚBLICA (E AGORA LEVA A PROPOSTA JUNTO) 🔥
             setTimeout(() => { 
                 window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}&proposta=${encodeURIComponent(propostaAtual)}`); 
             }, 1500);
         }
     </script>
+</body>
+</html>
