@@ -271,10 +271,14 @@
         // 🔥 NOVO: CAPTURAMOS A PROPOSTA AQUI PARA NÃO PERDÊ-LA 🔥
         let propostaAtual = urlParams.get('proposta') || "Geral";
         
+        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
+        const chaveBloqueio = propostaAtual !== "Geral" ? 'votou_' + idEventoAtual + '_' + propostaAtual : 'votou_' + idEventoAtual;
+        
         let nomeRealDaCampanha = "Carregando...";
 
         function checarBloqueio() {
-            if (idEventoAtual && localStorage.getItem('votou_' + idEventoAtual) === 'sim') {
+            // Usa a nova chaveBloqueio que leva em consideração a proposta do Monday
+            if (idEventoAtual && localStorage.getItem(chaveBloqueio) === 'sim') {
                 // Se já votou, DESTRÓI a tela na hora para impedir que a Splash Screen ou os emojis apareçam
                 document.body.innerHTML = `
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
@@ -386,5 +390,3 @@
             }, 1500);
         }
     </script>
-</body>
-</html>
