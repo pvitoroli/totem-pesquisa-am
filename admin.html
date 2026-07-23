@@ -69,7 +69,7 @@
         .sub-item:last-child { border-bottom: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); }
+        .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
 
         /* ================= DASHBOARD OVERLAY VISUAL (WEB) ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -92,7 +92,6 @@
         
         .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
-        /* Textos Detalhados da Síntese na WEB */
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; text-align: left; }
         .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
         .report-text ul { list-style: none; margin-bottom: 15px; }
@@ -126,8 +125,13 @@
             <div class="form-grid">
                 <input type="text" id="nomeCampanha" placeholder="Ex: Siderurgia 3" autocomplete="off">
                 <select id="setorCampanha">
-                    <option value="" disabled selected>⏳ Carregando setores da base...</option>
+                    <option value="" disabled selected>⏳ Carregando setores...</option>
                 </select>
+                
+                <select id="templateCampanha" style="color: var(--primary); font-weight: bold;">
+                    <option value="Padrão" selected>🎨 Template: Padrão</option>
+                </select>
+
                 <input type="date" id="dataCampanha">
                 <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
             </div>
@@ -160,6 +164,16 @@
             <h3 id="modTitle" style="margin-bottom: 5px;">Nome da Campanha</h3>
             <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
             
+            <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; text-align: left;">
+                <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">
+                    🎨 Template Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span>
+                </p>
+                <div style="display: flex; gap: 10px;">
+                    <select id="modalTemplateSelect" style="flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; outline: none;"></select>
+                    <button class="btn btn-outline" style="padding: 10px 15px; font-size: 12px; border-radius: 8px; color: white;" onclick="atualizarTemplate(this)">Salvar Mudança</button>
+                </div>
+            </div>
+
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
                 <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
                 <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
@@ -168,7 +182,7 @@
             <div id="qrCodeContainer" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;">
                 <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">QR Code do Totem Público</p>
                 <div id="qrCodeLoading" style="height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px;">Gerando QR Code...</div>
-                <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none;" alt="QR Code">
+                <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none; margin: 0 auto;" alt="QR Code">
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
@@ -239,13 +253,13 @@
     </div>
     
     <script>
-        // Ativa o plugin de porcentagens no gráfico web
         Chart.register(ChartDataLabels);
 
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
         let dbCampanhas = [];
+        let dbTemplates = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
         let dadosParaPDF = {};
@@ -253,9 +267,13 @@
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
             buscarSetores(); 
+            buscarTemplates(); // 🔥 CARREGA OS TEMPLATES ASSIM QUE A TELA ABRE 🔥
             await buscarDados();
         };
 
+        // =======================================================
+        // FUNÇÕES DE BUSCA (SETORES E TEMPLATES)
+        // =======================================================
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
             try {
@@ -264,8 +282,26 @@
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
-                console.error("Erro", e);
                 selectSetor.innerHTML = '<option value="" disabled selected>⚠️ Erro ao carregar setores</option>';
+            }
+        }
+
+        async function buscarTemplates() {
+            const selectNovo = document.getElementById('templateCampanha');
+            const selectModal = document.getElementById('modalTemplateSelect');
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=listarTemplates`);
+                dbTemplates = await res.json();
+                
+                let optionsHTML = '';
+                dbTemplates.forEach(t => { optionsHTML += `<option value="${t}">🎨 ${t}</option>`; });
+                
+                selectNovo.innerHTML = optionsHTML;
+                selectModal.innerHTML = optionsHTML;
+            } catch (e) {
+                console.error("Erro ao carregar templates", e);
+                selectNovo.innerHTML = '<option value="Padrão">Padrão</option>';
+                selectModal.innerHTML = '<option value="Padrão">Padrão</option>';
             }
         }
 
@@ -285,10 +321,15 @@
             }
         }
 
+        // =======================================================
+        // ROTINAS DE CRIAÇÃO E ATUALIZAÇÃO
+        // =======================================================
         async function salvarCampanha() {
             const nome = document.getElementById('nomeCampanha').value.trim();
             const setor = document.getElementById('setorCampanha').value;
             const data = document.getElementById('dataCampanha').value;
+            const template = document.getElementById('templateCampanha').value || 'Padrão';
+            
             const btn = document.getElementById('btnSalvar');
 
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos!");
@@ -298,7 +339,8 @@
 
             try {
                 const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&t=${antiCache}`);
+                // Envia o parâmetro template na URL
+                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
                 const resposta = await res.json();
                 if (!resposta.sucesso) alert(resposta.erro);
             } catch (e) { alert("Erro de conexão."); }
@@ -306,9 +348,55 @@
             btn.innerText = "Criar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
             document.getElementById('setorCampanha').selectedIndex = 0;
+            document.getElementById('templateCampanha').selectedIndex = 0;
             buscarDados(); 
         }
 
+        async function atualizarTemplate(btnElement) {
+            const novoTemplate = document.getElementById('modalTemplateSelect').value;
+            if(!campSelecionada || !novoTemplate) return;
+            
+            const txtOriginal = btnElement.innerText;
+            btnElement.innerText = "⏳..."; btnElement.disabled = true;
+
+            try {
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=alterarTemplate&id=${campSelecionada.id}&template=${encodeURIComponent(novoTemplate)}&t=${antiCache}`);
+                const json = await res.json();
+                
+                if(json.sucesso) {
+                    campSelecionada.template = novoTemplate;
+                    document.getElementById('modTemplateBadge').innerText = novoTemplate;
+                    alert("✅ Template atualizado com sucesso para: " + novoTemplate);
+                    renderizarLista(); // Atualiza em background
+                } else alert("⚠️ Falha: " + json.erro);
+            } catch (e) { alert("❌ Erro de rede."); } 
+            
+            btnElement.innerText = txtOriginal; btnElement.disabled = false;
+        }
+
+        async function alterarStatus(id, novoStatus, btnElement) {
+            if(!id) return;
+            const botoes = btnElement.parentElement.querySelectorAll('button');
+            botoes.forEach(b => b.disabled = true);
+            const txtOriginal = btnElement.innerText;
+            btnElement.innerText = "⏳...";
+
+            try {
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
+                const json = await res.json();
+                if(json.sucesso === true) {
+                    let camp = dbCampanhas.find(c => c.id === id);
+                    if(camp) camp.status = novoStatus;
+                    renderizarLista();
+                } else alert("⚠️ Falha " + json.erro);
+            } catch (e) { alert("❌ Erro de rede."); } 
+        }
+
+        // =======================================================
+        // LISTAGEM E RENDERIZAÇÃO
+        // =======================================================
         function normalizarNomeCampanha(nome) {
             if (!nome) return "Sem Nome";
             return nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim();
@@ -389,25 +477,6 @@
             `;
         }
 
-        async function alterarStatus(id, novoStatus, btnElement) {
-            if(!id) return;
-            const botoes = btnElement.parentElement.querySelectorAll('button');
-            botoes.forEach(b => b.disabled = true);
-            const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "⏳...";
-
-            try {
-                const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
-                const json = await res.json();
-                if(json.sucesso === true) {
-                    let camp = dbCampanhas.find(c => c.id === id);
-                    if(camp) camp.status = novoStatus;
-                    renderizarLista();
-                } else alert("⚠️ Falha " + json.erro);
-            } catch (e) { alert("❌ Erro de rede."); } 
-        }
-
         function toggleSublist(el) {
             el.nextElementSibling.classList.toggle('open');
             el.querySelector('span').innerText = el.nextElementSibling.classList.contains('open') ? 'Recolher ▲' : 'Expandir ▼';
@@ -427,12 +496,20 @@
             renderizarLista();
         }
 
-       function abrirModalJornada(id) {
+        // =======================================================
+        // MODAL JORNADA (ONDE SE ESCOLHE O TEMPLATE APÓS CRIAR)
+        // =======================================================
+        function abrirModalJornada(id) {
             campSelecionada = dbCampanhas.find(c => c.id === id);
             if(!campSelecionada) return;
             
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
             document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
+            
+            // Gerencia os Templates no Modal
+            let tAtual = campSelecionada.template || "Padrão";
+            document.getElementById('modTemplateBadge').innerText = tAtual;
+            document.getElementById('modalTemplateSelect').value = tAtual;
             
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
@@ -528,13 +605,8 @@
             const pMelhor = Math.round((countMelhor / totalVotos) * 100) || 0;
 
             renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
-
-            // Salva dados na memória para o PDF
             dadosParaPDF = { totalVotos, volumeDados, media, pFeliz, pAprendi, pSaberMais, pMelhor, countFeliz, countAprendi, countSaberMais, countMelhor };
 
-            // =========================================================
-            // TEXTO RICO PARA A WEB (IGUALZINHO A PENÚLTIMA VERSÃO)
-            // =========================================================
             let relatorioHTML = `
                 <p>A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
                 
@@ -594,24 +666,18 @@
             });
         }
 
-        // =========================================================================
-        // GERADOR INFALÍVEL DE PDF (Cria um DOM puro apenas na hora de imprimir)
-        // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
             btn.innerText = "⏳ Gerando Documento Oficial...";
 
-            // Recomendação estática
             let reco = "";
             if(dadosParaPDF.pFeliz + dadosParaPDF.pAprendi >= 70) reco = "O engajamento é considerado <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.";
             else if(dadosParaPDF.pMelhor > dadosParaPDF.pFeliz) reco = "Constata-se uma <strong>Rejeição Preocupante</strong>. O sentimento de frustração superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.";
             else if(dadosParaPDF.pSaberMais > 30) reco = "Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS (Diálogo Diário de Segurança) subsequente ou disparo de material de apoio complementar para sanar a lacuna deixada.";
             else reco = "A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.";
 
-            // CONSTRÓI O HTML DO PDF DO ZERO (Isto previne 100% dos bugs de CSS e display)
             const htmlDoPDF = `
                 <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
-                    
                     <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                         <h1 style="margin: 0; color: #ff5100; font-size: 26px; font-weight: 900; text-transform: uppercase;">ArcelorMittal</h1>
                         <div style="text-align: right;">
@@ -619,46 +685,37 @@
                             <p style="margin: 2px 0 0 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold;">Relatório Executivo de Resultados</p>
                         </div>
                     </div>
-
                     <h1 style="color: #12141a; font-size: 24px; margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">${campSelecionada.nome_campanha}</h1>
                     <p style="color: #555; font-size: 13px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
                         <strong>Setor Analisado:</strong> ${campSelecionada.setor} &nbsp;|&nbsp; 
                         <strong>Status da Coleta:</strong> ${campSelecionada.status.toUpperCase()} &nbsp;|&nbsp; 
                         <strong>Data de Extração:</strong> ${new Date().toLocaleString('pt-BR')}
                     </p>
-
                     <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Síntese Quantitativa (Métricas Principais)</h3>
                     <ul style="list-style-type: none; padding: 0; margin: 0 0 35px 0; font-size: 14px;">
                         <li style="margin-bottom: 10px;">• <strong>Total de Interações Válidas:</strong> ${dadosParaPDF.totalVotos} colaborações diretas.</li>
                         <li style="margin-bottom: 10px;">• <strong>Score Global de Satisfação:</strong> ${dadosParaPDF.media} / 10 <span style="font-size: 12px; color: #666;">(Média Ponderada)</span>.</li>
                         <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> ${dadosParaPDF.volumeDados} pontos de dados estruturados na base.</li>
                     </ul>
-
                     <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Engajamento</h3>
-                    
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Contexto Operacional:</strong><br>
                     A campanha corporativa processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} pontos de dados (Microdados), fornecendo base analítica consolidada e auditável para as decisões de Gestão.</p>
-                    
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Desdobramento Qualitativo da Experiência:</strong><br>
                     A análise demográfica do sentimento revelou a seguinte distribuição de satisfação entre os colaboradores participantes:</p>
-                    
                     <ul style="list-style: none; padding: 0; margin: 15px 0 25px 0;">
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ffbd59; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Fiquei Feliz:</strong> ${dadosParaPDF.pFeliz}% (${dadosParaPDF.feliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff5100; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Aprendi Algo Novo:</strong> ${dadosParaPDF.pAprendi}% (${dadosParaPDF.aprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#a300ff; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Quero Saber Mais:</strong> ${dadosParaPDF.pSaberMais}% (${dadosParaPDF.saberMais} votos) - Demonstraram curiosidade ou forte interesse em aprofundamento.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff0080; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Poderia Ser Melhor:</strong> ${dadosParaPDF.pMelhor}% (${dadosParaPDF.melhor} votos) - Indicaram que a abordagem não atingiu as expectativas geradas.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ffbd59; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Fiquei Feliz:</strong> ${dadosParaPDF.pFeliz}% (${dadosParaPDF.countFeliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff5100; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Aprendi Algo Novo:</strong> ${dadosParaPDF.pAprendi}% (${dadosParaPDF.countAprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#a300ff; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Quero Saber Mais:</strong> ${dadosParaPDF.pSaberMais}% (${dadosParaPDF.countSaberMais} votos) - Demonstraram curiosidade ou forte interesse em aprofundamento.</li>
+                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff0080; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Poderia Ser Melhor:</strong> ${dadosParaPDF.pMelhor}% (${dadosParaPDF.countMelhor} votos) - Indicaram que a abordagem não atingiu as expectativas geradas.</li>
                     </ul>
-
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final:</strong><br>
                     ${reco}</p>
-
                     <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
                         Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
                     </div>
                 </div>
             `;
 
-            // Criar uma div temporária invisível (totalmente imune ao CSS da tela)
             const divTemp = document.createElement('div');
             divTemp.innerHTML = htmlDoPDF;
             divTemp.style.position = 'absolute';
@@ -666,7 +723,6 @@
             divTemp.style.left = '-9999px';
             document.body.appendChild(divTemp);
 
-            // Nome oficial do arquivo solicitado
             const nomeDoArquivo = `Relatório Pesquisa de Sentimento (${campSelecionada.nome_campanha.trim()}).pdf`;
 
             const opt = {
@@ -677,7 +733,6 @@
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // Renderiza, baixa, apaga a div temporária e volta o botão ao normal
             html2pdf().set(opt).from(divTemp).save().then(() => {
                 document.body.removeChild(divTemp);
                 btn.innerText = "📄 Exportar Relatório Oficial";
