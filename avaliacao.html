@@ -114,8 +114,10 @@
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
         const setor = urlParams.get('setor') || "Geral";
+        const gif = urlParams.get('gif') || ""; // 🔥 CAPTURA O GIF DINÂMICO
+        const proposta = urlParams.get('proposta') || "Geral";
 
-        // DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+        // DICIONÁRIO DE FALLBACK (CASO O GIF NÃO VENHA NA URL)
         const linksEmojis = {
             "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
             "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
@@ -129,19 +131,24 @@
         // Preenche o nome do sentimento
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
 
-        // Injeta a imagem animada correspondente, se ela existir no dicionário
+        // Injeta a imagem animada correspondente (dinâmica ou fallback)
         const imgEmoji = document.getElementById('emoji-preview');
-        if (linksEmojis[sentimento]) {
-            imgEmoji.src = linksEmojis[sentimento];
-            imgEmoji.style.display = 'block'; // Mostra a imagem
+        const urlGifFinal = gif || linksEmojis[sentimento];
+        
+        if (urlGifFinal) {
+            imgEmoji.src = urlGifFinal;
+            imgEmoji.style.display = 'block'; 
         }
 
-        // 3. Configura o botão voltar mantendo as credenciais da campanha
+        // Configura o botão voltar mantendo as credenciais
         document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
 
-        // 4. Grava tudo no Sheets coletando Setor e Origem
+        // Grava tudo no Sheets coletando Setor e Origem
         function enviarDados(nota) {
             const urlWebhook = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
+            
+            // Trava os botões
+            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
             
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
@@ -155,10 +162,11 @@
                     "sentimento": sentimento,
                     "nota": nota,
                     "setor": setor,       // Registra o setor no Totem Fixo
-                    "origem": "Totem Fixo" // Registra a origem do dispositivo
+                    "origem": "Totem Fixo", // Registra a origem do dispositivo
+                    "proposta": proposta    // Envia a proposta também para paridade
                 })
             }).then(() => {
-                // Redireciona para o agradecimento REPASSANDO o ID e o Setor para o loop não quebrar!
+                // Redireciona para o agradecimento REPASSANDO o ID e o Setor
                 window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
             }).catch((erro) => {
                 console.error("Erro ao gravar:", erro);
@@ -166,3 +174,5 @@
             });
         }
     </script>
+</body>
+</html>
