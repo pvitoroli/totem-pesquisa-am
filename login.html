@@ -17,10 +17,33 @@
         .header-identidade { text-align: center; margin-bottom: 30px; }
         .logo-empresa { width: 130px; margin: 0 auto 25px auto; display: block; filter: brightness(1.2); }
         
-        /* Logo Completa do App (Símbolo + Nome) */
-        .brand-app-complete { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
-        .simbolo-app-img { width: 46px; height: 46px; object-fit: contain; }
-        .system-name { font-size: 20px; font-weight: 800; color: white; letter-spacing: 0.5px; text-align: left; line-height: 1.15; }
+        /* 🔥 Bloco da Marca do App - Ajustado para empilhar verticalmente 🔥 */
+        .brand-app-complete { 
+            display: flex; 
+            flex-direction: column; /* Empilha os itens verticalmente */
+            align-items: center;    /* Centraliza os itens horizontalmente na coluna */
+            justify-content: center; 
+            gap: 10px;               /* Espaçamento entre o título e o símbolo colorido */
+            margin-bottom: 20px; 
+        }
+        
+        /* Símbolo do App agora posicionado embaixo */
+        .simbolo-app-img { 
+            width: 46px; 
+            height: 46px; 
+            object-fit: contain; 
+            display: block;
+        }
+        
+        /* Título Principal - Agora centralizado */
+        .system-name { 
+            font-size: 20px; 
+            font-weight: 800; 
+            color: white; 
+            letter-spacing: 0.5px; 
+            text-align: center;      /* Texto centralizado */
+            line-height: 1.15; 
+        }
         
         /* Subtítulo independente bem separado */
         .mini-label { font-size: 11px; text-transform: uppercase; color: #9aa0a6; letter-spacing: 1.5px; font-weight: 700; display: block; margin-top: 15px; }
@@ -66,8 +89,8 @@
             <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo-empresa" onerror="this.style.display='none'">
             
             <div class="brand-app-complete">
-                <img src="simbolo-app.png" alt="Símbolo" class="simbolo-app-img" onerror="this.style.display='none'">
                 <h1 class="system-name">PESQUISA DE<br>SENTIMENTO</h1>
+                <img src="simbolo-app.png" alt="Símbolo" class="simbolo-app-img" onerror="this.style.display='none'">
             </div>
 
             <span class="mini-label">Acessar Painel de Gestão</span>
@@ -76,7 +99,7 @@
         <div class="input-group">
             <label>Setor Administrativo</label>
             <select id="setorSelect">
-                <option value="" disabled selected>A carregar setores...</option>
+                <option value="" disabled selected>Selecione o seu setor...</option>
             </select>
         </div>
 
