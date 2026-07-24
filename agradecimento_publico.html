@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sucesso - Pesquisa de Sentimento</title>
+    <title>Avaliação - Pesquisa de Sentimento</title>
     
-    <link rel="stylesheet" href="style-agradecimento.css">
+    <link rel="stylesheet" href="style-avaliacao.css">
 
     <style>
         body {
@@ -17,157 +17,198 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            overflow: hidden; /* Evita rolagens indesejadas no celular */
         }
         
-        /* 1. Animação de entrada suave da caixa toda (Fade In Up) */
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 2. Animação de pop do ícone */
-        .success-check-icon {
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.2s;
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* 3. Efeito Glow (Neon pulsante AMARELO) no círculo */
-        .glow-pulse-yellow {
-            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
-            animation: pulseGlowYellow 2s infinite alternate;
-            background-color: rgba(243, 156, 18, 0.1);
-        }
-
-        @keyframes pulseGlowYellow {
-            from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); }
-            to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); }
-        }
-
-        /* Estilo do botão fechar */
-        .btn-fechar {
-            background: rgba(255, 255, 255, 0.05);
+        /* Ajuste do visual do botão Voltar */
+        .btn-back {
             color: #a0a5b0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 24px;
-            border-radius: 10px;
+            text-decoration: none;
+            font-size: 14px;
             font-weight: 600;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.2s;
-            margin-top: 15px;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            transition: all 0.2s ease;
         }
-        .btn-fechar:hover {
-            background: rgba(255, 255, 255, 0.1);
+        .btn-back:hover {
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
+        }
+        
+        /* STATUS ONLINE DISCRETO - Corrigido para Verde */
+        .pulse-dot-verde {
+            width: 6px !important;
+            height: 6px !important;
+            background-color: #4bb543 !important; /* Verde exato */
+            border-radius: 50% !important;
+            display: inline-block !important;
+            animation: pulseVerde 1.5s infinite !important;
+        }
+
+        @keyframes pulseVerde {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
+        }
+
+        /* =========================================
+           NOVOS ESTILOS PROFISSIONAIS DOS BOTÕES DE NOTA 
+           ========================================= */
+        .rating-btn {
+            background-color: #2a2f3a;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+        }
+
+        /* Efeito ao Passar o Mouse (Contorno Laranja) */
+        .rating-btn:hover {
+            border: 2px solid #ff3700;
+            background-color: #2a2f3a;
+            box-shadow: 0 0 12px rgba(255, 55, 0, 0.3);
+            transform: scale(1.15);
+        }
+
+        /* Efeito ao Clicar (Preenchimento Laranja) */
+        .rating-btn:active,
+        .rating-btn:focus {
+            background-color: #ff3700;
+            border: 2px solid #ff3700;
+            color: white;
+            transform: scale(0.95);
+            box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.5);
         }
     </style>
 </head>
 <body>
 
-    <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
-      
-      <div class="success-box">
-        <div class="success-icon-wrapper glow-pulse-yellow" style="width: 90px; height: 90px; margin: 0 auto 24px auto; border-radius: 50%; padding: 15px; display: flex; align-items: center; justify-content: center;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="rgb(243, 156, 18)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
-            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-          </svg>
-        </div>
-        
-        <h2 class="success-title" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: white;">SENTIMENTO REGISTRADO!</h2>
-        
-        <h5 style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal; margin-top: 0;">
-          Muito obrigado por participar.<br>Sua voz molda o nosso futuro!
-        </h5>
-        
-        <div style="margin-top: 40px; padding: 20px; border-radius: 12px; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-            <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin: 0 0 15px 0;">
-                Sua resposta foi salva de forma anônima e segura. Você já pode sair desta tela.
-            </p>
-            <button class="btn-fechar" onclick="window.close()">Fechar Página</button>
+    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
+       <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
+            <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
+       </div>
+        <div class="header-right-text" style="display: flex;">
+            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
         </div>
       </div>
-
+      
+      <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        
+        <h3 id="sub-evento-nome" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
+        
+        <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
+          <span style="font-weight: normal; color: white;">Deixe aqui sua <b>NOTA GERAL</b> para a campanha!</span>
+        </h5>
+        
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
+            <span class="pulse-dot-verde"></span>
+            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Virtual</span>
+        </div>
+      </div>
+      
+      <div class="selected-sentiment-preview">
+          <img id="emoji-preview" src="" alt="Emoji" class="emoji-preview-img" style="display: none;">
+          <span id="label-sentimento-escolhido" class="preview-text-label">Carregando voto...</span>
+      </div>
+      
+      <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
+        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
+            <button onclick="enviarDados(0)" class="rating-btn">0</button>
+            <button onclick="enviarDados(1)" class="rating-btn">1</button>
+            <button onclick="enviarDados(2)" class="rating-btn">2</button>
+            <button onclick="enviarDados(3)" class="rating-btn">3</button>
+            <button onclick="enviarDados(4)" class="rating-btn">4</button>
+            <button onclick="enviarDados(5)" class="rating-btn">5</button>
+        </div>
+        <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
+            <button onclick="enviarDados(6)" class="rating-btn">6</button>
+            <button onclick="enviarDados(7)" class="rating-btn">7</button>
+            <button onclick="enviarDados(8)" class="rating-btn">8</button>
+            <button onclick="enviarDados(9)" class="rating-btn">9</button>
+            <button onclick="enviarDados(10)" class="rating-btn">10</button>
+        </div>
+      </div>
+      
+      <div class="action-footer" style="margin-top: auto; display: flex; justify-content: flex-start;">
+          <span id="link-voltar-dinamico"></span>
+      </div>
     </div>
 
     <script>
-        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
-
-        // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida)
+        // 1. CAPTURA DOS PARÂMETROS DA URL
         const urlParams = new URLSearchParams(window.location.search);
-        const nomeEvento = urlParams.get('evento');
-        const idEvento = urlParams.get('id');
-        const sentimento = urlParams.get('sentimento');
+        const evento = urlParams.get('evento') || "";
+        const id = urlParams.get('id') || "";
+        const sentimento = urlParams.get('sentimento') || "Geral";
+        const gif = urlParams.get('gif') || ""; // 🔥 CAPTURA O GIF DINÂMICO
         const setor = urlParams.get('setor') || "Geral";
-        const notaReal = urlParams.get('nota') || "10"; // Pega a nota clicada de 0 a 10
-        
-        // 🔥 NOVO: CAPTURA A PROPOSTA DO MONDAY (Que veio da tela anterior) 🔥
         const proposta = urlParams.get('proposta') || "Geral";
+        
+        const chaveBloqueio = proposta !== "Geral" ? 'votou_' + id + '_' + proposta : 'votou_' + id;
 
-        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
-        const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
-
-        // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
-        if (idEvento && localStorage.getItem(chaveBloqueio) === 'sim') {
-            document.body.innerHTML = `
-                <div style="background-color:#1b1e27; color:white; font-family:sans-serif; text-align:center; padding:50px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <h2 style="color:#ff5f00;">⚠️ VOTO JÁ REGISTRADO</h2>
-                    <p style="color:#a0a5b0; max-width:400px;">Identificamos que uma participação já foi contabilizada para este dispositivo nesta campanha.</p>
-                </div>
-            `;
-            throw new Error("Fluxo interrompido: Voto já computado neste dispositivo.");
+        // 2. CERCA ELÉTRICA (BLOQUEIO ANTI-F5/VOLTAR)
+        function checarBloqueio() {
+            if (id && localStorage.getItem(chaveBloqueio) === 'sim') {
+                document.body.innerHTML = `
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
+                        <h1 style="font-size:50px; margin-bottom:10px;">✅</h1>
+                        <h2 style="color:white; font-family:'Segoe UI', sans-serif;">Sentimento Registrado!</h2>
+                        <p style="color:#a0a5b0; font-family:'Segoe UI', sans-serif; max-width: 400px; line-height: 1.5;">Sua participação nesta campanha já foi contabilizada de forma segura. Muito obrigado!</p>
+                    </div>`;
+                throw new Error("Acesso Bloqueado: Usuário já votou.");
+            }
         }
+        
+        checarBloqueio(); 
+        window.addEventListener('pageshow', checarBloqueio); 
 
-        // 3. TRAVA DO BOTÃO VOLTAR DO NAVEGADOR
-        window.history.replaceState(null, null, window.location.href);
-        window.onpopstate = function () {
-            window.history.go(1);
+        // 3. DICIONÁRIO DE FALLBACK (USADO SÓ SE O LINK DA URL VIER VAZIO)
+        const linksEmojis = {
+            "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
+            "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
+            "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
+            "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
         };
 
-        // 4. REGISTRO DO VOTO REAL NA PLANILHA
-        async function gravarVotoPublico() {
-            if (!nomeEvento || !sentimento) return;
+        // 4. PREENCHIMENTO DA TELA
+        document.getElementById('sub-evento-nome').innerText = evento;
+        document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+        
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}&proposta=${encodeURIComponent(proposta)}" class="btn-back">← Voltar</a>`;
 
-            // 🔥 "Tatuagem" dinâmica com o ID do Monday (bloqueia apenas esta proposta específica) 🔥
-            if (idEvento) {
-                localStorage.setItem(chaveBloqueio, 'sim');
-            }
-
-            // Envia exatamente os eixos auditáveis coletados no Totem Público + Dados Monday
-            const payload = {
-                "evento": nomeEvento,
-                "sentimento": sentimento,
-                "nota": parseInt(notaReal), // Envia a nota real (0 a 10) que o colaborador clicou
-                "setor": setor,
-                "origem": "Totem Público",
-                "proposta": proposta // Insere a proposta no envio para o Google Sheets
-            };
-
-            try {
-                await fetch(URL_BACKEND, {
-                    method: "POST",
-                    body: JSON.stringify(payload)
-                });
-                console.log("Voto público integrado com sucesso.");
-            } catch (e) {
-                console.error("Voto processado.");
-            }
+        const imgEmoji = document.getElementById('emoji-preview');
+        
+        // USA O GIF PASSADO NA URL OU RECORRE AO DICIONÁRIO PADRÃO
+        const urlGifFinal = gif || linksEmojis[sentimento];
+        if (urlGifFinal) {
+            imgEmoji.src = urlGifFinal;
+            imgEmoji.style.display = 'block'; 
         }
 
-        // Dispara ao carregar a página
-        window.onload = gravarVotoPublico;
+        // 5. FUNÇÃO DE ENVIO - SEM FETCH! (Apenas roteamento)
+        function enviarDados(nota) {
+            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
+            
+            event.target.innerText = "...";
+            event.target.style.backgroundColor = "#ff3700";
+            event.target.style.borderColor = "#ff3700";
+            event.target.style.color = "white";
+
+            const linkDestino = `agradecimento.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
+            
+            window.location.replace(linkDestino);
+        }
+        
+        window.history.replaceState(null, null, window.location.href);
+        window.onpopstate = function () { window.history.go(1); };
     </script>
+</body>
+</html>
