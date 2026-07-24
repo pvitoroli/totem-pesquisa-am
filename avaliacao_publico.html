@@ -50,6 +50,41 @@
             70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(255, 183, 3, 0); }
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
         }
+
+        /* =========================================
+           NOVOS ESTILOS PROFISSIONAIS DOS BOTÕES DE NOTA 
+           ========================================= */
+        .rating-btn {
+            background-color: #2a2f3a;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+        }
+
+        /* Efeito ao Passar o Mouse (Contorno Laranja) */
+        .rating-btn:hover {
+            border: 2px solid #ff3700;
+            background-color: #2a2f3a;
+            box-shadow: 0 0 12px rgba(255, 55, 0, 0.3);
+            transform: scale(1.15);
+        }
+
+        /* Efeito ao Clicar (Preenchimento Laranja) */
+        .rating-btn:active,
+        .rating-btn:focus {
+            background-color: #ff3700;
+            border: 2px solid #ff3700;
+            color: white;
+            transform: scale(0.95);
+            box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.5);
+        }
     </style>
 </head>
 <body>
@@ -86,19 +121,19 @@
       
       <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
         <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(0)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">0</button>
-            <button onclick="enviarDados(1)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">1</button>
-            <button onclick="enviarDados(2)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">2</button>
-            <button onclick="enviarDados(3)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">3</button>
-            <button onclick="enviarDados(4)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">4</button>
-            <button onclick="enviarDados(5)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">5</button>
+            <button onclick="enviarDados(0)" class="rating-btn">0</button>
+            <button onclick="enviarDados(1)" class="rating-btn">1</button>
+            <button onclick="enviarDados(2)" class="rating-btn">2</button>
+            <button onclick="enviarDados(3)" class="rating-btn">3</button>
+            <button onclick="enviarDados(4)" class="rating-btn">4</button>
+            <button onclick="enviarDados(5)" class="rating-btn">5</button>
         </div>
         <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(6)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">6</button>
-            <button onclick="enviarDados(7)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">7</button>
-            <button onclick="enviarDados(8)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">8</button>
-            <button onclick="enviarDados(9)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">9</button>
-            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">10</button>
+            <button onclick="enviarDados(6)" class="rating-btn">6</button>
+            <button onclick="enviarDados(7)" class="rating-btn">7</button>
+            <button onclick="enviarDados(8)" class="rating-btn">8</button>
+            <button onclick="enviarDados(9)" class="rating-btn">9</button>
+            <button onclick="enviarDados(10)" class="rating-btn">10</button>
         </div>
       </div>
       
@@ -113,7 +148,7 @@
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
-        const gif = urlParams.get('gif') || ""; // 🔥 NOVO: CAPTURA O GIF VINDO DA URL 🔥
+        const gif = urlParams.get('gif') || ""; // 🔥 CAPTURA O GIF VINDO DA URL
         const setor = urlParams.get('setor') || "Geral";
         const proposta = urlParams.get('proposta') || "Geral";
         
@@ -151,7 +186,7 @@
 
         const imgEmoji = document.getElementById('emoji-preview');
         
-        // 🔥 USA O GIF PASSADO NA URL OU RECORRE AO DICIONÁRIO PADRÃO 🔥
+        // USA O GIF PASSADO NA URL OU RECORRE AO DICIONÁRIO PADRÃO
         const urlGifFinal = gif || linksEmojis[sentimento];
         if (urlGifFinal) {
             imgEmoji.src = urlGifFinal;
@@ -165,6 +200,7 @@
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
             event.target.style.borderColor = "#ff3700";
+            event.target.style.color = "white";
 
             const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
             
@@ -174,3 +210,5 @@
         window.history.replaceState(null, null, window.location.href);
         window.onpopstate = function () { window.history.go(1); };
     </script>
+</body>
+</html>
