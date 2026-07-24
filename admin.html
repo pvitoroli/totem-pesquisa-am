@@ -11,120 +11,173 @@
 
     <style>
         :root {
-            --bg: #12141a; --surface: #1e222d; --surface-hover: #2a2f3a;
-            --primary: #ff5100; --primary-hover: #e04700;
-            --text: #ffffff; --text-muted: #9aa0a6; --border: rgba(255,255,255,0.08);
-            --status-ativo: #2ecc71; --status-espera: #f39c12; --status-encerrado: #95a5a6;
+            --bg: #0f1115; /* Fundo levemente mais escuro, padrão web app */
+            --surface: #1e222d; 
+            --surface-hover: #2a2f3a;
+            --primary: #ff5100; 
+            --primary-hover: #e04700;
+            --text: #ffffff; 
+            --text-muted: #9aa0a6; 
+            --border: rgba(255,255,255,0.08);
+            --status-ativo: #2ecc71; 
+            --status-espera: #f39c12; 
+            --status-encerrado: #95a5a6;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
-        body { background-color: var(--bg); color: var(--text); padding: 20px; line-height: 1.6; }
         
-        .container { max-width: 1000px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
-        .logo { max-width: 130px; max-height: 35px; width: 100%; object-fit: contain; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
         
-        .card { background: var(--surface); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
-        h2 { font-size: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        /* ==========================================================================
+           1. SPLASH SCREEN (TELA DE CARREGAMENTO)
+           ========================================================================== */
+        #splash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg); z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+        .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 400px; width: 100%; position: relative; }
         
-        /* Labeled Inputs no Cadastro */
+        .splash-glow {
+            position: absolute; width: 180px; height: 180px;
+            background: rgba(255, 81, 0, 0.15); border-radius: 50%;
+            filter: blur(50px); z-index: -1; top: 20%;
+            animation: pulseGlow 2s alternate infinite ease-in-out;
+        }
+        @keyframes pulseGlow { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
+
+        .splash-logo-img { max-width: 140px; margin-bottom: 24px; filter: brightness(1.2); }
+        .loading-bar-container { position: relative; width: 220px; margin-top: 35px; overflow: hidden; }
+        .loading-bar-img { width: 100%; display: block; }
+        .loading-mask {
+            position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+            background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
+
+        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
+        @keyframes fadeInSlogan { to { opacity: 1; } }
+
+        /* ==========================================================================
+           2. NAVBAR (BARRA DE NAVEGAÇÃO WEB APP)
+           ========================================================================== */
+        .navbar {
+            background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .nav-brand { display: flex; align-items: center; gap: 15px; }
+        .nav-logo { max-width: 120px; filter: brightness(1.2); }
+        .nav-divider { width: 1px; height: 24px; background-color: var(--border); }
+        .nav-title { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
+        
+        .nav-user { display: flex; align-items: center; gap: 12px; }
+        .user-name { font-size: 13px; font-weight: 600; color: white; display: none; }
+        .user-avatar { width: 36px; height: 36px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: white; box-shadow: 0 4px 10px rgba(255, 81, 0, 0.3); }
+
+        @media(min-width: 600px) { .user-name { display: block; } }
+
+        /* ==========================================================================
+           3. ESTRUTURA PRINCIPAL
+           ========================================================================== */
+        .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
+
+        .welcome-banner { margin-bottom: 30px; }
+        .welcome-banner h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .welcome-banner p { color: var(--text-muted); font-size: 15px; max-width: 600px; }
+
+        .card { background: var(--surface); border-radius: 16px; padding: 30px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        
         .input-labeled-group { display: flex; flex-direction: column; }
-        .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; margin-left: 4px; }
+        .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; margin-left: 4px; }
 
-        input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; width: 100%; }
-        input:focus, select:focus { border-color: var(--primary); }
-        
-        /* Ícone do calendário em branco */
+        input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 14px; outline: none; width: 100%; transition: 0.2s; }
+        input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
-        .btn { padding: 14px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-align: center; }
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn { padding: 14px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-align: center; display: inline-block; }
+        .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 81, 0, 0.2); }
+        .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 81, 0, 0.4); }
         .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
         .btn-outline:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
 
-        .filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; }
-        .filter-pill { background: var(--bg); border: 1px solid var(--border); color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; }
-        .filter-pill.active { background: rgba(255,255,255,0.1); color: white; border-color: var(--text); }
-        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; }
+        .filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
+        .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .filter-pill:hover { color: white; }
+        .filter-pill.active { background: var(--surface); color: white; border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; }
 
-        .list-container { max-height: 450px; overflow-y: auto; padding-right: 5px; transition: max-height 0.4s ease; }
+        .list-container { max-height: 500px; overflow-y: auto; padding-right: 5px; transition: max-height 0.4s ease; }
         .list-container.expanded { max-height: none; overflow: visible; }
         
-        .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; }
-        .item-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
-        .item-info { flex: 1; display: flex; flex-direction: column; gap: 4px; text-align: left; }
-        .item-title { font-weight: 600; font-size: 15px; }
+        /* SCROLLBAR CUSTOMIZADA */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+        .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; transition: 0.2s; }
+        .list-item:hover { border-color: rgba(255,255,255,0.2); }
+        .item-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
+        .item-info { flex: 1; display: flex; flex-direction: column; gap: 6px; text-align: left; }
+        .item-title { font-weight: 700; font-size: 16px; color: white; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
         .badge.Ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
         .badge.EmEspera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
         .badge.Finalizado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
 
-        .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
-        .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface-hover); color: white; transition: 0.2s; text-transform: uppercase; }
+        .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+        .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: white; transition: 0.2s; text-transform: uppercase; }
         .btn-action:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.2); }
         .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-action.ativo { border-color: var(--status-ativo); color: var(--status-ativo); }
-        .btn-action.espera { border-color: var(--status-espera); color: var(--status-espera); }
-        .btn-action.encerrado { border-color: var(--status-encerrado); color: var(--status-encerrado); }
+        .btn-action.ativo { border-color: rgba(46,204,113,0.5); color: var(--status-ativo); }
+        .btn-action.espera { border-color: rgba(243,156,18,0.5); color: var(--status-espera); }
+        .btn-action.encerrado { border-color: rgba(149,165,166,0.5); color: var(--status-encerrado); }
 
-        .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.2); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
+        .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.3); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
         .sub-list.open { display: block; }
-        .sub-item { padding: 12px 16px 12px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; }
+        .sub-item { padding: 16px 20px 16px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; transition: 0.2s; }
+        .sub-item:hover { background: rgba(255,255,255,0.02); }
         .sub-item:last-child { border-bottom: none; }
 
-        /* ==========================================================================
-           NOVO POPUP MODULAR (DESIGN SAAS HORIZONTAL)
-           ========================================================================== */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        
-        /* Modal Largo para layout em Grid */
+        /* MODAL E DASHBOARD (Mantive os estilos corretos do Popup e Dashboard Web) */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 2000; }
         .modal { background: var(--surface); width: 95%; max-width: 900px; border-radius: 20px; padding: 40px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
-
-        /* Botão fechar flutuante no topo direito */
         .btn-close-icon { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .btn-close-icon:hover { background: rgba(255,255,255,0.1); color: white; transform: rotate(90deg); }
 
-        /* Cabeçalho do Modal */
         .modal-header-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); text-align: left; padding-right: 50px; }
         .modal-header-section h3 { margin-bottom: 6px; color: white; font-weight: 800; font-size: 24px; letter-spacing: 0.5px; }
         .modal-header-section p { color: var(--primary); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Grelha de 2 Colunas (Lado a Lado) */
         .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
-
         .modal-column { display: flex; flex-direction: column; gap: 24px; }
-        
         .column-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px;}
-        
         .modal-section-title { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; }
-        
-        /* Botões Padronizados do Modal */
         .btn-full { width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; padding: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Cards/Módulos Internos */
         .modal-card-module { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
-        
         .config-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
         .modal .btn-template-save { padding: 14px 16px; font-size: 12px; border-radius: 10px; color: white; white-space: nowrap; }
 
-        /* Card Unificado do QR Code e Link */
         .qr-access-group { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        
         #qrCodeContainer { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; background: white; border-radius: 12px; padding: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         #qrCodeImg { width: 100%; height: 100%; display: none; }
         #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 600; }
 
-        /* ================= DASHBOARD OVERLAY VISUAL (WEB) ================= */
-        .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 3000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
         .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
         .dash-header h1 { font-size: 24px; color: var(--primary); }
-        
         .loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
         .spinner { width: 50px; height: 50px; border: 4px solid rgba(255, 81, 0, 0.2); border-left-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
@@ -136,7 +189,6 @@
         
         .chart-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
         .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; min-height: 420px; }
-        
         .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; text-align: left; }
@@ -147,30 +199,57 @@
 
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
-            .chart-card { min-height: auto; padding: 20px; }
-            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } /* Empilha no telemóvel */
+            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } 
         }
         @media(max-width: 600px) {
+            .navbar { padding: 15px 20px; }
+            .welcome-banner h1 { font-size: 22px; }
             .form-grid { grid-template-columns: 1fr; }
             .item-header { flex-direction: column; align-items: flex-start; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .btn-action-group { width: 100%; display: flex; gap: 10px; }
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
-            .chart-container-inner { min-height: 220px; }
             .modal { padding: 30px 20px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <header>
-            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo" onerror="this.style.display='none'">
-            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px;">PAINEL DE GESTÃO CORPORATIVO</span>
-        </header>
+    <div id="splash-screen">
+        <div class="splash-content">
+            <div class="splash-glow"></div>
+            <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Gestão de Plataforma</span>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PAINEL<br>ANALÍTICO</h1>
+            <div class="loading-bar-container">
+                <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
+                <div class="loading-mask"></div>
+            </div>
+            <div class="splash-slogan">Sincronizando banco de dados...</div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-brand">
+            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="nav-logo" onerror="this.style.display='none'">
+            <div class="nav-divider"></div>
+            <span class="nav-title">App Hub</span>
+        </div>
+        <div class="nav-user">
+            <span class="user-name">Administrador Geral</span>
+            <div class="user-avatar">AD</div>
+        </div>
+    </nav>
+
+    <main class="main-wrapper">
+        
+        <div class="welcome-banner">
+            <h1>Painel de Controle e Gestão</h1>
+            <p>Configure, acompanhe e extraia relatórios de inteligência das campanhas de pesquisa de sentimento da sua unidade.</p>
+        </div>
 
         <section class="card" id="card-nova-campanha">
-            <h2>Nova Campanha</h2>
+            <div class="card-title">Criar Nova Campanha</div>
             <div class="form-grid">
                 
                 <div class="input-labeled-group">
@@ -188,7 +267,7 @@
                 <div class="input-labeled-group">
                     <label class="input-label" for="templateCampanha">Modelo Visual Ativo (Template)</label>
                     <select id="templateCampanha">
-                        <option value="Padrão" selected>Template: Padrão</option>
+                        <option value="Padrão" selected>Padrão</option>
                     </select>
                 </div>
 
@@ -198,19 +277,19 @@
                 </div>
 
                 <div class="input-labeled-group" style="justify-content: flex-end;">
-                    <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
+                    <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Cadastrar Campanha</button>
                 </div>
             </div>
         </section>
 
         <section class="card">
-            <h2>
-                <span>Campanhas</span>
-                <button class="btn-outline" style="padding: 6px 12px; font-size: 11px; border-radius: 8px;" onclick="toggleExpand()" id="btnExpand">Expandir Lista ▼</button>
-            </h2>
+            <div class="card-title">
+                <span>Campanhas Ativas e Histórico</span>
+                <button class="btn-outline" style="padding: 8px 16px; font-size: 11px; border-radius: 8px;" onclick="toggleExpand()" id="btnExpand">Expandir Lista ▼</button>
+            </div>
             
             <div class="filters-bar">
-                <div class="filter-pill active" onclick="aplicarFiltroStatus('todas', this)">Todas</div>
+                <div class="filter-pill active" onclick="aplicarFiltroStatus('todas', this)">Todas as Campanhas</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Finalizadas</div>
@@ -218,12 +297,12 @@
             </div>
 
             <div class="list-container" id="containerLista">
-                <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    A conectar ao servidor...
+                <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 40px 20px;">
+                    A sincronizar com a base de dados...
                 </div>
             </div>
         </section>
-    </div>
+    </main>
 
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
         <div class="modal">
@@ -240,24 +319,24 @@
                 <div class="modal-column">
                     <h4 class="column-title">Gestão e Inteligência</h4>
                     
-                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()" style="box-shadow: 0 8px 20px rgba(255, 81, 0, 0.2);">
+                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">
                         PAINEL ANALÍTICO
                     </button>
 
                     <div class="modal-card-module">
-                        <h4 class="modal-section-title">Template Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
+                        <h4 class="modal-section-title">Template de Layout Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                         <div class="config-row">
                             <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
-                            <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
+                            <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar Ajuste</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-column">
-                    <h4 class="column-title">Pontos de Coleta</h4>
+                    <h4 class="column-title">Acesso aos Pontos de Coleta</h4>
                     
                     <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: rgba(255,255,255,0.02);">
-                        INICIAR TOTEM FIXO
+                        INICIAR TOTEM FIXO (TELA CHEIA)
                     </button>
 
                     <div class="qr-access-group">
@@ -287,7 +366,7 @@
                 </div>
                 <div class="btn-action-group">
                     <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório Oficial</button>
-                    <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar</button>
+                    <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar Painel</button>
                 </div>
             </div>
 
@@ -354,6 +433,15 @@
             buscarSetores(); 
             buscarTemplates(); 
             await buscarDados();
+            
+            // Oculta a Splash Screen após carregar os dados ou após 3.5 segundos máximo
+            setTimeout(() => {
+                const splash = document.getElementById('splash-screen');
+                if (splash) {
+                    splash.classList.add('hidden');
+                    setTimeout(() => splash.style.display = 'none', 600); 
+                }
+            }, 3000);
         };
 
         // =======================================================
@@ -367,7 +455,7 @@
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor Responsável</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
-                selectSetor.innerHTML = '<option value="" disabled selected>⚠️ Erro ao carregar setores</option>';
+                selectSetor.innerHTML = '<option value="" disabled selected>Erro ao carregar setores</option>';
             }
         }
 
@@ -418,7 +506,7 @@
             const btn = document.getElementById('btnSalvar');
 
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Uma ação com este nome já existe."); }
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("Atenção: Uma ação com este nome já existe."); }
 
             btn.innerText = "A Criar..."; btn.disabled = true;
 
@@ -429,7 +517,7 @@
                 if (!resposta.sucesso) alert(resposta.erro);
             } catch (e) { alert("Erro crítico de conexão."); }
 
-            btn.innerText = "Criar Campanha"; btn.disabled = false;
+            btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
             document.getElementById('setorCampanha').selectedIndex = 0;
             document.getElementById('templateCampanha').selectedIndex = 0;
@@ -465,7 +553,7 @@
             const botoes = btnElement.parentElement.querySelectorAll('button');
             botoes.forEach(b => b.disabled = true);
             const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "A alterar...";
+            btnElement.innerText = "A processar...";
 
             try {
                 const antiCache = new Date().getTime();
@@ -508,7 +596,7 @@
             });
 
             if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:20px;'>Nenhuma ação atende aos critérios de filtro.</p>";
+                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted);'>Nenhuma ação encontrada para este filtro.</p>";
                 return;
             }
 
@@ -526,7 +614,7 @@
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
                                     <div class="item-title">Coleção: ${baseName}</div>
-                                    <div class="item-meta">Contém ${itens.length} ações cadastradas</div>
+                                    <div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div>
                                 </div>
                                 <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
                             </div>
@@ -544,13 +632,13 @@
 
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
-                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: 14px 16px;">
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
                         <div class="item-info" style="width: 100%;">
                             <div style="display:flex; justify-content:space-between; width:100%;">
                                 <div class="item-title" style="color: ${isSub ? 'var(--text-muted)' : 'white'};">${ev.nome_campanha}</div>
                                 <span class="badge ${statusClass}">${ev.status}</span>
                             </div>
-                            <div class="item-meta"><span>${ev.setor}</span>•<span>${dataFormatada}</span></div>
+                            <div class="item-meta"><span>${ev.setor}</span>•<span>Início: ${dataFormatada}</span></div>
                             <div class="action-bar" onclick="event.stopPropagation()">
                                 <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Activar</button>
                                 <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
@@ -589,7 +677,7 @@
             if(!campSelecionada) return;
             
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
-            document.getElementById('modMeta').innerText = `Setor Responsável: ${campSelecionada.setor} | Status Atual: ${campSelecionada.status.toUpperCase()}`;
+            document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor}  •  Status Atual: ${campSelecionada.status.toUpperCase()}`;
             
             let tAtual = campSelecionada.template || "Padrão";
             const badge = document.getElementById('modTemplateBadge');
