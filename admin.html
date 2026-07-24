@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel Gestão Pro - ArcelorMittal</title>
+    <title>Painel Administrativo - Pesquisa de Sentimento AMP</title>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
@@ -236,7 +236,7 @@
         <div class="nav-brand">
             <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="nav-logo" onerror="this.style.display='none'">
             <div class="nav-divider"></div>
-            <span class="nav-title">App Hub</span>
+            <span class="nav-title">Painel Administrativo</span>
         </div>
         <div class="nav-user">
             <span class="user-name">Administrador Geral</span>
@@ -256,26 +256,26 @@
             <div class="form-grid">
                 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="nomeCampanha">Nome da Ação Corporativa</label>
+                    <label class="input-label" for="nomeCampanha">Nome da campanha</label>
                     <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
                 </div>
 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="setorCampanha">Setor / Local Responsável</label>
+                    <label class="input-label" for="setorCampanha">Setor Responsável</label>
                     <select id="setorCampanha">
-                        <option value="" disabled selected>A Carregar setores...</option>
+                        <option value="" disabled selected>Carregando setores...</option>
                     </select>
                 </div>
                 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="templateCampanha">Modelo Visual Ativo (Template)</label>
+                    <label class="input-label" for="templateCampanha">Template</label>
                     <select id="templateCampanha">
                         <option value="Padrão" selected>Padrão</option>
                     </select>
                 </div>
 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="dataCampanha">Data de Início da Coleta</label>
+                    <label class="input-label" for="dataCampanha">Data da Coleta</label>
                     <input type="date" id="dataCampanha">
                 </div>
 
@@ -287,7 +287,7 @@
 
         <section class="card">
             <div class="card-title">
-                <span>Campanhas Ativas e Histórico</span>
+                <span>Lista de Campanhas</span>
                 <button class="btn-outline" style="padding: 8px 16px; font-size: 11px; border-radius: 8px;" onclick="toggleExpand()" id="btnExpand">Expandir Lista ▼</button>
             </div>
             
@@ -301,7 +301,7 @@
 
             <div class="list-container" id="containerLista">
                 <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 40px 20px;">
-                    A sincronizar com a base de dados...
+                    Sincronizando com a base de dados...
                 </div>
             </div>
         </section>
@@ -320,38 +320,38 @@
             <div class="modal-body-grid">
                 
                 <div class="modal-column">
-                    <h4 class="column-title">Gestão e Inteligência</h4>
+                    <h4 class="column-title">Gestão da Coleta</h4>
                     
                     <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">
                         PAINEL ANALÍTICO
                     </button>
 
                     <div class="modal-card-module">
-                        <h4 class="modal-section-title">Template de Layout Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
+                        <h4 class="modal-section-title">Template Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                         <div class="config-row">
                             <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
-                            <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar Ajuste</button>
+                            <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-column">
-                    <h4 class="column-title">Acesso aos Pontos de Coleta</h4>
+                    <h4 class="column-title">Acesso aos Totens de Coleta</h4>
                     
                     <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: rgba(255,255,255,0.02);">
-                        INICIAR TOTEM FIXO (TELA CHEIA)
+                        INICIAR TOTEM VIRTUAL (Neste dispositivo)
                     </button>
 
                     <div class="qr-access-group">
-                        <h4 class="modal-section-title">Totem Público (Partilha via Web)</h4>
+                        <h4 class="modal-section-title">COMPARTILHAR TOTEM PÚBLICO (Para outros dispositivos)</h4>
                         
                         <div id="qrCodeContainer">
-                            <div id="qrCodeLoading">A gerar código...</div>
+                            <div id="qrCodeLoading">Gerando código...</div>
                             <img id="qrCodeImg" alt="QR Code">
                         </div>
                         
                         <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: white; color: var(--bg); border: none;">
-                            COPIAR LINK PÚBLICO
+                            COPIAR LINK TOTEM PÚBLICO
                         </button>
                     </div>
                 </div>
@@ -364,24 +364,24 @@
         <div class="container" style="max-width: 1100px;">
             <div class="dash-header">
                 <div>
-                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Inteligência de Dados ArcelorMittal</span>
+                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Inteligência de Dados Pesquisa de Sentimento</span>
                     <h1 id="dashNomeCampanha">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório Oficial</button>
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar Painel</button>
                 </div>
             </div>
 
             <div id="dashLoading" class="loader-container">
                 <div class="spinner"></div>
-                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">A Processar Microdados...</p>
+                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">Processando Microdados...</p>
             </div>
 
             <div id="conteudoDashInterface" style="display: none;">
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-label">Status da Operação</div>
+                        <div class="kpi-label">Status da Campanha</div>
                         <div class="kpi-value" id="dashStatus" style="font-size: 24px; color: var(--status-ativo);">ATIVO</div>
                         <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;" id="dashTempo">Há X dias</div>
                     </div>
@@ -411,7 +411,7 @@
                     </div>
                     
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Síntese da Qualidade</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Resumo Analítico</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
@@ -509,7 +509,7 @@
             const btn = document.getElementById('btnSalvar');
 
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("Atenção: Uma ação com este nome já existe."); }
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("Atenção: Uma campanha com este nome já existe."); }
 
             btn.innerText = "A Criar..."; btn.disabled = true;
 
@@ -597,7 +597,7 @@
             });
 
             if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted);'>Nenhuma ação encontrada para este filtro.</p>";
+                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted);'>Nenhuma campanha encontrada para este filtro.</p>";
                 return;
             }
 
