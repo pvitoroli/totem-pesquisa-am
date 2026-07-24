@@ -265,12 +265,12 @@
         
         let nomeRealDaCampanha = "Carregando...";
 
-        // Objeto para guardar os textos dos sentimentos carregados dinamicamente
+        // Objeto para guardar tanto o texto quanto o GIF do sentimento selecionado
         let sentimentosAtivos = {
-            1: "Aprendi algo novo",
-            2: "Fiquei feliz",
-            3: "Quero saber mais",
-            4: "Poderia ser melhor"
+            1: { texto: "Aprendi algo novo", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" },
+            2: { texto: "Fiquei feliz", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" },
+            3: { texto: "Quero saber mais", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" },
+            4: { texto: "Poderia ser melhor", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" }
         };
 
         function checarBloqueio() {
@@ -325,28 +325,40 @@
                             
                             // 2. Atualiza Sentimentos e GIFs
                             if (t.s1_texto) {
-                                sentimentosAtivos[1] = t.s1_texto;
+                                sentimentosAtivos[1].texto = t.s1_texto;
                                 document.getElementById('label-s1').innerText = t.s1_texto;
                             }
-                            if (t.s1_gif) document.getElementById('gif-s1').src = t.s1_gif;
+                            if (t.s1_gif) {
+                                sentimentosAtivos[1].gif = t.s1_gif;
+                                document.getElementById('gif-s1').src = t.s1_gif;
+                            }
 
                             if (t.s2_texto) {
-                                sentimentosAtivos[2] = t.s2_texto;
+                                sentimentosAtivos[2].texto = t.s2_texto;
                                 document.getElementById('label-s2').innerText = t.s2_texto;
                             }
-                            if (t.s2_gif) document.getElementById('gif-s2').src = t.s2_gif;
+                            if (t.s2_gif) {
+                                sentimentosAtivos[2].gif = t.s2_gif;
+                                document.getElementById('gif-s2').src = t.s2_gif;
+                            }
 
                             if (t.s3_texto) {
-                                sentimentosAtivos[3] = t.s3_texto;
+                                sentimentosAtivos[3].texto = t.s3_texto;
                                 document.getElementById('label-s3').innerText = t.s3_texto;
                             }
-                            if (t.s3_gif) document.getElementById('gif-s3').src = t.s3_gif;
+                            if (t.s3_gif) {
+                                sentimentosAtivos[3].gif = t.s3_gif;
+                                document.getElementById('gif-s3').src = t.s3_gif;
+                            }
 
                             if (t.s4_texto) {
-                                sentimentosAtivos[4] = t.s4_texto;
+                                sentimentosAtivos[4].texto = t.s4_texto;
                                 document.getElementById('label-s4').innerText = t.s4_texto;
                             }
-                            if (t.s4_gif) document.getElementById('gif-s4').src = t.s4_gif;
+                            if (t.s4_gif) {
+                                sentimentosAtivos[4].gif = t.s4_gif;
+                                document.getElementById('gif-s4').src = t.s4_gif;
+                            }
                         }
 
                     } else { 
@@ -371,7 +383,10 @@
             if (window.animacaoEmAndamento) return; 
             window.animacaoEmAndamento = true; 
             
-            const sentimentoEscolhido = sentimentosAtivos[numeroSentimento] || "Geral";
+            // 🔥 CAPTURA TEXTO E GIF DO SENTIMENTO ESCOLHIDO 🔥
+            const objEscolhido = sentimentosAtivos[numeroSentimento] || { texto: "Geral", gif: "" };
+            const sentimentoEscolhido = objEscolhido.texto;
+            const gifEscolhido = objEscolhido.gif;
             
             const telaPrincipal = document.getElementById('main-interface'); 
             const overlayCinematico = document.getElementById('cinematic-overlay'); 
@@ -411,8 +426,9 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
+            // 🔥 ENVIA O GIF NA URL JUNTO COM O SENTIMENTO 🔥
             setTimeout(() => { 
-                window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&setor=${encodeURIComponent(setorAtual)}&proposta=${encodeURIComponent(propostaAtual)}`); 
+                window.location.replace(`avaliacao_publico.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&gif=${encodeURIComponent(gifEscolhido)}&setor=${encodeURIComponent(setorAtual)}&proposta=${encodeURIComponent(propostaAtual)}`); 
             }, 1500);
         }
     </script>
