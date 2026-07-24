@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - App Hub ArcelorMittal</title>
+    <style>
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f1115; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        
+        .login-box { background: #1e222d; padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 10; position: relative; }
+        .logo { width: 150px; margin-bottom: 30px; display: block; filter: brightness(1.2); }
+        
+        h2 { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
+        p { color: #9aa0a6; font-size: 13px; margin-bottom: 25px; }
+        
+        .input-group { margin-bottom: 20px; text-align: left; }
+        label { display: block; font-size: 11px; text-transform: uppercase; color: #9aa0a6; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
+        select, input { width: 100%; padding: 14px; background: #0f1115; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 10px; font-size: 14px; outline: none; transition: 0.3s; }
+        select:focus, input:focus { border-color: #ff5100; box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
+        
+        .btn-login { width: 100%; padding: 15px; background: #ff5100; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
+        .btn-login:hover { background: #e04700; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 81, 0, 0.3); }
+        
+        /* Efeito de fundo */
+        .glow { position: absolute; width: 300px; height: 300px; background: rgba(255, 81, 0, 0.15); border-radius: 50%; filter: blur(80px); z-index: 0; }
+        
+        #msgErro { color: #ff006e; font-size: 13px; text-align: center; margin-top: 15px; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="glow"></div>
+    <div class="login-box">
+        <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo">
+        <h2>Acesso ao Painel</h2>
+        <p>Selecione seu setor e insira a credencial de acesso.</p>
+        
+        <div class="input-group">
+            <label>Setor Administrativo</label>
+            <select id="setorSelect">
+                <option value="" disabled selected>A carregar setores...</option>
+            </select>
+        </div>
+
+        <div class="input-group">
+            <label>Senha de Acesso</label>
+            <input type="password" id="senhaInput" placeholder="••••••••">
+        </div>
+
+        <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">Entrar Seguramente</button>
+        <div id="msgErro">Senha incorreta!</div>
+    </div>
+
+    <script>
+        const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
+
+        // Carrega os setores dinamicamente do Google Sheets
+        window.onload = async () => {
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
+                const setores = await res.json();
+                const select = document.getElementById('setorSelect');
+                select.innerHTML = '<option value="Master">👑 Gestão Master (Ver Tudo)</option>'; // Opção fixa do admin geral
+                setores.forEach(s => select.innerHTML += `<option value="${s}">${s}</option>`);
+            } catch(e) {
+                document.getElementById('setorSelect').innerHTML = '<option value="Master">👑 Gestão Master</option>';
+            }
+        };
+
+        async function fazerLogin() {
+            const setor = document.getElementById('setorSelect').value;
+            const senha = document.getElementById('senhaInput').value;
+            const btn = document.getElementById('btnEntrar');
+            const erro = document.getElementById('msgErro');
+            
+            if(!setor || !senha) return;
+            
+            btn.innerText = "A autenticar..."; btn.disabled = true; erro.style.display = "none";
+            
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=login&setor=${encodeURIComponent(setor)}&senha=${encodeURIComponent(senha)}`);
+                const dados = await res.json();
+                
+                if(dados.sucesso) {
+                    // 🔥 TATUA O NAVEGADOR COM O SETOR AUTORIZADO E REDIRECIONA 🔥
+                    localStorage.setItem('setorLogado', dados.setor);
+                    window.location.href = "admin.html";
+                } else {
+                    erro.innerText = dados.erro; erro.style.display = "block";
+                }
+            } catch(e) {
+                erro.innerText = "Erro de conexão."; erro.style.display = "block";
+            }
+            btn.innerText = "Entrar Seguramente"; btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
