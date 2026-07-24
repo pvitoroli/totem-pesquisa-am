@@ -262,12 +262,12 @@
         let dbTemplates = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
-        let dadosParaPDF = {};
+        let dadosParaPDF = {}; // Guarda as informações compiladas para o PDF
 
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
             buscarSetores(); 
-            buscarTemplates(); // 🔥 CARREGA OS TEMPLATES ASSIM QUE A TELA ABRE 🔥
+            buscarTemplates(); 
             await buscarDados();
         };
 
@@ -339,7 +339,6 @@
 
             try {
                 const antiCache = new Date().getTime();
-                // Envia o parâmetro template na URL
                 const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
                 const resposta = await res.json();
                 if (!resposta.sucesso) alert(resposta.erro);
@@ -368,7 +367,7 @@
                     campSelecionada.template = novoTemplate;
                     document.getElementById('modTemplateBadge').innerText = novoTemplate;
                     alert("✅ Template atualizado com sucesso para: " + novoTemplate);
-                    renderizarLista(); // Atualiza em background
+                    renderizarLista();
                 } else alert("⚠️ Falha: " + json.erro);
             } catch (e) { alert("❌ Erro de rede."); } 
             
@@ -506,7 +505,6 @@
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
             document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor} | Status: ${campSelecionada.status.toUpperCase()}`;
             
-            // Gerencia os Templates no Modal
             let tAtual = campSelecionada.template || "Padrão";
             document.getElementById('modTemplateBadge').innerText = tAtual;
             document.getElementById('modalTemplateSelect').value = tAtual;
@@ -533,7 +531,7 @@
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link copiado com sucesso!")); }
 
         // =======================================================
-        // MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
+        // 🔥 MOTOR DO DASHBOARD WEB E CÁLCULOS DINÂMICOS 🔥
         // =======================================================
         let meuGrafico = null; 
 
@@ -579,73 +577,99 @@
             document.getElementById('dashTotalVotos').innerText = totalVotos;
             document.getElementById('dashMicrodados').innerText = volumeDados;
 
+            // Se não houver votos, limpa a tela
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
-                renderizarGrafico(0, 0, 0, 0);
+                renderizarGrafico([], [], []);
                 document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
                 return;
             }
 
-            let somaNotas = 0; let countFeliz = 0, countAprendi = 0, countSaberMais = 0, countMelhor = 0;
+            // 1. Agrupamento Inteligente de Votos (Funciona para QUALQUER template)
+            let somaNotas = 0; 
+            let agrupamento = {};
+
             votos.forEach(v => {
                 somaNotas += v.nota;
-                const s = v.sentimento.toLowerCase();
-                if(s.includes("feliz")) countFeliz++;
-                else if(s.includes("aprendi")) countAprendi++;
-                else if(s.includes("saber")) countSaberMais++;
-                else if(s.includes("melhor")) countMelhor++;
+                const s = v.sentimento; // Texto exato que veio da planilha (ex: "Entendi a mensagem")
+                if(!agrupamento[s]) agrupamento[s] = 0;
+                agrupamento[s]++;
             });
 
             const media = (somaNotas / totalVotos).toFixed(1);
             document.getElementById('dashMedia').innerText = media;
 
-            const pFeliz = Math.round((countFeliz / totalVotos) * 100) || 0;
-            const pAprendi = Math.round((countAprendi / totalVotos) * 100) || 0;
-            const pSaberMais = Math.round((countSaberMais / totalVotos) * 100) || 0;
-            const pMelhor = Math.round((countMelhor / totalVotos) * 100) || 0;
+            // 2. Separa e Ordena os dados para o gráfico (Do mais votado para o menos)
+            let sortedLabels = Object.keys(agrupamento).sort((a,b) => agrupamento[b] - agrupamento[a]);
+            let sortedCounts = sortedLabels.map(l => agrupamento[l]);
+            
+            // Paleta de Cores fixa para distribuir nos sentimentos que vierem
+            let paletaDeCores = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f'];
 
-            renderizarGrafico(countFeliz, countAprendi, countSaberMais, countMelhor);
-            dadosParaPDF = { totalVotos, volumeDados, media, pFeliz, pAprendi, pSaberMais, pMelhor, countFeliz, countAprendi, countSaberMais, countMelhor };
+            // Desenha o gráfico dinâmico
+            renderizarGrafico(sortedLabels, sortedCounts, paletaDeCores);
 
+            // 3. Monta a lista textual em HTML e para o PDF
+            let listaHTML = "";
+            let listaPDF = "";
+            
+            sortedLabels.forEach((sentimento, index) => {
+                let count = agrupamento[sentimento];
+                let p = Math.round((count / totalVotos) * 100);
+                let cor = paletaDeCores[index % paletaDeCores.length];
+
+                listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px;"><span class="dot" style="background:${cor}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
+                
+                listaPDF += `<li style="margin-bottom: 10px; font-size: 14px;"><span style="background:${cor}; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
+            });
+
+            // 4. Inteligência de Recomendação baseada puramente na NOTA (Agnóstica de Texto)
+            let recoHTML = "";
+            let recoPDF = "";
+            
+            if(media >= 8) {
+                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A campanha alcançou seus objetivos com excelência e forte adesão do público.</p>`;
+                recoPDF = `O engajamento é considerado <strong>Altamente Satisfatório (Nota ${media})</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.`;
+            } else if (media >= 6) {
+                recoHTML = `<p style="color: #f39c12;">A campanha teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de melhoria, mas a percepção geral encontra-se em um limiar aceitável.</p>`;
+                recoPDF = `A campanha teve um impacto qualitativo <strong>Mediano (Nota ${media})</strong>. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.`;
+            } else {
+                recoHTML = `<p style="color:#ff0080;"><strong>Alerta de Rejeição (Nota ${media}):</strong> O sentimento negativo superou a satisfação. Recomenda-se revisão imediata do conteúdo ou da logística da ação.</p>`;
+                recoPDF = `Constata-se uma <strong>Rejeição Preocupante (Nota ${media})</strong>. O sentimento negativo superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.`;
+            }
+
+            // Salva na memória global para uso do botão PDF
+            dadosParaPDF = { totalVotos, volumeDados, media, listaPDF, recoPDF };
+
+            // Injeta na tela Web
             let relatorioHTML = `
                 <p>A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
                 
                 <h4>Mapeamento Qualitativo</h4>
                 <p style="margin-bottom: 10px;">A análise de sentimento revelou a seguinte distribuição:</p>
-                <ul>
-                    <li><span class="dot" style="background:#ffbd59;"></span> <strong>Fiquei Feliz:</strong> ${pFeliz}% (${countFeliz} votos) - Experiência positiva.</li>
-                    <li><span class="dot" style="background:#ff5100;"></span> <strong>Aprendi Algo Novo:</strong> ${pAprendi}% (${countAprendi} votos) - Caráter educativo.</li>
-                    <li><span class="dot" style="background:#a300ff;"></span> <strong>Quero Saber Mais:</strong> ${pSaberMais}% (${countSaberMais} votos) - Demonstrou curiosidade.</li>
-                    <li><span class="dot" style="background:#ff0080;"></span> <strong>Poderia Ser Melhor:</strong> ${pMelhor}% (${countMelhor} votos) - Expectativa não atingida.</li>
+                <ul style="list-style: none; padding: 0;">
+                    ${listaHTML}
                 </ul>
 
                 <h4>Recomendações e Parecer</h4>
+                ${recoHTML}
             `;
-            
-            if(pFeliz + pAprendi >= 70) {
-                relatorioHTML += `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso.</p>`;
-            } else if (pMelhor > pFeliz) {
-                relatorioHTML += `<p style="color:#ff0080;"><strong>Alerta de Rejeição:</strong> O sentimento de frustração superou a satisfação. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem.</p>`;
-            } else if (pSaberMais > 30) {
-                relatorioHTML += `<p style="color: #3b82f6;">Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS subsequente ou disparo de material de apoio complementar para sanar a lacuna.</p>`;
-            } else {
-                relatorioHTML += `<p>A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.</p>`;
-            }
 
             document.getElementById('dashAnaliseTexto').innerHTML = relatorioHTML;
         }
 
-        function renderizarGrafico(feliz, aprendi, saberMais, melhor) {
+        // Função do Gráfico reescrita para receber Arrays dinâmicos de qualquer tamanho
+        function renderizarGrafico(labelsArray, dataArray, colorsArray) {
             const ctx = document.getElementById('sentimentoChart').getContext('2d');
             if (meuGrafico) { meuGrafico.destroy(); }
 
             meuGrafico = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Fiquei Feliz', 'Aprendi Algo Novo', 'Quero Saber Mais', 'Poderia Ser Melhor'],
+                    labels: labelsArray,
                     datasets: [{
-                        data: [feliz, aprendi, saberMais, melhor],
-                        backgroundColor: ['#ffbd59', '#ff5100', '#a300ff', '#ff0080'],
+                        data: dataArray,
+                        backgroundColor: colorsArray,
                         borderWidth: 0
                     }]
                 },
@@ -669,12 +693,6 @@
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
             btn.innerText = "⏳ Gerando Documento Oficial...";
-
-            let reco = "";
-            if(dadosParaPDF.pFeliz + dadosParaPDF.pAprendi >= 70) reco = "O engajamento é considerado <strong>Altamente Satisfatório</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.";
-            else if(dadosParaPDF.pMelhor > dadosParaPDF.pFeliz) reco = "Constata-se uma <strong>Rejeição Preocupante</strong>. O sentimento de frustração superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.";
-            else if(dadosParaPDF.pSaberMais > 30) reco = "Foi identificado um <strong>alto índice de curiosidade e dúvidas</strong> gerado na ação. É altamente recomendável programar um DDS (Diálogo Diário de Segurança) subsequente ou disparo de material de apoio complementar para sanar a lacuna deixada.";
-            else reco = "A campanha teve um impacto qualitativo mediano. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.";
 
             const htmlDoPDF = `
                 <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -703,13 +721,10 @@
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Desdobramento Qualitativo da Experiência:</strong><br>
                     A análise demográfica do sentimento revelou a seguinte distribuição de satisfação entre os colaboradores participantes:</p>
                     <ul style="list-style: none; padding: 0; margin: 15px 0 25px 0;">
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ffbd59; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Fiquei Feliz:</strong> ${dadosParaPDF.pFeliz}% (${dadosParaPDF.countFeliz} votos) - Classificaram a experiência de forma altamente positiva.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff5100; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Aprendi Algo Novo:</strong> ${dadosParaPDF.pAprendi}% (${dadosParaPDF.countAprendi} votos) - Destacaram o caráter educativo e de aprendizado.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#a300ff; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Quero Saber Mais:</strong> ${dadosParaPDF.pSaberMais}% (${dadosParaPDF.countSaberMais} votos) - Demonstraram curiosidade ou forte interesse em aprofundamento.</li>
-                        <li style="margin-bottom: 10px; font-size: 14px;"><span style="background:#ff0080; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>Poderia Ser Melhor:</strong> ${dadosParaPDF.pMelhor}% (${dadosParaPDF.countMelhor} votos) - Indicaram que a abordagem não atingiu as expectativas geradas.</li>
+                        ${dadosParaPDF.listaPDF}
                     </ul>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final:</strong><br>
-                    ${reco}</p>
+                    ${dadosParaPDF.recoPDF}</p>
                     <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
                         Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
                     </div>
