@@ -113,17 +113,14 @@
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
+        const gif = urlParams.get('gif') || ""; // 🔥 NOVO: CAPTURA O GIF VINDO DA URL 🔥
         const setor = urlParams.get('setor') || "Geral";
-        
-        // 🔥 NOVO: CAPTURA DO ID DO MONDAY (Proposta) 🔥
         const proposta = urlParams.get('proposta') || "Geral";
-
-        // 🔥 CORREÇÃO: Chave de bloqueio inteligente 🔥
+        
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + id + '_' + proposta : 'votou_' + id;
 
         // 2. CERCA ELÉTRICA (BLOQUEIO ANTI-F5/VOLTAR)
         function checarBloqueio() {
-            // Usa a nova chaveBloqueio que leva em consideração a proposta do Monday
             if (id && localStorage.getItem(chaveBloqueio) === 'sim') {
                 document.body.innerHTML = `
                     <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; text-align:center; padding: 20px; background-color: #1b1e27;">
@@ -135,10 +132,10 @@
             }
         }
         
-        checarBloqueio(); // Roda ao ler o script
-        window.addEventListener('pageshow', checarBloqueio); // Roda se o usuário usar o voltar do celular
+        checarBloqueio(); 
+        window.addEventListener('pageshow', checarBloqueio); 
 
-        // 3. DICIONÁRIO DE EMOJIS ANIMADOS DO GOOGLE
+        // 3. DICIONÁRIO DE FALLBACK (USADO SÓ SE O LINK DA URL VIER VAZIO)
         const linksEmojis = {
             "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
             "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
@@ -150,33 +147,30 @@
         document.getElementById('sub-evento-nome').innerText = evento;
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
         
-        // O Botão agora volta para a tela pública correta mantendo o ID e também a proposta para não perder se o cara voltar
         document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}&proposta=${encodeURIComponent(proposta)}" class="btn-back">← Voltar</a>`;
 
         const imgEmoji = document.getElementById('emoji-preview');
-        if (linksEmojis[sentimento]) {
-            imgEmoji.src = linksEmojis[sentimento];
+        
+        // 🔥 USA O GIF PASSADO NA URL OU RECORRE AO DICIONÁRIO PADRÃO 🔥
+        const urlGifFinal = gif || linksEmojis[sentimento];
+        if (urlGifFinal) {
+            imgEmoji.src = urlGifFinal;
             imgEmoji.style.display = 'block'; 
         }
 
         // 5. FUNÇÃO DE ENVIO - SEM FETCH! (Apenas roteamento)
         function enviarDados(nota) {
-            // Trava os botões
             document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
             
-            // Feedback visual
             event.target.innerText = "...";
             event.target.style.backgroundColor = "#ff3700";
             event.target.style.borderColor = "#ff3700";
 
-            // 🔥 NOVO: Monta a URL completa e agora repassa a "proposta" do Monday 🔥
             const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
             
-            // Vai para a tela amarela pública usando replace
             window.location.replace(linkDestino);
         }
         
-        // Bloqueio extra do histórico
         window.history.replaceState(null, null, window.location.href);
         window.onpopstate = function () { window.history.go(1); };
     </script>
