@@ -270,7 +270,6 @@
         let setorAtual = urlParams.get('setor') || "Geral"; 
         let nomeRealDaCampanha = "Carregando..."; 
 
-        // 🔥 NOVO: Objeto para guardar textos e GIFs dinâmicos 🔥
         let sentimentosAtivos = {
             1: { texto: "Aprendi algo novo", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" },
             2: { texto: "Fiquei feliz", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" },
@@ -289,49 +288,71 @@
             }, 4500);
         });
 
-        // BUSCA O NOME REAL NO GOOGLE E O TEMPLATE
+        // 🔥 FUNÇÃO NOVA: Preenche a tela com os dados
+        function aplicarTemplateNaTela(t, nomeCampanha) {
+            document.getElementById('nome-campanha-ativa').innerText = nomeCampanha;
+            
+            if (t.pergunta) document.getElementById('pergunta-principal-txt').innerText = t.pergunta;
+            
+            if (t.s1_texto) { sentimentosAtivos[1].texto = t.s1_texto; document.getElementById('label-s1').innerText = t.s1_texto; }
+            if (t.s1_gif) { sentimentosAtivos[1].gif = t.s1_gif; document.getElementById('gif-s1').src = t.s1_gif; }
+
+            if (t.s2_texto) { sentimentosAtivos[2].texto = t.s2_texto; document.getElementById('label-s2').innerText = t.s2_texto; }
+            if (t.s2_gif) { sentimentosAtivos[2].gif = t.s2_gif; document.getElementById('gif-s2').src = t.s2_gif; }
+
+            if (t.s3_texto) { sentimentosAtivos[3].texto = t.s3_texto; document.getElementById('label-s3').innerText = t.s3_texto; }
+            if (t.s3_gif) { sentimentosAtivos[3].gif = t.s3_gif; document.getElementById('gif-s3').src = t.s3_gif; }
+
+            if (t.s4_texto) { sentimentosAtivos[4].texto = t.s4_texto; document.getElementById('label-s4').innerText = t.s4_texto; }
+            if (t.s4_gif) { sentimentosAtivos[4].gif = t.s4_gif; document.getElementById('gif-s4').src = t.s4_gif; }
+        }
+
         async function buscarEventoAtivo() { 
             if (idEventoAtual) { 
+
+                // 🔥 1. SISTEMA DE CACHE: Tenta carregar os dados instantaneamente da memória do navegador 🔥
+                const cacheMemoria = localStorage.getItem('cache_evento_' + idEventoAtual);
+                if (cacheMemoria) {
+                    const dadosCacheados = JSON.parse(cacheMemoria);
+                    nomeRealDaCampanha = dadosCacheados.nome;
+                    setorAtual = dadosCacheados.setor || setorAtual;
+                    if (dadosCacheados.template) {
+                        aplicarTemplateNaTela(dadosCacheados.template, nomeRealDaCampanha);
+                    }
+                }
+
+                // 🔥 2. BUSCA NO SERVIDOR: Vai no Google silenciosamente atualizar a memória (caso o admin tenha alterado algo) 🔥
                 try { 
                     const antiCache = Date.now(); 
                     const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
                     const dados = await res.json(); 
                     
                     if (dados.sucesso) { 
+                        // Atualiza a memória para o próximo ciclo
+                        localStorage.setItem('cache_evento_' + idEventoAtual, JSON.stringify(dados));
+                        
                         nomeRealDaCampanha = dados.nome; 
                         setorAtual = dados.setor || setorAtual; 
                         
-                        // 🔥 APLICA O TEMPLATE DINÂMICO SE VIER DO GOOGLE SHEETS 🔥
                         if (dados.template) {
                             const t = dados.template;
+                            aplicarTemplateNaTela(t, nomeRealDaCampanha);
                             
-                            if (t.pergunta) document.getElementById('pergunta-principal-txt').innerText = t.pergunta;
-                            
-                            if (t.s1_texto) { sentimentosAtivos[1].texto = t.s1_texto; document.getElementById('label-s1').innerText = t.s1_texto; }
-                            if (t.s1_gif) { sentimentosAtivos[1].gif = t.s1_gif; document.getElementById('gif-s1').src = t.s1_gif; }
-
-                            if (t.s2_texto) { sentimentosAtivos[2].texto = t.s2_texto; document.getElementById('label-s2').innerText = t.s2_texto; }
-                            if (t.s2_gif) { sentimentosAtivos[2].gif = t.s2_gif; document.getElementById('gif-s2').src = t.s2_gif; }
-
-                            if (t.s3_texto) { sentimentosAtivos[3].texto = t.s3_texto; document.getElementById('label-s3').innerText = t.s3_texto; }
-                            if (t.s3_gif) { sentimentosAtivos[3].gif = t.s3_gif; document.getElementById('gif-s3').src = t.s3_gif; }
-
-                            if (t.s4_texto) { sentimentosAtivos[4].texto = t.s4_texto; document.getElementById('label-s4').innerText = t.s4_texto; }
-                            if (t.s4_gif) { sentimentosAtivos[4].gif = t.s4_gif; document.getElementById('gif-s4').src = t.s4_gif; }
+                            // 🔥 SALVA O TEXTO DE AGRADECIMENTO PARA A ÚLTIMA TELA LER 🔥
+                            if (t.agradecimento) {
+                                localStorage.setItem('agradecimento_' + idEventoAtual, t.agradecimento);
+                            }
                         }
                     } else { 
-                        nomeRealDaCampanha = "Campanha Inativa"; 
+                        document.getElementById('nome-campanha-ativa').innerText = "Campanha Inativa";
                     } 
                 } catch (e) { 
-                    console.error("Erro ao buscar dados:", e);
-                    nomeRealDaCampanha = "Ação ArcelorMittal"; 
+                    console.error("Erro ao atualizar em background:", e);
+                    if (!cacheMemoria) document.getElementById('nome-campanha-ativa').innerText = "Erro de Conexão";
                 } 
             } else { 
-                nomeRealDaCampanha = "Pesquisa de Clima"; 
+                document.getElementById('nome-campanha-ativa').innerText = "Pesquisa de Clima";
             } 
-            
-            const elementoTitulo = document.getElementById('nome-campanha-ativa'); 
-            if (elementoTitulo) elementoTitulo.innerText = nomeRealDaCampanha; 
         } 
         
         window.addEventListener('load', buscarEventoAtivo); 
@@ -343,7 +364,6 @@
             if (window.animacaoEmAndamento) return; 
             window.animacaoEmAndamento = true; 
             
-            // 🔥 CAPTURA TEXTO E GIF DO SENTIMENTO ESCOLHIDO 🔥
             const objEscolhido = sentimentosAtivos[numeroSentimento] || { texto: "Geral", gif: "" };
             const sentimentoEscolhido = objEscolhido.texto;
             const gifEscolhido = objEscolhido.gif;
@@ -387,7 +407,6 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-           // 🔥 REDIRECIONA PARA A AVALIAÇÃO LEVANDO TAMBÉM O GIF NA URL 🔥
             setTimeout(() => { 
                 window.location.href = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&gif=${encodeURIComponent(gifEscolhido)}&setor=${encodeURIComponent(setorAtual)}`; 
             }, 1500);
