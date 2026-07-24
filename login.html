@@ -3,37 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - App Hub ArcelorMittal</title>
+    <title>Acesso - App Hub ArcelorMittal</title>
     <style>
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 0; }
-        body { background-color: #0f1115; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; }
+        body { background-color: #0f1115; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: relative; }
         
-        .login-box { background: #1e222d; padding: 40px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); width: 100%; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); z-index: 10; position: relative; }
-        .logo { width: 150px; margin-bottom: 30px; display: block; filter: brightness(1.2); }
+        /* Efeito de brilho de fundo */
+        .glow { position: absolute; width: 400px; height: 400px; background: rgba(255, 81, 0, 0.12); border-radius: 50%; filter: blur(90px); z-index: 0; top: 50%; left: 50%; transform: translate(-50%, -50%); }
         
-        h2 { font-size: 24px; font-weight: 800; margin-bottom: 5px; }
-        p { color: #9aa0a6; font-size: 13px; margin-bottom: 25px; }
+        .login-box { background: #1e222d; padding: 45px 35px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); width: 90%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); z-index: 10; position: relative; }
         
+        .logo-empresa { width: 130px; margin: 0 auto 30px auto; display: block; filter: brightness(1.2); }
+        
+        /* Identidade do Sistema */
+        .system-id-box { display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 35px; text-align: left; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.03); }
+        .simbolo-app { width: 45px; height: auto; object-fit: contain; }
+        .system-titles { display: flex; flex-direction: column; }
+        .mini-label { font-size: 10px; text-transform: uppercase; color: #9aa0a6; letter-spacing: 1.5px; font-weight: 700; margin-bottom: 2px; }
+        .system-name { font-size: 18px; font-weight: 800; color: white; line-height: 1.1; letter-spacing: 0.5px;}
+
+        /* Formulário */
         .input-group { margin-bottom: 20px; text-align: left; }
-        label { display: block; font-size: 11px; text-transform: uppercase; color: #9aa0a6; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; }
-        select, input { width: 100%; padding: 14px; background: #0f1115; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 10px; font-size: 14px; outline: none; transition: 0.3s; }
+        label { display: block; font-size: 11px; text-transform: uppercase; color: #9aa0a6; font-weight: 700; margin-bottom: 8px; letter-spacing: 1px; margin-left: 4px; }
+        
+        select, input { width: 100%; padding: 14px 16px; background: #0f1115; border: 1px solid rgba(255,255,255,0.1); color: white; border-radius: 12px; font-size: 14px; outline: none; transition: 0.3s; appearance: none; }
         select:focus, input:focus { border-color: #ff5100; box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
         
-        .btn-login { width: 100%; padding: 15px; background: #ff5100; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; }
-        .btn-login:hover { background: #e04700; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 81, 0, 0.3); }
+        /* Botão */
+        .btn-login { width: 100%; padding: 16px; background: #ff5100; color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 10px; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 15px rgba(255, 81, 0, 0.2); }
+        .btn-login:hover { background: #e04700; transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 81, 0, 0.4); }
+        .btn-login:disabled { background: #555; cursor: not-allowed; transform: none; box-shadow: none; color: #aaa; }
         
-        /* Efeito de fundo */
-        .glow { position: absolute; width: 300px; height: 300px; background: rgba(255, 81, 0, 0.15); border-radius: 50%; filter: blur(80px); z-index: 0; }
-        
-        #msgErro { color: #ff006e; font-size: 13px; text-align: center; margin-top: 15px; display: none; font-weight: bold; }
+        #msgErro { background: rgba(255, 0, 110, 0.1); border: 1px solid rgba(255, 0, 110, 0.3); color: #ff006e; font-size: 12px; padding: 12px; border-radius: 8px; text-align: center; margin-top: 20px; display: none; font-weight: 600; }
     </style>
 </head>
 <body>
     <div class="glow"></div>
+    
     <div class="login-box">
-        <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo">
-        <h2>Acesso ao Painel</h2>
-        <p>Selecione seu setor e insira a credencial de acesso.</p>
+        <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo-empresa" onerror="this.style.display='none'">
+        
+        <div class="system-id-box">
+            <img src="simbolo-app.png" alt="Símbolo" class="simbolo-app" onerror="this.style.display='none'">
+            <div class="system-titles">
+                <span class="mini-label">Gestão de Plataforma</span>
+                <h1 class="system-name">PESQUISA DE<br>SENTIMENTO</h1>
+            </div>
+        </div>
         
         <div class="input-group">
             <label>Setor Administrativo</label>
@@ -43,27 +59,40 @@
         </div>
 
         <div class="input-group">
-            <label>Senha de Acesso</label>
-            <input type="password" id="senhaInput" placeholder="••••••••">
+            <label>Palavra-Passe</label>
+            <input type="password" id="senhaInput" placeholder="Insira a sua senha">
         </div>
 
-        <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">Entrar Seguramente</button>
-        <div id="msgErro">Senha incorreta!</div>
+        <button class="btn-login" id="btnEntrar" onclick="fazerLogin()">Autenticar Sessão</button>
+        <div id="msgErro">Credencial inválida!</div>
     </div>
 
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
 
-        // Carrega os setores dinamicamente do Google Sheets
         window.onload = async () => {
+            // Se já tem sessão, pula o login e vai direto pro admin
+            if (localStorage.getItem('setorLogado')) {
+                window.location.href = "admin.html";
+                return;
+            }
+
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
                 const setores = await res.json();
                 const select = document.getElementById('setorSelect');
-                select.innerHTML = '<option value="Master">👑 Gestão Master (Ver Tudo)</option>'; // Opção fixa do admin geral
+                
+                select.innerHTML = '<option value="" disabled selected>Selecione o seu setor...</option>'; 
+                
+                // Lista todos os setores normais
                 setores.forEach(s => select.innerHTML += `<option value="${s}">${s}</option>`);
+                
+                // 🔥 Adiciona o "Master" no final de forma 100% discreta, parecendo um setor comum 🔥
+                select.innerHTML += `<option value="Master">Master</option>`;
+                
             } catch(e) {
-                document.getElementById('setorSelect').innerHTML = '<option value="Master">👑 Gestão Master</option>';
+                // Fallback caso a internet falhe na hora de carregar
+                document.getElementById('setorSelect').innerHTML = '<option value="" disabled selected>Erro ao carregar</option><option value="Master">Master</option>';
             }
         };
 
@@ -73,25 +102,35 @@
             const btn = document.getElementById('btnEntrar');
             const erro = document.getElementById('msgErro');
             
-            if(!setor || !senha) return;
+            if(!setor || !senha) {
+                erro.innerText = "Preencha todos os campos."; 
+                erro.style.display = "block"; 
+                return;
+            }
             
-            btn.innerText = "A autenticar..."; btn.disabled = true; erro.style.display = "none";
+            btn.innerText = "A verificar credenciais..."; 
+            btn.disabled = true; 
+            erro.style.display = "none";
             
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=login&setor=${encodeURIComponent(setor)}&senha=${encodeURIComponent(senha)}`);
                 const dados = await res.json();
                 
                 if(dados.sucesso) {
-                    // 🔥 TATUA O NAVEGADOR COM O SETOR AUTORIZADO E REDIRECIONA 🔥
+                    // Salva o setor no navegador e libera o acesso
                     localStorage.setItem('setorLogado', dados.setor);
                     window.location.href = "admin.html";
                 } else {
-                    erro.innerText = dados.erro; erro.style.display = "block";
+                    erro.innerText = dados.erro; 
+                    erro.style.display = "block";
                 }
             } catch(e) {
-                erro.innerText = "Erro de conexão."; erro.style.display = "block";
+                erro.innerText = "Erro de conexão com o servidor. Tente novamente."; 
+                erro.style.display = "block";
             }
-            btn.innerText = "Entrar Seguramente"; btn.disabled = false;
+            
+            btn.innerText = "Autenticar Sessão"; 
+            btn.disabled = false;
         }
     </script>
 </body>
