@@ -125,7 +125,6 @@
         .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; transition: 0.2s; }
         .list-item:hover { border-color: rgba(255,255,255,0.2); }
         
-        /* 🔥 AJUSTE DE ESPAÇAMENTO DA LISTA AQUI 🔥 */
         .item-header { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
         .item-info { flex: 1; display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .item-title { font-weight: 700; font-size: 16px; color: white; display: flex; align-items: center; }
@@ -147,12 +146,11 @@
         .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.3); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
         .sub-list.open { display: block; }
         
-        /* 🔥 AJUSTE DE ESPAÇAMENTO DOS SUB-ITENS AQUI 🔥 */
         .sub-item { padding: 18px 24px 18px 45px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; transition: 0.2s; }
         .sub-item:hover { background: rgba(255,255,255,0.02); }
         .sub-item:last-child { border-bottom: none; }
 
-        /* MODAL E DASHBOARD (Mantive os estilos corretos do Popup e Dashboard Web) */
+        /* MODAL E DASHBOARD */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 2000; }
         .modal { background: var(--surface); width: 95%; max-width: 900px; border-radius: 20px; padding: 40px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
         .btn-close-icon { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: 0.2s; }
@@ -631,7 +629,7 @@
             }
         }
 
-        // Função Criar Card HTML com LÓGICA INTELIGENTE DE BOTÕES
+        // Função Criar Card HTML com LÓGICA INTELIGENTE DE BOTÕES E PADDING DINÂMICO
         function criarCardHTML(ev, isSub = false) {
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
@@ -655,10 +653,12 @@
                 `;
             }
 
-            // O Padding interno (.item-header ou padding style) foi ajustado para dar respiro nas bordas
+            // Define o padding do inner div. Se NÃO for subitem, ganha o mesmo padding que as coleções.
+            let innerPadding = isSub ? '0' : '18px 24px';
+
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
-                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
+                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: ${innerPadding};">
                         <div class="item-info" style="width: 100%;">
                             <div style="display:flex; justify-content:space-between; width:100%;">
                                 <div class="item-title" style="color: ${isSub ? 'var(--text-muted)' : 'white'};">${ev.nome_campanha}</div>
@@ -701,7 +701,7 @@
             if(!campSelecionada) return;
             
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
-            document.getElementById('modMeta').innerText = `Setor: ${campSelecionada.setor}  •  Status Atual: ${campSelecionada.status.toUpperCase()}`;
+            document.getElementById('modMeta').innerText = `Setor Responsável: ${campSelecionada.setor}  •  Status Atual: ${campSelecionada.status.toUpperCase()}`;
             
             let tAtual = campSelecionada.template || "Padrão";
             const badge = document.getElementById('modTemplateBadge');
@@ -916,7 +916,7 @@
                         ${dadosParaPDF.listaPDF}
                     </ul>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final de Gestão:</strong><br>
-                        ${dadosParaPDF.recoPDF}</p>
+                    ${dadosParaPDF.recoPDF}</p>
                     <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
                         Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
                     </div>
