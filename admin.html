@@ -27,9 +27,17 @@
         h2 { font-size: 18px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-        input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; }
+        
+        /* Ajuste Visual: Labeled Inputs no Cadastro */
+        .input-labeled-group { display: flex; flex-direction: column; }
+        .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; margin-left: 4px; }
+
+        input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px; border-radius: 10px; font-size: 14px; outline: none; width: 100%; }
         input:focus, select:focus { border-color: var(--primary); }
         
+        /* Ajuste do ícone do calendário para branco */
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
+
         .btn { padding: 14px 20px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-align: center; }
         .btn-primary { background: var(--primary); color: white; }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); }
@@ -69,7 +77,31 @@
         .sub-item:last-child { border-bottom: none; }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 30px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; }
+        .modal { background: var(--surface); width: 90%; max-width: 500px; border-radius: 20px; padding: 24px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; gap: 0; }
+
+        /* ==========================================================================
+           REMODULAÇÃO TOTAL DO POPUP (MÓDULOS E UX)
+           ========================================================================== */
+        .modal-header-section { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); }
+        .modal-header-section h3 { margin-bottom: 4px; color: white; font-weight: 800; font-size: 20px; }
+        .modal-header-section p { color: var(--text-muted); font-size: 12px; }
+
+        .modal-section { margin-bottom: 20px; }
+        .modal-section-title { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: bold; margin-bottom: 10px; margin-left: 2px; }
+        .btn-full { width: 100%; }
+
+        /* Módulo de Configuração (Template) */
+        .config-row { display: flex; gap: 10px; align-items: center; }
+        .modal .btn-template-save { padding: 12px 16px; font-size: 12px; border-radius: 8px; color: white; white-space: nowrap; }
+
+        /* Módulo de Acesso Público (QR e Link Agrupados no Fim) */
+        .modal-section.qr-access-group { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 16px; text-align: center; margin-top: auto; margin-bottom: 15px; }
+        .qr-access-content { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+        #qrCodeContainer { width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+        #qrCodeImg { width: 100%; height: 100%; border-radius: 8px; border: 5px solid white; display: none; margin: 0 auto; }
+        #qrCodeLoading { font-size: 12px; color: var(--text-muted); text-align: center; }
+
+        .btn-modal-close { margin-top: 10px; width: 100%; border: none; font-size: 13px; color: var(--text-muted); padding: 12px; }
 
         /* ================= DASHBOARD OVERLAY VISUAL (WEB) ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -120,20 +152,37 @@
             <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); letter-spacing: 1px;">PAINEL DE GESTÃO CORPORATIVO</span>
         </header>
 
-        <section class="card">
+        <section class="card" id="card-nova-campanha">
             <h2>Nova Campanha</h2>
             <div class="form-grid">
-                <input type="text" id="nomeCampanha" placeholder="Ex: Siderurgia 3" autocomplete="off">
-                <select id="setorCampanha">
-                    <option value="" disabled selected>⏳ Carregando setores...</option>
-                </select>
                 
-                <select id="templateCampanha" style="color: var(--primary); font-weight: bold;">
-                    <option value="Padrão" selected>🎨 Template: Padrão</option>
-                </select>
+                <div class="input-labeled-group">
+                    <label class="input-label" for="nomeCampanha">Nome da Ação Corporativa</label>
+                    <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
+                </div>
 
-                <input type="date" id="dataCampanha">
-                <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
+                <div class="input-labeled-group">
+                    <label class="input-label" for="setorCampanha">Setor / Local Responsável</label>
+                    <select id="setorCampanha">
+                        <option value="" disabled selected>⏳ Carregando setores...</option>
+                    </select>
+                </div>
+                
+                <div class="input-labeled-group">
+                    <label class="input-label" for="templateCampanha">Modelo Visual Ativo (Template)</label>
+                    <select id="templateCampanha">
+                        <option value="Padrão" selected>Template: Padrão</option>
+                    </select>
+                </div>
+
+                <div class="input-labeled-group">
+                    <label class="input-label" for="dataCampanha">Data de Início da Coleta</label>
+                    <input type="date" id="dataCampanha">
+                </div>
+
+                <div class="input-labeled-group" style="justify-content: flex-end;">
+                    <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Criar Campanha</button>
+                </div>
             </div>
         </section>
 
@@ -160,36 +209,42 @@
     </div>
 
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
-        <div class="modal" style="text-align: center;">
-            <h3 id="modTitle" style="margin-bottom: 5px;">Nome da Campanha</h3>
-            <p id="modMeta" style="color: var(--text-muted); font-size: 13px; margin-bottom: 20px;"></p>
+        <div class="modal">
             
-            <div style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 20px; text-align: left;">
-                <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">
-                    🎨 Template Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span>
-                </p>
-                <div style="display: flex; gap: 10px;">
-                    <select id="modalTemplateSelect" style="flex: 1; padding: 10px; border-radius: 8px; font-size: 13px; outline: none;"></select>
-                    <button class="btn btn-outline" style="padding: 10px 15px; font-size: 12px; border-radius: 8px; color: white;" onclick="atualizarTemplate(this)">Salvar Mudança</button>
+            <div class="modal-header-section">
+                <h3 id="modTitle">Nome da Campanha</h3>
+                <p id="modMeta">Meta da campanha</p>
+            </div>
+
+            <div class="modal-section">
+                <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">📊 ABRIR PAINEL ANALÍTICO DE MICRODADOS</button>
+            </div>
+
+            <div class="modal-section modal-card-module">
+                <h4 class="modal-section-title">Modelo Visual Ativo (Template)</h4>
+                <div class="config-row">
+                    <select id="modalTemplateSelect" style="flex: 1;"></select>
+                    <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar Mudança</button>
                 </div>
             </div>
 
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px;">
-                <button class="btn btn-primary" onclick="iniciarTotem()" style="width: 100%;">💻 Iniciar Totem Fixo</button>
-                <button class="btn btn-outline" onclick="gerarLinkPublico()" style="width: 100%;">🔗 Copiar Link do Totem Público</button>
+            <div class="modal-section">
+                <h4 class="modal-section-title">Totem Fixo (Uso Comum em Tablet)</h4>
+                <button class="btn btn-outline btn-full" onclick="iniciarTotem()">Abrir Interface do Totem Fixo</button>
             </div>
 
-            <div id="qrCodeContainer" style="background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;">
-                <p style="font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 10px; font-weight: bold;">QR Code do Totem Público</p>
-                <div id="qrCodeLoading" style="height: 150px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 12px;">Gerando QR Code...</div>
-                <img id="qrCodeImg" style="width: 150px; height: 150px; border-radius: 8px; border: 5px solid white; display: none; margin: 0 auto;" alt="QR Code">
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 10px;">
-                <button class="btn btn-primary" onclick="abrirDashboardAnalytics()" style="width: 100%; background-color: #2a2f3a; border: 1px solid var(--primary); color: var(--primary);">📊 Abrir Painel Analítico</button>
+            <div class="modal-section qr-access-group">
+                <h4 class="modal-section-title">Totem Público (🔗 QR Code Individual)</h4>
+                <div class="qr-access-content">
+                    <div id="qrCodeContainer">
+                        <div id="qrCodeLoading">Gerando QR Code...</div>
+                        <img id="qrCodeImg" alt="QR Code">
+                    </div>
+                    <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()">Copiar Link Público</button>
+                </div>
             </div>
             
-            <button class="btn btn-outline" style="width: 100%; border: none; margin-top: 5px;" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
+            <button class="btn btn-outline btn-modal-close" onclick="document.getElementById('modalJornada').style.display='none'">Fechar Janela</button>
         </div>
     </div>
 
@@ -262,7 +317,7 @@
         let dbTemplates = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
-        let dadosParaPDF = {}; // Guarda as informações compiladas para o PDF
+        let dadosParaPDF = {}; 
 
         window.onload = async () => {
             document.getElementById('dataCampanha').valueAsDate = new Date();
@@ -279,7 +334,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
                 const setores = await res.json();
-                selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor</option>';
+                selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor Responsável</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
             } catch (e) {
                 selectSetor.innerHTML = '<option value="" disabled selected>⚠️ Erro ao carregar setores</option>';
@@ -293,8 +348,9 @@
                 const res = await fetch(`${URL_BACKEND}?acao=listarTemplates`);
                 dbTemplates = await res.json();
                 
+                // Normalizando Templates: Removendo Emojis da lista
                 let optionsHTML = '';
-                dbTemplates.forEach(t => { optionsHTML += `<option value="${t}">🎨 ${t}</option>`; });
+                dbTemplates.forEach(t => { optionsHTML += `<option value="${t}">${t}</option>`; });
                 
                 selectNovo.innerHTML = optionsHTML;
                 selectModal.innerHTML = optionsHTML;
@@ -332,8 +388,8 @@
             
             const btn = document.getElementById('btnSalvar');
 
-            if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Campanha já existe."); }
+            if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Uma ação com este nome já existe."); }
 
             btn.innerText = "⏳ Criando..."; btn.disabled = true;
 
@@ -342,7 +398,7 @@
                 const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
                 const resposta = await res.json();
                 if (!resposta.sucesso) alert(resposta.erro);
-            } catch (e) { alert("Erro de conexão."); }
+            } catch (e) { alert("Erro crítico de conexão."); }
 
             btn.innerText = "Criar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
@@ -366,9 +422,9 @@
                 if(json.sucesso) {
                     campSelecionada.template = novoTemplate;
                     document.getElementById('modTemplateBadge').innerText = novoTemplate;
-                    alert("✅ Template atualizado com sucesso para: " + novoTemplate);
+                    alert("✅ Modelo visual (Template) atualizado com sucesso!");
                     renderizarLista();
-                } else alert("⚠️ Falha: " + json.erro);
+                } else alert("⚠️ Falha crítica: " + json.erro);
             } catch (e) { alert("❌ Erro de rede."); } 
             
             btnElement.innerText = txtOriginal; btnElement.disabled = false;
@@ -422,7 +478,7 @@
             });
 
             if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:20px;'>Nenhuma campanha atende aos filtros aplicados.</p>";
+                area.innerHTML = "<p style='padding:20px;'>Nenhuma ação atende aos critérios de filtro.</p>";
                 return;
             }
 
@@ -496,7 +552,7 @@
         }
 
         // =======================================================
-        // MODAL JORNADA (ONDE SE ESCOLHE O TEMPLATE APÓS CRIAR)
+        // MODAL JORNADA: Lógica atualizada para a nova UX
         // =======================================================
         function abrirModalJornada(id) {
             campSelecionada = dbCampanhas.find(c => c.id === id);
@@ -509,12 +565,13 @@
             document.getElementById('modTemplateBadge').innerText = tAtual;
             document.getElementById('modalTemplateSelect').value = tAtual;
             
+            // Gerência do QR Code (dentro do módulo agrupado)
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
             img.style.display = 'none';
             loading.style.display = 'flex';
             
-            img.onload = function() { loading.style.display = 'none'; img.style.display = 'inline-block'; };
+            img.onload = function() { loading.style.display = 'none'; img.style.display = 'block'; };
             img.onerror = function() { loading.innerText = "⚠️ Erro ao gerar."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
@@ -527,17 +584,19 @@
 
         function pegarLinkTotem() { return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
+        
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
-        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link copiado com sucesso!")); }
+        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link copiado para a área de transferência!")); }
 
         // =======================================================
-        // 🔥 MOTOR DO DASHBOARD WEB E CÁLCULOS DINÂMICOS 🔥
+        // MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
         // =======================================================
         let meuGrafico = null; 
 
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
             
+            // Fecha popup de jornada e abre dash analytics
             document.getElementById('modalJornada').style.display = 'none';
             document.getElementById('dashboardTela').style.display = 'block';
             document.body.style.overflow = 'hidden'; 
@@ -567,7 +626,7 @@
                     document.getElementById('dashLoading').style.display = 'none';
                     document.getElementById('conteudoDashInterface').style.display = 'block';
                 } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
-            } catch (e) { alert("Falha ao carregar dashboard."); fecharDashboard(); }
+            } catch (e) { alert("Falha crítica ao carregar dashboard."); fecharDashboard(); }
         }
 
         function processarEstatisticas(votos) {
@@ -577,21 +636,19 @@
             document.getElementById('dashTotalVotos').innerText = totalVotos;
             document.getElementById('dashMicrodados').innerText = volumeDados;
 
-            // Se não houver votos, limpa a tela
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
-                renderizarGrafico([], [], []);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
+                renderizarGrafico(0, 0, 0, 0);
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A ação corporativa ainda não recebeu interações válidas.</em>";
                 return;
             }
 
-            // 1. Agrupamento Inteligente de Votos (Funciona para QUALQUER template)
-            let somaNotas = 0; 
-            let agrupamento = {};
+            let somaNotas = 0; let agrupamento = {};
 
+            // Motor dinâmico de análise de sentimentos (funciona p/ QUALQUER template)
             votos.forEach(v => {
                 somaNotas += v.nota;
-                const s = v.sentimento; // Texto exato que veio da planilha (ex: "Entendi a mensagem")
+                const s = v.sentimento; // Texto exato que veio da planilha
                 if(!agrupamento[s]) agrupamento[s] = 0;
                 agrupamento[s]++;
             });
@@ -599,19 +656,18 @@
             const media = (somaNotas / totalVotos).toFixed(1);
             document.getElementById('dashMedia').innerText = media;
 
-            // 2. Separa e Ordena os dados para o gráfico (Do mais votado para o menos)
+            // Ordena os sentimentos do mais votado para o menos
             let sortedLabels = Object.keys(agrupamento).sort((a,b) => agrupamento[b] - agrupamento[a]);
             let sortedCounts = sortedLabels.map(l => agrupamento[l]);
             
-            // Paleta de Cores fixa para distribuir nos sentimentos que vierem
+            // Paleta de cores dinâmica para distribuir nos sentimentos que vierem
             let paletaDeCores = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f'];
 
-            // Desenha o gráfico dinâmico
             renderizarGrafico(sortedLabels, sortedCounts, paletaDeCores);
 
-            // 3. Monta a lista textual em HTML e para o PDF
+            // Monta a lista textual do relatório (dinâmica)
             let listaHTML = "";
-            let listaPDF = "";
+            let listaPDF = ""; // Guardar p/ o PDF depois
             
             sortedLabels.forEach((sentimento, index) => {
                 let count = agrupamento[sentimento];
@@ -623,42 +679,42 @@
                 listaPDF += `<li style="margin-bottom: 10px; font-size: 14px;"><span style="background:${cor}; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
             });
 
-            // 4. Inteligência de Recomendação baseada puramente na NOTA (Agnóstica de Texto)
+            // Inteligência de Recomendação Agnóstica (baseada puramente na NOTA)
             let recoHTML = "";
             let recoPDF = "";
             
             if(media >= 8) {
-                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A campanha alcançou seus objetivos com excelência e forte adesão do público.</p>`;
+                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A ação corporativa alcançou seus objetivos com excelência.</p>`;
                 recoPDF = `O engajamento é considerado <strong>Altamente Satisfatório (Nota ${media})</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.`;
             } else if (media >= 6) {
-                recoHTML = `<p style="color: #f39c12;">A campanha teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de melhoria, mas a percepção geral encontra-se em um limiar aceitável.</p>`;
-                recoPDF = `A campanha teve um impacto qualitativo <strong>Mediano (Nota ${media})</strong>. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.`;
+                recoHTML = `<p style="color: #f39c12;">A ação teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de atenção, mas a percepção geral encontra-se em um limiar aceitável.</p>`;
+                recoPDF = `A ação corporativa teve um impacto qualitativo <strong>Mediano (Nota ${media})</strong>. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.`;
             } else {
-                recoHTML = `<p style="color:#ff0080;"><strong>Alerta de Rejeição (Nota ${media}):</strong> O sentimento negativo superou a satisfação. Recomenda-se revisão imediata do conteúdo ou da logística da ação.</p>`;
+                recoHTML = `<p style="color:#ff0080;"><strong>Alerta de Rejeição (Nota ${media}):</strong> O sentimento negativo superou a satisfação. Recomenda-se revisão imediata do conteúdo abordado.</p>`;
                 recoPDF = `Constata-se uma <strong>Rejeição Preocupante (Nota ${media})</strong>. O sentimento negativo superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.`;
             }
 
-            // Salva na memória global para uso do botão PDF
+            // Salva compilado para uso no botão PDF
             dadosParaPDF = { totalVotos, volumeDados, media, listaPDF, recoPDF };
 
-            // Injeta na tela Web
+            // Injeta na interface Web
             let relatorioHTML = `
-                <p>A campanha corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
+                <p>A ação corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
                 
-                <h4>Mapeamento Qualitativo</h4>
-                <p style="margin-bottom: 10px;">A análise de sentimento revelou a seguinte distribuição:</p>
+                <h4>Mapeamento Qualitativo (Distribuição de Sentimento)</h4>
+                <p style="margin-bottom: 10px;">A análise revelou a seguinte distribuição:</p>
                 <ul style="list-style: none; padding: 0;">
                     ${listaHTML}
                 </ul>
 
-                <h4>Recomendações e Parecer</h4>
+                <h4>Recomendações e Parecer de Gestão</h4>
                 ${recoHTML}
             `;
 
             document.getElementById('dashAnaliseTexto').innerHTML = relatorioHTML;
         }
 
-        // Função do Gráfico reescrita para receber Arrays dinâmicos de qualquer tamanho
+        // Função do Gráfico reescrita para aceitar Arrays dinâmicos de qualquer tamanho
         function renderizarGrafico(labelsArray, dataArray, colorsArray) {
             const ctx = document.getElementById('sentimentoChart').getContext('2d');
             if (meuGrafico) { meuGrafico.destroy(); }
@@ -692,7 +748,7 @@
 
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ Gerando Documento Oficial...";
+            btn.innerText = "⏳ Gerando Documento Oficial ArcelorMittal...";
 
             const htmlDoPDF = `
                 <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -715,15 +771,15 @@
                         <li style="margin-bottom: 10px;">• <strong>Score Global de Satisfação:</strong> ${dadosParaPDF.media} / 10 <span style="font-size: 12px; color: #666;">(Média Ponderada)</span>.</li>
                         <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> ${dadosParaPDF.volumeDados} pontos de dados estruturados na base.</li>
                     </ul>
-                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Engajamento</h3>
+                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Recomendação</h3>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Contexto Operacional:</strong><br>
-                    A campanha corporativa processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} pontos de dados (Microdados), fornecendo base analítica consolidada e auditável para as decisões de Gestão.</p>
+                    A ação corporativa processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} microdados auditáveis.</p>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Desdobramento Qualitativo da Experiência:</strong><br>
                     A análise demográfica do sentimento revelou a seguinte distribuição de satisfação entre os colaboradores participantes:</p>
                     <ul style="list-style: none; padding: 0; margin: 15px 0 25px 0;">
                         ${dadosParaPDF.listaPDF}
                     </ul>
-                    <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final:</strong><br>
+                    <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final de Gestão:</strong><br>
                     ${dadosParaPDF.recoPDF}</p>
                     <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
                         Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
