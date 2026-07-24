@@ -11,7 +11,7 @@
 
     <style>
         :root {
-            --bg: #0f1115; /* Fundo levemente mais escuro, padrão web app */
+            --bg: #0f1115; 
             --surface: #1e222d; 
             --surface-hover: #2a2f3a;
             --primary: #ff5100; 
@@ -48,7 +48,7 @@
         }
         @keyframes pulseGlow { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
 
-        .splash-logo-img { max-width: 140px; margin-bottom: 24px; filter: brightness(1.2); }
+        .splash-logo-img { max-width: 130px; margin-bottom: 24px; filter: brightness(1.2); }
         .loading-bar-container { position: relative; width: 220px; margin-top: 35px; overflow: hidden; }
         .loading-bar-img { width: 100%; display: block; }
         .loading-mask {
@@ -124,9 +124,11 @@
 
         .list-item { background: var(--bg); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 12px; display: flex; flex-direction: column; transition: 0.2s; }
         .list-item:hover { border-color: rgba(255,255,255,0.2); }
-        .item-header { padding: 16px 20px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
+        
+        /* 🔥 AJUSTE DE ESPAÇAMENTO DA LISTA AQUI 🔥 */
+        .item-header { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
         .item-info { flex: 1; display: flex; flex-direction: column; gap: 6px; text-align: left; }
-        .item-title { font-weight: 700; font-size: 16px; color: white; }
+        .item-title { font-weight: 700; font-size: 16px; color: white; display: flex; align-items: center; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
@@ -144,7 +146,9 @@
 
         .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.3); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
         .sub-list.open { display: block; }
-        .sub-item { padding: 16px 20px 16px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; transition: 0.2s; }
+        
+        /* 🔥 AJUSTE DE ESPAÇAMENTO DOS SUB-ITENS AQUI 🔥 */
+        .sub-item { padding: 18px 24px 18px 45px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; transition: 0.2s; }
         .sub-item:hover { background: rgba(255,255,255,0.02); }
         .sub-item:last-child { border-bottom: none; }
 
@@ -209,6 +213,7 @@
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .btn-action-group { width: 100%; display: flex; gap: 10px; }
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
+            .chart-container-inner { min-height: 220px; }
             .modal { padding: 30px 20px; }
         }
     </style>
@@ -219,13 +224,13 @@
         <div class="splash-content">
             <div class="splash-glow"></div>
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
-            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Gestão de Plataforma</span>
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PAINEL<br>ANALÍTICO</h1>
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
                 <div class="loading-mask"></div>
             </div>
-            <div class="splash-slogan">Sincronizando banco de dados...</div>
+            <div class="splash-slogan">A força da voz que molda o aço</div>
         </div>
     </div>
 
@@ -552,9 +557,7 @@
             if(!id) return;
             const botoes = btnElement.parentElement.querySelectorAll('button');
             botoes.forEach(b => b.disabled = true);
-            const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "A processar...";
-
+            
             try {
                 const antiCache = new Date().getTime();
                 const res = await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
@@ -602,6 +605,9 @@
 
             const grupos = agruparCampanhas(filtrados);
             area.innerHTML = '';
+            
+            // Ícone vetorial SVG (Pasta) para substituir o emoji
+            const folderIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: text-bottom; color: var(--primary);"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
 
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
@@ -613,7 +619,7 @@
                         <div class="list-item">
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
-                                    <div class="item-title">Coleção: ${baseName}</div>
+                                    <div class="item-title" style="display:flex; align-items:center;">${folderIcon} Coleção: ${baseName}</div>
                                     <div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div>
                                 </div>
                                 <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
@@ -625,11 +631,31 @@
             }
         }
 
+        // Função Criar Card HTML com LÓGICA INTELIGENTE DE BOTÕES
         function criarCardHTML(ev, isSub = false) {
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
             let statusClass = ev.status.replace(/\s+/g, '');
 
+            // Renderiza botões com base no Status atual (Inteligência de Interface)
+            let botoesHTML = '';
+            if (ev.status === 'Ativo') {
+                botoesHTML = `
+                    <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
+                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
+                `;
+            } else if (ev.status === 'Em Espera') {
+                botoesHTML = `
+                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Ativar</button>
+                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
+                `;
+            } else if (ev.status === 'Finalizado') {
+                botoesHTML = `
+                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Reativar Ação</button>
+                `;
+            }
+
+            // O Padding interno (.item-header ou padding style) foi ajustado para dar respiro nas bordas
             return `
                 <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')">
                     <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px;">
@@ -640,9 +666,7 @@
                             </div>
                             <div class="item-meta"><span>${ev.setor}</span>•<span>Início: ${dataFormatada}</span></div>
                             <div class="action-bar" onclick="event.stopPropagation()">
-                                <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Activar</button>
-                                <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
-                                <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
+                                ${botoesHTML}
                             </div>
                         </div>
                     </div>
@@ -892,7 +916,7 @@
                         ${dadosParaPDF.listaPDF}
                     </ul>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final de Gestão:</strong><br>
-                    ${dadosParaPDF.recoPDF}</p>
+                        ${dadosParaPDF.recoPDF}</p>
                     <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
                         Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
                     </div>
