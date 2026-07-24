@@ -153,26 +153,26 @@
             <div class="form-grid">
                 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="nomeCampanha">Nome da Ação Corporativa</label>
+                    <label class="input-label" for="nomeCampanha">Nome da Campanha</label>
                     <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
                 </div>
 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="setorCampanha">Setor / Local Responsável</label>
+                    <label class="input-label" for="setorCampanha">Setor Responsável</label>
                     <select id="setorCampanha">
-                        <option value="" disabled selected>⏳ Carregando setores...</option>
+                        <option value="" disabled selected>⏳ Carregando...</option>
                     </select>
                 </div>
                 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="templateCampanha">Modelo Visual Ativo (Template)</label>
+                    <label class="input-label" for="templateCampanha">Template</label>
                     <select id="templateCampanha">
                         <option value="Padrão" selected>Template: Padrão</option>
                     </select>
                 </div>
 
                 <div class="input-labeled-group">
-                    <label class="input-label" for="dataCampanha">Data de Início da Coleta</label>
+                    <label class="input-label" for="dataCampanha">Data de Coleta</label>
                     <input type="date" id="dataCampanha">
                 </div>
 
@@ -213,24 +213,24 @@
             </div>
 
             <div class="modal-section">
-                <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">📊 ABRIR PAINEL ANALÍTICO DE MICRODADOS</button>
+                <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">📊 PAINEL ANALÍTICO</button>
             </div>
 
             <div class="modal-section modal-card-module">
-                <h4 class="modal-section-title">Modelo Visual Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
+                <h4 class="modal-section-title">Template Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                 <div class="config-row">
                     <select id="modalTemplateSelect" style="flex: 1;"></select>
-                    <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar Mudança</button>
+                    <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
                 </div>
             </div>
 
             <div class="modal-section">
-                <h4 class="modal-section-title">Totem Fixo (Uso Comum em Tablet)</h4>
-                <button class="btn btn-outline btn-full" onclick="iniciarTotem()">Abrir Interface do Totem Fixo</button>
+                <h4 class="modal-section-title">Totem Virtual (Use neste dispositivo)</h4>
+                <button class="btn btn-outline btn-full" onclick="iniciarTotem()">Entrar no modo Totem Virtual</button>
             </div>
 
             <div class="modal-section qr-access-group">
-                <h4 class="modal-section-title">Totem Público (🔗 QR Code Individual)</h4>
+                <h4 class="modal-section-title">Totem Público (🔗 QR Code para compartilhamento)</h4>
                 <div class="qr-access-content">
                     <div id="qrCodeContainer">
                         <div id="qrCodeLoading">Gerando QR Code...</div>
@@ -248,18 +248,18 @@
         <div class="container" style="max-width: 1100px;">
             <div class="dash-header">
                 <div>
-                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Inteligência de Dados ArcelorMittal</span>
+                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Pesquisa de Sentimento - ArcelorMittal</span>
                     <h1 id="dashNomeCampanha">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">📄 Exportar Relatório Oficial</button>
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">📄 Exportar Relatório</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar</button>
                 </div>
             </div>
 
             <div id="dashLoading" class="loader-container">
                 <div class="spinner"></div>
-                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">A Processar Microdados...</p>
+                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">Processando Microdados...</p>
             </div>
 
             <div id="conteudoDashInterface" style="display: none;">
@@ -282,20 +282,20 @@
                     <div class="kpi-card">
                         <div class="kpi-label">Volume de Dados</div>
                         <div class="kpi-value" id="dashMicrodados">0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Processados</div>
                     </div>
                 </div>
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição Visual</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Gráfico de Sentimentos</h3>
                         <div class="chart-container-inner">
                             <canvas id="sentimentoChart"></canvas>
                         </div>
                     </div>
                     
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Síntese da Qualidade</h3>
+                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Resumo Analítico</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
@@ -368,7 +368,7 @@
                 });
                 renderizarLista();
             } catch (e) {
-                document.getElementById('renderArea').innerHTML = "Falha ao ler dados da planilha.";
+                document.getElementById('renderArea').innerHTML = "Falha ao ler o Banco de Dados.";
             }
         }
 
@@ -384,7 +384,7 @@
             const btn = document.getElementById('btnSalvar');
 
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Uma ação com este nome já existe."); }
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Uma campanha com este nome já existe."); }
 
             btn.innerText = "⏳ Criando..."; btn.disabled = true;
 
@@ -474,7 +474,7 @@
             });
 
             if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:20px;'>Nenhuma ação atende aos critérios de filtro.</p>";
+                area.innerHTML = "<p style='padding:20px;'>Nenhuma campanha atende aos critérios de filtro.</p>";
                 return;
             }
 
@@ -636,7 +636,7 @@
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
                 renderizarGrafico([], [], []);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A ação corporativa ainda não recebeu interações válidas.</em>";
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A campanha ainda não recebeu interações válidas.</em>";
                 return;
             }
 
@@ -676,7 +676,7 @@
             let recoPDF = "";
             
             if(media >= 8) {
-                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A ação corporativa alcançou seus objetivos com excelência.</p>`;
+                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A campanha corporativa alcançou seus objetivos com excelência.</p>`;
                 recoPDF = `O engajamento é considerado <strong>Altamente Satisfatório (Nota ${media})</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.`;
             } else if (media >= 6) {
                 recoHTML = `<p style="color: #f39c12;">A ação teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de atenção, mas a percepção geral encontra-se em um limiar aceitável.</p>`;
@@ -689,7 +689,7 @@
             dadosParaPDF = { totalVotos, volumeDados, media, listaPDF, recoPDF };
 
             let relatorioHTML = `
-                <p>A ação corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
+                <p>A campanha <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
                 
                 <h4>Mapeamento Qualitativo (Distribuição de Sentimento)</h4>
                 <p style="margin-bottom: 10px;">A análise revelou a seguinte distribuição:</p>
