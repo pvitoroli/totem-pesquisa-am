@@ -14,14 +14,16 @@
         .login-box { background: #1e222d; padding: 45px 35px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.08); width: 90%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); z-index: 10; position: relative; }
         
         /* Identidade Centralizada */
-        .header-identidade { text-align: center; margin-bottom: 35px; }
-        .logo-empresa { width: 140px; margin: 0 auto 15px auto; display: block; filter: brightness(1.2); }
+        .header-identidade { text-align: center; margin-bottom: 30px; }
+        .logo-empresa { width: 130px; margin: 0 auto 25px auto; display: block; filter: brightness(1.2); }
         
-        /* Título Principal */
-        .system-name { font-size: 22px; font-weight: 800; color: white; letter-spacing: 0.5px; margin-bottom: 25px; /* 🔥 Aumentado para separar bem 🔥 */ }
+        /* Logo Completa do App (Símbolo + Nome) */
+        .brand-app-complete { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 20px; }
+        .simbolo-app-img { width: 46px; height: 46px; object-fit: contain; }
+        .system-name { font-size: 20px; font-weight: 800; color: white; letter-spacing: 0.5px; text-align: left; line-height: 1.15; }
         
-        /* Subtítulo independente */
-        .mini-label { font-size: 11px; text-transform: uppercase; color: #9aa0a6; letter-spacing: 1.5px; font-weight: 700; display: block; /* Garante que ocupe a linha toda */ }
+        /* Subtítulo independente bem separado */
+        .mini-label { font-size: 11px; text-transform: uppercase; color: #9aa0a6; letter-spacing: 1.5px; font-weight: 700; display: block; margin-top: 15px; }
 
         /* Formulário */
         .input-group { margin-bottom: 20px; text-align: left; }
@@ -43,7 +45,7 @@
 
         /* Container da Senha com Olhinho */
         .password-container { position: relative; display: flex; align-items: center; }
-        .password-container input { padding-right: 45px; } /* Espaço para o ícone não encavalar no texto */
+        .password-container input { padding-right: 45px; }
         .toggle-password { position: absolute; right: 16px; cursor: pointer; color: #9aa0a6; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
         .toggle-password:hover { color: white; }
         
@@ -62,7 +64,12 @@
         
         <div class="header-identidade">
             <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="logo-empresa" onerror="this.style.display='none'">
-            <h1 class="system-name">PESQUISA DE SENTIMENTO</h1>
+            
+            <div class="brand-app-complete">
+                <img src="simbolo-app.png" alt="Símbolo" class="simbolo-app-img" onerror="this.style.display='none'">
+                <h1 class="system-name">PESQUISA DE<br>SENTIMENTO</h1>
+            </div>
+
             <span class="mini-label">Acessar Painel de Gestão</span>
         </div>
         
