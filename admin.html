@@ -77,43 +77,46 @@
         .sub-item:last-child { border-bottom: none; }
 
         /* ==========================================================================
-           REMODULAÇÃO TOTAL DO POPUP (LAYOUT HORIZONTAL MODULAR)
+           NOVO POPUP MODULAR (DESIGN SAAS HORIZONTAL)
            ========================================================================== */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; }
         
-        /* Modal mais largo para acomodar grid */
-        .modal { background: var(--surface); width: 95%; max-width: 850px; border-radius: 20px; padding: 32px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+        /* Modal Largo para layout em Grid */
+        .modal { background: var(--surface); width: 95%; max-width: 900px; border-radius: 20px; padding: 40px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
 
         /* Botão fechar flutuante no topo direito */
-        .btn-close-icon { position: absolute; top: 24px; right: 24px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: 0.2s; }
+        .btn-close-icon { position: absolute; top: 20px; right: 20px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 14px; transition: 0.2s; }
         .btn-close-icon:hover { background: rgba(255,255,255,0.1); color: white; transform: rotate(90deg); }
 
-        /* Header do Modal */
-        .modal-header-section { margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); text-align: left; padding-right: 40px; }
-        .modal-header-section h3 { margin-bottom: 6px; color: white; font-weight: 800; font-size: 22px; letter-spacing: 0.5px; }
+        /* Cabeçalho do Modal */
+        .modal-header-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); text-align: left; padding-right: 50px; }
+        .modal-header-section h3 { margin-bottom: 6px; color: white; font-weight: 800; font-size: 24px; letter-spacing: 0.5px; }
         .modal-header-section p { color: var(--primary); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* O Grid Principal de 2 Colunas */
-        .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        /* Grelha de 2 Colunas (Lado a Lado) */
+        .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
 
-        .modal-column { display: flex; flex-direction: column; gap: 20px; }
+        .modal-column { display: flex; flex-direction: column; gap: 24px; }
         
-        .column-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 700; margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 8px;}
+        .column-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px;}
         
         .modal-section-title { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; }
-        .btn-full { width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; padding: 16px; }
+        
+        /* Botões Padronizados do Modal */
+        .btn-full { width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; padding: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* Cards Internos */
-        .modal-card-module { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+        /* Cards/Módulos Internos */
+        .modal-card-module { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
         
         .config-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
         .modal .btn-template-save { padding: 14px 16px; font-size: 12px; border-radius: 10px; color: white; white-space: nowrap; }
 
-        .qr-access-group { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; display: flex; flex-direction: column; height: 100%; justify-content: space-between; }
+        /* Card Unificado do QR Code e Link */
+        .qr-access-group { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
         
-        #qrCodeContainer { width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; }
-        #qrCodeImg { width: 100%; height: 100%; border-radius: 12px; border: 4px solid white; display: none; margin: 0 auto; box-shadow: 0 8px 16px rgba(0,0,0,0.3); }
-        #qrCodeLoading { font-size: 12px; color: var(--text-muted); text-align: center; }
+        #qrCodeContainer { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; background: white; border-radius: 12px; padding: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
+        #qrCodeImg { width: 100%; height: 100%; display: none; }
+        #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 600; }
 
         /* ================= DASHBOARD OVERLAY VISUAL (WEB) ================= */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 2000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
@@ -145,7 +148,7 @@
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
             .chart-card { min-height: auto; padding: 20px; }
-            .modal-body-grid { grid-template-columns: 1fr; gap: 24px; } /* Empilha no celular */
+            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } /* Empilha no telemóvel */
         }
         @media(max-width: 600px) {
             .form-grid { grid-template-columns: 1fr; }
@@ -154,7 +157,7 @@
             .btn-action-group { width: 100%; display: flex; gap: 10px; }
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
             .chart-container-inner { min-height: 220px; }
-            .modal { padding: 24px 20px; }
+            .modal { padding: 30px 20px; }
         }
     </style>
 </head>
@@ -178,7 +181,7 @@
                 <div class="input-labeled-group">
                     <label class="input-label" for="setorCampanha">Setor / Local Responsável</label>
                     <select id="setorCampanha">
-                        <option value="" disabled selected>⏳ Carregando setores...</option>
+                        <option value="" disabled selected>A Carregar setores...</option>
                     </select>
                 </div>
                 
@@ -216,7 +219,7 @@
 
             <div class="list-container" id="containerLista">
                 <div id="renderArea" style="text-align: center; color: var(--text-muted); padding: 20px;">
-                    Conectando ao servidor...
+                    A conectar ao servidor...
                 </div>
             </div>
         </section>
@@ -238,10 +241,10 @@
                     <h4 class="column-title">Gestão e Inteligência</h4>
                     
                     <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()" style="box-shadow: 0 8px 20px rgba(255, 81, 0, 0.2);">
-                        📊 PAINEL ANALÍTICO
+                        PAINEL ANALÍTICO
                     </button>
 
-                    <div class="modal-card-module" style="margin-top: 10px;">
+                    <div class="modal-card-module">
                         <h4 class="modal-section-title">Template Ativo: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                         <div class="config-row">
                             <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
@@ -254,19 +257,19 @@
                     <h4 class="column-title">Pontos de Coleta</h4>
                     
                     <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: rgba(255,255,255,0.02);">
-                        💻 Iniciar Totem Virtual
+                        INICIAR TOTEM FIXO
                     </button>
 
                     <div class="qr-access-group">
-                        <h4 class="modal-section-title">Totem Público Compartilhável</h4>
+                        <h4 class="modal-section-title">Totem Público (Partilha via Web)</h4>
                         
                         <div id="qrCodeContainer">
-                            <div id="qrCodeLoading">Gerando código...</div>
+                            <div id="qrCodeLoading">A gerar código...</div>
                             <img id="qrCodeImg" alt="QR Code">
                         </div>
                         
-                        <button class="btn btn-primary btn-full" onclick="gerarLinkPublico()" style="background: white; color: var(--bg);">
-                            🔗 Copiar Link Público
+                        <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: white; color: var(--bg); border: none;">
+                            COPIAR LINK PÚBLICO
                         </button>
                     </div>
                 </div>
@@ -283,7 +286,7 @@
                     <h1 id="dashNomeCampanha">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">📄 Exportar Relatório Oficial</button>
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório Oficial</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar</button>
                 </div>
             </div>
@@ -399,7 +402,7 @@
                 });
                 renderizarLista();
             } catch (e) {
-                document.getElementById('renderArea').innerHTML = "Falha ao ler dados da planilha.";
+                document.getElementById('renderArea').innerHTML = "Falha ao ler dados da base.";
             }
         }
 
@@ -417,7 +420,7 @@
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
             if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("⚠️ Uma ação com este nome já existe."); }
 
-            btn.innerText = "⏳ Criando..."; btn.disabled = true;
+            btn.innerText = "A Criar..."; btn.disabled = true;
 
             try {
                 const antiCache = new Date().getTime();
@@ -438,7 +441,7 @@
             if(!campSelecionada || !novoTemplate) return;
             
             const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "⏳..."; btnElement.disabled = true;
+            btnElement.innerText = "A Salvar..."; btnElement.disabled = true;
 
             try {
                 const antiCache = new Date().getTime();
@@ -449,10 +452,10 @@
                     campSelecionada.template = novoTemplate;
                     const badge = document.getElementById('modTemplateBadge');
                     if (badge) badge.innerText = novoTemplate;
-                    alert("✅ Modelo visual (Template) atualizado com sucesso!");
+                    alert("Modelo visual (Template) atualizado com sucesso!");
                     renderizarLista();
-                } else alert("⚠️ Falha crítica: " + json.erro);
-            } catch (e) { alert("❌ Erro de rede."); } 
+                } else alert("Falha crítica: " + json.erro);
+            } catch (e) { alert("Erro de rede."); } 
             
             btnElement.innerText = txtOriginal; btnElement.disabled = false;
         }
@@ -462,7 +465,7 @@
             const botoes = btnElement.parentElement.querySelectorAll('button');
             botoes.forEach(b => b.disabled = true);
             const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "⏳...";
+            btnElement.innerText = "A alterar...";
 
             try {
                 const antiCache = new Date().getTime();
@@ -472,8 +475,8 @@
                     let camp = dbCampanhas.find(c => c.id === id);
                     if(camp) camp.status = novoStatus;
                     renderizarLista();
-                } else alert("⚠️ Falha " + json.erro);
-            } catch (e) { alert("❌ Erro de rede."); } 
+                } else alert("Falha " + json.erro);
+            } catch (e) { alert("Erro de rede."); } 
         }
 
         // =======================================================
@@ -522,7 +525,7 @@
                         <div class="list-item">
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
-                                    <div class="item-title">📂 Coleção: ${baseName}</div>
+                                    <div class="item-title">Coleção: ${baseName}</div>
                                     <div class="item-meta">Contém ${itens.length} ações cadastradas</div>
                                 </div>
                                 <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
@@ -549,9 +552,9 @@
                             </div>
                             <div class="item-meta"><span>${ev.setor}</span>•<span>${dataFormatada}</span></div>
                             <div class="action-bar" onclick="event.stopPropagation()">
-                                <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">▶ Ativar</button>
-                                <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">⏸ Pausar</button>
-                                <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">⏹ Finalizar</button>
+                                <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Activar</button>
+                                <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
+                                <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
                             </div>
                         </div>
                     </div>
@@ -595,14 +598,14 @@
             const selectModal = document.getElementById('modalTemplateSelect');
             if (selectModal) selectModal.value = tAtual;
             
-            // Gerência do QR Code (dentro do módulo agrupado)
+            // Gerência do QR Code 
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
             img.style.display = 'none';
-            loading.style.display = 'flex';
+            loading.style.display = 'block';
             
             img.onload = function() { loading.style.display = 'none'; img.style.display = 'block'; };
-            img.onerror = function() { loading.innerText = "⚠️ Erro ao gerar."; };
+            img.onerror = function() { loading.innerText = "Erro ao gerar QR Code."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
             document.getElementById('modalJornada').style.display = 'flex';
@@ -616,7 +619,7 @@
         function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
-        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("✅ Link copiado para a área de transferência!")); }
+        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado com sucesso para a área de transferência!")); }
 
         // =======================================================
         // MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
@@ -626,7 +629,6 @@
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
             
-            // Fecha popup de jornada e abre dash analytics
             document.getElementById('modalJornada').style.display = 'none';
             document.getElementById('dashboardTela').style.display = 'block';
             document.body.style.overflow = 'hidden'; 
@@ -645,7 +647,7 @@
             } else if(campSelecionada.status === "Finalizado") {
                 elStatus.innerText = "ENCERRADO"; elStatus.style.color = "var(--status-encerrado)"; elTempo.innerText = `Duração total: ${diasAtivo} dia(s)`;
             } else {
-                elStatus.innerText = "PLANEJADO"; elStatus.style.color = "var(--status-espera)"; elTempo.innerText = "Aguardando inicialização";
+                elStatus.innerText = "PLANEADO"; elStatus.style.color = "var(--status-espera)"; elTempo.innerText = "A aguardar inicialização";
             }
 
             try {
@@ -656,7 +658,7 @@
                     document.getElementById('dashLoading').style.display = 'none';
                     document.getElementById('conteudoDashInterface').style.display = 'block';
                 } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
-            } catch (e) { alert("Falha crítica ao carregar dashboard."); fecharDashboard(); }
+            } catch (e) { alert("Falha crítica ao carregar o dashboard."); fecharDashboard(); }
         }
 
         function processarEstatisticas(votos) {
@@ -675,7 +677,6 @@
 
             let somaNotas = 0; let agrupamento = {};
 
-            // Motor dinâmico de análise de sentimentos
             votos.forEach(v => {
                 somaNotas += v.nota;
                 const s = v.sentimento; 
@@ -686,7 +687,6 @@
             const media = (somaNotas / totalVotos).toFixed(1);
             document.getElementById('dashMedia').innerText = media;
 
-            // Ordena os sentimentos do mais votado para o menos
             let sortedLabels = Object.keys(agrupamento).sort((a,b) => agrupamento[b] - agrupamento[a]);
             let sortedCounts = sortedLabels.map(l => agrupamento[l]);
             
@@ -711,10 +711,10 @@
             let recoPDF = "";
             
             if(media >= 8) {
-                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A ação corporativa alcançou seus objetivos com excelência.</p>`;
+                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A ação corporativa alcançou os seus objetivos com excelência.</p>`;
                 recoPDF = `O engajamento é considerado <strong>Altamente Satisfatório (Nota ${media})</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.`;
             } else if (media >= 6) {
-                recoHTML = `<p style="color: #f39c12;">A ação teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de atenção, mas a percepção geral encontra-se em um limiar aceitável.</p>`;
+                recoHTML = `<p style="color: #f39c12;">A ação teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de atenção, mas a perceção geral encontra-se num limiar aceitável.</p>`;
                 recoPDF = `A ação corporativa teve um impacto qualitativo <strong>Mediano (Nota ${media})</strong>. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.`;
             } else {
                 recoHTML = `<p style="color:#ff0080;"><strong>Alerta de Rejeição (Nota ${media}):</strong> O sentimento negativo superou a satisfação. Recomenda-se revisão imediata do conteúdo abordado.</p>`;
@@ -772,7 +772,7 @@
 
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ Gerando Documento Oficial ArcelorMittal...";
+            btn.innerText = "⏳ A gerar Documento Oficial...";
 
             const htmlDoPDF = `
                 <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
@@ -787,7 +787,7 @@
                     <p style="color: #555; font-size: 13px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
                         <strong>Setor Analisado:</strong> ${campSelecionada.setor} &nbsp;|&nbsp; 
                         <strong>Status da Coleta:</strong> ${campSelecionada.status.toUpperCase()} &nbsp;|&nbsp; 
-                        <strong>Data de Extração:</strong> ${new Date().toLocaleString('pt-BR')}
+                        <strong>Data de Extração:</strong> ${new Date().toLocaleString('pt-PT')}
                     </p>
                     <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Síntese Quantitativa (Métricas Principais)</h3>
                     <ul style="list-style-type: none; padding: 0; margin: 0 0 35px 0; font-size: 14px;">
@@ -830,7 +830,7 @@
             
             html2pdf().set(opt).from(divTemp).save().then(() => {
                 document.body.removeChild(divTemp);
-                btn.innerText = "📄 Exportar Relatório Oficial";
+                btn.innerText = "Exportar Relatório Oficial";
             });
         }
 
