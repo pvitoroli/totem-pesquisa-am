@@ -71,7 +71,7 @@
         
         <h2 class="success-title" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: white;">VOTO REGISTRADO!</h2>
         
-        <h5 style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal; margin-top: 0;">
+        <h5 id="msg-agradecimento" style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal; margin-top: 0;">
           Sua voz molda o nosso futuro!
         </h5>
         
@@ -97,11 +97,17 @@
         const idCampanha = urlParams.get('id') || "";
         const setorCampanha = urlParams.get('setor') || "Geral";
 
-        // Cronômetro de 2 segundos que reinicia o Totem mantendo o endereço da campanha ativo!
+        // 🔥 NOVO: Busca o texto de agradecimento salvo na memória do navegador pelo index.html 🔥
+        const msgPersonalizada = localStorage.getItem('agradecimento_' + idCampanha);
+        if (msgPersonalizada) {
+            document.getElementById('msg-agradecimento').innerText = msgPersonalizada;
+        }
+
+        // Cronômetro de 2.5 segundos que reinicia o Totem mantendo o endereço da campanha ativo
         window.onload = function() {
             setTimeout(function() {
                 window.location.href = `index.html?evento=${idCampanha}&setor=${encodeURIComponent(setorCampanha)}`; 
-            }, 2000); 
+            }, 2500); // Aumentei de 2000 para 2500 para dar tempo de lerem a mensagem personalizada!
         };
     </script>
 
