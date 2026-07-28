@@ -109,70 +109,46 @@
     </div>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const evento = urlParams.get('evento') || "";
-        const id = urlParams.get('id') || "";
-        const sentimento = urlParams.get('sentimento') || "Geral";
-        const setor = urlParams.get('setor') || "Geral";
-        const gif = urlParams.get('gif') || ""; // 🔥 CAPTURA O GIF DINÂMICO
-        const proposta = urlParams.get('proposta') || "Geral";
+    const urlParams = new URLSearchParams(window.location.search);
+    const evento = urlParams.get('evento') || "";
+    const id = urlParams.get('id') || "";
+    const sentimento = urlParams.get('sentimento') || "Geral";
+    const setor = urlParams.get('setor') || "Geral";
+    const gif = urlParams.get('gif') || ""; 
+    const proposta = urlParams.get('proposta') || "Geral";
 
-        // DICIONÁRIO DE FALLBACK (CASO O GIF NÃO VENHA NA URL)
-        const linksEmojis = {
-            "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
-            "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
-            "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
-            "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
-        };
+    const linksEmojis = {
+        "Aprendi algo novo": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif",
+        "Fiquei feliz": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif",
+        "Quero saber mais": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif",
+        "Poderia ser melhor": "https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif"
+    };
 
-        // Preenche o Titulo
-        document.getElementById('sub-evento-nome').innerText = evento;
+    document.getElementById('sub-evento-nome').innerText = evento;
+    document.getElementById('label-sentimento-escolhido').innerText = sentimento;
+
+    const imgEmoji = document.getElementById('emoji-preview');
+    const urlGifFinal = gif || linksEmojis[sentimento];
+    
+    if (urlGifFinal) {
+        imgEmoji.src = urlGifFinal;
+        imgEmoji.style.display = 'block'; 
+    }
+
+    document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
+
+    // 🔥 FUNÇÃO TURBO (FRICÇÃO ZERO) 🔥
+    function enviarDados(nota) {
+        // Trava os botões
+        document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
+        event.target.innerText = "...";
+        event.target.style.backgroundColor = "#ff3700";
+
+        // Redireciona IMEDIATAMENTE empacotando os dados na URL
+        const urlDestino = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}&evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimento)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
         
-        // Preenche o nome do sentimento
-        document.getElementById('label-sentimento-escolhido').innerText = sentimento;
-
-        // Injeta a imagem animada correspondente (dinâmica ou fallback)
-        const imgEmoji = document.getElementById('emoji-preview');
-        const urlGifFinal = gif || linksEmojis[sentimento];
-        
-        if (urlGifFinal) {
-            imgEmoji.src = urlGifFinal;
-            imgEmoji.style.display = 'block'; 
-        }
-
-        // Configura o botão voltar mantendo as credenciais
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="index.html?evento=${id}&setor=${encodeURIComponent(setor)}" class="btn-back">← Voltar</a>`;
-
-        // Grava tudo no Sheets coletando Setor e Origem
-        function enviarDados(nota) {
-            const urlWebhook = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
-            
-            // Trava os botões
-            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
-            
-            event.target.innerText = "...";
-            event.target.style.backgroundColor = "#ff3700";
-
-            // Envia o pacote com os novos campos auditáveis
-            fetch(urlWebhook, {
-                method: 'POST',
-                mode: 'no-cors', 
-                body: JSON.stringify({
-                    "evento": evento,
-                    "sentimento": sentimento,
-                    "nota": nota,
-                    "setor": setor,       // Registra o setor no Totem Fixo
-                    "origem": "Totem Fixo", // Registra a origem do dispositivo
-                    "proposta": proposta    // Envia a proposta também para paridade
-                })
-            }).then(() => {
-                // Redireciona para o agradecimento REPASSANDO o ID e o Setor
-                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            }).catch((erro) => {
-                console.error("Erro ao gravar:", erro);
-                window.location.href = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}`;
-            });
-        }
-    </script>
+        window.location.href = urlDestino;
+    }
+</script>
 </body>
 </html>
