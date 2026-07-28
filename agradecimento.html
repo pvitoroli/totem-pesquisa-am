@@ -97,17 +97,11 @@
         const idCampanha = urlParams.get('id') || "";
         const setorCampanha = urlParams.get('setor') || "Geral";
 
-        // 🔥 NOVO: Busca o texto de agradecimento salvo na memória do navegador pelo index.html 🔥
-        const msgPersonalizada = localStorage.getItem('agradecimento_' + idCampanha);
-        if (msgPersonalizada) {
-            document.getElementById('msg-agradecimento').innerText = msgPersonalizada;
-        }
-
         // Cronômetro de 2.5 segundos que reinicia o Totem mantendo o endereço da campanha ativo
         window.onload = function() {
             setTimeout(function() {
                 window.location.href = `index.html?evento=${idCampanha}&setor=${encodeURIComponent(setorCampanha)}`; 
-            }, 2500); // Aumentei de 2000 para 2500 para dar tempo de lerem a mensagem personalizada!
+            }, 2500); // 2.5 segundos de exibição
         };
     </script>
 
