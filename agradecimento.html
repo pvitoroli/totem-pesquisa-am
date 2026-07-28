@@ -86,24 +86,62 @@
     </div>
 
     <script>
-        // Bloqueio do botão voltar
-        window.history.replaceState(null, null, window.location.href);
-        window.onpopstate = function () {
-            window.history.go(1);
-        };
+    const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
 
-        // Captura o ID e o Setor que vieram da tela de notas para restaurar o loop
-        const urlParams = new URLSearchParams(window.location.search);
-        const idCampanha = urlParams.get('id') || "";
-        const setorCampanha = urlParams.get('setor') || "Geral";
+    // Bloqueio do botão voltar
+    window.history.replaceState(null, null, window.location.href);
+    window.onpopstate = function () {
+        window.history.go(1);
+    };
 
-        // Cronômetro de 2.5 segundos que reinicia o Totem mantendo o endereço da campanha ativo
-        window.onload = function() {
-            setTimeout(function() {
-                window.location.href = `index.html?evento=${idCampanha}&setor=${encodeURIComponent(setorCampanha)}`; 
-            }, 2500); // 2.5 segundos de exibição
-        };
-    </script>
+    // 1. Captura os dados que chegaram em frações de segundo
+    const urlParams = new URLSearchParams(window.location.search);
+    const idCampanha = urlParams.get('id') || "";
+    const setorCampanha = urlParams.get('setor') || "Geral";
+    const evento = urlParams.get('evento');
+    const sentimento = urlParams.get('sentimento');
+    const nota = urlParams.get('nota');
+    const proposta = urlParams.get('proposta') || "Geral";
+
+    // 2. FUNÇÃO MESTRA DE ENVIO SEGURO
+    async function processarVotoERetornar() {
+        
+        // Relógio de Segurança: Garante que o utilizador vai ter PELO MENOS 3 segundos para ler a frase
+        const tempoMinimoLeitura = new Promise(resolve => setTimeout(resolve, 3000));
+        
+        let requisicaoAoGoogle = Promise.resolve();
+
+        // Se trouxer os dados da tela anterior, faz o envio em "background"
+        if (evento && sentimento && nota) {
+            const payload = {
+                "evento": evento,
+                "sentimento": sentimento,
+                "nota": parseInt(nota),
+                "setor": setorCampanha,
+                "origem": "Totem Fixo",
+                "proposta": proposta
+            };
+            
+            requisicaoAoGoogle = fetch(URL_BACKEND, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: JSON.stringify(payload)
+            }).catch(e => console.error(e));
+        }
+
+        // 🔥 A MÁGICA ACONTECE AQUI 🔥
+        // O sistema vai esperar pelos 3 segundos de leitura E esperar pelo Google responder. 
+        // Se o Google for rápido (1 seg), ele espera até bater os 3s de leitura.
+        // Se o Google for lento (4 segs), ele aguarda os 4s totais garantindo que o voto chega.
+        await Promise.all([tempoMinimoLeitura, requisicaoAoGoogle]);
+
+        // Tudo finalizado e seguro! Volta a abrir o totem inicial.
+        window.location.href = `index.html?evento=${idCampanha}&setor=${encodeURIComponent(setorCampanha)}`;
+    }
+
+    // Inicia assim que a tela abre
+    window.onload = processarVotoERetornar;
+</script>
 
 </body>
 </html>
