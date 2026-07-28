@@ -116,12 +116,6 @@
         const notaReal = urlParams.get('nota') || "10"; 
         const proposta = urlParams.get('proposta') || "Geral";
 
-        // 🔥 Opcional: Tenta pegar uma mensagem customizada, senão mantém a padrão 🔥
-        const msgPersonalizada = localStorage.getItem('agradecimento_' + idEvento);
-        if (msgPersonalizada) {
-            document.getElementById('msg-agradecimento').innerText = msgPersonalizada;
-        }
-
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
 
         // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
