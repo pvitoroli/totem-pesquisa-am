@@ -36,21 +36,55 @@
         }
         
         /* STATUS ONLINE DISCRETO - Corrigido para Verde */
+        .pulse-dot-verde {
+            width: 6px !important;
+            height: 6px !important;
+            background-color: #4bb543 !important; /* Verde exato */
+            border-radius: 50% !important;
+            display: inline-block !important;
+            animation: pulseVerde 1.5s infinite !important;
+        }
 
-    .pulse-dot-verde {
-        width: 6px !important;
-        height: 6px !important;
-        background-color: #4bb543 !important; /* Verde exato */
-        border-radius: 50% !important;
-        display: inline-block !important;
-        animation: pulseVerde 1.5s infinite !important;
-    }
+        @keyframes pulseVerde {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
+        }
 
-    @keyframes pulseVerde {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
-    }
+        /* ==========================================================================
+           BOTÕES DE NOTA (0 a 10) - EFEITO HOVER E INTERAÇÃO
+           ========================================================================== */
+        .rating-btn {
+            background-color: transparent; 
+            border: 2px solid rgba(255, 255, 255, 0.1); 
+            color: white;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        /* Quando o rato passa por cima (Hover) */
+        .rating-btn:hover {
+            border-color: #ff5100; 
+            background-color: rgba(255, 81, 0, 0.1); 
+            transform: scale(1.1); 
+        }
+
+        /* Quando o botão é clicado (Active) */
+        .rating-btn:active {
+            background-color: #ff5100; 
+            border-color: #ff5100;
+            color: white;
+            transform: scale(0.95); 
+        }
     </style>
 </head>
 <body>
@@ -87,19 +121,19 @@
       
       <div class="rating-container" style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 30px;">
         <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(0)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">0</button>
-            <button onclick="enviarDados(1)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">1</button>
-            <button onclick="enviarDados(2)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">2</button>
-            <button onclick="enviarDados(3)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">3</button>
-            <button onclick="enviarDados(4)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">4</button>
-            <button onclick="enviarDados(5)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">5</button>
+            <button onclick="enviarDados(0)" class="rating-btn">0</button>
+            <button onclick="enviarDados(1)" class="rating-btn">1</button>
+            <button onclick="enviarDados(2)" class="rating-btn">2</button>
+            <button onclick="enviarDados(3)" class="rating-btn">3</button>
+            <button onclick="enviarDados(4)" class="rating-btn">4</button>
+            <button onclick="enviarDados(5)" class="rating-btn">5</button>
         </div>
         <div class="rating-row" style="display: flex; justify-content: center; gap: 8px;">
-            <button onclick="enviarDados(6)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">6</button>
-            <button onclick="enviarDados(7)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">7</button>
-            <button onclick="enviarDados(8)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">8</button>
-            <button onclick="enviarDados(9)" class="rating-btn" style="background-color: #2a2f3a; border: 1px solid rgba(255, 255, 255, 0.1); color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer;">9</button>
-            <button onclick="enviarDados(10)" class="rating-btn" style="background-color: #ff3700; border: 1px solid #ff3700; color: white; width: 42px; height: 42px; border-radius: 50%; font-size: 14px; font-weight: 700; cursor: pointer; box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.4);">10</button>
+            <button onclick="enviarDados(6)" class="rating-btn">6</button>
+            <button onclick="enviarDados(7)" class="rating-btn">7</button>
+            <button onclick="enviarDados(8)" class="rating-btn">8</button>
+            <button onclick="enviarDados(9)" class="rating-btn">9</button>
+            <button onclick="enviarDados(10)" class="rating-btn">10</button>
         </div>
       </div>
       
@@ -142,7 +176,9 @@
         // Trava os botões
         document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
         event.target.innerText = "...";
-        event.target.style.backgroundColor = "#ff3700";
+        // Preenche de laranja imediatamente ao clicar para feedback visual instântaneo
+        event.target.style.backgroundColor = "#ff5100";
+        event.target.style.borderColor = "#ff5100";
 
         // Redireciona IMEDIATAMENTE empacotando os dados na URL
         const urlDestino = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}&evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimento)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
