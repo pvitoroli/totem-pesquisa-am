@@ -99,7 +99,7 @@
         <div class="input-group">
             <label>Setor</label>
             <select id="setorSelect">
-                <option value="" disabled selected>Carregando setores...</option>
+                <option value="" disabled selected>⏳ Carregando setores da base...</option>
             </select>
         </div>
 
@@ -125,10 +125,19 @@
 
         // 1. CARREGAMENTO E ORDENAÇÃO (A-Z) DOS SETORES
         window.onload = async () => {
-            // Se já tiver uma sessão válida guardada, salta o login e vai direto pro admin
-            if (localStorage.getItem('setorLogado')) {
+            // 🔥 Verificação Híbrida de Data do Calendário 🔥
+            const setorLogado = localStorage.getItem('setorLogado');
+            const dataLogin = localStorage.getItem('dataLogin');
+            const hoje = new Date().toDateString();
+
+            // Só redireciona direto se tiver logado E se o login foi feito HOJE
+            if (setorLogado && dataLogin === hoje) {
                 window.location.href = "admin.html";
                 return;
+            } else {
+                // Se a data não for de hoje, faz uma limpeza preventiva
+                localStorage.removeItem('setorLogado');
+                localStorage.removeItem('dataLogin');
             }
 
             const select = document.getElementById('setorSelect');
@@ -204,6 +213,8 @@
                 
                 if(dados.sucesso) {
                     localStorage.setItem('setorLogado', dados.setor);
+                    // 🔥 Grava a data EXATA do calendário em que o login foi feito 🔥
+                    localStorage.setItem('dataLogin', new Date().toDateString());
                     window.location.href = "admin.html";
                 } else {
                     erro.innerText = dados.erro; 
