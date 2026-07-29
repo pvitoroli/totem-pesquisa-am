@@ -61,7 +61,7 @@
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         /* ==========================================================================
-           2. NAVBAR (BARRA DE NAVEGAÇÃO WEB APP) E MENU MOBILE
+           2. NAVBAR E MENU MOBILE
            ========================================================================== */
         .navbar {
             background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px);
@@ -81,24 +81,19 @@
         @media(min-width: 600px) { .user-name { display: block; } }
 
         /* MENU MOBILE OFFCANVAS */
-        .mobile-menu-btn {
-            display: none; background: transparent; border: none; cursor: pointer; padding: 5px; color: white;
-        }
-
+        .mobile-menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 5px; color: white; }
         .mobile-menu-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
         }
         .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
-
         .mobile-menu-content {
             position: absolute; top: 0; right: -100%; width: 280px; max-width: 80%; height: 100%;
             background: var(--surface); border-left: 1px solid var(--border); box-shadow: -15px 0 40px rgba(0,0,0,0.5);
             padding: 30px 24px; display: flex; flex-direction: column; transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .mobile-menu-overlay.active .mobile-menu-content { right: 0; }
-
         .mobile-menu-header {
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
             padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 700; color: var(--text-muted);
@@ -106,7 +101,6 @@
         }
         .mobile-menu-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
         .mobile-menu-header button:hover { color: var(--primary); transform: scale(1.1); }
-
         .mobile-user-card {
             display: flex; align-items: center; gap: 15px; margin-bottom: 30px;
             background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border);
@@ -115,7 +109,6 @@
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .mobile-user-name { font-size: 16px; color: white; font-weight: 800; text-transform: uppercase; }
-
         .btn-logout-mobile {
             width: 100%; padding: 16px; background: transparent; color: var(--text-muted); border: 1px solid var(--border);
             border-radius: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; letter-spacing: 1px;
@@ -126,7 +119,6 @@
            3. ESTRUTURA PRINCIPAL
            ========================================================================== */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
-
         .welcome-banner { margin-bottom: 30px; }
         .welcome-banner h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
         .welcome-banner p { color: var(--text-muted); font-size: 15px; max-width: 600px; }
@@ -135,10 +127,8 @@
         .card-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
-        
         .input-labeled-group { display: flex; flex-direction: column; }
         .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; margin-left: 4px; }
-
         input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 14px; outline: none; width: 100%; transition: 0.2s; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
@@ -158,7 +148,6 @@
         .list-container { max-height: 500px; overflow-y: auto; padding-right: 5px; transition: max-height 0.4s ease; }
         .list-container.expanded { max-height: none; overflow: visible; }
         
-        /* SCROLLBAR CUSTOMIZADA */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--surface-hover); border-radius: 10px; }
@@ -172,18 +161,11 @@
         .item-title { font-weight: 700; font-size: 16px; color: white; display: flex; align-items: center; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        /* 🔥 PONTINHO DE NOVA CAMPANHA (CANTO SUPERIOR DIREITO) 🔥 */
+        /* 🔥 PONTINHO DE NOVA CAMPANHA 🔥 */
         .nova-campanha-dot {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 14px;
-            height: 14px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            box-shadow: 0 0 15px var(--primary);
-            z-index: 10;
-            border: 2px solid var(--surface);
+            position: absolute; top: -5px; right: -5px; width: 14px; height: 14px;
+            background-color: var(--primary); border-radius: 50%;
+            box-shadow: 0 0 15px var(--primary); z-index: 10; border: 2px solid var(--surface);
         }
 
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; height: fit-content; align-self: flex-start; }
@@ -198,10 +180,13 @@
         .btn-action.ativo { border-color: rgba(46,204,113,0.5); color: var(--status-ativo); }
         .btn-action.espera { border-color: rgba(243,156,18,0.5); color: var(--status-espera); }
         .btn-action.encerrado { border-color: rgba(149,165,166,0.5); color: var(--status-encerrado); }
+        
+        /* 🔥 BOTÃO EXCLUIR 🔥 */
+        .btn-action.excluir { border-color: rgba(255, 71, 87, 0.5); color: #ff4757; }
+        .btn-action.excluir:hover:not(:disabled) { background: rgba(255, 71, 87, 0.1); }
 
         .sub-list { display: none; border-top: 1px solid var(--border); background: rgba(0,0,0,0.3); border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; }
         .sub-list.open { display: block; }
-        
         .sub-item { padding: 18px 24px 18px 45px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); cursor: pointer; flex-wrap: wrap; transition: 0.2s; }
         .sub-item:hover { background: rgba(255,255,255,0.02); }
         .sub-item:last-child { border-bottom: none; }
@@ -269,7 +254,6 @@
             .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
             .chart-container-inner { min-height: 220px; }
             .modal { padding: 30px 20px; }
-            /* Mobile Menu Overrides */
             .nav-user { display: none !important; }
             .nav-title { display: none !important; }
             .mobile-menu-btn { display: block; }
@@ -299,13 +283,11 @@
             <span class="nav-title">Pesquisa de Sentimento AMP</span>
         </div>
         
-        <!-- INFO USUÁRIO (SÓ PC) -->
         <div class="nav-user">
             <span class="user-name" id="displaySetorTopo">A carregar...</span>
             <div class="user-avatar" id="navAvatar">--</div>
         </div>
 
-        <!-- BOTÃO HAMBÚRGUER (SÓ CELULAR) -->
         <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -315,7 +297,6 @@
         </button>
     </nav>
 
-    <!-- OVERLAY MENU MOBILE -->
     <div class="mobile-menu-overlay" id="mobileMenu" onclick="fecharMenuClicandoFora(event)">
         <div class="mobile-menu-content">
             <div class="mobile-menu-header">
@@ -331,7 +312,6 @@
                 </div>
             </div>
 
-            <!-- Botão Sair Minimalista -->
             <button class="btn-logout-mobile" onclick="localStorage.removeItem('setorLogado'); window.location.href='login.html'">
                 Encerrar Sessão
             </button>
@@ -352,6 +332,12 @@
                 <div class="input-labeled-group">
                     <label class="input-label" for="nomeCampanha">Nome da campanha</label>
                     <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
+                </div>
+
+                <!-- 🔥 CAMPO DE PASTA ADICIONADO AQUI 🔥 -->
+                <div class="input-labeled-group">
+                    <label class="input-label" for="pastaCampanha">Pasta / Grupo (Opcional)</label>
+                    <input type="text" id="pastaCampanha" placeholder="Deixe em branco para automático" autocomplete="off">
                 </div>
 
                 <div class="input-labeled-group">
@@ -420,12 +406,20 @@
                         PAINEL ANALÍTICO
                     </button>
 
-                    <!-- 🔥 ID ADICIONADO AQUI PARA OCULTAR O TEMPLATE 🔥 -->
                     <div class="modal-card-module" id="moduloTemplateAdmin">
                         <h4 class="modal-section-title">Template Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                         <div class="config-row">
                             <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
                             <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
+                        </div>
+                    </div>
+
+                    <!-- 🔥 MÓDULO DE PASTA (NOVO) 🔥 -->
+                    <div class="modal-card-module" id="moduloPastaAdmin" style="margin-top: 15px;">
+                        <h4 class="modal-section-title">Pasta de Organização: <span id="modPastaBadge" style="color: var(--primary);">Automática</span></h4>
+                        <div class="config-row">
+                            <input type="text" id="modalPastaInput" style="flex: 1; background: var(--bg);" placeholder="Nome da pasta...">
+                            <button class="btn btn-outline btn-template-save" onclick="atualizarPasta(this)">Mover</button>
                         </div>
                     </div>
                 </div>
@@ -515,7 +509,6 @@
     </div>
     
     <script>
-        // CONTROLE DO MENU MOBILE
         function toggleMobileMenu() {
             document.getElementById('mobileMenu').classList.toggle('active');
         }
@@ -534,42 +527,32 @@
         let campSelecionada = null;
         let dadosParaPDF = {}; 
 
-        // =======================================================
-        // 🔥 BLINDAGEM DE ACESSO E GESTÃO DE SESSÃO 🔥
-        // =======================================================
         const setorLogado = localStorage.getItem('setorLogado');
         if (!setorLogado) {
-            window.location.href = "login.html"; // Intrusos são expulsos para a tela de login
+            window.location.href = "login.html"; 
         }
 
         window.onload = async () => {
-            
-            // 🔥 Atualiza a TAG visual na Navbar (PC) e no Menu (Mobile) 🔥
             const navUserName = document.getElementById('displaySetorTopo');
             const navAvatar = document.getElementById('navAvatar');
-            
             const mobRole = document.getElementById('mobileRole');
             const mobName = document.getElementById('mobileName');
             const mobAvatar = document.getElementById('mobileAvatar');
             
             if (setorLogado === "Master") {
-                // Preenche PC
                 navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71;">MASTER</strong> <a href="#" onclick="localStorage.removeItem('setorLogado'); window.location.href='login.html'" style="color:var(--text-muted); font-size:10px; margin-left:10px; text-decoration:none; border:1px solid var(--border); padding:3px 6px; border-radius:4px;">Encerrar Sessão</a>`;
                 navAvatar.innerText = "M";
                 navAvatar.style.backgroundColor = "#2ecc71";
                 
-                // Preenche Celular
                 mobRole.innerText = "ACESSO TOTAL";
                 mobName.innerText = "MASTER";
                 mobName.style.color = "#2ecc71";
                 mobAvatar.innerText = "M";
                 mobAvatar.style.backgroundColor = "#2ecc71";
             } else {
-                // Preenche PC
                 navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase;">${setorLogado}</strong> <a href="#" onclick="localStorage.removeItem('setorLogado'); window.location.href='login.html'" style="color:var(--text-muted); font-size:10px; margin-left:10px; text-decoration:none; border:1px solid var(--border); padding:3px 6px; border-radius:4px;">Encerrar Sessão</a>`;
                 navAvatar.innerText = setorLogado.charAt(0).toUpperCase();
                 
-                // Preenche Celular
                 mobRole.innerText = "Setor Logado";
                 mobName.innerText = setorLogado;
                 mobName.style.color = "var(--primary)";
@@ -590,9 +573,6 @@
             }, 3000);
         };
 
-        // =======================================================
-        // FUNÇÕES DE BUSCA (SETORES E TEMPLATES)
-        // =======================================================
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
             try {
@@ -618,7 +598,6 @@
                 selectNovo.innerHTML = optionsHTML;
                 selectModal.innerHTML = optionsHTML;
             } catch (e) {
-                console.error("Erro ao carregar templates", e);
                 selectNovo.innerHTML = '<option value="Padrão">Padrão</option>';
                 selectModal.innerHTML = '<option value="Padrão">Padrão</option>';
             }
@@ -640,11 +619,10 @@
             }
         }
 
-        // =======================================================
-        // ROTINAS DE CRIAÇÃO E ATUALIZAÇÃO
-        // =======================================================
+        // 🔥 SALVAR CAMPANHA ATUALIZADO COM CAMPO PASTA 🔥
         async function salvarCampanha() {
             const nome = document.getElementById('nomeCampanha').value.trim();
+            const pasta = document.getElementById('pastaCampanha').value.trim();
             const setor = document.getElementById('setorCampanha').value;
             const data = document.getElementById('dataCampanha').value;
             const template = document.getElementById('templateCampanha').value || 'Padrão';
@@ -652,13 +630,13 @@
             const btn = document.getElementById('btnSalvar');
 
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase())) { return alert("Atenção: Uma campanha com este nome já existe."); }
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase() && c.status !== 'Excluído')) { return alert("Atenção: Uma campanha com este nome já existe."); }
 
             btn.innerText = "A Criar..."; btn.disabled = true;
 
             try {
                 const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
+                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&pasta=${encodeURIComponent(pasta)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
                 const resposta = await res.json();
                 if (!resposta.sucesso) {
                     alert(resposta.erro);
@@ -669,6 +647,7 @@
 
             btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = '';
+            document.getElementById('pastaCampanha').value = '';
             document.getElementById('setorCampanha').selectedIndex = 0;
             document.getElementById('templateCampanha').selectedIndex = 0;
             buscarDados(); 
@@ -698,6 +677,30 @@
             btnElement.innerText = txtOriginal; btnElement.disabled = false;
         }
 
+        // 🔥 NOVA FUNÇÃO PARA MOVER PASTAS 🔥
+        async function atualizarPasta(btnElement) {
+            const novaPasta = document.getElementById('modalPastaInput').value.trim();
+            if(!campSelecionada) return;
+            
+            const txtOriginal = btnElement.innerText;
+            btnElement.innerText = "..."; btnElement.disabled = true;
+
+            try {
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=alterarPasta&id=${campSelecionada.id}&pasta=${encodeURIComponent(novaPasta)}&t=${antiCache}`);
+                const json = await res.json();
+                
+                if(json.sucesso) {
+                    campSelecionada.pasta = novaPasta;
+                    const badge = document.getElementById('modPastaBadge');
+                    if (badge) badge.innerText = novaPasta || "Automática";
+                    renderizarLista();
+                } else alert("Falha: " + json.erro);
+            } catch (e) { alert("Erro de rede."); } 
+            
+            btnElement.innerText = txtOriginal; btnElement.disabled = false;
+        }
+
         async function alterarStatus(id, novoStatus, btnElement) {
             if(!id) return;
             const botoes = btnElement.parentElement.querySelectorAll('button');
@@ -715,18 +718,23 @@
             } catch (e) { alert("Erro de rede."); } 
         }
 
-        // =======================================================
-        // LISTAGEM E RENDERIZAÇÃO
-        // =======================================================
+        // 🔥 FUNÇÃO DE EXCLUSÃO LÓGICA 🔥
+        function confirmarExclusao(id, btn) {
+            if(confirm("Tem certeza que deseja EXCLUIR esta campanha? Os dados serão ocultados do painel permanentemente.")) {
+                alterarStatus(id, 'Excluído', btn);
+            }
+        }
+
         function normalizarNomeCampanha(nome) {
             if (!nome) return "Sem Nome";
             return nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim();
         }
 
+        // 🔥 AGRUPAMENTO HÍBRIDO (Manual ou Automático) 🔥
         function agruparCampanhas(lista) {
             let grupos = {};
             lista.forEach(c => {
-                let baseName = normalizarNomeCampanha(c.nome_campanha);
+                let baseName = c.pasta && c.pasta.trim() !== "" ? c.pasta : normalizarNomeCampanha(c.nome_campanha);
                 if (!grupos[baseName]) grupos[baseName] = [];
                 grupos[baseName].push(c);
             });
@@ -738,17 +746,18 @@
             const dataFiltro = document.getElementById('filtroData').value;
             
             let filtrados = dbCampanhas.filter(c => {
+                // 🔥 IGNORAR EXCLUÍDOS 🔥
+                if (c.status === 'Excluído') return false;
+
                 let passaStatus = (stateFiltroStatus === 'todas' || c.status === stateFiltroStatus);
                 let passaData = (!dataFiltro || c.data_inicio.substring(0,10) === dataFiltro);
-                
-                // 🔥 SÓ PASSA SE FOR A CAMPANHA DO SETOR DO CARA (OU SE ELE FOR MASTER) 🔥
                 let passaSetor = (setorLogado === "Master" || c.setor === setorLogado);
 
                 return passaStatus && passaData && passaSetor;
             });
 
             if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted);'>Nenhuma campanha encontrada para este filtro.</p>";
+                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted);'>Nenhuma campanha ativa encontrada para este filtro.</p>";
                 return;
             }
 
@@ -759,7 +768,8 @@
 
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
-                if (itens.length === 1) {
+                // Se a coleção tiver apenas 1 e NÃO tiver uma pasta manual definida
+                if (itens.length === 1 && (!itens[0].pasta || itens[0].pasta.trim() === "")) {
                     area.innerHTML += criarCardHTML(itens[0]);
                 } else {
                     let subHtml = itens.map(i => criarCardHTML(i, true)).join('');
@@ -767,7 +777,7 @@
                         <div class="list-item">
                             <div class="item-header" onclick="toggleSublist(this)">
                                 <div class="item-info">
-                                    <div class="item-title" style="display:flex; align-items:center;">${folderIcon} Coleção: ${baseName}</div>
+                                    <div class="item-title" style="display:flex; align-items:center;">${folderIcon} ${baseName}</div>
                                     <div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div>
                                 </div>
                                 <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
@@ -779,6 +789,7 @@
             }
         }
 
+        // 🔥 BOTÃO DE EXCLUSÃO ADICIONADO AOS CARDS 🔥
         function criarCardHTML(ev, isSub = false) {
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
             let divClass = isSub ? 'sub-item' : 'list-item';
@@ -789,15 +800,18 @@
                 botoesHTML = `
                     <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
                     <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
+                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
                 `;
             } else if (ev.status === 'Em Espera') {
                 botoesHTML = `
                     <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Ativar</button>
                     <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
+                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
                 `;
             } else if (ev.status === 'Finalizado') {
                 botoesHTML = `
                     <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Reativar Ação</button>
+                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
                 `;
             }
 
@@ -865,6 +879,12 @@
             
             const selectModal = document.getElementById('modalTemplateSelect');
             if (selectModal) selectModal.value = tAtual;
+
+            // 🔥 Atualiza as informações da pasta no Modal 🔥
+            const pBadge = document.getElementById('modPastaBadge');
+            if (pBadge) pBadge.innerText = campSelecionada.pasta && campSelecionada.pasta.trim() !== "" ? campSelecionada.pasta : "Automática";
+            const pInput = document.getElementById('modalPastaInput');
+            if (pInput) pInput.value = campSelecionada.pasta || "";
             
             const img = document.getElementById('qrCodeImg');
             const loading = document.getElementById('qrCodeLoading');
@@ -875,19 +895,21 @@
             img.onerror = function() { loading.innerText = "Erro ao gerar QR Code."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
-            // 🔥 Lógica de ocultação (Totens e Template) para Finalizados 🔥
             const gridBody = document.getElementById('modalBodyGrid');
             const colTotens = document.getElementById('colunaTotens');
             const modTemplate = document.getElementById('moduloTemplateAdmin');
+            const modPasta = document.getElementById('moduloPastaAdmin'); // Puxando pasta para ocultar/mostrar também
             
             if (campSelecionada.status === 'Finalizado') {
                 colTotens.style.display = 'none';
                 gridBody.style.gridTemplateColumns = '1fr'; 
                 if(modTemplate) modTemplate.style.display = 'none';
+                if(modPasta) modPasta.style.display = 'none';
             } else {
                 colTotens.style.display = 'flex';
                 gridBody.style.gridTemplateColumns = ''; 
                 if(modTemplate) modTemplate.style.display = 'block';
+                if(modPasta) modPasta.style.display = 'block';
             }
 
             document.getElementById('modalJornada').style.display = 'flex';
