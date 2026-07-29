@@ -99,7 +99,7 @@
         <div class="input-group">
             <label>Setor</label>
             <select id="setorSelect">
-                <option value="" disabled selected>Selecione o seu setor...</option>
+                <option value="" disabled selected>⏳ Carregando setores da base...</option>
             </select>
         </div>
 
@@ -123,24 +123,37 @@
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
 
-        // 1. CARREGAMENTO DOS SETORES
+        // 1. CARREGAMENTO E ORDENAÇÃO (A-Z) DOS SETORES
         window.onload = async () => {
+            // Se já tiver uma sessão válida guardada, salta o login e vai direto pro admin
             if (localStorage.getItem('setorLogado')) {
                 window.location.href = "admin.html";
                 return;
             }
 
+            const select = document.getElementById('setorSelect');
+
             try {
-                const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
-                const setores = await res.json();
-                const select = document.getElementById('setorSelect');
+                // antiCache garante que a lista de setores vai ser a mais atual da planilha
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=listarSetores&t=${antiCache}`);
+                let setores = await res.json();
                 
+                // 🔥 Ordena os setores por ordem alfabética (respeitando acentos como Á, Ç) 🔥
+                setores.sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+                // Limpa o select e põe a opção definitiva
                 select.innerHTML = '<option value="" disabled selected>Selecione o seu setor...</option>'; 
+                
+                // Popula com a lista ordenada
                 setores.forEach(s => select.innerHTML += `<option value="${s}">${s}</option>`);
+                
+                // Adiciona o Master sempre no final
                 select.innerHTML += `<option value="Master">Master</option>`;
                 
             } catch(e) {
-                document.getElementById('setorSelect').innerHTML = '<option value="" disabled selected>Erro ao carregar</option><option value="Master">Master</option>';
+                console.error("Falha ao puxar setores:", e);
+                select.innerHTML = '<option value="" disabled selected>Erro ao carregar setores.</option><option value="Master">Master</option>';
             }
         };
 
@@ -184,7 +197,9 @@
             erro.style.display = "none";
             
             try {
-                const res = await fetch(`${URL_BACKEND}?acao=login&setor=${encodeURIComponent(setor)}&senha=${encodeURIComponent(senha)}`);
+                // Adicionamos um antiCache aqui também por segurança na validação
+                const antiCache = new Date().getTime();
+                const res = await fetch(`${URL_BACKEND}?acao=login&setor=${encodeURIComponent(setor)}&senha=${encodeURIComponent(senha)}&t=${antiCache}`);
                 const dados = await res.json();
                 
                 if(dados.sucesso) {
