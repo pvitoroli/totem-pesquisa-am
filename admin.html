@@ -61,7 +61,7 @@
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         /* ==========================================================================
-           2. NAVBAR E MENU MOBILE
+           2. NAVBAR E MENU LATERAL (DESKTOP E MOBILE)
            ========================================================================== */
         .navbar {
             background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px);
@@ -74,33 +74,34 @@
         .nav-divider { width: 1px; height: 24px; background-color: var(--border); }
         .nav-title { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
         
-        .nav-user { display: flex; align-items: center; gap: 12px; }
+        /* O AVATAR AGORA É UM BOTÃO DISCRETO PARA O MENU */
+        .nav-user { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 6px 12px; border-radius: 30px; transition: 0.2s; border: 1px solid transparent; }
+        .nav-user:hover { background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
         .user-name { font-size: 13px; font-weight: 600; color: white; display: none; }
         .user-avatar { width: 36px; height: 36px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: white; box-shadow: 0 4px 10px rgba(255, 81, 0, 0.3); }
 
         @media(min-width: 600px) { .user-name { display: block; } }
 
-        /* MENU MOBILE OFFCANVAS */
         .mobile-menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 5px; color: white; }
-        .mobile-menu-overlay {
+        .menu-lateral-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
         }
-        .mobile-menu-overlay.active { opacity: 1; visibility: visible; }
-        .mobile-menu-content {
+        .menu-lateral-overlay.active { opacity: 1; visibility: visible; }
+        .menu-lateral-content {
             position: absolute; top: 0; right: -100%; width: 280px; max-width: 80%; height: 100%;
             background: var(--surface); border-left: 1px solid var(--border); box-shadow: -15px 0 40px rgba(0,0,0,0.5);
             padding: 30px 24px; display: flex; flex-direction: column; transition: right 0.5s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .mobile-menu-overlay.active .mobile-menu-content { right: 0; }
-        .mobile-menu-header {
+        .menu-lateral-overlay.active .menu-lateral-content { right: 0; }
+        .menu-lateral-header {
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
             padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 700; color: var(--text-muted);
             text-transform: uppercase; letter-spacing: 1.5px;
         }
-        .mobile-menu-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
-        .mobile-menu-header button:hover { color: var(--primary); transform: scale(1.1); }
+        .menu-lateral-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
+        .menu-lateral-header button:hover { color: var(--primary); transform: scale(1.1); }
         .mobile-user-card {
             display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
             background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border);
@@ -109,11 +110,13 @@
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         .mobile-user-name { font-size: 16px; color: white; font-weight: 800; text-transform: uppercase; }
-        .btn-logout-mobile {
+        
+        .btn-menu-lateral {
             width: 100%; padding: 14px; background: transparent; color: var(--text-muted); border: 1px solid var(--border);
             border-radius: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; letter-spacing: 1px;
+            display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
-        .btn-logout-mobile:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.2); }
+        .btn-menu-lateral:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
 
         /* ==========================================================================
            3. ESTRUTURA PRINCIPAL
@@ -161,12 +164,7 @@
         .item-title { font-weight: 700; font-size: 16px; color: white; display: flex; align-items: center; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
-        /* 🔥 PONTINHO DE NOVA CAMPANHA 🔥 */
-        .nova-campanha-dot {
-            position: absolute; top: -5px; right: -5px; width: 14px; height: 14px;
-            background-color: var(--primary); border-radius: 50%;
-            box-shadow: 0 0 15px var(--primary); z-index: 10; border: 2px solid var(--surface);
-        }
+        .nova-campanha-dot { position: absolute; top: -5px; right: -5px; width: 14px; height: 14px; background-color: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); z-index: 10; border: 2px solid var(--surface); }
 
         .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; height: fit-content; align-self: flex-start; }
         .badge.Ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
@@ -180,8 +178,6 @@
         .btn-action.ativo { border-color: rgba(46,204,113,0.5); color: var(--status-ativo); }
         .btn-action.espera { border-color: rgba(243,156,18,0.5); color: var(--status-espera); }
         .btn-action.encerrado { border-color: rgba(149,165,166,0.5); color: var(--status-encerrado); }
-        
-        /* 🔥 BOTÃO EXCLUIR 🔥 */
         .btn-action.excluir { border-color: rgba(255, 71, 87, 0.5); color: #ff4757; }
         .btn-action.excluir:hover:not(:disabled) { background: rgba(255, 71, 87, 0.1); }
 
@@ -223,7 +219,8 @@
         .tabela-usuarios tbody tr:hover { background: rgba(255,255,255,0.03); }
         .input-edit-user { background: var(--bg); border: 1px solid var(--primary); color: white; padding: 8px 12px; border-radius: 8px; font-size: 13px; width: 100%; outline: none; }
         .input-edit-user:focus { box-shadow: 0 0 0 2px rgba(255, 81, 0, 0.2); }
-        .btn-icon-user { background: transparent; border: 1px solid var(--border); color: var(--text-muted); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+        
+        .btn-icon-user { background: transparent; border: 1px solid var(--border); color: var(--text-muted); width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; }
         .btn-icon-user:hover { background: var(--surface-hover); color: white; border-color: rgba(255,255,255,0.3); }
         .btn-icon-user.edit:hover { color: var(--primary); border-color: var(--primary); }
         .btn-icon-user.delete:hover { color: #ff4757; border-color: #ff4757; }
@@ -297,12 +294,12 @@
             <span class="nav-title">Pesquisa de Sentimento AMP</span>
         </div>
         
-        <div class="nav-user">
+        <div class="nav-user" onclick="toggleMenuLateral()" title="Abrir Opções de Conta">
             <span class="user-name" id="displaySetorTopo">A carregar...</span>
             <div class="user-avatar" id="navAvatar">--</div>
         </div>
 
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+        <button class="mobile-menu-btn" onclick="toggleMenuLateral()">
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="3" y1="12" x2="21" y2="12"></line>
                 <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -311,11 +308,11 @@
         </button>
     </nav>
 
-    <div class="mobile-menu-overlay" id="mobileMenu" onclick="fecharMenuClicandoFora(event)">
-        <div class="mobile-menu-content">
-            <div class="mobile-menu-header">
-                <span>Menu Gestão</span>
-                <button onclick="toggleMobileMenu()">✕</button>
+    <div class="menu-lateral-overlay" id="menuLateral" onclick="fecharMenuClicandoFora(event)">
+        <div class="menu-lateral-content">
+            <div class="menu-lateral-header">
+                <span>Menu de Acesso</span>
+                <button onclick="toggleMenuLateral()">✕</button>
             </div>
             
             <div class="mobile-user-card">
@@ -326,62 +323,53 @@
                 </div>
             </div>
 
-            <button id="btnGestaoUsuariosMobile" class="btn-logout-mobile" style="display: none; margin-bottom: 12px; border-color: var(--primary); color: var(--primary);" onclick="abrirModalUsuarios(); toggleMobileMenu();">
-                ⚙️ Gestão de Usuários
+            <button id="btnGestaoUsuariosLateral" class="btn-menu-lateral" style="display: none;" onclick="abrirModalUsuarios(); toggleMenuLateral();">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                Gestão de Usuários
             </button>
 
-            <button class="btn-logout-mobile" onclick="encerrarSessaoSegura()">
+            <button class="btn-menu-lateral" onclick="encerrarSessaoSegura()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 Encerrar Sessão
             </button>
         </div>
     </div>
 
     <main class="main-wrapper">
-        
         <div class="welcome-banner">
             <div>
                 <h1>Painel Administrativo</h1>
                 <p>Configure, acompanhe e extraia relatórios de inteligência das campanhas de pesquisa de sentimento da sua unidade.</p>
             </div>
-            <button id="btnGestaoUsuarios" class="btn btn-primary" style="display: none; align-items: center; gap: 8px; font-size: 13px; height: fit-content;" onclick="abrirModalUsuarios()">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-                Gestão de Usuários
-            </button>
-        </div>
+            </div>
 
         <section class="card" id="card-nova-campanha">
             <div class="card-title">Criar Nova Campanha</div>
             <div class="form-grid">
-                
                 <div class="input-labeled-group">
                     <label class="input-label" for="nomeCampanha">Nome da campanha</label>
                     <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
                 </div>
-
                 <div class="input-labeled-group">
                     <label class="input-label" for="pastaCampanha">Pasta / Grupo (Opcional)</label>
                     <input type="text" id="pastaCampanha" placeholder="Deixe em branco para automático" autocomplete="off">
                 </div>
-
                 <div class="input-labeled-group">
                     <label class="input-label" for="setorCampanha">Setor Responsável</label>
                     <select id="setorCampanha">
                         <option value="" disabled selected>Carregando...</option>
                     </select>
                 </div>
-                
                 <div class="input-labeled-group">
                     <label class="input-label" for="templateCampanha">Template</label>
                     <select id="templateCampanha">
                         <option value="Padrão" selected>Padrão</option>
                     </select>
                 </div>
-
                 <div class="input-labeled-group">
                     <label class="input-label" for="dataCampanha">Data da Coleta</label>
                     <input type="date" id="dataCampanha">
                 </div>
-
                 <div class="input-labeled-group" style="justify-content: flex-end;">
                     <button class="btn btn-primary" id="btnSalvar" onclick="salvarCampanha()">Cadastrar Campanha</button>
                 </div>
@@ -412,23 +400,17 @@
 
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
         <div class="modal">
-            
             <button class="btn-close-icon" onclick="document.getElementById('modalJornada').style.display='none'">✕</button>
-
             <div class="modal-header-section">
                 <h3 id="modTitle">Nome da Campanha</h3>
                 <p id="modMeta">Meta da campanha</p>
             </div>
-
             <div class="modal-body-grid" id="modalBodyGrid">
-                
                 <div class="modal-column">
                     <h4 class="column-title">Gestão da Coleta</h4>
-                    
                     <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">
                         PAINEL ANALÍTICO
                     </button>
-
                     <div class="modal-card-module" id="moduloTemplateAdmin" style="margin-top: 15px;">
                         <h4 class="modal-section-title">Template Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                         <div class="config-row">
@@ -436,7 +418,6 @@
                             <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
                         </div>
                     </div>
-
                     <div class="modal-card-module" id="moduloPastaAdmin" style="margin-top: 15px;">
                         <h4 class="modal-section-title">Pasta de Organização: <span id="modPastaBadge" style="color: var(--primary);">Automática</span></h4>
                         <div class="config-row">
@@ -445,28 +426,22 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-column" id="colunaTotens">
                     <h4 class="column-title">Acesso aos Totens de Coleta</h4>
-                    
                     <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: rgba(255,255,255,0.02);">
                         INICIAR TOTEM VIRTUAL (Neste dispositivo)
                     </button>
-
                     <div class="qr-access-group">
                         <h4 class="modal-section-title">COMPARTILHAR TOTEM PÚBLICO (Para outros dispositivos)</h4>
-                        
                         <div id="qrCodeContainer">
                             <div id="qrCodeLoading">Gerando código...</div>
                             <img id="qrCodeImg" alt="QR Code">
                         </div>
-                        
                         <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: white; color: var(--bg); border: none;">
                             COPIAR LINK TOTEM PÚBLICO
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -485,8 +460,8 @@
                         <label class="input-label" style="margin-left: 0;">Nome do Novo Setor</label>
                         <input type="text" id="novoSetorInput" placeholder="Ex: Aciaria 4, Laminação..." autocomplete="off">
                     </div>
-                    <button class="btn btn-primary" id="btnAdicionarUser" onclick="adicionarUsuarioAdmin(this)" style="padding: 13px 20px;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 5px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    <button class="btn btn-primary" id="btnAdicionarUser" onclick="adicionarUsuarioAdmin(this)" style="padding: 13px 20px; display: flex; align-items: center; gap: 8px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                         Adicionar e Gerar Senha
                     </button>
                 </div>
@@ -569,32 +544,28 @@
     </div>
     
     <script>
-        // =======================================================
-        // 🔥 BLINDAGEM DE ACESSO E GESTÃO DE SESSÃO
-        // =======================================================
         const setorLogado = localStorage.getItem('setorLogado');
         const dataLogin = localStorage.getItem('dataLogin');
         const hoje = new Date().toDateString();
 
-        // Expulsa se não houver login ou se o dia tiver virado
         if (!setorLogado || !dataLogin || dataLogin !== hoje) {
             localStorage.removeItem('setorLogado');
             localStorage.removeItem('dataLogin');
             window.location.href = "login.html"; 
         }
 
-        // Função de logout manual
         function encerrarSessaoSegura() {
             localStorage.removeItem('setorLogado');
             localStorage.removeItem('dataLogin');
             window.location.href = 'login.html';
         }
 
-        function toggleMobileMenu() {
-            document.getElementById('mobileMenu').classList.toggle('active');
+        // AGORA ACIONADO PELO AVATAR (DESKTOP E MOBILE)
+        function toggleMenuLateral() {
+            document.getElementById('menuLateral').classList.toggle('active');
         }
         function fecharMenuClicandoFora(e) {
-            if(e.target.id === 'mobileMenu') toggleMobileMenu();
+            if(e.target.id === 'menuLateral') toggleMenuLateral();
         }
 
         Chart.register(ChartDataLabels);
@@ -615,12 +586,11 @@
             const mobName = document.getElementById('mobileName');
             const mobAvatar = document.getElementById('mobileAvatar');
             
-            // 🔥 REGRA DO PERFIL MASTER 🔥
             if (setorLogado === "Master") {
-                document.getElementById('btnGestaoUsuarios').style.display = 'inline-flex';
-                document.getElementById('btnGestaoUsuariosMobile').style.display = 'block';
+                // ACENDE O BOTÃO DISCRETO DENTRO DO MENU LATERAL
+                document.getElementById('btnGestaoUsuariosLateral').style.display = 'flex';
 
-                navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71;">MASTER</strong> <a href="#" onclick="encerrarSessaoSegura()" style="color:var(--text-muted); font-size:10px; margin-left:10px; text-decoration:none; border:1px solid var(--border); padding:3px 6px; border-radius:4px;">Encerrar Sessão</a>`;
+                navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71;">MASTER</strong>`;
                 navAvatar.innerText = "M";
                 navAvatar.style.backgroundColor = "#2ecc71";
                 
@@ -630,7 +600,7 @@
                 mobAvatar.innerText = "M";
                 mobAvatar.style.backgroundColor = "#2ecc71";
             } else {
-                navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase;">${setorLogado}</strong> <a href="#" onclick="encerrarSessaoSegura()" style="color:var(--text-muted); font-size:10px; margin-left:10px; text-decoration:none; border:1px solid var(--border); padding:3px 6px; border-radius:4px;">Encerrar Sessão</a>`;
+                navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase;">${setorLogado}</strong>`;
                 navAvatar.innerText = setorLogado.charAt(0).toUpperCase();
                 
                 mobRole.innerText = "Setor Logado";
@@ -691,9 +661,12 @@
                 return;
             }
 
+            // ÍCONES FLAT SUBSTITUINDO EMOJIS
+            const svgEdit = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
+            const svgDelete = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
+
             let html = '';
             usuarios.forEach((u, index) => {
-                // A conta Master não deve ser deletada ou editada facilmente
                 let isMaster = u.setor.toLowerCase() === 'master';
                 html += `
                     <tr id="row-user-${index}">
@@ -701,8 +674,8 @@
                         <td><span style="font-family: monospace; letter-spacing: 1px; color: ${isMaster ? '#2ecc71' : 'var(--primary)'}; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px;">${u.senha}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
                             ${isMaster ? '<span style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Protegido</span>' : `
-                            <button class="btn-icon-user edit" onclick="ativarEdicaoUsuario(${index}, '${u.setor}', '${u.senha}')" title="Editar Usuário">✏️</button>
-                            <button class="btn-icon-user delete" onclick="excluirUsuarioAdmin('${u.setor}', this)" title="Excluir Usuário">🗑️</button>
+                            <button class="btn-icon-user edit" onclick="ativarEdicaoUsuario(${index}, '${u.setor}', '${u.senha}')" title="Editar Usuário">${svgEdit}</button>
+                            <button class="btn-icon-user delete" onclick="excluirUsuarioAdmin('${u.setor}', this)" title="Excluir Usuário">${svgDelete}</button>
                             `}
                         </td>
                     </tr>
@@ -728,7 +701,7 @@
                     alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha para o responsável do setor.`);
                     input.value = '';
                     carregarListaUsuariosAdmin();
-                    buscarSetores(); // Atualiza o select de setores no formulário de campanhas
+                    buscarSetores(); // Atualiza dropdown do formulário
                 } else {
                     alert("⚠️ Erro: " + data.erro);
                 }
@@ -737,17 +710,21 @@
             }
             
             btn.disabled = false;
-            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align: text-bottom; margin-right: 5px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Adicionar e Gerar Senha`;
+            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Adicionar e Gerar Senha`;
         }
 
         function ativarEdicaoUsuario(index, setorAntigo, senhaAntiga) {
             const row = document.getElementById(`row-user-${index}`);
+            
+            const svgSave = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+            const svgCancel = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+            
             row.innerHTML = `
                 <td><input type="text" class="input-edit-user" id="edit-setor-${index}" value="${setorAntigo}"></td>
                 <td><input type="text" class="input-edit-user" id="edit-senha-${index}" value="${senhaAntiga}"></td>
                 <td style="text-align: right; white-space: nowrap;">
-                    <button class="btn-icon-user save" onclick="salvarEdicaoUsuarioAdmin(${index}, '${setorAntigo}', this)" title="Salvar Alteração">💾</button>
-                    <button class="btn-icon-user delete" onclick="carregarListaUsuariosAdmin()" title="Cancelar Edição">❌</button>
+                    <button class="btn-icon-user save" onclick="salvarEdicaoUsuarioAdmin(${index}, '${setorAntigo}', this)" title="Salvar Alteração">${svgSave}</button>
+                    <button class="btn-icon-user delete" onclick="carregarListaUsuariosAdmin()" title="Cancelar Edição">${svgCancel}</button>
                 </td>
             `;
         }
@@ -759,7 +736,6 @@
             if(!novoSetor || !novaSenha) return alert("Atenção: Os campos não podem ficar vazios!");
             
             btn.disabled = true;
-            btn.innerHTML = "⏳";
             
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=editarUsuario&setorAntigo=${encodeURIComponent(setorAntigo)}&setorNovo=${encodeURIComponent(novoSetor)}&senhaNova=${encodeURIComponent(novaSenha)}&t=${new Date().getTime()}`);
@@ -771,12 +747,10 @@
                 } else {
                     alert("Erro: " + data.erro);
                     btn.disabled = false;
-                    btn.innerHTML = "💾";
                 }
             } catch (e) {
                 alert("Erro de rede.");
                 btn.disabled = false;
-                btn.innerHTML = "💾";
             }
         }
 
@@ -784,7 +758,6 @@
             if(!confirm(`⚠️ AVISO DE SEGURANÇA ⚠️\n\nTem certeza que deseja EXCLUIR definitivamente o acesso do setor: ${setor}?\n\nEles não poderão mais logar no sistema.`)) return;
             
             btn.disabled = true;
-            btn.innerHTML = "⏳";
             
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=excluirUsuario&setor=${encodeURIComponent(setor)}&t=${new Date().getTime()}`);
@@ -796,12 +769,10 @@
                 } else {
                     alert("Erro ao excluir: " + data.erro);
                     btn.disabled = false;
-                    btn.innerHTML = "🗑️";
                 }
             } catch (e) {
                 alert("Erro de rede ao tentar excluir.");
                 btn.disabled = false;
-                btn.innerHTML = "🗑️";
             }
         }
 
@@ -979,10 +950,8 @@
             
             let filtrados = dbCampanhas.filter(c => {
                 if (c.status === 'Excluído') return false;
-
                 let passaStatus = (stateFiltroStatus === 'todas' || c.status === stateFiltroStatus);
                 let passaData = (!dataFiltro || c.data_inicio.substring(0,10) === dataFiltro);
-                // Mestre vê tudo. Outros só veem o seu.
                 let passaSetor = (setorLogado === "Master" || c.setor === setorLogado);
 
                 return passaStatus && passaData && passaSetor;
