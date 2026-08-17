@@ -23,7 +23,9 @@
             --status-espera: #f39c12; 
             --status-encerrado: #95a5a6;
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        
+        /* Tipografia mais formal e sóbria */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Helvetica Neue', Arial, sans-serif; }
         
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
         
@@ -57,7 +59,7 @@
         }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
-        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
+        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 500; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         /* ==========================================================================
@@ -72,13 +74,12 @@
         .nav-brand { display: flex; align-items: center; gap: 15px; }
         .nav-logo { max-width: 120px; filter: brightness(1.2); }
         .nav-divider { width: 1px; height: 24px; background-color: var(--border); }
-        .nav-title { font-size: 12px; font-weight: 700; color: var(--text-muted); letter-spacing: 1.5px; text-transform: uppercase; }
+        .nav-title { font-size: 13px; font-weight: 500; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
         
-        /* O AVATAR AGORA É UM BOTÃO DISCRETO PARA O MENU */
         .nav-user { display: flex; align-items: center; gap: 12px; cursor: pointer; padding: 6px 12px; border-radius: 30px; transition: 0.2s; border: 1px solid transparent; }
         .nav-user:hover { background: rgba(255,255,255,0.03); border: 1px solid var(--border); }
-        .user-name { font-size: 13px; font-weight: 600; color: white; display: none; }
-        .user-avatar { width: 36px; height: 36px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: white; box-shadow: 0 4px 10px rgba(255, 81, 0, 0.3); }
+        .user-name { font-size: 13px; font-weight: 500; color: white; display: none; }
+        .user-avatar { width: 36px; height: 36px; background-color: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: white; box-shadow: 0 4px 10px rgba(255, 81, 0, 0.3); }
 
         @media(min-width: 600px) { .user-name { display: block; } }
 
@@ -97,8 +98,8 @@
         .menu-lateral-overlay.active .menu-lateral-content { right: 0; }
         .menu-lateral-header {
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
-            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 700; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1.5px;
+            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 600; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
         }
         .menu-lateral-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
         .menu-lateral-header button:hover { color: var(--primary); transform: scale(1.1); }
@@ -109,11 +110,11 @@
         .mobile-avatar-lrg { width: 48px; height: 48px; font-size: 18px; }
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .mobile-user-name { font-size: 16px; color: white; font-weight: 800; text-transform: uppercase; }
+        .mobile-user-name { font-size: 16px; color: white; font-weight: 600; text-transform: uppercase; }
         
         .btn-menu-lateral {
             width: 100%; padding: 14px; background: transparent; color: var(--text-muted); border: 1px solid var(--border);
-            border-radius: 12px; font-size: 13px; font-weight: 700; text-transform: uppercase; cursor: pointer; transition: 0.2s; letter-spacing: 1px;
+            border-radius: 12px; font-size: 13px; font-weight: 500; text-transform: uppercase; cursor: pointer; transition: 0.2s; letter-spacing: 1px;
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
         .btn-menu-lateral:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
@@ -123,27 +124,27 @@
            ========================================================================== */
         .main-wrapper { max-width: 1100px; margin: 0 auto; padding: 40px 20px; }
         .welcome-banner { margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-        .welcome-banner h1 { font-size: 28px; font-weight: 800; margin-bottom: 8px; letter-spacing: -0.5px; }
+        .welcome-banner h1 { font-size: 26px; font-weight: 500; margin-bottom: 8px; letter-spacing: 0; }
         .welcome-banner p { color: var(--text-muted); font-size: 15px; max-width: 600px; }
 
         .card { background: var(--surface); border-radius: 16px; padding: 30px; margin-bottom: 24px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
+        .card-title { font-size: 16px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 15px; }
 
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .input-labeled-group { display: flex; flex-direction: column; }
-        .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; margin-left: 4px; }
+        .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 500; margin-bottom: 8px; margin-left: 4px; }
         input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 14px; outline: none; width: 100%; transition: 0.2s; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
-        .btn { padding: 14px 24px; border-radius: 12px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; text-align: center; display: inline-block; }
+        .btn { padding: 14px 24px; border-radius: 12px; font-weight: 500; cursor: pointer; border: none; transition: 0.2s; text-align: center; display: inline-block; }
         .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 81, 0, 0.2); }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 81, 0, 0.4); }
         .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
         .btn-outline:hover { background: rgba(255,255,255,0.05); color: white; border-color: white; }
 
         .filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
-        .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; cursor: pointer; transition: 0.2s; }
+        .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; transition: 0.2s; }
         .filter-pill:hover { color: white; }
         .filter-pill.active { background: var(--surface); color: white; border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; }
@@ -161,18 +162,18 @@
         
         .item-header { padding: 18px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; gap: 15px; }
         .item-info { flex: 1; display: flex; flex-direction: column; gap: 6px; text-align: left; }
-        .item-title { font-weight: 700; font-size: 16px; color: white; display: flex; align-items: center; }
+        .item-title { font-weight: 500; font-size: 16px; color: white; display: flex; align-items: center; }
         .item-meta { font-size: 12px; color: var(--text-muted); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
         
         .nova-campanha-dot { position: absolute; top: -5px; right: -5px; width: 14px; height: 14px; background-color: var(--primary); border-radius: 50%; box-shadow: 0 0 15px var(--primary); z-index: 10; border: 2px solid var(--surface); }
 
-        .badge { padding: 4px 10px; border-radius: 20px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; height: fit-content; align-self: flex-start; }
+        .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; height: fit-content; align-self: flex-start; }
         .badge.Ativo { background: rgba(46,204,113,0.15); color: var(--status-ativo); border: 1px solid rgba(46,204,113,0.3); }
         .badge.EmEspera { background: rgba(243,156,18,0.15); color: var(--status-espera); border: 1px solid rgba(243,156,18,0.3); }
         .badge.Finalizado { background: rgba(149,165,166,0.15); color: var(--status-encerrado); border: 1px solid rgba(149,165,166,0.3); }
 
         .action-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
-        .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: white; transition: 0.2s; text-transform: uppercase; }
+        .btn-action { padding: 8px 12px; border-radius: 8px; font-size: 11px; font-weight: 600; cursor: pointer; border: 1px solid var(--border); background: var(--surface); color: white; transition: 0.2s; text-transform: uppercase; }
         .btn-action:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.2); }
         .btn-action:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-action.ativo { border-color: rgba(46,204,113,0.5); color: var(--status-ativo); }
@@ -194,13 +195,13 @@
         .btn-close-icon:hover { background: rgba(255,255,255,0.1); color: white; transform: rotate(90deg); }
 
         .modal-header-section { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); text-align: left; padding-right: 50px; }
-        .modal-header-section h3 { margin-bottom: 6px; color: white; font-weight: 800; font-size: 24px; letter-spacing: 0.5px; }
-        .modal-header-section p { color: var(--primary); font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-header-section h3 { margin-bottom: 6px; color: white; font-weight: 500; font-size: 24px; letter-spacing: 0.5px; }
+        .modal-header-section p { color: var(--primary); font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
         .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
         .modal-column { display: flex; flex-direction: column; gap: 24px; }
-        .column-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 700; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px;}
-        .modal-section-title { font-size: 12px; color: var(--text-muted); font-weight: 600; margin-bottom: 12px; }
+        .column-title { font-size: 12px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 600; margin-bottom: 8px; border-bottom: 1px solid rgba(255,255,255,0.03); padding-bottom: 10px;}
+        .modal-section-title { font-size: 12px; color: var(--text-muted); font-weight: 500; margin-bottom: 12px; }
         .btn-full { width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px; font-size: 13px; padding: 16px; border-radius: 12px; text-transform: uppercase; letter-spacing: 1px; }
 
         .modal-card-module { background: rgba(255,255,255,0.02); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
@@ -210,12 +211,12 @@
         .qr-access-group { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; }
         #qrCodeContainer { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; background: white; border-radius: 12px; padding: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         #qrCodeImg { width: 100%; height: 100%; display: none; }
-        #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 600; }
+        #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 500; }
 
         /* 🔥 GESTÃO DE USUÁRIOS (MASTER) 🔥 */
         .tabela-usuarios { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabela-usuarios th, .tabela-usuarios td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; color: white; }
-        .tabela-usuarios th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: 700; letter-spacing: 1px; }
+        .tabela-usuarios th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: 500; letter-spacing: 1px; }
         .tabela-usuarios tbody tr:hover { background: rgba(255,255,255,0.03); }
         .input-edit-user { background: var(--bg); border: 1px solid var(--primary); color: white; padding: 8px 12px; border-radius: 8px; font-size: 13px; width: 100%; outline: none; }
         .input-edit-user:focus { box-shadow: 0 0 0 2px rgba(255, 81, 0, 0.2); }
@@ -230,22 +231,22 @@
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
         .dash-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; }
-        .dash-header h1 { font-size: 24px; color: var(--primary); }
+        .dash-header h1 { font-size: 24px; color: var(--primary); font-weight: 500; }
         .loader-container { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 60vh; }
         .spinner { width: 50px; height: 50px; border: 4px solid rgba(255, 81, 0, 0.2); border-left-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-bottom: 20px; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
         .kpi-card { background: var(--surface); padding: 20px; border-radius: 16px; border: 1px solid var(--border); text-align: center; }
-        .kpi-value { font-size: 32px; font-weight: 800; color: white; margin: 10px 0 5px 0; }
-        .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .kpi-value { font-size: 28px; font-weight: 500; color: white; margin: 10px 0 5px 0; }
+        .kpi-label { font-size: 12px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
         
         .chart-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; }
         .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; min-height: 420px; }
         .chart-container-inner { position: relative; width: 100%; height: 100%; min-height: 250px; display: flex; justify-content: center; align-items: center; padding: 10px; }
         
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; text-align: left; }
-        .report-text h4 { color: var(--primary); margin-top: 15px; margin-bottom: 8px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; }
+        .report-text h4 { color: var(--primary); margin-top: 20px; margin-bottom: 12px; font-size: 15px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; font-weight: 500; }
         .report-text ul { list-style: none; margin-bottom: 15px; }
         .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
         .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
@@ -277,8 +278,8 @@
         <div class="splash-content">
             <div class="splash-glow"></div>
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
-            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 600; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 26px; font-weight: 600; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
                 <div class="loading-mask"></div>
@@ -295,7 +296,7 @@
         </div>
         
         <div class="nav-user" onclick="toggleMenuLateral()" title="Abrir Opções de Conta">
-            <span class="user-name" id="displaySetorTopo">A carregar...</span>
+            <span class="user-name" id="displaySetorTopo">Carregando...</span>
             <div class="user-avatar" id="navAvatar">--</div>
         </div>
 
@@ -484,12 +485,13 @@
         </div>
     </div>
 
+    <!-- PAINEL ANALÍTICO WEB -->
     <div class="dash-overlay" id="dashboardTela">
         <div class="container" style="max-width: 1100px; margin: 0 auto;">
             <div class="dash-header">
                 <div>
-                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase;">Inteligência de Dados Pesquisa de Sentimento</span>
-                    <h1 id="dashNomeCampanha">Carregando...</h1>
+                    <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 500;">Pesquisa de Sentimento - Inteligência de Dados</span>
+                    <h1 id="dashNomeCampanha" style="margin-top: 5px;">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
                     <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório</button>
@@ -499,14 +501,14 @@
 
             <div id="dashLoading" class="loader-container">
                 <div class="spinner"></div>
-                <p style="color: var(--text-muted); font-weight: 600; letter-spacing: 1px;">Processando Microdados...</p>
+                <p style="color: var(--text-muted); font-weight: 500; letter-spacing: 1px;">Processando Microdados...</p>
             </div>
 
-            <div id="conteudoDashInterface" style="display: none;">
+            <div id="conteudoDashInterface" style="display: none; padding-bottom: 20px;">
                 <div class="kpi-grid">
                     <div class="kpi-card">
-                        <div class="kpi-label">Status da Campanha</div>
-                        <div class="kpi-value" id="dashStatus" style="font-size: 24px; color: var(--status-ativo);">ATIVO</div>
+                        <div class="kpi-label">Status da Operação</div>
+                        <div class="kpi-value" id="dashStatus" style="color: var(--status-ativo);">ATIVO</div>
                         <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;" id="dashTempo">Há X dias</div>
                     </div>
                     <div class="kpi-card">
@@ -515,27 +517,27 @@
                         <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Votos Consolidados</div>
                     </div>
                     <div class="kpi-card">
-                        <div class="kpi-label">Score Geral (0 a 10)</div>
+                        <div class="kpi-label">Índice de Aprovação</div>
                         <div class="kpi-value" id="dashMedia">0.0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Média Ponderada</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Média (0 a 10)</div>
                     </div>
                     <div class="kpi-card">
                         <div class="kpi-label">Volume de Dados</div>
                         <div class="kpi-value" id="dashMicrodados">0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div>
+                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Extraídos</div>
                     </div>
                 </div>
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase;">Distribuição Visual</h3>
+                        <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Distribuição de Percepções</h3>
                         <div class="chart-container-inner">
                             <canvas id="sentimentoChart"></canvas>
                         </div>
                     </div>
                     
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 15px; color: white; margin-bottom: 5px; text-transform: uppercase;">Resumo Analítico</h3>
+                        <h3 style="font-size: 14px; color: white; margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Analítico Executivo</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
                     </div>
                 </div>
@@ -560,7 +562,6 @@
             window.location.href = 'login.html';
         }
 
-        // AGORA ACIONADO PELO AVATAR (DESKTOP E MOBILE)
         function toggleMenuLateral() {
             document.getElementById('menuLateral').classList.toggle('active');
         }
@@ -577,7 +578,6 @@
         let dbTemplates = [];
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
-        let dadosParaPDF = {}; 
 
         window.onload = async () => {
             const navUserName = document.getElementById('displaySetorTopo');
@@ -587,10 +587,8 @@
             const mobAvatar = document.getElementById('mobileAvatar');
             
             if (setorLogado === "Master") {
-                // ACENDE O BOTÃO DISCRETO DENTRO DO MENU LATERAL
                 document.getElementById('btnGestaoUsuariosLateral').style.display = 'flex';
-
-                navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71;">MASTER</strong>`;
+                navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71; font-weight: 600;">MASTER</strong>`;
                 navAvatar.innerText = "M";
                 navAvatar.style.backgroundColor = "#2ecc71";
                 
@@ -600,7 +598,7 @@
                 mobAvatar.innerText = "M";
                 mobAvatar.style.backgroundColor = "#2ecc71";
             } else {
-                navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase;">${setorLogado}</strong>`;
+                navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase; font-weight: 600;">${setorLogado}</strong>`;
                 navAvatar.innerText = setorLogado.charAt(0).toUpperCase();
                 
                 mobRole.innerText = "Setor Logado";
@@ -623,10 +621,9 @@
             }, 3000);
         };
 
-        // =======================================================
-        // 🔥 LÓGICA DO MODAL GESTÃO DE USUÁRIOS (SÓ MASTER) 🔥
-        // =======================================================
-        
+        /* =======================================================
+           LÓGICA DO MODAL GESTÃO DE USUÁRIOS (SÓ MASTER)
+           ======================================================= */
         function fecharModalUsuarios(e) {
             if(e.target.id === 'modalUsuarios') document.getElementById('modalUsuarios').style.display = 'none';
         }
@@ -661,7 +658,6 @@
                 return;
             }
 
-            // ÍCONES FLAT SUBSTITUINDO EMOJIS
             const svgEdit = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
             const svgDelete = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
 
@@ -670,7 +666,7 @@
                 let isMaster = u.setor.toLowerCase() === 'master';
                 html += `
                     <tr id="row-user-${index}">
-                        <td style="font-weight: 600;">${u.setor}</td>
+                        <td style="font-weight: 500;">${u.setor}</td>
                         <td><span style="font-family: monospace; letter-spacing: 1px; color: ${isMaster ? '#2ecc71' : 'var(--primary)'}; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px;">${u.senha}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
                             ${isMaster ? '<span style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Protegido</span>' : `
@@ -701,7 +697,7 @@
                     alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha para o responsável do setor.`);
                     input.value = '';
                     carregarListaUsuariosAdmin();
-                    buscarSetores(); // Atualiza dropdown do formulário
+                    buscarSetores(); 
                 } else {
                     alert("⚠️ Erro: " + data.erro);
                 }
@@ -776,10 +772,9 @@
             }
         }
 
-        // =======================================================
-        // FUNÇÕES DO PAINEL DE CAMPANHAS
-        // =======================================================
-
+        /* =======================================================
+           FUNÇÕES DO PAINEL DE CAMPANHAS
+           ======================================================= */
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
             try {
@@ -980,7 +975,7 @@
                                     <div class="item-title" style="display:flex; align-items:center;">${folderIcon} ${baseName}</div>
                                     <div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div>
                                 </div>
-                                <span style="font-size:12px; font-weight: bold; color: var(--primary);">Expandir ▼</span>
+                                <span style="font-size:12px; font-weight: 600; color: var(--primary);">Expandir ▼</span>
                             </div>
                             <div class="sub-list">${subHtml}</div>
                         </div>
@@ -1057,9 +1052,9 @@
             renderizarLista();
         }
 
-        // =======================================================
-        // MODAL JORNADA
-        // =======================================================
+        /* =======================================================
+           MODAL JORNADA
+           ======================================================= */
         function abrirModalJornada(id) {
             campSelecionada = dbCampanhas.find(c => c.id === id);
             if(!campSelecionada) return;
@@ -1123,9 +1118,9 @@
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado com sucesso para a área de transferência!")); }
 
-        // =======================================================
-        // MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
-        // =======================================================
+        /* =======================================================
+           MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
+           ======================================================= */
         let meuGrafico = null; 
 
         async function abrirDashboardAnalytics() {
@@ -1145,11 +1140,11 @@
             const elTempo = document.getElementById('dashTempo');
             
             if(campSelecionada.status === "Ativo") {
-                elStatus.innerText = "EM ANDAMENTO"; elStatus.style.color = "var(--status-ativo)"; elTempo.innerText = `Ativo há ${diasAtivo} dia(s)`;
+                elStatus.innerText = "EM ANDAMENTO"; elStatus.style.color = "var(--status-ativo)"; elTempo.innerText = `Ativa há ${diasAtivo} dia(s)`;
             } else if(campSelecionada.status === "Finalizado") {
-                elStatus.innerText = "ENCERRADO"; elStatus.style.color = "var(--status-encerrado)"; elTempo.innerText = `Duração total: ${diasAtivo} dia(s)`;
+                elStatus.innerText = "ENCERRADA"; elStatus.style.color = "var(--status-encerrado)"; elTempo.innerText = `Duração total: ${diasAtivo} dia(s)`;
             } else {
-                elStatus.innerText = "PLANEADO"; elStatus.style.color = "var(--status-espera)"; elTempo.innerText = "A aguardar inicialização";
+                elStatus.innerText = "PLANEJADA"; elStatus.style.color = "var(--status-espera)"; elTempo.innerText = "Aguardando inicialização";
             }
 
             try {
@@ -1165,7 +1160,7 @@
 
         function processarEstatisticas(votos) {
             const totalVotos = votos.length;
-            const volumeDados = totalVotos * 6;
+            const volumeDados = totalVotos * 6; // Representação de pontos extraídos
             
             document.getElementById('dashTotalVotos').innerText = totalVotos;
             document.getElementById('dashMicrodados').innerText = volumeDados;
@@ -1173,7 +1168,7 @@
             if(totalVotos === 0) {
                 document.getElementById('dashMedia').innerText = "0.0";
                 renderizarGrafico([], [], []);
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em>A ação corporativa ainda não recebeu interações válidas.</em>";
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em style='color: var(--text-muted);'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>";
                 return;
             }
 
@@ -1197,44 +1192,35 @@
             renderizarGrafico(sortedLabels, sortedCounts, paletaDeCores);
 
             let listaHTML = "";
-            let listaPDF = ""; 
             
             sortedLabels.forEach((sentimento, index) => {
                 let count = agrupamento[sentimento];
                 let p = Math.round((count / totalVotos) * 100);
                 let cor = paletaDeCores[index % paletaDeCores.length];
 
-                listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px;"><span class="dot" style="background:${cor}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
-                
-                listaPDF += `<li style="margin-bottom: 10px; font-size: 14px;"><span style="background:${cor}; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
+                listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px;"><span class="dot" style="background:${cor}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</li>`;
             });
 
             let recoHTML = "";
-            let recoPDF = "";
             
             if(media >= 8) {
-                recoHTML = `<p style="color: #2ecc71;">O engajamento é <strong>Altamente Satisfatório (Nota ${media})</strong>. A ação corporativa alcançou os seus objetivos com excelência.</p>`;
-                recoPDF = `O engajamento é considerado <strong>Altamente Satisfatório (Nota ${media})</strong>. A comunicação foi clara e gerou excelente receptividade. O formato atual deve ser mantido e documentado como padrão de sucesso para as próximas ações institucionais.`;
+                recoHTML = `<p style="color: #2ecc71;">O engajamento demonstra um índice <strong>Altamente Satisfatório (Média ${media})</strong>. A comunicação corporativa apresentou clareza e gerou uma excelente receptividade. Recomenda-se manter e documentar o formato atual como um padrão para as próximas ações institucionais.</p>`;
             } else if (media >= 6) {
-                recoHTML = `<p style="color: #f39c12;">A ação teve um impacto <strong>Mediano (Nota ${media})</strong>. Existem pontos de atenção, mas a perceção geral encontra-se num limiar aceitável.</p>`;
-                recoPDF = `A ação corporativa teve um impacto qualitativo <strong>Mediano (Nota ${media})</strong>. Recomenda-se um acompanhamento mais focado na escuta verbal contínua para calibrar as próximas pautas com maior precisão de alcance.`;
+                recoHTML = `<p style="color: #f39c12;">A ação corporativa obteve um impacto qualitativo <strong>Moderado (Média ${media})</strong>. É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as próximas pautas, buscando maior precisão no alinhamento das expectativas da equipe.</p>`;
             } else {
-                recoHTML = `<p style="color:#ff0080;"><strong>Alerta de Rejeição (Nota ${media}):</strong> O sentimento negativo superou a satisfação. Recomenda-se revisão imediata do conteúdo abordado.</p>`;
-                recoPDF = `Constata-se uma <strong>Rejeição Preocupante (Nota ${media})</strong>. O sentimento negativo superou a satisfação do colaborador. Recomenda-se revisão imediata do conteúdo abordado, da logística do evento ou da clareza da mensagem corporativa.`;
+                recoHTML = `<p style="color:#ff0080;">Constata-se uma <strong>Atenção Requerida (Média ${media})</strong>. O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística do evento ou da clareza da mensagem corporativa abordada.</p>`;
             }
 
-            dadosParaPDF = { totalVotos, volumeDados, media, listaPDF, recoPDF };
-
             let relatorioHTML = `
-                <p>A ação corporativa <strong>${campSelecionada.nome_campanha}</strong> processou com sucesso um volume de <strong>${totalVotos} interações</strong> diretas. O score global de satisfação fechou em <strong>${media} (de 10 pontos)</strong>.</p>
+                <p>A iniciativa executiva <strong>${campSelecionada.nome_campanha}</strong> registrou e processou um volume de <strong>${totalVotos} colaborações</strong> diretas. O índice de aprovação da ação firmou-se em <strong>${media} (em uma escala qualitativa de 0 a 10)</strong>.</p>
                 
-                <h4>Mapeamento Qualitativo (Distribuição de Sentimento)</h4>
-                <p style="margin-bottom: 10px;">A análise revelou a seguinte distribuição:</p>
+                <h4>Mapeamento Analítico da Percepção</h4>
+                <p style="margin-bottom: 10px;">O escrutínio dos dados indica a seguinte estruturação de satisfação:</p>
                 <ul style="list-style: none; padding: 0;">
                     ${listaHTML}
                 </ul>
 
-                <h4>Recomendações e Parecer de Gestão</h4>
+                <h4>Parecer de Gestão</h4>
                 ${recoHTML}
             `;
 
@@ -1258,9 +1244,9 @@
                 options: {
                     responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, 
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#ffffff', padding: 15, font: { family: 'Segoe UI', size: 11 } } },
+                        legend: { position: 'bottom', labels: { color: '#ffffff', padding: 15, font: { family: "'Helvetica Neue', Arial, sans-serif", size: 12 } } },
                         datalabels: {
-                            color: '#ffffff', font: { weight: 'bold', size: 14 },
+                            color: '#ffffff', font: { family: "'Helvetica Neue', Arial, sans-serif", weight: 'bold', size: 14 },
                             formatter: (value, context) => {
                                 if(value === 0) return ''; 
                                 let total = context.chart._metasets[context.datasetIndex].total;
@@ -1274,65 +1260,28 @@
 
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
-            btn.innerText = "⏳ A gerar Documento Oficial...";
+            const txtOriginal = btn.innerHTML;
+            btn.innerHTML = "⏳ A compilar Documento...";
 
-            const htmlDoPDF = `
-                <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Segoe UI', Arial, sans-serif; color: #333; line-height: 1.6;">
-                    <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
-                        <h1 style="margin: 0; color: #ff5100; font-size: 26px; font-weight: 900; text-transform: uppercase;">ArcelorMittal</h1>
-                        <div style="text-align: right;">
-                            <h2 style="margin: 0; color: #12141a; font-size: 16px; font-weight: 800; text-transform: uppercase;">PESQUISA DE SENTIMENTO</h2>
-                            <p style="margin: 2px 0 0 0; color: #666; font-size: 11px; text-transform: uppercase; font-weight: bold;">Relatório Executivo de Resultados</p>
-                        </div>
-                    </div>
-                    <h1 style="color: #12141a; font-size: 24px; margin-bottom: 8px; font-weight: 800; text-transform: uppercase;">${campSelecionada.nome_campanha}</h1>
-                    <p style="color: #555; font-size: 13px; margin-bottom: 30px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
-                        <strong>Setor Analisado:</strong> ${campSelecionada.setor} &nbsp;|&nbsp; 
-                        <strong>Status da Coleta:</strong> ${campSelecionada.status.toUpperCase()} &nbsp;|&nbsp; 
-                        <strong>Data de Extração:</strong> ${new Date().toLocaleString('pt-PT')}
-                    </p>
-                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">1. Síntese Quantitativa (Métricas Principais)</h3>
-                    <ul style="list-style-type: none; padding: 0; margin: 0 0 35px 0; font-size: 14px;">
-                        <li style="margin-bottom: 10px;">• <strong>Total de Interações Válidas:</strong> ${dadosParaPDF.totalVotos} colaborações diretas.</li>
-                        <li style="margin-bottom: 10px;">• <strong>Score Global de Satisfação:</strong> ${dadosParaPDF.media} / 10 <span style="font-size: 12px; color: #666;">(Média Ponderada)</span>.</li>
-                        <li style="margin-bottom: 10px;">• <strong>Volume de Microdados Processados:</strong> ${dadosParaPDF.volumeDados} pontos de dados estruturados na base.</li>
-                    </ul>
-                    <h3 style="color: #ff5100; font-size: 15px; margin-bottom: 15px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;">2. Análise Estratégica e Recomendação</h3>
-                    <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Contexto Operacional:</strong><br>
-                    A ação corporativa processou com sucesso um volume de <strong>${dadosParaPDF.totalVotos} interações</strong> diretas no ambiente. Como reflexo global, o Score de Satisfação da ação fechou em <strong>${dadosParaPDF.media} (de 10 pontos)</strong>. Em termos técnicos, a ação captou ${dadosParaPDF.volumeDados} microdados auditáveis.</p>
-                    <p style="font-size: 14px; text-align: justify; margin-bottom: 15px;"><strong>Desdobramento Qualitativo da Experiência:</strong><br>
-                    A análise demográfica do sentimento revelou a seguinte distribuição de satisfação entre os colaboradores participantes:</p>
-                    <ul style="list-style: none; padding: 0; margin: 15px 0 25px 0;">
-                        ${dadosParaPDF.listaPDF}
-                    </ul>
-                    <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;"><strong>Recomendações e Parecer Final de Gestão:</strong><br>
-                    ${dadosParaPDF.recoPDF}</p>
-                    <div style="margin-top: 60px; border-top: 1px solid #ddd; padding-top: 15px; text-align: center; font-size: 10px; color: #999;">
-                        Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno
-                    </div>
-                </div>
-            `;
+            // Oculta os botões do cabeçalho
+            const actionGroup = document.querySelector('.btn-action-group');
+            actionGroup.style.display = 'none';
 
-            const divTemp = document.createElement('div');
-            divTemp.innerHTML = htmlDoPDF;
-            divTemp.style.position = 'absolute';
-            divTemp.style.top = '-9999px';
-            divTemp.style.left = '-9999px';
-            document.body.appendChild(divTemp);
-
-            const nomeDoArquivo = `Relatório Pesquisa de Sentimento (${campSelecionada.nome_campanha.trim()}).pdf`;
+            // Elemento que abrange todo o dashboard visível
+            const dashboardContainer = document.querySelector('#dashboardTela .container');
 
             const opt = {
-                margin:       [10, 0, 10, 0], 
-                filename:     nomeDoArquivo,
-                image:        { type: 'jpeg', quality: 1 },
-                html2canvas:  { scale: 2 },
-                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+                margin:       [10, 10, 10, 10],
+                filename:     `Relatorio_Analitico_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
+                image:        { type: 'jpeg', quality: 0.98 },
+                html2canvas:  { scale: 2, useCORS: true, backgroundColor: '#0f1115' },
+                jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
             };
             
-            html2pdf().set(opt).from(divTemp).save().then(() => {
-                document.body.removeChild(divTemp);
-                btn.innerText = "Exportar Relatório Oficial";
+            // Retira a foto do painel real que o usuário está vendo e transforma num documento
+            html2pdf().set(opt).from(dashboardContainer).save().then(() => {
+                actionGroup.style.display = 'flex';
+                btn.innerHTML = txtOriginal;
             });
         }
 
