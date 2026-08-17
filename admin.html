@@ -493,7 +493,7 @@
                     <h1 id="dashNomeCampanha" style="margin-top: 5px;">Carregando...</h1>
                 </div>
                 <div class="btn-action-group">
-                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório</button>
+                    <button id="btnExportPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFDocumento()">Exportar Relatório Oficial</button>
                     <button class="btn btn-outline" style="padding: 10px 15px;" onclick="fecharDashboard()">✕ Fechar Painel</button>
                 </div>
             </div>
@@ -1137,21 +1137,22 @@
             
             const dataCriacaoFormato = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
             const diasAtivo = Math.max(0, Math.floor((new Date() - new Date(campSelecionada.data_inicio)) / 86400000));
+            const dataExtracao = new Date().toLocaleDateString('pt-BR');
             const elStatus = document.getElementById('dashStatus');
             const elTempo = document.getElementById('dashTempo');
             
-            if(campSelecionada.status === "Ativo") {
+            if(campSelecionada.status === "Finalizado") {
+                elStatus.innerText = "ENCERRADA"; 
+                elStatus.style.color = "var(--status-encerrado)"; 
+                elTempo.innerText = `Encerrada em: ${dataExtracao}`;
+            } else if(campSelecionada.status === "Ativo") {
                 elStatus.innerText = "EM ANDAMENTO"; 
                 elStatus.style.color = "var(--status-ativo)"; 
-                if (diasAtivo > 1) {
+                if (diasAtivo >= 1) {
                     elTempo.innerText = `Criada em: ${dataCriacaoFormato} (Duração total: ${diasAtivo} dias)`;
                 } else {
                     elTempo.innerText = `Criada em: ${dataCriacaoFormato}`;
                 }
-            } else if(campSelecionada.status === "Finalizado") {
-                elStatus.innerText = "ENCERRADA"; 
-                elStatus.style.color = "var(--status-encerrado)"; 
-                elTempo.innerText = `Encerrada em: ${new Date().toLocaleDateString('pt-BR')}`;
             } else {
                 elStatus.innerText = "PLANEJADA"; 
                 elStatus.style.color = "var(--status-espera)"; 
@@ -1211,7 +1212,7 @@
                 let cor = paletaDeCores[index % paletaDeCores.length];
 
                 listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: white;"><span class="dot" style="background:${cor}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</li>`;
-                listaPDF += `<li style="margin-bottom: 10px; font-size: 14px;"><span style="background:${cor}; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong>${sentimento}:</strong> ${p}% (${count} votos)</li>`;
+                listaPDF += `<li style="margin-bottom: 10px; font-size: 14px;"><span style="background:${cor}; width: 14px; height: 14px; display: inline-block; border-radius: 50%; margin-right: 8px; vertical-align: middle;"></span> <strong style="color: #333;">${sentimento}:</strong> ${p}% (${count} votos)</li>`;
             });
 
             let recoHTML = "";
@@ -1277,6 +1278,9 @@
             });
         }
 
+        // =========================================================================
+        // GERADOR DE PDF 100% BLINDADO E ESTRUTURADO (Direto na Memória)
+        // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
             const txtOriginal = btn.innerHTML;
@@ -1290,33 +1294,14 @@
             if(campSelecionada.status === "Finalizado") {
                 textoTempo = `Encerrada em: ${dataExtracao}`;
             } else if(campSelecionada.status === "Ativo") {
-                textoTempo = diasAtivo > 1 ? `Criada em: ${dataCriacao} (Duração total: ${diasAtivo} dias)` : `Criada em: ${dataCriacao}`;
+                textoTempo = diasAtivo >= 1 ? `Criada em: ${dataCriacao} (Duração total: ${diasAtivo} dias)` : `Criada em: ${dataCriacao}`;
             } else {
                 textoTempo = `Criada em: ${dataCriacao} - Em Espera`;
             }
 
-            // Gerando a URL da API do QuickChart para desenhar o gráfico com transparência
-            const chartData = {
-                type: 'doughnut',
-                data: {
-                    labels: meuGrafico.data.labels,
-                    datasets: [{
-                        data: meuGrafico.data.datasets[0].data,
-                        backgroundColor: meuGrafico.data.datasets[0].backgroundColor,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    plugins: {
-                        datalabels: { color: '#ffffff', font: { weight: 'bold', size: 18 } },
-                        legend: { position: 'bottom', labels: { fontSize: 14 } }
-                    }
-                }
-            };
-            const chartUrl = `https://quickchart.io/chart?c=${encodeURIComponent(JSON.stringify(chartData))}&w=500&h=300`;
-
+            // Documento injetado diretamente pro html2pdf via string
             const htmlDoPDF = `
-                <div style="width: 790px; background: #ffffff; padding: 40px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; line-height: 1.6;">
+                <div style="width: 100%; max-width: 790px; background: #ffffff; padding: 40px; font-family: 'Helvetica Neue', Arial, sans-serif; color: #333; line-height: 1.6; box-sizing: border-box;">
                     <div style="border-bottom: 2px solid #ff5100; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                         <h1 style="margin: 0; color: #ff5100; font-size: 26px; font-weight: 900; text-transform: uppercase;">ArcelorMittal</h1>
                         <div style="text-align: right;">
@@ -1349,10 +1334,6 @@
                         ${dadosParaPDF.listaPDF}
                     </ul>
 
-                    <div id="pdfChartContainer" style="text-align: center; margin: 30px 0;">
-                        <!-- O gráfico será injetado perfeitamente aqui -->
-                    </div>
-
                     <h4 style="font-size: 14px; color: #12141a; margin-top: 20px; margin-bottom: 10px;">Conclusão:</h4>
                     <p style="font-size: 14px; text-align: justify; margin-bottom: 50px;">
                         ${dadosParaPDF.recoPDF}
@@ -1364,45 +1345,18 @@
                 </div>
             `;
 
-            const divTemp = document.createElement('div');
-            divTemp.innerHTML = htmlDoPDF;
-            divTemp.style.position = 'absolute';
-            divTemp.style.top = '-9999px';
-            divTemp.style.left = '-9999px';
-            document.body.appendChild(divTemp);
-
             const opt = {
                 margin:       [10, 10, 10, 10],
-                filename:     `Relatorio_Analitico_${campSelecionada.nome_campanha.replace(/\s+/g, '_')}.pdf`,
+                filename:     `Relatório Pesquisa de Sentimento (${campSelecionada.nome_campanha.trim()}).pdf`,
                 image:        { type: 'jpeg', quality: 0.98 },
-                html2canvas:  { scale: 2, useCORS: true },
+                html2canvas:  { scale: 2, useCORS: true, logging: false },
                 jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
             };
             
-            // Garantir que a imagem do gráfico da web carregue completamente antes de transformar em PDF
-            const imgEl = new Image();
-            imgEl.crossOrigin = "Anonymous";
-            imgEl.style.maxWidth = "100%";
-            imgEl.style.borderRadius = "8px";
-            imgEl.style.boxShadow = "0 4px 10px rgba(0,0,0,0.1)";
-            imgEl.style.padding = "10px";
-            imgEl.style.background = "#fff";
-            
-            imgEl.onload = () => {
-                divTemp.querySelector('#pdfChartContainer').appendChild(imgEl);
-                html2pdf().set(opt).from(divTemp).save().then(() => {
-                    document.body.removeChild(divTemp);
-                    btn.innerHTML = txtOriginal;
-                });
-            };
-            imgEl.onerror = () => {
-                // Caso haja falha no QuickChart, baixa os dados assim mesmo
-                html2pdf().set(opt).from(divTemp).save().then(() => {
-                    document.body.removeChild(divTemp);
-                    btn.innerHTML = txtOriginal;
-                });
-            };
-            imgEl.src = chartUrl;
+            // Passamos a string diretamente. Elimina 100% do erro de foto branca de elementos escondidos.
+            html2pdf().set(opt).from(htmlDoPDF).save().then(() => {
+                btn.innerHTML = txtOriginal;
+            });
         }
 
         function fecharDashboard() {
