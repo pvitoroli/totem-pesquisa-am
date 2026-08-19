@@ -58,6 +58,7 @@
         }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
+        /* Slogan com peso restaurado para 600 */
         .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
@@ -226,7 +227,6 @@
         .btn-icon-user.delete:hover { color: #ff4757; border-color: #ff4757; }
         .btn-icon-user.save:hover { color: #2ecc71; border-color: #2ecc71; }
 
-        /* DASHBOARDS (INDIVIDUAL E GLOBAL) */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 3000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -269,8 +269,8 @@
             .form-grid { grid-template-columns: 1fr; }
             .item-header { flex-direction: column; align-items: flex-start; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .btn-action-group { width: 100%; display: flex; gap: 10px; flex-wrap: wrap; }
-            .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; white-space: nowrap; }
+            .btn-action-group { width: 100%; display: flex; gap: 10px; }
+            .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
             .chart-container-inner { min-height: 220px; }
             .modal { padding: 30px 20px; }
             .nav-user { display: none !important; }
@@ -284,6 +284,7 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
+            <!-- Imagem e textos com font-weight restaurados para o padrão do totem -->
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
             <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
@@ -331,7 +332,7 @@
                 </div>
             </div>
 
-            <!-- Botão de Relatório Mensal Reposicionado no Menu Lateral -->
+            <!-- Botão de Relatório Mensal no Menu Lateral -->
             <button class="btn-menu-lateral" onclick="abrirDashboardGlobal(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Relatório Mensal
@@ -469,6 +470,7 @@
                 <h3>Gestão de Acessos</h3>
                 <p>Administre os Setores e Senhas de acesso da plataforma</p>
             </div>
+            
             <div class="modal-body-grid" style="grid-template-columns: 1fr; gap: 24px;">
                 <div class="modal-card-module" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; padding: 20px;">
                     <div class="input-labeled-group" style="flex: 1; min-width: 250px;">
@@ -480,10 +482,19 @@
                         Adicionar e Gerar Senha
                     </button>
                 </div>
+
                 <div class="list-container" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 0;">
                     <table class="tabela-usuarios">
-                        <thead><tr><th>Setor Cadastrado</th><th>Senha de Acesso</th><th style="text-align: right; width: 100px;">Ações</th></tr></thead>
-                        <tbody id="listaUsuariosBody"><tr><td colspan="3" style="text-align:center; padding: 30px; color: var(--text-muted);">Sincronizando usuários...</td></tr></tbody>
+                        <thead>
+                            <tr>
+                                <th>Setor Cadastrado</th>
+                                <th>Senha de Acesso</th>
+                                <th style="text-align: right; width: 100px;">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="listaUsuariosBody">
+                            <tr><td colspan="3" style="text-align:center; padding: 30px; color: var(--text-muted);">Sincronizando usuários...</td></tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -598,7 +609,7 @@
 
         Chart.register(ChartDataLabels);
 
-        // ⚠️ ATENÇÃO: Link do Apps Script (Verifique se publicou uma Nova Implantação!)
+        // ⚠️ ATENÇÃO: Link do Apps Script
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -757,7 +768,7 @@
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`); 
                 const data = await res.json();
                 
-                // Tratamento blindado: Se a planilha responder com um erro formal
+                // Tratamento blindado: Se a planilha responder com um erro formal ou objeto de erro
                 if(data && data.sucesso === false) {
                     console.error("Erro do Banco de Dados:", data.erro);
                     document.getElementById('renderArea').innerHTML = `<p style='padding:40px 20px; color: #ff4757;'>Erro no servidor: ${data.erro}</p>`;
@@ -774,7 +785,7 @@
                 renderizarLista();
             } catch (e) { 
                 console.error(e);
-                document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique se a URL_BACKEND no código é a de uma Nova Implantação do Google Apps Script.</p>"; 
+                document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique se publicou uma Nova Implantação no Google Apps Script ou se a permissão está correta.</p>"; 
             }
         }
         
@@ -1269,7 +1280,7 @@
             if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 70, 70); }
             y = Math.max(listY, startY + 60) + 12;
             
-            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Mês:", 15, y); y += 6;
+            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Mês!", 15, y); y += 6;
             doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosGlobaisParaPDF.conclusao, 180); doc.text(linhasConclusao, 15, y);
             
             y += (linhasConclusao.length * 5) + 15;
