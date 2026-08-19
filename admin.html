@@ -128,8 +128,6 @@
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
         .btn-menu-lateral:hover { background: var(--surface-highlight); color: var(--text); border-color: var(--text-muted); }
-        .btn-relatorio-especial { border-color: var(--primary); color: white; background: rgba(255, 81, 0, 0.1); }
-        .btn-relatorio-especial:hover { background: var(--primary); border-color: var(--primary); color: white; }
 
         /* ==========================================================================
            3. ESTRUTURA PRINCIPAL
@@ -294,6 +292,12 @@
     </style>
 </head>
 <body>
+    
+    <script>
+        if(localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    </script>
 
     <div id="splash-screen">
         <div class="splash-content">
@@ -341,7 +345,7 @@
                 </div>
             </div>
 
-            <button class="btn-menu-lateral btn-relatorio-especial" onclick="abrirModalFiltroMensal(); toggleMenuLateral();">
+            <button class="btn-menu-lateral" onclick="abrirModalFiltroMensal(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Relatório Mensal
             </button>
@@ -648,14 +652,13 @@
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
             document.getElementById('themeToggleText').innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
             
-            // Recarrega os gráficos se existirem para aplicar a reestilização
+            // Recarrega os gráficos se existirem para aplicar a reestilização do Canvas
             if(meuGrafico) meuGrafico.update();
             if(window.meuGraficoGlobal) window.meuGraficoGlobal.update();
         }
 
-        // Aplica o tema na primeira carga
-        if(localStorage.getItem('theme') === 'light') {
-            document.body.classList.add('light-mode');
+        // Aplica o texto do botão na primeira carga (O body já recebe a classe lá no topo do HTML)
+        if(document.body.classList.contains('light-mode')) {
             const toggleText = document.getElementById('themeToggleText');
             if(toggleText) toggleText.innerText = 'Modo Escuro';
         }
@@ -952,7 +955,6 @@
             const gridBody = document.getElementById('modalBodyGrid');
             const configCampanhaAtiva = document.getElementById('configCampanhaAtiva');
 
-            // OCULTAÇÃO INTELIGENTE SE A CAMPANHA ESTIVER FINALIZADA
             if (campSelecionada.status.toLowerCase() === 'finalizado') { 
                 colTotens.style.display = 'none'; 
                 gridBody.style.gridTemplateColumns = '1fr'; 
@@ -965,8 +967,18 @@
             document.getElementById('modalJornada').style.display = 'flex';
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
-        function pegarLinkTotem() { return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
-        function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
+        
+        /* Modificado para enviar o parâmetro de modo claro (&theme=light) direto na URL */
+        function pegarLinkTotem() { 
+            let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
+            if(document.body.classList.contains('light-mode')) url += "&theme=light";
+            return url;
+        }
+        function pegarLinkPublico() { 
+            let url = `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
+            if(document.body.classList.contains('light-mode')) url += "&theme=light";
+            return url;
+        }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado para a área de transferência!")); }
 
