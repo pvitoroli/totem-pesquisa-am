@@ -29,7 +29,7 @@
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
         
         /* ==========================================================================
-           1. SPLASH SCREEN (TELA DE CARREGAMENTO)
+           1. SPLASH SCREEN
            ========================================================================== */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -40,25 +40,18 @@
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
 
         .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 400px; width: 100%; position: relative; }
-        
         .splash-glow {
-            position: absolute; width: 180px; height: 180px;
-            background: rgba(255, 81, 0, 0.15); border-radius: 50%;
-            filter: blur(50px); z-index: -1; top: 20%;
-            animation: pulseGlow 2s alternate infinite ease-in-out;
+            position: absolute; width: 180px; height: 180px; background: rgba(255, 81, 0, 0.15); border-radius: 50%;
+            filter: blur(50px); z-index: -1; top: 20%; animation: pulseGlow 2s alternate infinite ease-in-out;
         }
         @keyframes pulseGlow { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
 
         .splash-logo-img { max-width: 130px; margin-bottom: 24px; filter: brightness(1.2); }
         .loading-bar-container { position: relative; width: 220px; margin-top: 35px; overflow: hidden; }
         .loading-bar-img { width: 100%; display: block; }
-        .loading-mask {
-            position: absolute; top: 0; left: 0; height: 100%; width: 100%;
-            background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
+        .loading-mask { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
-        /* Slogan com peso restaurado para 600 */
         .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
@@ -66,10 +59,8 @@
            2. NAVBAR E MENU LATERAL
            ========================================================================== */
         .navbar {
-            background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
-            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 1000;
+            background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
         }
         .nav-brand { display: flex; align-items: center; gap: 15px; }
         .nav-logo { max-width: 120px; filter: brightness(1.2); }
@@ -85,8 +76,7 @@
 
         .mobile-menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 5px; color: white; }
         .menu-lateral-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px);
             z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
         }
         .menu-lateral-overlay.active { opacity: 1; visibility: visible; }
@@ -98,15 +88,11 @@
         .menu-lateral-overlay.active .menu-lateral-content { right: 0; }
         .menu-lateral-header {
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
-            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 500; color: var(--text-muted);
-            text-transform: uppercase; letter-spacing: 1px;
+            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
         }
         .menu-lateral-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
         .menu-lateral-header button:hover { color: var(--primary); transform: scale(1.1); }
-        .mobile-user-card {
-            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
-            background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border);
-        }
+        .mobile-user-card { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border); }
         .mobile-avatar-lrg { width: 48px; height: 48px; font-size: 18px; }
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -118,6 +104,8 @@
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
         .btn-menu-lateral:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
+        .btn-relatorio-especial { border-color: var(--primary); color: white; background: rgba(255, 81, 0, 0.1); }
+        .btn-relatorio-especial:hover { background: var(--primary); border-color: var(--primary); }
 
         /* ==========================================================================
            3. ESTRUTURA PRINCIPAL
@@ -213,7 +201,7 @@
         #qrCodeImg { width: 100%; height: 100%; display: none; }
         #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 400; }
 
-        /* 🔥 GESTÃO DE USUÁRIOS (MASTER) 🔥 */
+        /* GESTÃO DE USUÁRIOS */
         .tabela-usuarios { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabela-usuarios th, .tabela-usuarios td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; color: white; }
         .tabela-usuarios th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: 500; letter-spacing: 1px; }
@@ -227,6 +215,7 @@
         .btn-icon-user.delete:hover { color: #ff4757; border-color: #ff4757; }
         .btn-icon-user.save:hover { color: #2ecc71; border-color: #2ecc71; }
 
+        /* DASHBOARDS (INDIVIDUAL E GLOBAL) */
         .dash-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); z-index: 3000; overflow-y: auto; display: none; padding: 30px; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes slideUp { from { transform: translateY(100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
@@ -251,6 +240,13 @@
         .report-text li { margin-bottom: 8px; display: flex; align-items: center; gap: 10px;}
         .report-text .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
 
+        /* Lista Detalhada do Global */
+        .lista-detalhada { margin-top: 30px; }
+        .campanha-detalhe-card { background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 15px; }
+        .campanha-detalhe-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 10px; margin-bottom: 15px; }
+        .campanha-detalhe-title { font-size: 15px; font-weight: 500; color: white; text-transform: uppercase;}
+        .campanha-detalhe-kpis { font-size: 12px; color: var(--text-muted); }
+
         @media(max-width: 800px) { 
             .chart-section { grid-template-columns: 1fr; } 
             .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } 
@@ -262,8 +258,8 @@
             .form-grid { grid-template-columns: 1fr; }
             .item-header { flex-direction: column; align-items: flex-start; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
-            .btn-action-group { width: 100%; display: flex; gap: 10px; }
-            .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; }
+            .btn-action-group { width: 100%; display: flex; gap: 10px; flex-wrap: wrap; }
+            .btn-action-group button { flex: 1; padding: 10px; font-size: 12px; white-space: nowrap; }
             .chart-container-inner { min-height: 220px; }
             .modal { padding: 30px 20px; }
             .nav-user { display: none !important; }
@@ -277,7 +273,6 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
-            <!-- Imagem e textos com font-weight restaurados para o padrão do totem -->
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
             <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
@@ -302,11 +297,7 @@
         </div>
 
         <button class="mobile-menu-btn" onclick="toggleMenuLateral()">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="3" y1="12" x2="21" y2="12"></line>
-                <line x1="3" y1="6" x2="21" y2="6"></line>
-                <line x1="3" y1="18" x2="21" y2="18"></line>
-            </svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
     </nav>
 
@@ -325,8 +316,8 @@
                 </div>
             </div>
 
-            <!-- Botão de Relatório Mensal no Menu Lateral -->
-            <button class="btn-menu-lateral" onclick="abrirDashboardGlobal(); toggleMenuLateral();">
+            <!-- Botão de Relatório Mensal no Menu - AGORA CHAMA O MODAL DE FILTRO -->
+            <button class="btn-menu-lateral btn-relatorio-especial" onclick="abrirModalFiltroMensal(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Relatório Mensal
             </button>
@@ -406,6 +397,31 @@
         </section>
     </main>
 
+    <!-- MODAL DE FILTRO DO RELATÓRIO MENSAL -->
+    <div class="modal-overlay" id="modalFiltroMensal" onclick="if(event.target.id === 'modalFiltroMensal') this.style.display='none'">
+        <div class="modal" style="max-width: 400px; padding: 30px;">
+            <button class="btn-close-icon" onclick="document.getElementById('modalFiltroMensal').style.display='none'">✕</button>
+            <div class="modal-header-section" style="margin-bottom: 20px; padding-bottom: 15px; padding-right: 30px;">
+                <h3 style="font-size: 18px; margin-bottom: 2px;">Filtro de Relatório</h3>
+                <p style="font-size: 11px;">Selecione o período para gerar o documento executivo</p>
+            </div>
+            
+            <div class="input-labeled-group" style="margin-bottom: 15px;">
+                <label class="input-label">Ano de Referência</label>
+                <select id="selectFiltroAno" style="cursor: pointer;"></select>
+            </div>
+            <div class="input-labeled-group" style="margin-bottom: 25px;">
+                <label class="input-label">Mês de Referência</label>
+                <select id="selectFiltroMes" style="cursor: pointer;"></select>
+            </div>
+            
+            <button class="btn btn-primary btn-full" onclick="processarFiltroEabrirDashboard()">
+                GERAR RELATÓRIO MENSAL
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL DE GESTÃO DA JORNADA -->
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
         <div class="modal">
             <button class="btn-close-icon" onclick="document.getElementById('modalJornada').style.display='none'">✕</button>
@@ -454,6 +470,7 @@
         </div>
     </div>
 
+    <!-- MODAL DE USUÁRIOS -->
     <div class="modal-overlay" id="modalUsuarios" onclick="fecharModalUsuarios(event)">
         <div class="modal" style="max-width: 750px;">
             <button class="btn-close-icon" onclick="document.getElementById('modalUsuarios').style.display='none'">✕</button>
@@ -461,7 +478,6 @@
                 <h3>Gestão de Acessos</h3>
                 <p>Administre os Setores e Senhas de acesso da plataforma</p>
             </div>
-            
             <div class="modal-body-grid" style="grid-template-columns: 1fr; gap: 24px;">
                 <div class="modal-card-module" style="display: flex; gap: 15px; align-items: flex-end; flex-wrap: wrap; padding: 20px;">
                     <div class="input-labeled-group" style="flex: 1; min-width: 250px;">
@@ -473,26 +489,17 @@
                         Adicionar e Gerar Senha
                     </button>
                 </div>
-
                 <div class="list-container" style="max-height: 400px; overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px solid var(--border); border-radius: 12px; padding: 0;">
                     <table class="tabela-usuarios">
-                        <thead>
-                            <tr>
-                                <th>Setor Cadastrado</th>
-                                <th>Senha de Acesso</th>
-                                <th style="text-align: right; width: 100px;">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody id="listaUsuariosBody">
-                            <tr><td colspan="3" style="text-align:center; padding: 30px; color: var(--text-muted);">Sincronizando usuários...</td></tr>
-                        </tbody>
+                        <thead><tr><th>Setor Cadastrado</th><th>Senha de Acesso</th><th style="text-align: right; width: 100px;">Ações</th></tr></thead>
+                        <tbody id="listaUsuariosBody"><tr><td colspan="3" style="text-align:center; padding: 30px; color: var(--text-muted);">Sincronizando usuários...</td></tr></tbody>
                     </table>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- PAINEL ANALÍTICO WEB -->
+    <!-- PAINEL ANALÍTICO INDIVIDUAL -->
     <div class="dash-overlay" id="dashboardTela">
         <div class="container" style="max-width: 1100px; margin: 0 auto;">
             <div class="dash-header">
@@ -513,36 +520,16 @@
 
             <div id="conteudoDashInterface" style="display: none; padding-bottom: 20px;">
                 <div class="kpi-grid">
-                    <div class="kpi-card">
-                        <div class="kpi-label">Status da Operação</div>
-                        <div class="kpi-value" id="dashStatus" style="color: var(--status-ativo);">ATIVO</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;" id="dashTempo">Há X dias</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Total de Interações</div>
-                        <div class="kpi-value" id="dashTotalVotos">0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Votos Consolidados</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Índice de Aprovação</div>
-                        <div class="kpi-value" id="dashMedia">0.0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Média (0 a 10)</div>
-                    </div>
-                    <div class="kpi-card">
-                        <div class="kpi-label">Volume de Dados</div>
-                        <div class="kpi-value" id="dashMicrodados">0</div>
-                        <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Extraídos</div>
-                    </div>
+                    <div class="kpi-card"><div class="kpi-label">Status da Operação</div><div class="kpi-value" id="dashStatus" style="color: var(--status-ativo);">ATIVO</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;" id="dashTempo">Há X dias</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Total de Interações</div><div class="kpi-value" id="dashTotalVotos">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Votos Consolidados</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Índice de Aprovação</div><div class="kpi-value" id="dashMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Média (0 a 10)</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Volume de Dados</div><div class="kpi-value" id="dashMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Extraídos</div></div>
                 </div>
-
                 <div class="chart-section">
                     <div class="chart-card">
                         <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Distribuição de Percepções</h3>
-                        <div class="chart-container-inner">
-                            <canvas id="sentimentoChart"></canvas>
-                        </div>
+                        <div class="chart-container-inner"><canvas id="sentimentoChart"></canvas></div>
                     </div>
-                    
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
                         <h3 style="font-size: 14px; color: white; margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Analítico</h3>
                         <div class="report-text" id="dashAnaliseTexto"></div>
@@ -551,14 +538,14 @@
             </div>
         </div>
     </div>
-    
+
     <!-- 🔥 PAINEL ANALÍTICO MENSAL CONSOLIDADO (GLOBAL) 🔥 -->
     <div class="dash-overlay" id="dashboardGlobalTela">
         <div class="container" style="max-width: 1100px; margin: 0 auto;">
             <div class="dash-header">
                 <div>
                     <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 500;">Visão Executiva de Inteligência</span>
-                    <h1 style="margin-top: 5px; color: var(--primary);">RELATÓRIO MENSAL CONSOLIDADO</h1>
+                    <h1 id="dashGlobalTitle" style="margin-top: 5px; color: var(--primary);">RELATÓRIO MENSAL CONSOLIDADO</h1>
                 </div>
                 <div class="btn-action-group">
                     <button id="btnExportGlobalPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFGlobal()">Exportar Documento Mestre</button>
@@ -575,23 +562,23 @@
                 <div class="kpi-grid">
                     <div class="kpi-card"><div class="kpi-label">Ações Corporativas</div><div class="kpi-value" id="dashGlobalCampanhas">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Campanhas no Período</div></div>
                     <div class="kpi-card"><div class="kpi-label">Interações Totais</div><div class="kpi-value" id="dashGlobalTotalVotos">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Votos Recebidos</div></div>
-                    <div class="kpi-card"><div class="kpi-label">Índice de Aprovação</div><div class="kpi-value" id="dashGlobalMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Aprovação Média Ponderada</div></div>
-                    <div class="kpi-card"><div class="kpi-label">Total de Microdados</div><div class="kpi-value" id="dashGlobalMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Índice Geral</div><div class="kpi-value" id="dashGlobalMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Aprovação Média Ponderada</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Massa de Dados</div><div class="kpi-value" id="dashGlobalMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div></div>
                 </div>
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Mapa de Sentimentos</h3>
+                        <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Ecossistema de Percepção Global</h3>
                         <div class="chart-container-inner"><canvas id="sentimentoGlobalChart"></canvas></div>
                     </div>
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 14px; color: white; margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Conclusão Analítica do Mês</h3>
+                        <h3 style="font-size: 14px; color: white; margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Estratégico</h3>
                         <div class="report-text" id="dashGlobalAnaliseTexto"></div>
                     </div>
                 </div>
 
                 <div class="lista-detalhada">
-                    <h3 style="font-size: 15px; color: white; margin-bottom: 15px; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 10px;">3. Lista de Campanhas</h3>
+                    <h3 style="font-size: 15px; color: white; margin-bottom: 15px; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Detalhamento por Campanha</h3>
                     <div id="listaDetalhamentoCampanhas"></div>
                 </div>
             </div>
@@ -599,20 +586,6 @@
     </div>
     
     <script>
-        // Dados para PDF Global e Paleta de Cores
-        let dadosGlobaisParaPDF = {};
-        const PALETA_MESTRE = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f', '#00d2ff', '#ff0000', '#00ff88'];
-        let colorMapMestre = {};
-        let colorIndexMestre = 0;
-
-        function obterCorDoSentimento(sentimento) {
-            if (!colorMapMestre[sentimento]) {
-                colorMapMestre[sentimento] = PALETA_MESTRE[colorIndexMestre % PALETA_MESTRE.length];
-                colorIndexMestre++;
-            }
-            return colorMapMestre[sentimento];
-        }
-
         const setorLogado = localStorage.getItem('setorLogado');
         const dataLogin = localStorage.getItem('dataLogin');
         const hoje = new Date().toDateString();
@@ -629,15 +602,12 @@
             window.location.href = 'login.html';
         }
 
-        function toggleMenuLateral() {
-            document.getElementById('menuLateral').classList.toggle('active');
-        }
-        function fecharMenuClicandoFora(e) {
-            if(e.target.id === 'menuLateral') toggleMenuLateral();
-        }
+        function toggleMenuLateral() { document.getElementById('menuLateral').classList.toggle('active'); }
+        function fecharMenuClicandoFora(e) { if(e.target.id === 'menuLateral') toggleMenuLateral(); }
 
         Chart.register(ChartDataLabels);
 
+        // ⚠️ ATENÇÃO: Lembre-se de atualizar este link se você gerar uma "Nova Implantação" no Apps Script!
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -646,9 +616,23 @@
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
         
-        // Armazena dados essenciais para o motor nativo do PDF
+        // Dados para PDF
         let dadosParaPDF = {}; 
         let dadosAgrupadosParaPDF = []; 
+        let dadosGlobaisParaPDF = {};
+
+        // Paleta Global (Para garantir que a mesma cor represente o mesmo sentimento no relatório Mestre)
+        const PALETA_MESTRE = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f', '#00d2ff', '#ff0000', '#00ff88'];
+        let colorMapMestre = {};
+        let colorIndexMestre = 0;
+
+        function obterCorDoSentimento(sentimento) {
+            if (!colorMapMestre[sentimento]) {
+                colorMapMestre[sentimento] = PALETA_MESTRE[colorIndexMestre % PALETA_MESTRE.length];
+                colorIndexMestre++;
+            }
+            return colorMapMestre[sentimento];
+        }
 
         window.onload = async () => {
             const navUserName = document.getElementById('displaySetorTopo');
@@ -660,21 +644,13 @@
             if (setorLogado === "Master") {
                 document.getElementById('btnGestaoUsuariosLateral').style.display = 'flex';
                 navUserName.innerHTML = `Acesso Total: <strong style="color: #2ecc71; font-weight: 500;">MASTER</strong>`;
-                navAvatar.innerText = "M";
-                navAvatar.style.backgroundColor = "#2ecc71";
-                
-                mobRole.innerText = "ACESSO TOTAL";
-                mobName.innerText = "MASTER";
-                mobName.style.color = "#2ecc71";
-                mobAvatar.innerText = "M";
-                mobAvatar.style.backgroundColor = "#2ecc71";
+                navAvatar.innerText = "M"; navAvatar.style.backgroundColor = "#2ecc71";
+                mobRole.innerText = "ACESSO TOTAL"; mobName.innerText = "MASTER"; mobName.style.color = "#2ecc71";
+                mobAvatar.innerText = "M"; mobAvatar.style.backgroundColor = "#2ecc71";
             } else {
                 navUserName.innerHTML = `Setor Logado: <strong style="color: var(--primary); text-transform: uppercase; font-weight: 500;">${setorLogado}</strong>`;
                 navAvatar.innerText = setorLogado.charAt(0).toUpperCase();
-                
-                mobRole.innerText = "Setor Logado";
-                mobName.innerText = setorLogado;
-                mobName.style.color = "var(--primary)";
+                mobRole.innerText = "Setor Logado"; mobName.innerText = setorLogado; mobName.style.color = "var(--primary)";
                 mobAvatar.innerText = setorLogado.charAt(0).toUpperCase();
             }
 
@@ -693,45 +669,25 @@
         };
 
         /* =======================================================
-           LÓGICA DO MODAL GESTÃO DE USUÁRIOS (SÓ MASTER)
+           GESTÃO DE USUÁRIOS (SÓ MASTER)
            ======================================================= */
-        function fecharModalUsuarios(e) {
-            if(e.target.id === 'modalUsuarios') document.getElementById('modalUsuarios').style.display = 'none';
-        }
-
-        async function abrirModalUsuarios() {
-            document.getElementById('modalUsuarios').style.display = 'flex';
-            carregarListaUsuariosAdmin();
-        }
-
+        function fecharModalUsuarios(e) { if(e.target.id === 'modalUsuarios') document.getElementById('modalUsuarios').style.display = 'none'; }
+        async function abrirModalUsuarios() { document.getElementById('modalUsuarios').style.display = 'flex'; carregarListaUsuariosAdmin(); }
         async function carregarListaUsuariosAdmin() {
             const tbody = document.getElementById('listaUsuariosBody');
             tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; padding: 30px; color: var(--text-muted);">Sincronizando base de acessos...</td></tr>';
-            
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=listarUsuarios&t=${new Date().getTime()}`);
                 const data = await res.json();
-                
-                if(data.sucesso) {
-                    renderTabelaUsuarios(data.usuarios);
-                } else {
-                    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: #ff4757;">Erro: ${data.erro}</td></tr>`;
-                }
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: #ff4757;">Falha na conexão. Tente novamente.</td></tr>';
-            }
+                if(data.sucesso) renderTabelaUsuarios(data.usuarios);
+                else tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: #ff4757;">Erro: ${data.erro}</td></tr>`;
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: #ff4757;">Falha na conexão. Tente novamente.</td></tr>'; }
         }
-
         function renderTabelaUsuarios(usuarios) {
             const tbody = document.getElementById('listaUsuariosBody');
-            if(usuarios.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Nenhum usuário encontrado.</td></tr>';
-                return;
-            }
-
+            if(usuarios.length === 0) { tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: var(--text-muted);">Nenhum usuário encontrado.</td></tr>'; return; }
             const svgEdit = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>`;
             const svgDelete = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>`;
-
             let html = '';
             usuarios.forEach((u, index) => {
                 let isMaster = u.setor.toLowerCase() === 'master';
@@ -740,149 +696,76 @@
                         <td style="font-weight: 400;">${u.setor}</td>
                         <td><span style="font-family: monospace; letter-spacing: 1px; color: ${isMaster ? '#2ecc71' : 'var(--primary)'}; background: rgba(0,0,0,0.3); padding: 4px 8px; border-radius: 6px;">${u.senha}</span></td>
                         <td style="text-align: right; white-space: nowrap;">
-                            ${isMaster ? '<span style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Protegido</span>' : `
-                            <button class="btn-icon-user edit" onclick="ativarEdicaoUsuario(${index}, '${u.setor}', '${u.senha}')" title="Editar Usuário">${svgEdit}</button>
-                            <button class="btn-icon-user delete" onclick="excluirUsuarioAdmin('${u.setor}', this)" title="Excluir Usuário">${svgDelete}</button>
-                            `}
+                            ${isMaster ? '<span style="font-size:10px; color:var(--text-muted); text-transform:uppercase;">Protegido</span>' : `<button class="btn-icon-user edit" onclick="ativarEdicaoUsuario(${index}, '${u.setor}', '${u.senha}')">${svgEdit}</button><button class="btn-icon-user delete" onclick="excluirUsuarioAdmin('${u.setor}', this)">${svgDelete}</button>`}
                         </td>
-                    </tr>
-                `;
+                    </tr>`;
             });
             tbody.innerHTML = html;
         }
-
         async function adicionarUsuarioAdmin(btn) {
-            const input = document.getElementById('novoSetorInput');
-            const setor = input.value.trim();
-            
+            const input = document.getElementById('novoSetorInput'); const setor = input.value.trim();
             if(!setor) return alert("Por favor, digite o nome do novo setor!");
-            
-            btn.disabled = true;
-            btn.innerHTML = "Processando...";
-            
+            btn.disabled = true; btn.innerHTML = "Processando...";
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=adicionarUsuario&setor=${encodeURIComponent(setor)}&t=${new Date().getTime()}`);
                 const data = await res.json();
-                
-                if(data.sucesso) {
-                    alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha para o responsável do setor.`);
-                    input.value = '';
-                    carregarListaUsuariosAdmin();
-                    buscarSetores(); 
-                } else {
-                    alert("⚠️ Erro: " + data.erro);
-                }
-            } catch (e) {
-                alert("Falha de conexão ao tentar adicionar o usuário.");
-            }
-            
-            btn.disabled = false;
-            btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Adicionar e Gerar Senha`;
+                if(data.sucesso) { alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha.`); input.value = ''; carregarListaUsuariosAdmin(); buscarSetores(); } 
+                else alert("⚠️ Erro: " + data.erro);
+            } catch (e) { alert("Falha de conexão."); }
+            btn.disabled = false; btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Adicionar e Gerar Senha`;
         }
-
         function ativarEdicaoUsuario(index, setorAntigo, senhaAntiga) {
             const row = document.getElementById(`row-user-${index}`);
-            
             const svgSave = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
             const svgCancel = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-            
-            row.innerHTML = `
-                <td><input type="text" class="input-edit-user" id="edit-setor-${index}" value="${setorAntigo}"></td>
-                <td><input type="text" class="input-edit-user" id="edit-senha-${index}" value="${senhaAntiga}"></td>
-                <td style="text-align: right; white-space: nowrap;">
-                    <button class="btn-icon-user save" onclick="salvarEdicaoUsuarioAdmin(${index}, '${setorAntigo}', this)" title="Salvar Alteração">${svgSave}</button>
-                    <button class="btn-icon-user delete" onclick="carregarListaUsuariosAdmin()" title="Cancelar Edição">${svgCancel}</button>
-                </td>
-            `;
+            row.innerHTML = `<td><input type="text" class="input-edit-user" id="edit-setor-${index}" value="${setorAntigo}"></td><td><input type="text" class="input-edit-user" id="edit-senha-${index}" value="${senhaAntiga}"></td><td style="text-align: right; white-space: nowrap;"><button class="btn-icon-user save" onclick="salvarEdicaoUsuarioAdmin(${index}, '${setorAntigo}', this)">${svgSave}</button><button class="btn-icon-user delete" onclick="carregarListaUsuariosAdmin()">${svgCancel}</button></td>`;
         }
-
         async function salvarEdicaoUsuarioAdmin(index, setorAntigo, btn) {
-            const novoSetor = document.getElementById(`edit-setor-${index}`).value.trim();
-            const novaSenha = document.getElementById(`edit-senha-${index}`).value.trim();
-            
+            const novoSetor = document.getElementById(`edit-setor-${index}`).value.trim(); const novaSenha = document.getElementById(`edit-senha-${index}`).value.trim();
             if(!novoSetor || !novaSenha) return alert("Atenção: Os campos não podem ficar vazios!");
-            
             btn.disabled = true;
-            
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=editarUsuario&setorAntigo=${encodeURIComponent(setorAntigo)}&setorNovo=${encodeURIComponent(novoSetor)}&senhaNova=${encodeURIComponent(novaSenha)}&t=${new Date().getTime()}`);
                 const data = await res.json();
-                
-                if(data.sucesso) {
-                    carregarListaUsuariosAdmin();
-                    buscarSetores(); 
-                } else {
-                    alert("Erro: " + data.erro);
-                    btn.disabled = false;
-                }
-            } catch (e) {
-                alert("Erro de rede.");
-                btn.disabled = false;
-            }
+                if(data.sucesso) { carregarListaUsuariosAdmin(); buscarSetores(); } else { alert("Erro: " + data.erro); btn.disabled = false; }
+            } catch (e) { alert("Erro de rede."); btn.disabled = false; }
         }
-
         async function excluirUsuarioAdmin(setor, btn) {
-            if(!confirm(`⚠️ AVISO DE SEGURANÇA ⚠️\n\nTem certeza que deseja EXCLUIR definitivamente o acesso do setor: ${setor}?\n\nEles não poderão mais logar no sistema.`)) return;
-            
+            if(!confirm(`⚠️ AVISO DE SEGURANÇA ⚠️\n\nTem certeza que deseja EXCLUIR o acesso do setor: ${setor}?`)) return;
             btn.disabled = true;
-            
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=excluirUsuario&setor=${encodeURIComponent(setor)}&t=${new Date().getTime()}`);
                 const data = await res.json();
-                
-                if(data.sucesso) {
-                    carregarListaUsuariosAdmin();
-                    buscarSetores();
-                } else {
-                    alert("Erro ao excluir: " + data.erro);
-                    btn.disabled = false;
-                }
-            } catch (e) {
-                alert("Erro de rede ao tentar excluir.");
-                btn.disabled = false;
-            }
+                if(data.sucesso) { carregarListaUsuariosAdmin(); buscarSetores(); } else { alert("Erro: " + data.erro); btn.disabled = false; }
+            } catch (e) { alert("Erro de rede."); btn.disabled = false; }
         }
 
         /* =======================================================
-           FUNÇÕES DO PAINEL DE CAMPANHAS
+           FUNÇÕES DA CAMPANHA E LEITURA DE DADOS
            ======================================================= */
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
             try {
-                const res = await fetch(`${URL_BACKEND}?acao=listarSetores`);
-                const setores = await res.json();
+                const res = await fetch(`${URL_BACKEND}?acao=listarSetores`); const setores = await res.json();
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor Responsável</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
-            } catch (e) {
-                selectSetor.innerHTML = '<option value="" disabled selected>Erro ao carregar setores</option>';
-            }
+            } catch (e) { selectSetor.innerHTML = '<option value="" disabled selected>Erro ao carregar setores</option>'; }
         }
-
         async function buscarTemplates() {
-            const selectNovo = document.getElementById('templateCampanha');
-            const selectModal = document.getElementById('modalTemplateSelect');
+            const selectNovo = document.getElementById('templateCampanha'); const selectModal = document.getElementById('modalTemplateSelect');
             try {
-                const res = await fetch(`${URL_BACKEND}?acao=listarTemplates`);
-                dbTemplates = await res.json();
-                
-                let optionsHTML = '';
-                dbTemplates.forEach(t => { optionsHTML += `<option value="${t}">${t}</option>`; });
-                
-                selectNovo.innerHTML = optionsHTML;
-                selectModal.innerHTML = optionsHTML;
-            } catch (e) {
-                selectNovo.innerHTML = '<option value="Padrão">Padrão</option>';
-                selectModal.innerHTML = '<option value="Padrão">Padrão</option>';
-            }
+                const res = await fetch(`${URL_BACKEND}?acao=listarTemplates`); dbTemplates = await res.json();
+                let optionsHTML = ''; dbTemplates.forEach(t => { optionsHTML += `<option value="${t}">${t}</option>`; });
+                selectNovo.innerHTML = optionsHTML; selectModal.innerHTML = optionsHTML;
+            } catch (e) { selectNovo.innerHTML = '<option value="Padrão">Padrão</option>'; selectModal.innerHTML = '<option value="Padrão">Padrão</option>'; }
         }
-
         async function buscarDados() {
             try {
                 const antiCache = new Date().getTime(); 
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`); 
                 const data = await res.json();
                 
-                // Trata o erro caso a planilha falhe formalmente
+                // Trata o erro caso a planilha falhe
                 if(data && data.sucesso === false) {
                     console.error("Erro do Banco de Dados:", data.erro);
                     document.getElementById('renderArea').innerHTML = `<p style='padding:40px 20px; color: #ff4757;'>Erro no servidor: ${data.erro}</p>`;
@@ -897,442 +780,203 @@
                 });
                 renderizarLista();
             } catch (e) { 
-                console.error(e);
                 document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique a Nova Implantação.</p>"; 
             }
         }
-
         async function salvarCampanha() {
-            const nome = document.getElementById('nomeCampanha').value.trim();
-            const pasta = document.getElementById('pastaCampanha').value.trim();
-            const setor = document.getElementById('setorCampanha').value;
-            const data = document.getElementById('dataCampanha').value;
-            const template = document.getElementById('templateCampanha').value || 'Padrão';
-            
-            const btn = document.getElementById('btnSalvar');
-
+            const nome = document.getElementById('nomeCampanha').value.trim(); const pasta = document.getElementById('pastaCampanha').value.trim();
+            const setor = document.getElementById('setorCampanha').value; const data = document.getElementById('dataCampanha').value;
+            const template = document.getElementById('templateCampanha').value || 'Padrão'; const btn = document.getElementById('btnSalvar');
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
-            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase() && c.status !== 'Excluído')) { return alert("Atenção: Uma campanha com este nome já existe."); }
-
+            if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase() && c.status !== 'Excluído')) return alert("Atenção: Campanha existente.");
             btn.innerText = "A Criar..."; btn.disabled = true;
-
             try {
-                const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&pasta=${encodeURIComponent(pasta)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${antiCache}`);
+                const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&pasta=${encodeURIComponent(pasta)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${new Date().getTime()}`);
                 const resposta = await res.json();
-                if (!resposta.sucesso) {
-                    alert(resposta.erro);
-                } else {
-                    sessionStorage.setItem('novaCampanhaNome', nome);
-                }
-            } catch (e) { alert("Erro crítico de conexão."); }
-
+                if (!resposta.sucesso) alert(resposta.erro); else sessionStorage.setItem('novaCampanhaNome', nome);
+            } catch (e) { alert("Erro de conexão."); }
             btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
-            document.getElementById('nomeCampanha').value = '';
-            document.getElementById('pastaCampanha').value = '';
-            document.getElementById('setorCampanha').selectedIndex = 0;
-            document.getElementById('templateCampanha').selectedIndex = 0;
+            document.getElementById('nomeCampanha').value = ''; document.getElementById('pastaCampanha').value = '';
+            document.getElementById('setorCampanha').selectedIndex = 0; document.getElementById('templateCampanha').selectedIndex = 0;
             buscarDados(); 
         }
-
         async function atualizarTemplate(btnElement) {
-            const novoTemplate = document.getElementById('modalTemplateSelect').value;
-            if(!campSelecionada || !novoTemplate) return;
-            
-            const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "A Salvar..."; btnElement.disabled = true;
-
+            const novoTemplate = document.getElementById('modalTemplateSelect').value; if(!campSelecionada || !novoTemplate) return;
+            const txtOriginal = btnElement.innerText; btnElement.innerText = "A Salvar..."; btnElement.disabled = true;
             try {
-                const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=alterarTemplate&id=${campSelecionada.id}&template=${encodeURIComponent(novoTemplate)}&t=${antiCache}`);
-                const json = await res.json();
-                
+                const res = await fetch(`${URL_BACKEND}?acao=alterarTemplate&id=${campSelecionada.id}&template=${encodeURIComponent(novoTemplate)}&t=${new Date().getTime()}`); const json = await res.json();
                 if(json.sucesso) {
-                    campSelecionada.template = novoTemplate;
-                    const badge = document.getElementById('modTemplateBadge');
-                    if (badge) badge.innerText = novoTemplate;
-                    alert("Modelo visual (Template) atualizado com sucesso!");
-                    renderizarLista();
-                } else alert("Falha crítica: " + json.erro);
+                    campSelecionada.template = novoTemplate; const badge = document.getElementById('modTemplateBadge'); if (badge) badge.innerText = novoTemplate;
+                    alert("Modelo atualizado!"); renderizarLista();
+                } else alert("Falha: " + json.erro);
             } catch (e) { alert("Erro de rede."); } 
-            
             btnElement.innerText = txtOriginal; btnElement.disabled = false;
         }
-
         async function atualizarPasta(btnElement) {
-            const novaPasta = document.getElementById('modalPastaInput').value.trim();
-            if(!campSelecionada) return;
-            
-            const txtOriginal = btnElement.innerText;
-            btnElement.innerText = "..."; btnElement.disabled = true;
-
+            const novaPasta = document.getElementById('modalPastaInput').value.trim(); if(!campSelecionada) return;
+            const txtOriginal = btnElement.innerText; btnElement.innerText = "..."; btnElement.disabled = true;
             try {
-                const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=alterarPasta&id=${campSelecionada.id}&pasta=${encodeURIComponent(novaPasta)}&t=${antiCache}`);
-                const json = await res.json();
-                
+                const res = await fetch(`${URL_BACKEND}?acao=alterarPasta&id=${campSelecionada.id}&pasta=${encodeURIComponent(novaPasta)}&t=${new Date().getTime()}`); const json = await res.json();
                 if(json.sucesso) {
-                    campSelecionada.pasta = novaPasta;
-                    const badge = document.getElementById('modPastaBadge');
-                    if (badge) badge.innerText = novaPasta || "Automática";
+                    campSelecionada.pasta = novaPasta; const badge = document.getElementById('modPastaBadge'); if (badge) badge.innerText = novaPasta || "Automática";
                     renderizarLista();
                 } else alert("Falha: " + json.erro);
             } catch (e) { alert("Erro de rede."); } 
-            
             btnElement.innerText = txtOriginal; btnElement.disabled = false;
         }
-
         async function alterarStatus(id, novoStatus, btnElement) {
             if(!id) return;
-            const botoes = btnElement.parentElement.querySelectorAll('button');
-            botoes.forEach(b => b.disabled = true);
-            
+            const botoes = btnElement.parentElement.querySelectorAll('button'); botoes.forEach(b => b.disabled = true);
             try {
-                const antiCache = new Date().getTime();
-                const res = await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${antiCache}`);
-                const json = await res.json();
-                if(json.sucesso === true) {
-                    let camp = dbCampanhas.find(c => c.id === id);
-                    if(camp) camp.status = novoStatus;
-                    renderizarLista();
-                } else alert("Falha " + json.erro);
+                const res = await fetch(`${URL_BACKEND}?acao=alterarStatus&id=${id}&status=${novoStatus}&t=${new Date().getTime()}`); const json = await res.json();
+                if(json.sucesso === true) { let camp = dbCampanhas.find(c => c.id === id); if(camp) camp.status = novoStatus; renderizarLista(); } 
+                else alert("Falha " + json.erro);
             } catch (e) { alert("Erro de rede."); } 
         }
-
-        function confirmarExclusao(id, btn) {
-            if(confirm("Tem certeza que deseja EXCLUIR esta campanha? Os dados serão ocultados do painel permanentemente.")) {
-                alterarStatus(id, 'Excluído', btn);
-            }
-        }
-
-        function normalizarNomeCampanha(nome) {
-            if (!nome) return "Sem Nome";
-            return nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim();
-        }
-
+        function confirmarExclusao(id, btn) { if(confirm("Tem certeza que deseja EXCLUIR esta campanha?")) alterarStatus(id, 'Excluído', btn); }
+        function normalizarNomeCampanha(nome) { return nome ? nome.replace(/\s*(?:-|–)?\s*(?:dia|turma|etapa|parte|fase)?\s*\d+[º°aªo]?(?:\s*dias?)?$/i, '').trim() : "Sem Nome"; }
         function agruparCampanhas(lista) {
             let grupos = {};
             lista.forEach(c => {
                 let baseName = c.pasta && c.pasta.trim() !== "" ? c.pasta : normalizarNomeCampanha(c.nome_campanha);
-                if (!grupos[baseName]) grupos[baseName] = [];
-                grupos[baseName].push(c);
-            });
-            return grupos;
+                if (!grupos[baseName]) grupos[baseName] = []; grupos[baseName].push(c);
+            }); return grupos;
         }
-
         function renderizarLista() {
-            const area = document.getElementById('renderArea');
-            const dataFiltro = document.getElementById('filtroData').value;
-            
+            const area = document.getElementById('renderArea'); const dataFiltro = document.getElementById('filtroData').value;
             let filtrados = dbCampanhas.filter(c => {
                 if (c.status === 'Excluído') return false;
                 let passaStatus = (stateFiltroStatus === 'todas' || c.status === stateFiltroStatus);
                 let passaData = (!dataFiltro || c.data_inicio.substring(0,10) === dataFiltro);
                 let passaSetor = (setorLogado === "Master" || c.setor === setorLogado);
-
                 return passaStatus && passaData && passaSetor;
             });
-
-            if (filtrados.length === 0) {
-                area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted); font-weight:400;'>Nenhuma campanha ativa encontrada para este filtro.</p>";
-                return;
-            }
-
-            const grupos = agruparCampanhas(filtrados);
-            area.innerHTML = '';
-            
+            if (filtrados.length === 0) { area.innerHTML = "<p style='padding:40px 20px; color: var(--text-muted); font-weight:400;'>Nenhuma campanha encontrada.</p>"; return; }
+            const grupos = agruparCampanhas(filtrados); area.innerHTML = '';
             const folderIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px; vertical-align: text-bottom; color: var(--primary);"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>`;
-
             for (let baseName in grupos) {
                 const itens = grupos[baseName];
-                if (itens.length === 1 && (!itens[0].pasta || itens[0].pasta.trim() === "")) {
-                    area.innerHTML += criarCardHTML(itens[0]);
-                } else {
+                if (itens.length === 1 && (!itens[0].pasta || itens[0].pasta.trim() === "")) { area.innerHTML += criarCardHTML(itens[0]); } 
+                else {
                     let subHtml = itens.map(i => criarCardHTML(i, true)).join('');
-                    area.innerHTML += `
-                        <div class="list-item">
-                            <div class="item-header" onclick="toggleSublist(this)">
-                                <div class="item-info">
-                                    <div class="item-title" style="display:flex; align-items:center;">${folderIcon} ${baseName}</div>
-                                    <div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div>
-                                </div>
-                                <span style="font-size:12px; font-weight: 500; color: var(--primary);">Expandir ▼</span>
-                            </div>
-                            <div class="sub-list">${subHtml}</div>
-                        </div>
-                    `;
+                    area.innerHTML += `<div class="list-item"><div class="item-header" onclick="toggleSublist(this)"><div class="item-info"><div class="item-title">${folderIcon} ${baseName}</div><div class="item-meta">Contém ${itens.length} ações cadastradas no sistema</div></div><span style="font-size:12px; font-weight: 500; color: var(--primary);">Expandir ▼</span></div><div class="sub-list">${subHtml}</div></div>`;
                 }
             }
         }
-
         function criarCardHTML(ev, isSub = false) {
             let dataFormatada = ev.data_inicio ? new Date(ev.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'}) : 'Sem data';
-            let divClass = isSub ? 'sub-item' : 'list-item';
-            let statusClass = ev.status.replace(/\s+/g, '');
-
-            let botoesHTML = '';
-            if (ev.status === 'Ativo') {
-                botoesHTML = `
-                    <button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button>
-                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
-                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
-                `;
-            } else if (ev.status === 'Em Espera') {
-                botoesHTML = `
-                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Ativar</button>
-                    <button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button>
-                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
-                `;
-            } else if (ev.status === 'Finalizado') {
-                botoesHTML = `
-                    <button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Reativar Ação</button>
-                    <button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>
-                `;
-            }
-
-            let innerPadding = isSub ? '0' : '18px 24px';
-            
-            let nomeNova = sessionStorage.getItem('novaCampanhaNome');
-            let dotHTML = (ev.nome_campanha === nomeNova) ? '<div class="nova-campanha-dot" title="Nova Campanha"></div>' : '';
-
-            return `
-                <div class="${divClass}" onclick="abrirModalJornada('${ev.id}')" style="position: relative;">
-                    ${dotHTML}
-                    <div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: ${innerPadding};">
-                        <div class="item-info" style="width: 100%;">
-                            <div style="display:flex; justify-content:space-between; width:100%;">
-                                <div class="item-title" style="color: ${isSub ? 'var(--text-muted)' : 'white'};">${ev.nome_campanha}</div>
-                                <span class="badge ${statusClass}">${ev.status}</span>
-                            </div>
-                            <div class="item-meta"><span>${ev.setor}</span>•<span>Início: ${dataFormatada}</span></div>
-                            <div class="action-bar" onclick="event.stopPropagation()">
-                                ${botoesHTML}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
+            let divClass = isSub ? 'sub-item' : 'list-item'; let statusClass = ev.status.replace(/\s+/g, ''); let botoesHTML = '';
+            if (ev.status === 'Ativo') botoesHTML = `<button class="btn-action espera" onclick="alterarStatus('${ev.id}', 'Em Espera', this)">Pausar</button><button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button><button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>`;
+            else if (ev.status === 'Em Espera') botoesHTML = `<button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Ativar</button><button class="btn-action encerrado" onclick="alterarStatus('${ev.id}', 'Finalizado', this)">Finalizar</button><button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>`;
+            else if (ev.status === 'Finalizado') botoesHTML = `<button class="btn-action ativo" onclick="alterarStatus('${ev.id}', 'Ativo', this)">Reativar Ação</button><button class="btn-action excluir" onclick="confirmarExclusao('${ev.id}', this)">Excluir</button>`;
+            let innerPadding = isSub ? '0' : '18px 24px'; let dotHTML = (ev.nome_campanha === sessionStorage.getItem('novaCampanhaNome')) ? '<div class="nova-campanha-dot" title="Nova Campanha"></div>' : '';
+            return `<div class="${divClass}" onclick="abrirModalJornada('${ev.id}')" style="position: relative;">${dotHTML}<div style="width:100%; display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 10px; padding: ${innerPadding};"><div class="item-info" style="width: 100%;"><div style="display:flex; justify-content:space-between; width:100%;"><div class="item-title" style="color: ${isSub ? 'var(--text-muted)' : 'white'};">${ev.nome_campanha}</div><span class="badge ${statusClass}">${ev.status}</span></div><div class="item-meta"><span>${ev.setor}</span>•<span>Início: ${dataFormatada}</span></div><div class="action-bar" onclick="event.stopPropagation()">${botoesHTML}</div></div></div></div>`;
         }
-
-        function toggleSublist(el) {
-            el.nextElementSibling.classList.toggle('open');
-            el.querySelector('span').innerText = el.nextElementSibling.classList.contains('open') ? 'Recolher ▲' : 'Expandir ▼';
-        }
-
-        function toggleExpand() {
-            const cont = document.getElementById('containerLista');
-            const btn = document.getElementById('btnExpand');
-            cont.classList.toggle('expanded');
-            btn.innerText = cont.classList.contains('expanded') ? 'Recolher Lista ▲' : 'Expandir Lista ▼';
-        }
-
-        function aplicarFiltroStatus(status, element) {
-            stateFiltroStatus = status;
-            document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            renderizarLista();
-        }
+        function toggleSublist(el) { el.nextElementSibling.classList.toggle('open'); el.querySelector('span').innerText = el.nextElementSibling.classList.contains('open') ? 'Recolher ▲' : 'Expandir ▼'; }
+        function toggleExpand() { const cont = document.getElementById('containerLista'); const btn = document.getElementById('btnExpand'); cont.classList.toggle('expanded'); btn.innerText = cont.classList.contains('expanded') ? 'Recolher Lista ▲' : 'Expandir Lista ▼'; }
+        function aplicarFiltroStatus(status, element) { stateFiltroStatus = status; document.querySelectorAll('.filter-pill').forEach(el => el.classList.remove('active')); element.classList.add('active'); renderizarLista(); }
 
         /* =======================================================
-           MODAL JORNADA
+           MODAIS E LINKS DO TOTEM
            ======================================================= */
         function abrirModalJornada(id) {
-            campSelecionada = dbCampanhas.find(c => c.id === id);
-            if(!campSelecionada) return;
-            
-            if(sessionStorage.getItem('novaCampanhaNome') === campSelecionada.nome_campanha) {
-                sessionStorage.removeItem('novaCampanhaNome');
-                renderizarLista();
-            }
-            
+            campSelecionada = dbCampanhas.find(c => c.id === id); if(!campSelecionada) return;
+            if(sessionStorage.getItem('novaCampanhaNome') === campSelecionada.nome_campanha) { sessionStorage.removeItem('novaCampanhaNome'); renderizarLista(); }
             document.getElementById('modTitle').innerText = campSelecionada.nome_campanha;
             document.getElementById('modMeta').innerText = `Setor Responsável: ${campSelecionada.setor}  •  Status Atual: ${campSelecionada.status.toUpperCase()}`;
+            document.getElementById('modTemplateBadge').innerText = campSelecionada.template || "Padrão";
+            document.getElementById('modalTemplateSelect').value = campSelecionada.template || "Padrão";
+            document.getElementById('modPastaBadge').innerText = campSelecionada.pasta && campSelecionada.pasta.trim() !== "" ? campSelecionada.pasta : "Automática";
+            document.getElementById('modalPastaInput').value = campSelecionada.pasta || "";
             
-            let tAtual = campSelecionada.template || "Padrão";
-            const badge = document.getElementById('modTemplateBadge');
-            if (badge) badge.innerText = tAtual;
-            
-            const selectModal = document.getElementById('modalTemplateSelect');
-            if (selectModal) selectModal.value = tAtual;
-
-            const pBadge = document.getElementById('modPastaBadge');
-            if (pBadge) pBadge.innerText = campSelecionada.pasta && campSelecionada.pasta.trim() !== "" ? campSelecionada.pasta : "Automática";
-            const pInput = document.getElementById('modalPastaInput');
-            if (pInput) pInput.value = campSelecionada.pasta || "";
-            
-            const img = document.getElementById('qrCodeImg');
-            const loading = document.getElementById('qrCodeLoading');
-            img.style.display = 'none';
-            loading.style.display = 'block';
-            
+            const img = document.getElementById('qrCodeImg'); const loading = document.getElementById('qrCodeLoading');
+            img.style.display = 'none'; loading.style.display = 'block';
             img.onload = function() { loading.style.display = 'none'; img.style.display = 'block'; };
             img.onerror = function() { loading.innerText = "Erro ao gerar QR Code."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
-            const gridBody = document.getElementById('modalBodyGrid');
-            const colTotens = document.getElementById('colunaTotens');
-            const modTemplate = document.getElementById('moduloTemplateAdmin');
-            const modPasta = document.getElementById('moduloPastaAdmin');
-            
-            if (campSelecionada.status === 'Finalizado') {
-                colTotens.style.display = 'none';
-                gridBody.style.gridTemplateColumns = '1fr'; 
-                if(modTemplate) modTemplate.style.display = 'none';
-                if(modPasta) modPasta.style.display = 'none';
-            } else {
-                colTotens.style.display = 'flex';
-                gridBody.style.gridTemplateColumns = ''; 
-                if(modTemplate) modTemplate.style.display = 'block';
-                if(modPasta) modPasta.style.display = 'block';
-            }
-
+            const colTotens = document.getElementById('colunaTotens'); const gridBody = document.getElementById('modalBodyGrid');
+            if (campSelecionada.status === 'Finalizado') { colTotens.style.display = 'none'; gridBody.style.gridTemplateColumns = '1fr'; } 
+            else { colTotens.style.display = 'flex'; gridBody.style.gridTemplateColumns = ''; }
             document.getElementById('modalJornada').style.display = 'flex';
         }
-
-        function fecharModal(e) {
-            if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none';
-        }
-
+        function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
         function pegarLinkTotem() { return `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
         function pegarLinkPublico() { return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; }
-        
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
-        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado com sucesso para a área de transferência!")); }
+        function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado para a área de transferência!")); }
 
         /* =======================================================
-           MOTOR DO DASHBOARD WEB E CÁLCULOS GERAIS
+           MOTOR DASHBOARD ANALÍTICO INDIVIDUAL
            ======================================================= */
         let meuGrafico = null; 
-
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
-            
-            document.getElementById('modalJornada').style.display = 'none';
-            document.getElementById('dashboardTela').style.display = 'block';
-            document.body.style.overflow = 'hidden'; 
-            
-            document.getElementById('dashLoading').style.display = 'flex';
-            document.getElementById('conteudoDashInterface').style.display = 'none';
-            
+            document.getElementById('modalJornada').style.display = 'none'; document.getElementById('dashboardTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
+            document.getElementById('dashLoading').style.display = 'flex'; document.getElementById('conteudoDashInterface').style.display = 'none';
             document.getElementById('dashNomeCampanha').innerText = campSelecionada.nome_campanha;
             
             const dataCriacaoFormato = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
             const diasAtivo = Math.max(0, Math.floor((new Date() - new Date(campSelecionada.data_inicio)) / 86400000));
-            const dataExtracao = new Date().toLocaleDateString('pt-BR');
-            const elStatus = document.getElementById('dashStatus');
-            const elTempo = document.getElementById('dashTempo');
+            const elStatus = document.getElementById('dashStatus'); const elTempo = document.getElementById('dashTempo');
             
             if(campSelecionada.status === "Finalizado") {
-                elStatus.innerText = "ENCERRADA"; 
-                elStatus.style.color = "var(--status-encerrado)"; 
-                elTempo.innerText = `Encerrada em: ${dataExtracao}`;
+                elStatus.innerText = "ENCERRADA"; elStatus.style.color = "var(--status-encerrado)"; elTempo.innerText = `Encerrada em: ${new Date().toLocaleDateString('pt-BR')}`;
             } else if(campSelecionada.status === "Ativo") {
-                elStatus.innerText = "EM ANDAMENTO"; 
-                elStatus.style.color = "var(--status-ativo)"; 
-                if (diasAtivo >= 1) {
-                    elTempo.innerText = `Criada em: ${dataCriacaoFormato} (Duração total: ${diasAtivo} dias)`;
-                } else {
-                    elTempo.innerText = `Criada em: ${dataCriacaoFormato}`;
-                }
+                elStatus.innerText = "EM ANDAMENTO"; elStatus.style.color = "var(--status-ativo)"; elTempo.innerText = diasAtivo >= 1 ? `Criada em: ${dataCriacaoFormato} (Duração total: ${diasAtivo} dias)` : `Criada em: ${dataCriacaoFormato}`;
             } else {
-                elStatus.innerText = "PLANEJADA"; 
-                elStatus.style.color = "var(--status-espera)"; 
-                elTempo.innerText = `Criada em: ${dataCriacaoFormato} - Aguardando inicialização`;
+                elStatus.innerText = "PLANEJADA"; elStatus.style.color = "var(--status-espera)"; elTempo.innerText = `Criada em: ${dataCriacaoFormato} - Aguardando inicialização`;
             }
 
             try {
-                const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`);
-                const dados = await res.json();
-                if(dados.sucesso) {
-                    processarEstatisticas(dados.votos);
-                    document.getElementById('dashLoading').style.display = 'none';
-                    document.getElementById('conteudoDashInterface').style.display = 'block';
-                } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
-            } catch (e) { alert("Falha crítica ao carregar o dashboard."); fecharDashboard(); }
+                const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
+                if(dados.sucesso) { processarEstatisticas(dados.votos); document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; } 
+                else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
+            } catch (e) { alert("Falha ao carregar dashboard."); fecharDashboard(); }
         }
 
         function processarEstatisticas(votos) {
-            const totalVotos = votos.length;
-            const volumeDados = totalVotos * 6;
-            
-            document.getElementById('dashTotalVotos').innerText = totalVotos;
-            document.getElementById('dashMicrodados').innerText = volumeDados;
-
+            const totalVotos = votos.length; document.getElementById('dashTotalVotos').innerText = totalVotos; document.getElementById('dashMicrodados').innerText = totalVotos * 6;
             if(totalVotos === 0) {
-                document.getElementById('dashMedia').innerText = "0.0";
-                renderizarGrafico([], [], [], 'sentimentoChart');
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>";
-                return;
+                document.getElementById('dashMedia').innerText = "0.0"; renderizarGrafico([], [], [], 'sentimentoChart');
+                document.getElementById('dashAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>"; return;
             }
-
             let somaNotas = 0; let agrupamento = {};
-
-            votos.forEach(v => {
-                somaNotas += v.nota;
-                const s = v.sentimento; 
-                if(!agrupamento[s]) agrupamento[s] = 0;
-                agrupamento[s]++;
-            });
-
-            const media = (somaNotas / totalVotos).toFixed(1);
-            document.getElementById('dashMedia').innerText = media;
-
+            votos.forEach(v => { somaNotas += v.nota; if(!agrupamento[v.sentimento]) agrupamento[v.sentimento] = 0; agrupamento[v.sentimento]++; });
+            
+            const media = (somaNotas / totalVotos).toFixed(1); document.getElementById('dashMedia').innerText = media;
             let sortedLabels = Object.keys(agrupamento).sort((a,b) => agrupamento[b] - agrupamento[a]);
             let sortedCounts = sortedLabels.map(l => agrupamento[l]);
-            
-            let paletaDeCores = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f'];
 
-            renderizarGrafico(sortedLabels, sortedCounts, paletaDeCores, 'sentimentoChart');
+            let coresIndividuais = sortedLabels.map(l => obterCorDoSentimento(l));
+            renderizarGrafico(sortedLabels, sortedCounts, coresIndividuais, 'sentimentoChart');
 
-            let listaHTML = "";
-            dadosAgrupadosParaPDF = []; 
-            
+            let listaHTML = ""; let listaPDF = ""; dadosAgrupadosParaPDF = []; 
             sortedLabels.forEach((sentimento, index) => {
-                let count = agrupamento[sentimento];
-                let p = Math.round((count / totalVotos) * 100);
-                let corStr = paletaDeCores[index % paletaDeCores.length];
-
-                let r = parseInt(corStr.slice(1,3), 16);
-                let g = parseInt(corStr.slice(3,5), 16);
-                let b = parseInt(corStr.slice(5,7), 16);
-                
+                let count = agrupamento[sentimento]; let p = Math.round((count / totalVotos) * 100);
+                let corStr = coresIndividuais[index];
+                let r = parseInt(corStr.slice(1,3), 16); let g = parseInt(corStr.slice(3,5), 16); let b = parseInt(corStr.slice(5,7), 16);
                 dadosAgrupadosParaPDF.push({ sentimento, p, count, r, g, b });
-
                 listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: white;"><span class="dot" style="background:${corStr}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <span><strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</span></li>`;
+                listaPDF += `<li style="margin-bottom: 12px; font-size: 13px; color: #333; display: flex; align-items: center;"><span style="background:${corStr}; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 10px; flex-shrink: 0;"></span> <span><strong style="color: #000;">${sentimento}:</strong> ${p}% (${count} votos)</span></li>`;
             });
 
-            let recoHTML = "";
-            let recoPDFLimpa = "";
-            
+            let recoHTML = ""; let recoPDFLimpa = "";
             if(media >= 8) {
-                recoHTML = `<p style="color: white; font-weight: 400;">O engajamento demonstra um índice <strong style="color: #2ecc71; font-weight: 500;">Altamente Satisfatório (Média ${media})</strong>. A comunicação corporativa apresentou clareza e gerou uma excelente receptividade. Recomenda-se manter e documentar o formato atual como um padrão para as próximas ações institucionais.</p>`;
-                recoPDFLimpa = `O engajamento demonstra um índice Altamente Satisfatório (Média ${media}). A comunicação corporativa apresentou clareza e gerou uma excelente receptividade. Recomenda-se manter e documentar o formato atual como um padrão para as próximas ações institucionais.`;
+                recoHTML = `<p style="color: white; font-weight: 400;">O engajamento demonstra um índice <strong style="color: #2ecc71; font-weight: 500;">Altamente Satisfatório (Média ${media})</strong>. A comunicação corporativa apresentou clareza e gerou excelente receptividade. Recomenda-se manter o formato atual.</p>`;
+                recoPDFLimpa = `O engajamento demonstra um índice Altamente Satisfatório (Média ${media}). A comunicação corporativa apresentou clareza e gerou excelente receptividade. Recomenda-se manter e documentar o formato atual como padrão.`;
             } else if (media >= 6) {
-                recoHTML = `<p style="color: white; font-weight: 400;">A ação corporativa obteve um impacto qualitativo <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${media})</strong>. É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as próximas pautas, buscando maior precisão no alinhamento das expectativas da equipe.</p>`;
-                recoPDFLimpa = `A ação corporativa obteve um impacto qualitativo Moderado (Média ${media}). É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as próximas pautas, buscando maior precisão no alinhamento das expectativas da equipe.`;
+                recoHTML = `<p style="color: white; font-weight: 400;">A ação obteve um impacto <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${media})</strong>. Recomendável estabelecer acompanhamento focado na escuta contínua para calibrar as próximas pautas.</p>`;
+                recoPDFLimpa = `A ação corporativa obteve um impacto qualitativo Moderado (Média ${media}). É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as próximas pautas.`;
             } else {
-                recoHTML = `<p style="color: white; font-weight: 400;">Constata-se uma <strong style="color: #ff0080; font-weight: 500;">Atenção Requerida (Média ${media})</strong>. O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística do evento ou da clareza da mensagem corporativa abordada.</p>`;
-                recoPDFLimpa = `Constata-se uma Atenção Requerida (Média ${media}). O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística do evento ou da clareza da mensagem corporativa abordada.`;
+                recoHTML = `<p style="color: white; font-weight: 400;">Constata-se uma <strong style="color: #ff0080; font-weight: 500;">Atenção Requerida (Média ${media})</strong>. Nível de insatisfação superou a percepção positiva. Recomendamos revisão da mensagem.</p>`;
+                recoPDFLimpa = `Constata-se uma Atenção Requerida (Média ${media}). O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística do evento ou clareza da mensagem abordada.`;
             }
-
-            dadosParaPDF = { totalVotos, volumeDados, media, recoPDFLimpa };
-
-            let relatorioHTML = `
-                <p style="color: white; font-weight: 400;">A iniciativa executiva <strong>${campSelecionada.nome_campanha}</strong> registrou e processou um volume de <strong>${totalVotos} colaborações</strong> diretas. O índice de aprovação da ação firmou-se em <strong>${media} (em uma escala de 0 a 10)</strong>.</p>
-                
-                <h4 style="color: var(--primary);">Mapeamento Analítico da Percepção:</h4>
-                <ul style="list-style: none; padding: 0;">
-                    ${listaHTML}
-                </ul>
-
-                <h4 style="color: var(--primary);">Conclusão:</h4>
-                ${recoHTML}
-            `;
-
-            document.getElementById('dashAnaliseTexto').innerHTML = relatorioHTML;
+            dadosParaPDF = { totalVotos, volumeDados: totalVotos*6, media, recoPDFLimpa };
+            document.getElementById('dashAnaliseTexto').innerHTML = `<p style="color: white; font-weight: 400;">A iniciativa processou <strong>${totalVotos} colaborações</strong> diretas. Índice de aprovação: <strong>${media} (0 a 10)</strong>.</p><h4 style="color: var(--primary);">Mapeamento:</h4><ul style="list-style: none; padding: 0;">${listaHTML}</ul><h4 style="color: var(--primary);">Conclusão:</h4>${recoHTML}`;
         }
 
-        function renderizarGrafico(labelsArray, dataArray, colorsArray, canvasId = 'sentimentoChart') {
+        function renderizarGrafico(labelsArray, dataArray, colorsArray, canvasId) {
             const ctx = document.getElementById(canvasId).getContext('2d');
             let isGlobal = canvasId === 'sentimentoGlobalChart';
             let chartInstance = isGlobal ? window.meuGraficoGlobal : meuGrafico;
@@ -1354,229 +998,196 @@
         }
 
         // =========================================================================
-        // MOTOR NATIVO JSPDF: GRÁFICO TRANSPARENTE LADO A LADO COM O TEXTO
+        // PDF INDIVIDUAL (CAMPANHA ÚNICA)
         // =========================================================================
         function baixarPDFDocumento() {
-            const btn = document.getElementById('btnExportPDF');
-            const txtOriginal = btn.innerHTML;
-            btn.innerHTML = "Compilando Documento...";
-
-            const dataExtracao = new Date().toLocaleDateString('pt-BR');
-            let textoTempo = "";
-            let dataCriacao = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
+            const btn = document.getElementById('btnExportPDF'); const txtOriginal = btn.innerHTML; btn.innerHTML = "⏳ A compilar...";
+            const dataExtracao = new Date().toLocaleDateString('pt-BR'); let textoTempo = ""; let dataCriacao = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
             const diasAtivo = Math.max(0, Math.floor((new Date() - new Date(campSelecionada.data_inicio)) / 86400000));
             
-            if(campSelecionada.status === "Finalizado") {
-                textoTempo = `Encerrada em: ${dataExtracao}`;
-            } else if(campSelecionada.status === "Ativo") {
-                textoTempo = diasAtivo >= 1 ? `Criada em: ${dataCriacao} (Duração total: ${diasAtivo} dias)` : `Criada em: ${dataCriacao}`;
-            } else {
-                textoTempo = `Criada em: ${dataCriacao} - Em Espera`;
-            }
+            if(campSelecionada.status === "Finalizado") textoTempo = `Encerrada em: ${dataExtracao}`;
+            else if(campSelecionada.status === "Ativo") textoTempo = diasAtivo >= 1 ? `Criada em: ${dataCriacao} (Duração total: ${diasAtivo} dias)` : `Criada em: ${dataCriacao}`;
+            else textoTempo = `Criada em: ${dataCriacao} - Em Espera`;
 
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('p', 'mm', 'a4');
-
-            const imgLogoPdf = new Image();
-            imgLogoPdf.crossOrigin = "Anonymous";
-            imgLogoPdf.src = "logo-arcelormittal-padrao.png";
-
-            imgLogoPdf.onload = () => {
-                construirEGerarPDF(doc, imgLogoPdf, textoTempo, txtOriginal, btn);
-            };
-            imgLogoPdf.onerror = () => {
-                construirEGerarPDF(doc, null, textoTempo, txtOriginal, btn); 
-            };
+            const { jsPDF } = window.jspdf; const doc = new jsPDF('p', 'mm', 'a4');
+            const imgLogoPdf = new Image(); imgLogoPdf.crossOrigin = "Anonymous"; imgLogoPdf.src = "logo-arcelormittal-padrao.png";
+            imgLogoPdf.onload = () => { construirPDFIndividual(doc, imgLogoPdf, textoTempo, txtOriginal, btn); };
+            imgLogoPdf.onerror = () => { construirPDFIndividual(doc, null, textoTempo, txtOriginal, btn); };
         }
 
-        function construirEGerarPDF(doc, imgLogoPdf, textoTempo, txtOriginal, btn) {
+        function construirPDFIndividual(doc, imgLogoPdf, textoTempo, txtOriginal, btn) {
             let y = 25;
-
-            // 1. CABEÇALHO 
             if (imgLogoPdf) {
-                const canvas = document.createElement('canvas');
-                canvas.width = imgLogoPdf.naturalWidth;
-                canvas.height = imgLogoPdf.naturalHeight;
-                const ctx = canvas.getContext('2d');
-                ctx.drawImage(imgLogoPdf, 0, 0);
-                const logoBase64 = canvas.toDataURL('image/png');
-                
-                const imgWidth = 35; 
-                const imgHeight = (imgLogoPdf.naturalHeight * imgWidth) / imgLogoPdf.naturalWidth;
-                
-                doc.addImage(logoBase64, 'PNG', 15, 28 - imgHeight, imgWidth, imgHeight);
-            } else {
-                doc.setFont("helvetica", "bold");
-                doc.setFontSize(16);
-                doc.setTextColor(255, 81, 0);
-                doc.text("ARCELORMITTAL - PECÉM", 15, y);
-            }
+                const canvas = document.createElement('canvas'); canvas.width = imgLogoPdf.naturalWidth; canvas.height = imgLogoPdf.naturalHeight;
+                canvas.getContext('2d').drawImage(imgLogoPdf, 0, 0);
+                const imgWidth = 35; const imgHeight = (imgLogoPdf.naturalHeight * imgWidth) / imgLogoPdf.naturalWidth;
+                doc.addImage(canvas.toDataURL('image/png'), 'PNG', 15, 28 - imgHeight, imgWidth, imgHeight);
+            } else { doc.setFont("helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 81, 0); doc.text("ARCELORMITTAL - PECÉM", 15, y); }
             
-            doc.setFontSize(10);
-            doc.setTextColor(0, 0, 0);
-            doc.setFont("helvetica", "bold");
-            doc.text("PESQUISA DE SENTIMENTO", 195, 21, { align: "right" });
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(8);
-            doc.setTextColor(120, 120, 120);
-            doc.text("Relatório Executivo de Resultados", 195, 26, { align: "right" });
+            doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "bold"); doc.text("PESQUISA DE SENTIMENTO", 195, 21, { align: "right" });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(120, 120, 120); doc.text("Relatório Executivo de Resultados", 195, 26, { align: "right" });
             
-            y = 31; 
-            doc.setDrawColor(255, 81, 0);
-            doc.setLineWidth(0.5);
-            doc.line(15, y, 195, y);
+            y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            // 2. DADOS DA CAMPANHA
-            y += 12;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text(campSelecionada.nome_campanha.toUpperCase(), 15, y);
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); doc.text(campSelecionada.nome_campanha.toUpperCase(), 15, y);
+            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`, 15, y);
             
-            y += 8;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(80, 80, 80);
-            doc.text(`Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`, 15, y);
-            
-            // 3. SÍNTESE QUANTITATIVA
-            y += 16;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.setTextColor(255, 81, 0);
-            doc.text("1. SÍNTESE QUANTITATIVA", 15, y);
-
-            y += 3;
-            doc.setDrawColor(230, 230, 230);
-            doc.setLineWidth(0.2);
-            doc.line(15, y, 195, y);
-            
-            y += 8;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(30, 30, 30);
-            doc.text(`• Total de Interações Válidas: ${dadosParaPDF.totalVotos} colaborações diretas.`, 15, y);
-            y += 6;
-            doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y);
-            y += 6;
+            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. SÍNTESE QUANTITATIVA", 15, y);
+            y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
+            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
+            doc.text(`• Total de Interações Válidas: ${dadosParaPDF.totalVotos} colaborações diretas.`, 15, y); y += 6;
+            doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            // 4. RESUMO ANALÍTICO
-            y += 16;
-            doc.setFont("helvetica", "bold");
-            doc.setFontSize(11);
-            doc.setTextColor(255, 81, 0);
-            doc.text("2. RESUMO ANALÍTICO", 15, y);
-
-            y += 3;
-            doc.setDrawColor(230, 230, 230);
-            doc.line(15, y, 195, y);
+            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("2. RESUMO ANALÍTICO", 15, y);
+            y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
+            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
             
-            y += 8;
-            doc.setFont("helvetica", "normal");
-            doc.setFontSize(10);
-            doc.setTextColor(30, 30, 30);
+            const textoResumo = `A iniciativa processou com sucesso um volume de ${dadosParaPDF.totalVotos} colaborações diretas. O índice de aprovação firmou-se em ${dadosParaPDF.media} (em escala de 0 a 10).`;
+            const linhasResumo = doc.splitTextToSize(textoResumo, 180); doc.text(linhasResumo, 15, y);
             
-            const textoResumo = `A iniciativa executiva processou com sucesso um volume de ${dadosParaPDF.totalVotos} colaborações diretas no ambiente corporativo. O índice de aprovação da ação firmou-se em ${dadosParaPDF.media} (em uma escala de 0 a 10).`;
-            const linhasResumo = doc.splitTextToSize(textoResumo, 180);
-            doc.text(linhasResumo, 15, y);
+            y += (linhasResumo.length * 5) + 8; doc.setFont("helvetica", "bold"); doc.text("Mapeamento Analítico da Percepção:", 15, y); y += 8;
             
-            y += (linhasResumo.length * 5) + 8;
-            doc.setFont("helvetica", "bold");
-            doc.text("Mapeamento Analítico da Percepção:", 15, y);
-            y += 8;
-            
-            let startY = y;
-            let listY = y + 5;
-            
-            // 5. LISTA PONDERADA
+            let startY = y; let listY = y + 5;
             dadosAgrupadosParaPDF.forEach(item => {
-                doc.setFillColor(item.r, item.g, item.b);
-                doc.circle(17, listY - 1.2, 1.5, "F");
-                doc.setFont("helvetica", "bold");
-                doc.text(`${item.sentimento}:`, 21, listY);
-                let textWidth = doc.getTextWidth(`${item.sentimento}: `);
-                doc.setFont("helvetica", "normal");
-                doc.text(`${item.p}% (${item.count} votos)`, 21 + textWidth, listY);
+                doc.setFillColor(item.r, item.g, item.b); doc.circle(17, listY - 1.2, 1.5, "F");
+                doc.setFont("helvetica", "bold"); doc.text(`${item.sentimento}:`, 21, listY);
+                let w = doc.getTextWidth(`${item.sentimento}: `);
+                doc.setFont("helvetica", "normal"); doc.text(`${item.p}% (${item.count} votos)`, 21 + w, listY);
                 listY += 8;
             });
 
-            // 6. GRÁFICO TRANSPARENTE
             const chartBase64 = meuGrafico ? meuGrafico.toBase64Image() : null;
-            if (chartBase64) {
-                doc.addImage(chartBase64, 'PNG', 110, startY - 5, 75, 75); 
-            }
-            
+            if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 75, 75); }
             y = Math.max(listY, startY + 70) + 10;
             
-            // 7. CONCLUSÃO
-            if (y > 250) {
-                doc.addPage();
-                y = 20;
-            } else {
-                y += 4;
-            }
-
-            doc.setFont("helvetica", "bold");
-            doc.setTextColor(0, 0, 0);
-            doc.text("Conclusão:", 15, y);
-            y += 6;
+            if (y > 250) { doc.addPage(); y = 20; } else { y += 4; }
+            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão:", 15, y); y += 6;
+            doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosParaPDF.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
             
-            doc.setFont("helvetica", "normal");
-            const linhasConclusao = doc.splitTextToSize(dadosParaPDF.recoPDFLimpa, 180);
-            doc.text(linhasConclusao, 15, y);
-            
-            // RODAPÉ
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i);
-                doc.setFontSize(8);
-                doc.setTextColor(150, 150, 150);
+                doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
                 doc.text("Documento Oficial gerado eletronicamente - Classificação da Informação: ArcelorMittal Interno", 105, 285, { align: "center" });
             }
-            
             doc.save(`Relatório Pesquisa de Sentimento (${campSelecionada.nome_campanha.trim()}).pdf`);
             btn.innerHTML = txtOriginal;
         }
 
-        function fecharDashboard() {
-            document.getElementById('dashboardTela').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
+        function fecharDashboard() { document.getElementById('dashboardTela').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         /* =========================================================================
-           🔥 MOTOR DASHBOARD (RELATÓRIO MENSAL) 🔥
+           🔥 MODAL DE FILTRO E MOTOR DASHBOARD GLOBAL (RELATÓRIO MENSAL) 🔥
            ========================================================================= */
         window.meuGraficoGlobal = null;
 
-        async function abrirDashboardGlobal() {
-            document.getElementById('dashboardGlobalTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
-            document.getElementById('dashGlobalLoading').style.display = 'flex'; document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
+        // 1. Abre o modal e puxa todos os anos que tem cadastro no banco para preencher o filtro
+        function abrirModalFiltroMensal() {
+            let anosDisponiveis = new Set();
+            
+            dbCampanhas.forEach(c => {
+                if(c.data_inicio && c.status !== 'Excluído') {
+                    // O Master vê tudo. O setor logado só vê as campanhas do próprio setor para o filtro
+                    if(setorLogado === 'Master' || c.setor === setorLogado) {
+                        let d = new Date(c.data_inicio);
+                        if(!isNaN(d)) anosDisponiveis.add(d.getUTCFullYear());
+                    }
+                }
+            });
+
+            let selectAno = document.getElementById('selectFiltroAno');
+            let selectMes = document.getElementById('selectFiltroMes');
+            
+            selectAno.innerHTML = '<option value="TODOS">Todos os Anos</option>';
+            Array.from(anosDisponiveis).sort((a,b) => b - a).forEach(a => {
+                selectAno.innerHTML += `<option value="${a}">${a}</option>`;
+            });
+            
+            let anoAtual = new Date().getFullYear();
+            if(anosDisponiveis.has(anoAtual)) selectAno.value = anoAtual.toString();
+
+            const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            selectMes.innerHTML = '<option value="TODOS">Todos os Meses</option>';
+            nomesMeses.forEach((nome, i) => {
+                selectMes.innerHTML += `<option value="${i+1}">${nome}</option>`;
+            });
+            
+            selectMes.value = (new Date().getMonth() + 1).toString();
+
+            document.getElementById('modalFiltroMensal').style.display = 'flex';
+        }
+
+        // 2. Dispara a captura de votos e cruza com a campanha dona deles
+        async function processarFiltroEabrirDashboard() {
+            const anoSelecionado = document.getElementById('selectFiltroAno').value;
+            const mesSelecionado = document.getElementById('selectFiltroMes').value;
+            const mesNome = document.getElementById('selectFiltroMes').options[document.getElementById('selectFiltroMes').selectedIndex].text;
+            
+            document.getElementById('modalFiltroMensal').style.display = 'none';
+            document.getElementById('dashboardGlobalTela').style.display = 'block'; 
+            document.body.style.overflow = 'hidden'; 
+            document.getElementById('dashGlobalLoading').style.display = 'flex'; 
+            document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
+            
+            const dashTitle = document.getElementById('dashGlobalTitle');
+            if(mesSelecionado === 'TODOS' && anoSelecionado === 'TODOS') {
+                dashTitle.innerText = `RELATÓRIO CONSOLIDADO GERAL`;
+            } else if (mesSelecionado !== 'TODOS' && anoSelecionado === 'TODOS') {
+                dashTitle.innerText = `RELATÓRIO DE ${mesNome.toUpperCase()} - TODOS OS ANOS`;
+            } else if (mesSelecionado === 'TODOS' && anoSelecionado !== 'TODOS') {
+                dashTitle.innerText = `RELATÓRIO ANUAL DE ${anoSelecionado}`;
+            } else {
+                dashTitle.innerText = `RELATÓRIO CONSOLIDADO DE ${mesNome.toUpperCase()}/${anoSelecionado}`;
+            }
             
             try {
+                // Pede TODOS os votos ao backend. Nós interceptamos os dados aqui no front!
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); 
                 const dados = await res.json();
                 
                 if(dados && dados.sucesso) { 
-                    processarEstatisticasGlobais(dados.votos); 
+                    
+                    // 🛡️ O FILTRO MÁGICO 🛡️
+                    let votosFiltrados = dados.votos.filter(v => {
+                        let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
+                        if(!camp) return false;
+                        
+                        // Restrição de Segurança: Se não for Master, só passa voto do seu setor
+                        if(setorLogado !== "Master" && camp.setor !== setorLogado) return false;
+                        
+                        // Restrição de Data: Cruzando o mês/ano com a data de início da campanha dona do voto
+                        if(anoSelecionado !== 'TODOS' || mesSelecionado !== 'TODOS') {
+                            let dataCamp = new Date(camp.data_inicio);
+                            let campMes = (dataCamp.getUTCMonth() + 1).toString();
+                            let campAno = dataCamp.getUTCFullYear().toString();
+                            
+                            if(anoSelecionado !== 'TODOS' && campAno !== anoSelecionado) return false;
+                            if(mesSelecionado !== 'TODOS' && campMes !== mesSelecionado) return false;
+                        }
+                        
+                        return true;
+                    });
+                    
+                    processarEstatisticasGlobais(votosFiltrados, dashTitle.innerText); 
                     document.getElementById('dashGlobalLoading').style.display = 'none'; 
                     document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; 
-                } 
-                else { 
-                    alert("Erro ao extrair dados. " + (dados ? dados.erro : '')); fecharDashboardGlobal(); 
+                } else { 
+                    alert("Erro ao extrair dados globais. " + (dados ? dados.erro : '')); fecharDashboardGlobal(); 
                 }
             } catch (e) { 
-                alert("Falha de conexão com o banco de dados."); fecharDashboardGlobal(); 
+                alert("Falha de conexão com o banco de dados global."); fecharDashboardGlobal(); 
             }
         }
 
-        function processarEstatisticasGlobais(votos) {
+        // 3. Processa e exibe a matemática filtrada na tela
+        function processarEstatisticasGlobais(votos, tituloDinamico) {
             let totalVotosGlobais = votos.length;
             let somaNotasGlobais = 0;
             let agrupamentoGlobal = {};
             let campanhasMap = {}; 
             
-            dadosGlobaisParaPDF = { detalhamento: [] };
+            // Salvamos o título para o PDF puxar depois
+            dadosGlobaisParaPDF = { detalhamento: [], tituloDinamico: tituloDinamico || "RELATÓRIO MENSAL CONSOLIDADO" };
 
             votos.forEach(v => {
                 somaNotasGlobais += v.nota;
@@ -1601,7 +1212,7 @@
 
             if(totalVotosGlobais === 0) {
                 document.getElementById('dashGlobalMedia').innerText = "0.0"; renderizarGrafico([], [], [], 'sentimentoGlobalChart');
-                document.getElementById('dashGlobalAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado no período.</em>";
+                document.getElementById('dashGlobalAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado no período especificado.</em>";
                 document.getElementById('listaDetalhamentoCampanhas').innerHTML = ""; return;
             }
 
@@ -1628,7 +1239,7 @@
                 recoPDFGlobalLimpa = `A percepção corporativa geral do período consolidado é Altamente Satisfatória (Média ${mediaGlobal}). As ações executadas demonstram forte aderência e engajamento das equipas. Recomenda-se escalar essas metodologias para as próximas etapas institucionais.`;
             } else if (mediaGlobal >= 6) {
                 recoHTMLGlobal = `<p style="color: white; font-weight: 400;">O cenário atual revela um engajamento <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${mediaGlobal})</strong>. Recomenda-se analisar o detalhamento abaixo para atuar em pautas de menor aprovação.</p>`;
-                recoPDFGlobalLimpa = `O cenário atual do mês revela um engajamento qualitativo Moderado (Média ${mediaGlobal}). É estrategicamente recomendado analisar o detalhamento das campanhas abaixo para identificar e corrigir pautas com taxas expressivas de baixo engajamento.`;
+                recoPDFGlobalLimpa = `O cenário atual revela um engajamento qualitativo Moderado (Média ${mediaGlobal}). É estrategicamente recomendado analisar o detalhamento das campanhas abaixo para identificar e corrigir pautas com taxas expressivas de baixo engajamento.`;
             } else {
                 recoHTMLGlobal = `<p style="color: white; font-weight: 400;">Atenção Crítica: O índice global está <strong style="color: #ff0080; font-weight: 500;">Abaixo da Meta (Média ${mediaGlobal})</strong>. O volume de avaliações negativas nas campanhas exige reestruturação imediata da comunicação.</p>`;
                 recoPDFGlobalLimpa = `Atenção Crítica: O índice de satisfação global encontra-se Abaixo da Meta estipulada (Média ${mediaGlobal}). O volume substancial de avaliações de melhoria ou negativas nas ações correntes exige uma reestruturação imediata da abordagem comunicacional da unidade.`;
@@ -1640,7 +1251,7 @@
             dadosGlobaisParaPDF.sintese = arraySinteseGlobalPDF;
             dadosGlobaisParaPDF.conclusao = recoPDFGlobalLimpa;
 
-            document.getElementById('dashGlobalAnaliseTexto').innerHTML = `<h4 style="color: var(--primary); margin-top: 0;">Mapeamento Consolidado:</h4><ul style="list-style: none; padding: 0;">${listaHTMLGlobal}</ul><h4 style="color: var(--primary);">Conclusão Analítica do Mês:</h4>${recoHTMLGlobal}`;
+            document.getElementById('dashGlobalAnaliseTexto').innerHTML = `<h4 style="color: var(--primary); margin-top: 0;">Mapeamento Consolidado:</h4><ul style="list-style: none; padding: 0;">${listaHTMLGlobal}</ul><h4 style="color: var(--primary);">Conclusão Executiva:</h4>${recoHTMLGlobal}`;
 
             let containerListaHTML = "";
             let arrNomesCampanhas = Object.keys(campanhasMap).sort();
@@ -1681,7 +1292,7 @@
         function fecharDashboardGlobal() { document.getElementById('dashboardGlobalTela').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         // =========================================================================
-        // PDF GLOBAL MENSAL 
+        // PDF GLOBAL MENSAL (AGORA COM NOME DINÂMICO DO FILTRO)
         // =========================================================================
         function baixarPDFGlobal() {
             const btn = document.getElementById('btnExportGlobalPDF'); const txtOriginal = btn.innerHTML; btn.innerHTML = "⏳ Gerando Mestre...";
@@ -1696,10 +1307,8 @@
         function construirPDFGlobal(doc, imgLogoPdf, dataExtracao, txtOriginal, btn) {
             let y = 25;
             
-            // INTELIGÊNCIA DO TÍTULO DO MÊS
-            const mesesStr = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
-            const dataAtual = new Date();
-            const tituloDinamico = `RELATÓRIO CONSOLIDADO DE ${mesesStr[dataAtual.getMonth()]}/${dataAtual.getFullYear()}`;
+            // O título agora respeita o que o usuário escolheu no popup
+            const tituloDinamico = dadosGlobaisParaPDF.tituloDinamico;
             
             // 1. CABEÇALHO 
             if (imgLogoPdf) {
@@ -1710,12 +1319,12 @@
             } else { doc.setFont("helvetica", "bold"); doc.setFontSize(16); doc.setTextColor(255, 81, 0); doc.text("ARCELORMITTAL - PECÉM", 15, y); }
             
             doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.setFont("helvetica", "bold"); doc.text("PESQUISA DE SENTIMENTO", 195, 21, { align: "right" });
-            doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(120, 120, 120); doc.text("Visão Executiva Mensal", 195, 26, { align: "right" });
+            doc.setFont("helvetica", "normal"); doc.setFontSize(8); doc.setTextColor(120, 120, 120); doc.text("Visão Executiva", 195, 26, { align: "right" });
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); doc.text(tituloDinamico, 15, y);
-            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Extraído em: ${dataExtracao}   |   Total de Campanhas: ${dadosGlobaisParaPDF.totalCampanhas}`, 15, y);
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); doc.text(tituloDinamico, 15, y);
+            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Extraído em: ${dataExtracao}   |   Total de Campanhas Focadas: ${dadosGlobaisParaPDF.totalCampanhas}`, 15, y);
             
             // 2. RESUMO GERAL
             y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. RESUMO GERAL", 15, y);
@@ -1742,7 +1351,7 @@
             if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 70, 70); }
             y = Math.max(listY, startY + 60) + 12;
             
-            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Mês!", 15, y); y += 6;
+            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Período:", 15, y); y += 6;
             doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosGlobaisParaPDF.conclusao, 180); doc.text(linhasConclusao, 15, y);
             
             y += (linhasConclusao.length * 5) + 15;
@@ -1777,7 +1386,6 @@
             doc.save(`Relatório Mensal (${dataExtracao.replace(/\//g, '-')}).pdf`);
             btn.innerHTML = txtOriginal;
         }
-
     </script>
 </body>
 </html>
