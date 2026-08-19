@@ -40,12 +40,6 @@
             --text-muted: #6b7280; 
             --border: rgba(0,0,0,0.1);
         }
-
-        /* Adaptação inteligente para o Logo no Modo Claro */
-        body.light-mode .splash-logo-img,
-        body.light-mode .nav-logo {
-            filter: invert(1) hue-rotate(180deg) brightness(1.2);
-        }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Arial, sans-serif; }
         
@@ -69,7 +63,7 @@
         }
         @keyframes pulseGlow { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
 
-        .splash-logo-img { max-width: 130px; margin-bottom: 24px; filter: brightness(1.2); transition: filter 0.3s ease; }
+        .splash-logo-img { max-width: 130px; margin-bottom: 24px; transition: filter 0.3s ease; }
         .loading-bar-container { position: relative; width: 220px; margin-top: 35px; overflow: hidden; }
         .loading-bar-img { width: 100%; display: block; }
         .loading-mask { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards; transition: background-color 0.3s ease; }
@@ -87,7 +81,7 @@
             transition: background-color 0.3s ease, border-color 0.3s ease;
         }
         .nav-brand { display: flex; align-items: center; gap: 15px; }
-        .nav-logo { max-width: 120px; filter: brightness(1.2); transition: filter 0.3s ease; }
+        .nav-logo { max-width: 120px; transition: filter 0.3s ease; }
         .nav-divider { width: 1px; height: 24px; background-color: var(--border); }
         .nav-title { font-size: 13px; font-weight: 400; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
         
@@ -302,7 +296,7 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
-            <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
+            <img src="logo-arcelormittal.png" class="splash-logo-img" id="splashLogo" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
             <h1 style="font-size: 28px; font-weight: 800; color: var(--text); margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
@@ -315,7 +309,7 @@
 
     <nav class="navbar">
         <div class="nav-brand">
-            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="nav-logo" onerror="this.style.display='none'">
+            <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="nav-logo" id="navLogo" onerror="this.style.display='none'">
             <div class="nav-divider"></div>
             <span class="nav-title">Pesquisa de Sentimento AMP</span>
         </div>
@@ -645,22 +639,31 @@
         function toggleMenuLateral() { document.getElementById('menuLateral').classList.toggle('active'); }
         function fecharMenuClicandoFora(e) { if(e.target.id === 'menuLateral') toggleMenuLateral(); }
 
-        /* MODO CLARO E MODO ESCURO */
+        /* MODO CLARO E MODO ESCURO COM TROCA DE LOGO */
+        function applyThemeLogos() {
+            const isLight = document.body.classList.contains('light-mode');
+            const splashLogo = document.getElementById('splashLogo');
+            const navLogo = document.getElementById('navLogo');
+            
+            if(isLight) {
+                if(splashLogo) splashLogo.src = 'logo-arcelormittal-padrao.png';
+                if(navLogo) navLogo.src = 'logo-arcelormittal-padrao.png';
+            } else {
+                if(splashLogo) splashLogo.src = 'logo-arcelormittal.png';
+                if(navLogo) navLogo.src = 'logo-arcelormittal.png';
+            }
+        }
+
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
             localStorage.setItem('theme', isLight ? 'light' : 'dark');
             document.getElementById('themeToggleText').innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
             
-            // Recarrega os gráficos se existirem para aplicar a reestilização do Canvas
+            // Troca a logo e atualiza os gráficos
+            applyThemeLogos();
             if(meuGrafico) meuGrafico.update();
             if(window.meuGraficoGlobal) window.meuGraficoGlobal.update();
-        }
-
-        // Aplica o texto do botão na primeira carga (O body já recebe a classe lá no topo do HTML)
-        if(document.body.classList.contains('light-mode')) {
-            const toggleText = document.getElementById('themeToggleText');
-            if(toggleText) toggleText.innerText = 'Modo Escuro';
         }
 
         Chart.register(ChartDataLabels);
@@ -968,7 +971,6 @@
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
         
-        /* Modificado para enviar o parâmetro de modo claro (&theme=light) direto na URL */
         function pegarLinkTotem() { 
             let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
             if(document.body.classList.contains('light-mode')) url += "&theme=light";
@@ -1379,6 +1381,11 @@
             doc.save(`Relatório Mensal (${dataExtracao.replace(/\//g, '-')}).pdf`);
             btn.innerHTML = txtOriginal;
         }
+
+        // Garante que o applyThemeLogos rode e carregue a logo correta após a página carregar
+        window.addEventListener('DOMContentLoaded', () => {
+            applyThemeLogos();
+        });
     </script>
 </body>
 </html>
