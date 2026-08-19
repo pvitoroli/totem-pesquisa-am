@@ -109,7 +109,7 @@
         .mobile-avatar-lrg { width: 48px; height: 48px; font-size: 18px; }
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .mobile-user-name { font-size: 14px; color: white; font-weight: 500; text-transform: uppercase; }
+        .mobile-user-name { font-size: 15px; color: white; font-weight: 500; text-transform: uppercase; }
         
         .btn-menu-lateral {
             width: 100%; padding: 14px; background: transparent; color: var(--text-muted); border: 1px solid var(--border);
@@ -276,7 +276,6 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
-            <!-- Logo Original do Site -->
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
             <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 600; margin-bottom: 2px;">Você está na</span>
             <h1 style="font-size: 26px; font-weight: 400; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
@@ -290,7 +289,6 @@
 
     <nav class="navbar">
         <div class="nav-brand">
-            <!-- Logo Original do Site -->
             <img src="logo-arcelormittal.png" alt="ArcelorMittal" class="nav-logo" onerror="this.style.display='none'">
             <div class="nav-divider"></div>
             <span class="nav-title">Pesquisa de Sentimento AMP</span>
@@ -1274,7 +1272,8 @@
                     responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, 
                     animation: { duration: 0 },
                     plugins: {
-                        legend: { position: 'bottom', labels: { color: '#ffffff', padding: 15, font: { family: "'Segoe UI', Arial, sans-serif", size: 12 } } },
+                        // A legenda é desativada aqui, pois a lista de cores já faz esse papel muito bem!
+                        legend: { display: false },
                         datalabels: {
                             color: '#ffffff', font: { family: "'Segoe UI', Arial, sans-serif", weight: 'bold', size: 14 },
                             formatter: (value, context) => {
@@ -1289,7 +1288,7 @@
         }
 
         // =========================================================================
-        // MOTOR NATIVO JSPDF: TEXTO VETORIAL, LOGO EXCLUSIVA E GRÁFICO INTEGRADOS
+        // MOTOR NATIVO JSPDF: GRÁFICO TRANSPARENTE LADO A LADO COM O TEXTO
         // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
@@ -1321,14 +1320,14 @@
                 construirEGerarPDF(doc, imgLogoPdf, textoTempo, txtOriginal, btn);
             };
             imgLogoPdf.onerror = () => {
-                construirEGerarPDF(doc, null, textoTempo, txtOriginal, btn); // Se der erro, segue o jogo sem logo
+                construirEGerarPDF(doc, null, textoTempo, txtOriginal, btn); 
             };
         }
 
         function construirEGerarPDF(doc, imgLogoPdf, textoTempo, txtOriginal, btn) {
             let y = 25;
 
-            // 1. CABEÇALHO (Com ou Sem Logo Exclusiva)
+            // 1. CABEÇALHO 
             if (imgLogoPdf) {
                 const canvas = document.createElement('canvas');
                 canvas.width = imgLogoPdf.naturalWidth;
@@ -1337,9 +1336,11 @@
                 ctx.drawImage(imgLogoPdf, 0, 0);
                 const logoBase64 = canvas.toDataURL('image/png');
                 
-                const imgWidth = 45;
+                const imgWidth = 35; // Largura menor para caber melhor no cabeçalho
                 const imgHeight = (imgLogoPdf.naturalHeight * imgWidth) / imgLogoPdf.naturalWidth;
-                doc.addImage(logoBase64, 'PNG', 15, 15, imgWidth, imgHeight);
+                
+                // Ancoramos a imagem para que sua base fique alinhada com os textos do cabeçalho
+                doc.addImage(logoBase64, 'PNG', 15, 28 - imgHeight, imgWidth, imgHeight);
             } else {
                 doc.setFont("helvetica", "bold");
                 doc.setFontSize(16);
@@ -1356,7 +1357,7 @@
             doc.setTextColor(120, 120, 120);
             doc.text("Relatório Executivo de Resultados", 195, 26, { align: "right" });
             
-            y += 6;
+            y = 31; // Linha logo abaixo da logo e dos títulos
             doc.setDrawColor(255, 81, 0);
             doc.setLineWidth(0.5);
             doc.line(15, y, 195, y);
@@ -1421,36 +1422,33 @@
             doc.text("Mapeamento Analítico da Percepção:", 15, y);
             y += 8;
             
-            // Lista Ponderada com Vetores
+            // Marca a posição vertical para desenharmos a lista e o gráfico lado a lado
+            let startY = y;
+            let listY = y + 5;
+            
+            // 5. LISTA PONDERADA (À ESQUERDA)
             dadosAgrupadosParaPDF.forEach(item => {
                 doc.setFillColor(item.r, item.g, item.b);
-                doc.circle(17, y - 1.2, 1.5, "F");
+                doc.circle(17, listY - 1.2, 1.5, "F");
                 doc.setFont("helvetica", "bold");
-                doc.text(`${item.sentimento}:`, 21, y);
+                doc.text(`${item.sentimento}:`, 21, listY);
                 let textWidth = doc.getTextWidth(`${item.sentimento}: `);
                 doc.setFont("helvetica", "normal");
-                doc.text(`${item.p}% (${item.count} votos)`, 21 + textWidth, y);
-                y += 8;
+                doc.text(`${item.p}% (${item.count} votos)`, 21 + textWidth, listY);
+                listY += 8;
             });
 
-            // 5. INSERÇÃO DO GRÁFICO
+            // 6. GRÁFICO TRANSPARENTE (À DIREITA)
             const chartBase64 = meuGrafico ? meuGrafico.toBase64Image() : null;
-            if (chartBase64 && y < 220) {
-                y += 2;
-                doc.setFillColor(30, 34, 45); 
-                doc.roundedRect(45, y, 120, 75, 4, 4, 'F');
-                doc.addImage(chartBase64, 'PNG', 55, y + 5, 100, 65); 
-                y += 85; 
-            } else if (chartBase64) {
-                doc.addPage();
-                y = 20;
-                doc.setFillColor(30, 34, 45); 
-                doc.roundedRect(45, y, 120, 75, 4, 4, 'F');
-                doc.addImage(chartBase64, 'PNG', 55, y + 5, 100, 65); 
-                y += 85; 
+            if (chartBase64) {
+                // Ao desenharmos direto, sem a caixa preta, o gráfico assume o fundo branco (transparente)
+                doc.addImage(chartBase64, 'PNG', 110, startY - 5, 75, 75); 
             }
             
-            // 6. CONCLUSÃO
+            // Empurra o cursor vertical "y" para o final do maior elemento (a lista ou o gráfico)
+            y = Math.max(listY, startY + 70) + 10;
+            
+            // 7. CONCLUSÃO
             if (y > 250) {
                 doc.addPage();
                 y = 20;
