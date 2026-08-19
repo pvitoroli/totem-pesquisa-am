@@ -58,7 +58,8 @@
         }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
-        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 400; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
+        /* Slogan com peso restaurado para 600 */
+        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         /* ==========================================================================
@@ -276,9 +277,10 @@
     <div id="splash-screen">
         <div class="splash-content">
             <div class="splash-glow"></div>
+            <!-- Imagem e textos com font-weight restaurados para o padrão do totem -->
             <img src="logo-arcelormittal.png" class="splash-logo-img" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
-            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 600; margin-bottom: 2px;">Você está na</span>
-            <h1 style="font-size: 26px; font-weight: 400; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
                 <div class="loading-mask"></div>
@@ -1272,7 +1274,6 @@
                     responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, 
                     animation: { duration: 0 },
                     plugins: {
-                        // A legenda é desativada aqui, pois a lista de cores já faz esse papel muito bem!
                         legend: { display: false },
                         datalabels: {
                             color: '#ffffff', font: { family: "'Segoe UI', Arial, sans-serif", weight: 'bold', size: 14 },
@@ -1311,7 +1312,6 @@
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
-            // Carrega a imagem PADRÃO exclusivamente para uso do PDF
             const imgLogoPdf = new Image();
             imgLogoPdf.crossOrigin = "Anonymous";
             imgLogoPdf.src = "logo-arcelormittal-padrao.png";
@@ -1336,10 +1336,9 @@
                 ctx.drawImage(imgLogoPdf, 0, 0);
                 const logoBase64 = canvas.toDataURL('image/png');
                 
-                const imgWidth = 35; // Largura menor para caber melhor no cabeçalho
+                const imgWidth = 35; 
                 const imgHeight = (imgLogoPdf.naturalHeight * imgWidth) / imgLogoPdf.naturalWidth;
                 
-                // Ancoramos a imagem para que sua base fique alinhada com os textos do cabeçalho
                 doc.addImage(logoBase64, 'PNG', 15, 28 - imgHeight, imgWidth, imgHeight);
             } else {
                 doc.setFont("helvetica", "bold");
@@ -1357,7 +1356,7 @@
             doc.setTextColor(120, 120, 120);
             doc.text("Relatório Executivo de Resultados", 195, 26, { align: "right" });
             
-            y = 31; // Linha logo abaixo da logo e dos títulos
+            y = 31; 
             doc.setDrawColor(255, 81, 0);
             doc.setLineWidth(0.5);
             doc.line(15, y, 195, y);
@@ -1422,11 +1421,10 @@
             doc.text("Mapeamento Analítico da Percepção:", 15, y);
             y += 8;
             
-            // Marca a posição vertical para desenharmos a lista e o gráfico lado a lado
             let startY = y;
             let listY = y + 5;
             
-            // 5. LISTA PONDERADA (À ESQUERDA)
+            // 5. LISTA PONDERADA
             dadosAgrupadosParaPDF.forEach(item => {
                 doc.setFillColor(item.r, item.g, item.b);
                 doc.circle(17, listY - 1.2, 1.5, "F");
@@ -1438,14 +1436,12 @@
                 listY += 8;
             });
 
-            // 6. GRÁFICO TRANSPARENTE (À DIREITA)
+            // 6. GRÁFICO TRANSPARENTE
             const chartBase64 = meuGrafico ? meuGrafico.toBase64Image() : null;
             if (chartBase64) {
-                // Ao desenharmos direto, sem a caixa preta, o gráfico assume o fundo branco (transparente)
                 doc.addImage(chartBase64, 'PNG', 110, startY - 5, 75, 75); 
             }
             
-            // Empurra o cursor vertical "y" para o final do maior elemento (a lista ou o gráfico)
             y = Math.max(listY, startY + 70) + 10;
             
             // 7. CONCLUSÃO
