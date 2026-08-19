@@ -104,6 +104,8 @@
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
         .btn-menu-lateral:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
+        .btn-relatorio-especial { border-color: var(--primary); color: white; background: rgba(255, 81, 0, 0.1); }
+        .btn-relatorio-especial:hover { background: var(--primary); border-color: var(--primary); }
 
         /* ==========================================================================
            3. ESTRUTURA PRINCIPAL
@@ -133,7 +135,7 @@
         .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 400; cursor: pointer; transition: 0.2s; }
         .filter-pill:hover { color: white; }
         .filter-pill.active { background: var(--surface); color: white; border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; width: auto; border-radius: 8px; }
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; }
 
         .list-container { max-height: 500px; overflow-y: auto; padding-right: 5px; transition: max-height 0.4s ease; }
         .list-container.expanded { max-height: none; overflow: visible; }
@@ -314,6 +316,12 @@
                 </div>
             </div>
 
+            <!-- Botão de Relatório Mensal no Menu -->
+            <button class="btn-menu-lateral btn-relatorio-especial" onclick="abrirDashboardGlobal(); toggleMenuLateral();">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                Relatório Mensal
+            </button>
+
             <button id="btnGestaoUsuariosLateral" class="btn-menu-lateral" style="display: none;" onclick="abrirModalUsuarios(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                 Gestão de Usuários
@@ -378,11 +386,7 @@
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                 <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Finalizadas</div>
-                
-                <!-- BOTÃO DO RELATÓRIO MENSAL -->
-                <button class="filter-pill" style="margin-left: auto; background: var(--primary); color: white; border: none; font-weight: 500;" onclick="abrirDashboardGlobal()">
-                    🌍 GERAR RELATÓRIO MENSAL
-                </button>
+                <input type="date" class="filter-date" id="filtroData" onchange="renderizarLista()">
             </div>
 
             <div class="list-container" id="containerLista">
@@ -579,6 +583,7 @@
 
         Chart.register(ChartDataLabels);
 
+        // ⚠️ ATENÇÃO: Lembre-se de atualizar este link se você gerar uma "Nova Implantação" no Apps Script!
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -712,7 +717,7 @@
         }
 
         /* =======================================================
-           FUNÇÕES DA CAMPANHA
+           FUNÇÕES DA CAMPANHA E LEITURA DE DADOS
            ======================================================= */
         async function buscarSetores() {
             const selectSetor = document.getElementById('setorCampanha');
@@ -732,14 +737,27 @@
         }
         async function buscarDados() {
             try {
-                const antiCache = new Date().getTime(); const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`); dbCampanhas = await res.json();
+                const antiCache = new Date().getTime(); 
+                const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`); 
+                const data = await res.json();
+                
+                // Trata o erro caso a planilha não retorne uma array (Ex: Erro do Apps Script porque não houve nova implantação)
+                if(data.sucesso === false) {
+                    console.error("Erro do Banco de Dados:", data.erro);
+                    document.getElementById('renderArea').innerHTML = `<p style='padding:40px 20px; color: #ff4757;'>Erro no servidor: ${data.erro}. (Dica: Você esqueceu de publicar uma Nova Implantação no Apps Script?)</p>`;
+                    return;
+                }
+
+                dbCampanhas = data;
                 dbCampanhas.forEach(c => {
                     if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
                     if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
                     if(c.status.toLowerCase() === 'encerrado') c.status = 'Finalizado';
                 });
                 renderizarLista();
-            } catch (e) { document.getElementById('renderArea').innerHTML = "Falha ao ler dados da base."; }
+            } catch (e) { 
+                document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique se o link URL_BACKEND no código é a Nova Implantação do Google Apps Script.</p>"; 
+            }
         }
         async function salvarCampanha() {
             const nome = document.getElementById('nomeCampanha').value.trim(); const pasta = document.getElementById('pastaCampanha').value.trim();
@@ -896,7 +914,7 @@
         function processarEstatisticas(votos) {
             const totalVotos = votos.length; document.getElementById('dashTotalVotos').innerText = totalVotos; document.getElementById('dashMicrodados').innerText = totalVotos * 6;
             if(totalVotos === 0) {
-                document.getElementById('dashMedia').innerText = "0.0"; renderizarGrafico([], []);
+                document.getElementById('dashMedia').innerText = "0.0"; renderizarGrafico([], [], [], 'sentimentoChart');
                 document.getElementById('dashAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>"; return;
             }
             let somaNotas = 0; let agrupamento = {};
@@ -1044,29 +1062,35 @@
             document.getElementById('dashGlobalLoading').style.display = 'flex'; document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
             
             try {
-                // A requisição GERAL traz todos os votos do backend de uma vez!
-                const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
-                if(dados.sucesso) { processarEstatisticasGlobais(dados.votos); document.getElementById('dashGlobalLoading').style.display = 'none'; document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; } 
-                else { alert("Erro de dados globais: " + dados.erro); fecharDashboardGlobal(); }
-            } catch (e) { alert("Falha ao carregar dashboard global."); fecharDashboardGlobal(); }
+                const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); 
+                const dados = await res.json();
+                
+                if(dados.sucesso) { 
+                    processarEstatisticasGlobais(dados.votos); 
+                    document.getElementById('dashGlobalLoading').style.display = 'none'; 
+                    document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; 
+                } 
+                else { 
+                    alert("Erro de dados globais: " + dados.erro); fecharDashboardGlobal(); 
+                }
+            } catch (e) { 
+                alert("Falha ao carregar dashboard global."); fecharDashboardGlobal(); 
+            }
         }
 
         function processarEstatisticasGlobais(votos) {
             let totalVotosGlobais = votos.length;
             let somaNotasGlobais = 0;
             let agrupamentoGlobal = {};
-            let campanhasMap = {}; // Para agrupar detalhamento de cada campanha
+            let campanhasMap = {}; 
             
-            // Variável Mestre limpa
             dadosGlobaisParaPDF = { detalhamento: [] };
 
             votos.forEach(v => {
-                // Métricas Globais
                 somaNotasGlobais += v.nota;
                 if(!agrupamentoGlobal[v.sentimento]) agrupamentoGlobal[v.sentimento] = 0;
                 agrupamentoGlobal[v.sentimento]++;
                 
-                // Mapeamento por Campanha
                 if (!campanhasMap[v.campanha]) {
                     campanhasMap[v.campanha] = { total: 0, somaNotas: 0, agrupamento: {} };
                 }
@@ -1092,13 +1116,11 @@
             const mediaGlobal = (somaNotasGlobais / totalVotosGlobais).toFixed(1);
             document.getElementById('dashGlobalMedia').innerText = mediaGlobal;
 
-            // Renderiza Gráfico Global
             let sortedLabelsGlobal = Object.keys(agrupamentoGlobal).sort((a,b) => agrupamentoGlobal[b] - agrupamentoGlobal[a]);
             let sortedCountsGlobal = sortedLabelsGlobal.map(l => agrupamentoGlobal[l]);
             let coresGlobais = sortedLabelsGlobal.map(l => obterCorDoSentimento(l));
             renderizarGrafico(sortedLabelsGlobal, sortedCountsGlobal, coresGlobais, 'sentimentoGlobalChart');
 
-            // Constrói HTML do Resumo Global e guarda para PDF
             let listaHTMLGlobal = ""; let arraySinteseGlobalPDF = [];
             sortedLabelsGlobal.forEach((sentimento, index) => {
                 let count = agrupamentoGlobal[sentimento]; let p = Math.round((count / totalVotosGlobais) * 100);
@@ -1128,14 +1150,12 @@
 
             document.getElementById('dashGlobalAnaliseTexto').innerHTML = `<h4 style="color: var(--primary); margin-top: 0;">Mapeamento Consolidado:</h4><ul style="list-style: none; padding: 0;">${listaHTMLGlobal}</ul><h4 style="color: var(--primary);">Conclusão Executiva:</h4>${recoHTMLGlobal}`;
 
-            // Processa a Lista Detalhada de cada campanha (Sem gráficos)
             let containerListaHTML = "";
             let arrNomesCampanhas = Object.keys(campanhasMap).sort();
 
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp];
                 let mediaCamp = (info.somaNotas / info.total).toFixed(1);
-                
                 let sortedSentimentos = Object.keys(info.agrupamento).sort((a,b) => info.agrupamento[b] - info.agrupamento[a]);
                 
                 let linhaItemHTML = "";
@@ -1184,6 +1204,11 @@
         function construirPDFGlobal(doc, imgLogoPdf, dataExtracao, txtOriginal, btn) {
             let y = 25;
             
+            // INTELIGÊNCIA DO TÍTULO DO MÊS
+            const mesesStr = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
+            const dataAtual = new Date();
+            const tituloDinamico = `RELATÓRIO CONSOLIDADO DE ${mesesStr[dataAtual.getMonth()]}/${dataAtual.getFullYear()}`;
+            
             // 1. CABEÇALHO 
             if (imgLogoPdf) {
                 const canvas = document.createElement('canvas'); canvas.width = imgLogoPdf.naturalWidth; canvas.height = imgLogoPdf.naturalHeight;
@@ -1197,20 +1222,20 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); doc.text("RELATÓRIO CONSOLIDADO DO PERÍODO", 15, y);
-            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Extração Sistêmica: ${dataExtracao}   |   Campanhas Ativas: ${dadosGlobaisParaPDF.totalCampanhas}`, 15, y);
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); doc.text(tituloDinamico, 15, y);
+            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Extraído em: ${dataExtracao}   |   Total de Campanhas: ${dadosGlobaisParaPDF.totalCampanhas}`, 15, y);
             
-            // 2. SÍNTESE GLOBAL
-            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. SÍNTESE GLOBAL", 15, y);
+            // 2. RESUMO GERAL
+            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. RESUMO GERAL", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
             y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
             doc.text(`• Total de Votos Consolidados: ${dadosGlobaisParaPDF.totalVotos} interações.`, 15, y); y += 6;
             doc.text(`• Índice Geral de Aprovação: ${dadosGlobaisParaPDF.media} / 10.`, 15, y); y += 6;
 
-            // 3. MAPA GLOBAL E GRÁFICO
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("2. MAPA EXECUTIVO", 15, y);
+            // 3. MAPA DE SENTIMENTOS E GRÁFICO
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("2. MAPA DE SENTIMENTOS", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
-            y += 8; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text("Percentuais Universais:", 15, y); y += 8;
+            y += 8; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text("Percentuais dos votos:", 15, y); y += 8;
             
             let startY = y; let listY = y + 2;
             dadosGlobaisParaPDF.sintese.forEach(item => {
@@ -1225,31 +1250,30 @@
             if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 70, 70); }
             y = Math.max(listY, startY + 60) + 12;
             
-            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Executiva do Mês:", 15, y); y += 6;
+            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Mês:", 15, y); y += 6;
             doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosGlobaisParaPDF.conclusao, 180); doc.text(linhasConclusao, 15, y);
             
             y += (linhasConclusao.length * 5) + 15;
 
-            // 4. DETALHAMENTO CORRIDO DAS CAMPANHAS
-            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("3. DESDOBRAMENTO DE CAMPANHAS", 15, y);
+            // 4. LISTA DE CAMPANHAS
+            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("3. LISTA DE CAMPANHAS", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y); y += 8;
 
             dadosGlobaisParaPDF.detalhamento.forEach(camp => {
-                // Checa quebra de página antes de inserir o cabeçalho da campanha
                 if (y > 260) { doc.addPage(); y = 25; }
                 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
-                doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
+                doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
                 
                 camp.sentimentos.forEach(s => {
-                    if (y > 275) { doc.addPage(); y = 25; } // Checa quebra durante a lista
+                    if (y > 275) { doc.addPage(); y = 25; }
                     doc.setFillColor(s.r, s.g, s.b); doc.circle(17, y - 1.2, 1.2, "F");
                     doc.setFont("helvetica", "bold"); doc.setTextColor(50, 50, 50); doc.text(`${s.nome}:`, 20, y);
                     let w = doc.getTextWidth(`${s.nome}: `);
                     doc.setFont("helvetica", "normal"); doc.text(`${s.p}% (${s.count})`, 20 + w, y);
                     y += 5;
                 });
-                y += 6; // Espaço para a próxima campanha
+                y += 6; 
             });
 
             // RODAPÉ GERAL
@@ -1258,7 +1282,7 @@
                 doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
                 doc.text(`Página ${i} de ${pageCount}  -  ArcelorMittal Interno`, 105, 285, { align: "center" });
             }
-            doc.save(`Relatório Mestre de Sentimento (${dataExtracao.replace(/\//g, '-')}).pdf`);
+            doc.save(`Relatório Mensal (${dataExtracao.replace(/\//g, '-')}).pdf`);
             btn.innerHTML = txtOriginal;
         }
     </script>
