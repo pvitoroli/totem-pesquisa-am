@@ -29,7 +29,7 @@
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
         
         /* ==========================================================================
-           1. SPLASH SCREEN
+           1. SPLASH SCREEN (TELA DE CARREGAMENTO)
            ========================================================================== */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -40,16 +40,22 @@
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
 
         .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 400px; width: 100%; position: relative; }
+        
         .splash-glow {
-            position: absolute; width: 180px; height: 180px; background: rgba(255, 81, 0, 0.15); border-radius: 50%;
-            filter: blur(50px); z-index: -1; top: 20%; animation: pulseGlow 2s alternate infinite ease-in-out;
+            position: absolute; width: 180px; height: 180px;
+            background: rgba(255, 81, 0, 0.15); border-radius: 50%;
+            filter: blur(50px); z-index: -1; top: 20%;
+            animation: pulseGlow 2s alternate infinite ease-in-out;
         }
         @keyframes pulseGlow { from { transform: scale(0.8); opacity: 0.5; } to { transform: scale(1.2); opacity: 1; } }
 
         .splash-logo-img { max-width: 130px; margin-bottom: 24px; filter: brightness(1.2); }
         .loading-bar-container { position: relative; width: 220px; margin-top: 35px; overflow: hidden; }
         .loading-bar-img { width: 100%; display: block; }
-        .loading-mask { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        .loading-mask {
+            position: absolute; top: 0; left: 0; height: 100%; width: 100%;
+            background-color: var(--bg); animation: revealRight 3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
         .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards 1s; }
@@ -59,8 +65,10 @@
            2. NAVBAR E MENU LATERAL
            ========================================================================== */
         .navbar {
-            background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
-            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000;
+            background-color: rgba(30, 34, 45, 0.85); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 1000;
         }
         .nav-brand { display: flex; align-items: center; gap: 15px; }
         .nav-logo { max-width: 120px; filter: brightness(1.2); }
@@ -76,7 +84,8 @@
 
         .mobile-menu-btn { display: none; background: transparent; border: none; cursor: pointer; padding: 5px; color: white; }
         .menu-lateral-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 17, 21, 0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
             z-index: 10000; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease;
         }
         .menu-lateral-overlay.active { opacity: 1; visibility: visible; }
@@ -88,11 +97,15 @@
         .menu-lateral-overlay.active .menu-lateral-content { right: 0; }
         .menu-lateral-header {
             display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border);
-            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
+            padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 500; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 1px;
         }
         .menu-lateral-header button { background: transparent; border: none; color: white; font-size: 22px; cursor: pointer; transition: 0.2s; }
         .menu-lateral-header button:hover { color: var(--primary); transform: scale(1.1); }
-        .mobile-user-card { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border); }
+        .mobile-user-card {
+            display: flex; align-items: center; gap: 15px; margin-bottom: 20px;
+            background: rgba(255,255,255,0.02); padding: 16px; border-radius: 14px; border: 1px solid var(--border);
+        }
         .mobile-avatar-lrg { width: 48px; height: 48px; font-size: 18px; }
         .mobile-user-details { display: flex; flex-direction: column; gap: 4px; }
         .mobile-user-role { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
@@ -104,8 +117,6 @@
             display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px;
         }
         .btn-menu-lateral:hover { background: rgba(255,255,255,0.05); color: white; border-color: rgba(255,255,255,0.3); }
-        .btn-relatorio-especial { border-color: var(--primary); color: white; background: rgba(255, 81, 0, 0.1); }
-        .btn-relatorio-especial:hover { background: var(--primary); border-color: var(--primary); }
 
         /* ==========================================================================
            3. ESTRUTURA PRINCIPAL
@@ -201,7 +212,7 @@
         #qrCodeImg { width: 100%; height: 100%; display: none; }
         #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 400; }
 
-        /* GESTÃO DE USUÁRIOS */
+        /* 🔥 GESTÃO DE USUÁRIOS (MASTER) 🔥 */
         .tabela-usuarios { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .tabela-usuarios th, .tabela-usuarios td { padding: 12px 16px; text-align: left; border-bottom: 1px solid var(--border); font-size: 13px; color: white; }
         .tabela-usuarios th { color: var(--text-muted); text-transform: uppercase; font-size: 11px; font-weight: 500; letter-spacing: 1px; }
@@ -297,7 +308,11 @@
         </div>
 
         <button class="mobile-menu-btn" onclick="toggleMenuLateral()">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
         </button>
     </nav>
 
@@ -316,8 +331,8 @@
                 </div>
             </div>
 
-            <!-- Botão de Relatório Mensal no Menu -->
-            <button class="btn-menu-lateral btn-relatorio-especial" onclick="abrirDashboardGlobal(); toggleMenuLateral();">
+            <!-- Botão de Relatório Mensal no Menu Lateral -->
+            <button class="btn-menu-lateral" onclick="abrirDashboardGlobal(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
                 Relatório Mensal
             </button>
@@ -544,7 +559,7 @@
 
                 <div class="chart-section">
                     <div class="chart-card">
-                        <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Ecossistema de Percepção Global</h3>
+                        <h3 style="font-size: 14px; color: white; margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Mapa de Sentimentos</h3>
                         <div class="chart-container-inner"><canvas id="sentimentoGlobalChart"></canvas></div>
                     </div>
                     <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
@@ -583,7 +598,7 @@
 
         Chart.register(ChartDataLabels);
 
-        // ⚠️ ATENÇÃO: Lembre-se de atualizar este link se você gerar uma "Nova Implantação" no Apps Script!
+        // ⚠️ ATENÇÃO: Link do Apps Script (Verifique se publicou uma Nova Implantação!)
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec"; 
         const URL_SITE_BASE = "https://pesquisa-sentimento-amp.vercel.app/index.html"; 
         
@@ -597,7 +612,7 @@
         let dadosAgrupadosParaPDF = []; 
         let dadosGlobaisParaPDF = {};
 
-        // Paleta Global (Para garantir que a mesma cor represente o mesmo sentimento no relatório Mestre)
+        // Paleta Global
         const PALETA_MESTRE = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f', '#00d2ff', '#ff0000', '#00ff88'];
         let colorMapMestre = {};
         let colorIndexMestre = 0;
@@ -735,20 +750,22 @@
                 selectNovo.innerHTML = optionsHTML; selectModal.innerHTML = optionsHTML;
             } catch (e) { selectNovo.innerHTML = '<option value="Padrão">Padrão</option>'; selectModal.innerHTML = '<option value="Padrão">Padrão</option>'; }
         }
+        
         async function buscarDados() {
             try {
                 const antiCache = new Date().getTime(); 
                 const res = await fetch(`${URL_BACKEND}?acao=listar&t=${antiCache}`); 
                 const data = await res.json();
                 
-                // Trata o erro caso a planilha não retorne uma array (Ex: Erro do Apps Script porque não houve nova implantação)
-                if(data.sucesso === false) {
+                // Tratamento blindado: Se a planilha responder com um erro formal
+                if(data && data.sucesso === false) {
                     console.error("Erro do Banco de Dados:", data.erro);
-                    document.getElementById('renderArea').innerHTML = `<p style='padding:40px 20px; color: #ff4757;'>Erro no servidor: ${data.erro}. (Dica: Você esqueceu de publicar uma Nova Implantação no Apps Script?)</p>`;
+                    document.getElementById('renderArea').innerHTML = `<p style='padding:40px 20px; color: #ff4757;'>Erro no servidor: ${data.erro}</p>`;
                     return;
                 }
 
-                dbCampanhas = data;
+                // Se passou, assume-se que é o array de campanhas
+                dbCampanhas = Array.isArray(data) ? data : [];
                 dbCampanhas.forEach(c => {
                     if(c.status.toLowerCase() === 'rascunho') c.status = 'Em Espera';
                     if(c.status.toLowerCase() === 'ativo') c.status = 'Ativo';
@@ -756,9 +773,11 @@
                 });
                 renderizarLista();
             } catch (e) { 
-                document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique se o link URL_BACKEND no código é a Nova Implantação do Google Apps Script.</p>"; 
+                console.error(e);
+                document.getElementById('renderArea').innerHTML = "<p style='padding:40px 20px; color: #ff4757;'>Falha ao ler dados da base. Verifique se publicou uma Nova Implantação no Google Apps Script.</p>"; 
             }
         }
+        
         async function salvarCampanha() {
             const nome = document.getElementById('nomeCampanha').value.trim(); const pasta = document.getElementById('pastaCampanha').value.trim();
             const setor = document.getElementById('setorCampanha').value; const data = document.getElementById('dataCampanha').value;
@@ -1065,16 +1084,16 @@
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); 
                 const dados = await res.json();
                 
-                if(dados.sucesso) { 
+                if(dados && dados.sucesso) { 
                     processarEstatisticasGlobais(dados.votos); 
                     document.getElementById('dashGlobalLoading').style.display = 'none'; 
                     document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; 
                 } 
                 else { 
-                    alert("Erro de dados globais: " + dados.erro); fecharDashboardGlobal(); 
+                    alert("Erro ao extrair dados globais. " + (dados ? dados.erro : '')); fecharDashboardGlobal(); 
                 }
             } catch (e) { 
-                alert("Falha ao carregar dashboard global."); fecharDashboardGlobal(); 
+                alert("Falha de conexão com o banco de dados global."); fecharDashboardGlobal(); 
             }
         }
 
