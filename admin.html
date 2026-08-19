@@ -575,8 +575,8 @@
                 <div class="kpi-grid">
                     <div class="kpi-card"><div class="kpi-label">Ações Corporativas</div><div class="kpi-value" id="dashGlobalCampanhas">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Campanhas no Período</div></div>
                     <div class="kpi-card"><div class="kpi-label">Interações Totais</div><div class="kpi-value" id="dashGlobalTotalVotos">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Votos Recebidos</div></div>
-                    <div class="kpi-card"><div class="kpi-label">Índice Geral</div><div class="kpi-value" id="dashGlobalMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Aprovação Média Ponderada</div></div>
-                    <div class="kpi-card"><div class="kpi-label">Massa de Dados</div><div class="kpi-value" id="dashGlobalMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Índice de Aprovação</div><div class="kpi-value" id="dashGlobalMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Aprovação Média Ponderada</div></div>
+                    <div class="kpi-card"><div class="kpi-label">Total de Microdados</div><div class="kpi-value" id="dashGlobalMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div></div>
                 </div>
 
                 <div class="chart-section">
@@ -1359,7 +1359,7 @@
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF');
             const txtOriginal = btn.innerHTML;
-            btn.innerHTML = "⏳ A compilar Documento Oficial...";
+            btn.innerHTML = "Compilando Documento...";
 
             const dataExtracao = new Date().toLocaleDateString('pt-BR');
             let textoTempo = "";
@@ -1545,7 +1545,7 @@
         }
 
         /* =========================================================================
-           🔥 MOTOR DASHBOARD GLOBAL (RELATÓRIO MENSAL) 🔥
+           🔥 MOTOR DASHBOARD (RELATÓRIO MENSAL) 🔥
            ========================================================================= */
         window.meuGraficoGlobal = null;
 
@@ -1563,10 +1563,10 @@
                     document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; 
                 } 
                 else { 
-                    alert("Erro ao extrair dados globais. " + (dados ? dados.erro : '')); fecharDashboardGlobal(); 
+                    alert("Erro ao extrair dados. " + (dados ? dados.erro : '')); fecharDashboardGlobal(); 
                 }
             } catch (e) { 
-                alert("Falha de conexão com o banco de dados global."); fecharDashboardGlobal(); 
+                alert("Falha de conexão com o banco de dados."); fecharDashboardGlobal(); 
             }
         }
 
