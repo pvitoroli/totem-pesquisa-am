@@ -8,145 +8,148 @@
     <link rel="stylesheet" href="style-index.css">
 
     <style>
+        /* ==========================================================================
+           VARIÁVEIS DE TEMA (O SEGREDO DA TRANSIÇÃO PERFEITA)
+           ========================================================================== */
+        :root {
+            /* Modo Escuro (Padrão) */
+            --bg-body: #1b1e27;
+            --text-title: #ffffff;
+            --text-muted: #a0a5b0;
+            --header-border: rgba(255, 255, 255, 0.08);
+            --status-bg: rgba(255, 255, 255, 0.03);
+            --overlay-bg: rgba(6, 8, 12, 0.75);
+            
+            /* Cards de Votação */
+            --card-bg: #2a2f3a;
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-text: #ffffff;
+            
+            /* Rodapé */
+            --btn-footer-bg: rgba(255, 255, 255, 0.03);
+            --btn-footer-border: rgba(255, 255, 255, 0.08);
+            --btn-footer-text: rgba(160, 165, 176, 0.6);
+        }
+
+        body.light-mode {
+            /* Modo Claro (Inversão Limpa sem !important destrutivos) */
+            --bg-body: #f5f7f9;
+            --text-title: #1e222d;
+            --text-muted: #6b7280;
+            --header-border: rgba(0, 0, 0, 0.1);
+            --status-bg: rgba(0, 0, 0, 0.05);
+            --overlay-bg: rgba(255, 255, 255, 0.85);
+            
+            /* Cards de Votação no Claro */
+            --card-bg: #ffffff;
+            --card-border: rgba(0, 0, 0, 0.08);
+            --card-text: #1e222d;
+            
+            /* Rodapé no Claro */
+            --btn-footer-bg: #ffffff;
+            --btn-footer-border: rgba(0, 0, 0, 0.1);
+            --btn-footer-text: #6b7280;
+        }
+
         body {
-            background-color: #1b1e27;
-            margin: 0;
-            padding: 20px;
+            background-color: var(--bg-body);
+            margin: 0; padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; position: relative; overflow-x: hidden;
+            transition: background-color 0.4s ease, color 0.4s ease;
         }
 
-        /* ==========================================================================
-           MODO CLARO - SOBRESCRITA ABSOLUTA (VENCENDO O CSS EXTERNO)
-           ========================================================================== */
-        body.light-mode { background-color: #f5f7f9 !important; color: #1e222d !important; }
-        
-        body.light-mode .totem-app-canvas {
-            background-color: #ffffff !important;
-            box-shadow: 0px 20px 40px rgba(0,0,0,0.05) !important;
-        }
-
-        /* Textos Principais */
-        body.light-mode h1, 
-        body.light-mode h3, 
-        body.light-mode h5, 
-        body.light-mode p,
-        body.light-mode span.card-label,
-        body.light-mode #pergunta-principal-txt,
-        body.light-mode #pergunta-principal-txt b {
-            color: #1e222d !important;
-        }
-
-        /* Textos Secundários (Muted) */
-        body.light-mode .campaign-mini-label,
-        body.light-mode .brand-subtext,
-        body.light-mode .status-text,
-        body.light-mode .splash-slogan {
-            color: #6b7280 !important;
-        }
-
-        body.light-mode .totem-header { border-bottom-color: rgba(0,0,0,0.1) !important; }
-        body.light-mode .status-online-area { background-color: rgba(0,0,0,0.05) !important; }
-
-        /* VOTE CARDS */
-        body.light-mode .vote-card { background-color: #ffffff !important; border: 1.5px solid rgba(0,0,0,0.1) !important; }
-        body.light-mode .vote-card:hover { box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; transform: translateY(-5px) !important; }
-        
-        /* RESTAURANDO AS BORDAS COLORIDAS NO MODO CLARO */
-        body.light-mode .vote-card.border-orange { border-color: rgba(255, 81, 0, 0.4) !important; }
-        body.light-mode .vote-card.border-yellow { border-color: rgba(255, 204, 0, 0.4) !important; }
-        body.light-mode .vote-card.border-purple { border-color: rgba(163, 0, 255, 0.4) !important; }
-        body.light-mode .vote-card.border-pink { border-color: rgba(255, 0, 128, 0.4) !important; }
-
-        /* Botões do Rodapé */
-        body.light-mode .btn-action-footer {
-            background-color: #ffffff !important;
-            color: #6b7280 !important;
-            border-color: rgba(0,0,0,0.1) !important;
-        }
-        body.light-mode .btn-action-footer:hover {
-            background-color: rgba(255, 81, 0, 0.1) !important;
-            color: #ff5100 !important;
-            border-color: rgba(255, 81, 0, 0.3) !important;
-        }
-
-        /* Splash Screen & Overlay */
-        body.light-mode #splash-screen,
-        body.light-mode .loading-mask { background-color: #f5f7f9 !important; }
-        body.light-mode #cinematic-overlay { background-color: rgba(255, 255, 255, 0.85) !important; }
-
-        body:not(.light-mode) .splash-logo-img, 
-        body:not(.light-mode) .brand-logo-img { filter: brightness(1.2) !important; }
-
-
-        /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN (PADRÃO ESCURO)
-           ========================================================================== */
+        /* SPLASH SCREEN */
         #splash-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: #1b1e27; z-index: 9999; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px; box-sizing: border-box;
-            transition: opacity 0.5s ease, visibility 0.5s ease, background-color 0.3s ease;
+            background-color: var(--bg-body); z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box;
+            transition: opacity 0.5s ease, visibility 0.5s ease, background-color 0.4s ease;
         }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
 
         .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 400px; width: 100%; }
-
         .splash-logo-img { max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain; margin-top: -40px; margin-bottom: 24px; transition: filter 0.3s ease; }
+        
+        body:not(.light-mode) .splash-logo-img, body:not(.light-mode) .brand-logo-img { filter: brightness(1.2); }
 
         .loading-bar-container { position: relative; width: 220px; height: auto; margin-top: 35px; overflow: hidden; }
         .loading-bar-img { width: 100%; height: auto; display: block; }
-        .loading-mask { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #1b1e27; animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; transition: background-color 0.3s ease; }
+        .loading-mask { position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: var(--bg-body); animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; transition: background-color 0.4s ease; }
         @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
-        .splash-slogan { font-size: 11px; text-transform: uppercase; color: #a0a5b0; letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards; animation-delay: 1.2s; }
+        .splash-slogan { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.2px; font-weight: 600; margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards; animation-delay: 1.2s; }
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         .splash-glow { position: absolute; width: 160px; height: 160px; background: rgba(255, 81, 0, 0.12); border-radius: 50%; filter: blur(40px); z-index: -1; animation: pulseGlow 1.5s alternate infinite ease-in-out; }
         @keyframes pulseGlow { from { transform: scale(0.9); opacity: 0.5; } to { transform: scale(1.1); opacity: 1; } }
 
         /* ==========================================================================
-           ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
+           COMPONENTES DO TOTEM
            ========================================================================== */
-        .vote-card {
-            background-color: #2a2f3a; 
-            border: 1.5px solid rgba(255, 255, 255, 0.05); 
-            border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; 
-            flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
-        }
+        .totem-header { border-bottom-color: var(--header-border) !important; transition: border-color 0.4s ease; }
+        .brand-subtext, .campaign-mini-label { color: var(--text-muted) !important; transition: color 0.4s ease; }
+        .title-section h1, .title-section h3, #pergunta-principal-txt, #pergunta-principal-txt b { color: var(--text-title) !important; transition: color 0.4s ease; }
         
-        .vote-card:active { transform: scale(0.95); }
-        .vote-card:hover { box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15); transform: translateY(-5px); }
-        
-        .card-label { font-size: 13px; font-weight: 700; color: white; text-align: center; display: block; padding-top: 4px; text-transform: uppercase; }
-
-        .totem-app-canvas { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease; }
-
-        #cinematic-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(6, 8, 12, 0.75); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
-            opacity: 0; visibility: hidden; z-index: 99990;
-            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, background-color 0.3s ease;
-        }
-        #cinematic-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(10px); }
+        .status-online-area { background-color: var(--status-bg) !important; transition: background-color 0.4s ease; }
+        .status-text { color: var(--text-muted) !important; transition: color 0.4s ease; }
 
         .pulse-dot-verde { width: 6px; height: 6px; background-color: #4bb543; border-radius: 50%; display: inline-block; animation: pulseVerde 1.5s infinite; }
         @keyframes pulseVerde { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 5px rgba(75, 181, 67, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); } }
 
         /* ==========================================================================
-           RODAPÉ (AÇÕES)
+           VOTE CARDS (Limpos de código inline!)
+           ========================================================================== */
+        .vote-card {
+            background-color: var(--card-bg);
+            border: 1.5px solid var(--card-border);
+            border-radius: 20px; 
+            padding: 36px 12px; 
+            min-height: 200px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-evenly; 
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.4s ease, border-color 0.4s ease;
+        }
+
+        body.light-mode .vote-card { box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+
+        .vote-card:active { transform: scale(0.95); }
+        .vote-card:hover { box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15); transform: translateY(-5px); }
+        
+        /* Acende a borda colorida no modo claro */
+        body.light-mode .border-orange { border-color: rgba(255, 81, 0, 0.4); }
+        body.light-mode .border-yellow { border-color: rgba(255, 204, 0, 0.4); }
+        body.light-mode .border-purple { border-color: rgba(163, 0, 255, 0.4); }
+        body.light-mode .border-pink   { border-color: rgba(255, 0, 128, 0.4); }
+
+        .card-label {
+            font-size: 13px; font-weight: 700; color: var(--card-text); 
+            text-align: center; display: block; padding-top: 4px; text-transform: uppercase;
+            transition: color 0.4s ease;
+        }
+
+        .totem-app-canvas { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease; }
+
+        #cinematic-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--overlay-bg); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+            opacity: 0; visibility: hidden; z-index: 99990;
+            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease, background-color 0.4s ease;
+        }
+        #cinematic-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+
+        /* ==========================================================================
+           RODAPÉ E BOTÕES
            ========================================================================== */
         .footer-actions { margin-top: 65vh; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; width: 100%; }
         
         .btn-action-footer {
-            background-color: rgba(255, 255, 255, 0.03); color: rgba(160, 165, 176, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+            background-color: var(--btn-footer-bg); color: var(--btn-footer-text); border: 1px solid var(--btn-footer-border);
             padding: 10px 20px; border-radius: 8px; font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
             text-transform: uppercase; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;
         }
@@ -167,8 +170,8 @@
         <div class="splash-content">
             <div class="splash-glow"></div>
             <img src="logo-arcelormittal.png" class="splash-logo-img" id="splashLogo" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
-            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: #a0a5b0; letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 28px; font-weight: 800; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
                 <div class="loading-mask"></div>
@@ -184,12 +187,12 @@
     </script>
 
     <div class="totem-app-canvas" id="main-interface" style="width: 100%; max-width: 600px;">
-      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px; transition: border-color 0.3s ease;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid; padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
         <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
             <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" id="brandLogo" class="brand-logo-img" style="max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" onerror="this.style.display='none'"/>
         </div>
         <div class="header-right-text" style="display: flex;">
-            <span class="brand-subtext" style="font-size: 11px; color: #a0a5b0; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
+            <span class="brand-subtext" style="font-size: 11px; text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
         </div>
       </div>
       
@@ -200,22 +203,21 @@
       </script>
       
       <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
-        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: #a0a5b0; letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
         
         <h3 id="nome-campanha-ativa" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
         
-        <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
-          <span id="pergunta-principal-txt" style="font-weight: normal; color: white;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
+        <h5 style="text-align: center; font-size: 15px; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
+          <span id="pergunta-principal-txt" style="font-weight: normal;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
         </h5>
         
-        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px; transition: background-color 0.3s ease;">
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 12px;">
             <span class="pulse-dot-verde"></span>
-            <span class="status-text" style="font-size: 10px; color: #a0a5b0; font-weight: 600;">Conexão Totem Virtual</span>
+            <span class="status-text" style="font-size: 10px; font-weight: 600;">Conexão Totem Virtual</span>
         </div>
       </div>
 
       <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
-        
         <a href="javascript:void(0)" onclick="escolherSentimento(event, 1, this)" class="vote-card border-orange">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img id="gif-s1" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
@@ -263,7 +265,7 @@
     </div>
 
     <script>
-        // Define o texto inicial do botão baseado no estado
+        // Define o texto do botão secret ao carregar
         if(document.body.classList.contains('light-mode')) {
             document.getElementById('themeBtnText').innerText = 'MODO ESCURO';
         }
@@ -324,7 +326,8 @@
                     if (dadosCacheados.template) aplicarTemplateNaTela(dadosCacheados.template, nomeRealDaCampanha);
                 }
                 try { 
-                    const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${Date.now()}`); 
+                    const antiCache = Date.now(); 
+                    const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
                     const dados = await res.json(); 
                     if (dados.sucesso) { 
                         localStorage.setItem('cache_evento_' + idEventoAtual, JSON.stringify(dados));
@@ -340,7 +343,7 @@
         
         window.addEventListener('load', buscarEventoAtivo); 
 
-        // O HERO TRANSITION
+        // O HERO TRANSITION COM TRAVAS BLINDADAS
         function escolherSentimento(event, numeroSentimento, elementoClicado) { 
             event.preventDefault(); 
             if (window.animacaoEmAndamento) return; window.animacaoEmAndamento = true; 
@@ -354,31 +357,44 @@
             if (elementoClicado.classList.contains('border-purple')) glowColor = 'rgba(163, 0, 255, 0.6)'; 
             if (elementoClicado.classList.contains('border-pink')) glowColor = 'rgba(255, 0, 128, 0.6)'; 
             
-            const rect = elementoClicado.getBoundingClientRect(); const clone = elementoClicado.cloneNode(true); 
+            const rect = elementoClicado.getBoundingClientRect(); 
+            const clone = elementoClicado.cloneNode(true); 
+            
+            // Puxa as cores corretas e computadas do elemento para o clone não piscar
+            const computed = window.getComputedStyle(elementoClicado);
+            
             elementoClicado.style.opacity = '0'; 
             
-            clone.style.position = 'fixed'; clone.style.top = rect.top + 'px'; clone.style.left = rect.left + 'px'; clone.style.width = rect.width + 'px'; clone.style.height = rect.height + 'px'; clone.style.margin = '0'; clone.style.zIndex = '99995'; clone.style.transform = 'translate(0px, 0px) scale(1)'; clone.style.transition = 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'; 
+            // CSS embutido blindado contra HOVERS para o voo
+            clone.style.cssText = `
+                position: fixed !important;
+                top: ${rect.top}px !important;
+                left: ${rect.left}px !important;
+                width: ${rect.width}px !important;
+                height: ${rect.height}px !important;
+                margin: 0 !important;
+                z-index: 99995 !important;
+                background-color: ${computed.backgroundColor} !important;
+                border-color: ${computed.borderColor} !important;
+                border-radius: ${computed.borderRadius} !important;
+                transform-origin: center center !important;
+                transform: translate(0px, 0px) scale(1) !important;
+                transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.7s ease !important;
+                pointer-events: none !important;
+            `;
             
-            // Garantir as bordas no clone se tiver no modo claro
-            if(document.body.classList.contains('light-mode')) {
-                clone.style.setProperty("background-color", "#ffffff", "important");
-                if (elementoClicado.classList.contains('border-orange')) clone.style.setProperty("border-color", "rgba(255, 81, 0, 0.4)", "important");
-                if (elementoClicado.classList.contains('border-yellow')) clone.style.setProperty("border-color", "rgba(255, 204, 0, 0.4)", "important");
-                if (elementoClicado.classList.contains('border-purple')) clone.style.setProperty("border-color", "rgba(163, 0, 255, 0.4)", "important");
-                if (elementoClicado.classList.contains('border-pink')) clone.style.setProperty("border-color", "rgba(255, 0, 128, 0.4)", "important");
-            }
-
             document.body.appendChild(clone); 
             
             if (overlayCinematico) overlayCinematico.classList.add('active'); 
             if (telaPrincipal) { telaPrincipal.style.transform = 'scale(0.92)'; telaPrincipal.style.filter = 'blur(6px) brightness(0.3)'; }
             
-            const moveX = (window.innerWidth / 2) - (rect.left + rect.width / 2); const moveY = (window.innerHeight / 2) - (rect.top + rect.height / 2); 
+            const moveX = (window.innerWidth / 2) - (rect.left + rect.width / 2); 
+            const moveY = (window.innerHeight / 2) - (rect.top + rect.height / 2); 
             
             requestAnimationFrame(() => { 
-                clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.4)`; 
-                clone.style.boxShadow = `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${glowColor}`; 
-                if(!document.body.classList.contains('light-mode')) clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
+                // Setar como important evita que qualquer CSS externo sobrescreva o centro do ecrã
+                clone.style.setProperty('transform', `translate(${moveX}px, ${moveY}px) scale(1.4)`, 'important');
+                clone.style.setProperty('box-shadow', `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${glowColor}`, 'important');
             }); 
             
             let linkProximaTela = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(objEscolhido.texto)}&gif=${encodeURIComponent(objEscolhido.gif)}&setor=${encodeURIComponent(setorAtual)}`;
