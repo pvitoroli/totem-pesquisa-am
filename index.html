@@ -62,6 +62,20 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
             border-width: 1.5px !important;
             border-style: solid !important;
+            border-color: rgba(0, 0, 0, 0.08) !important; /* Borda neutra e suave por padrão */
+        }
+        
+        /* ATENÇÃO: Sem !important no transform para não brigar com o Voo do Javascript */
+        body.light-mode .vote-card:hover {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
+            transform: translateY(-5px);
+        }
+        
+        /* CORES DAS BORDAS APENAS NO HOVER - GARANTIDAS COM IMPORTANT */
+        body.light-mode .vote-card.border-orange:hover { border-color: rgba(255, 81, 0, 0.6) !important; }
+        body.light-mode .vote-card.border-yellow:hover { border-color: rgba(255, 204, 0, 0.6) !important; }
+        body.light-mode .vote-card.border-purple:hover { border-color: rgba(163, 0, 255, 0.6) !important; }
+        body.light-mode .vote-card.border-pink:hover { border-color: rgba(255, 0, 128, 0.6) !important; }
         }
         
         /* ATENÇÃO: Sem !important no transform para não brigar com o Voo do Javascript */
