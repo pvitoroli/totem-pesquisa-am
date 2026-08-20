@@ -8,8 +8,54 @@
     <link rel="stylesheet" href="style-index.css">
 
     <style>
+        :root {
+            /* Variáveis base (Modo Escuro Padrão) */
+            --bg-body: #1b1e27;
+            --bg-splash: #1b1e27;
+            --bg-mask: #1b1e27;
+            --bg-overlay: rgba(6, 8, 12, 0.75);
+            --text-title: white;
+            --text-subtitle: #a0a5b0;
+            --text-label: rgb(255, 255, 255);
+            --border-header: rgba(255, 255, 255, 0.08);
+            --bg-status: rgba(255, 255, 255, 0.03);
+            --bg-card: #2a2f3a;
+            --border-card: rgba(255, 255, 255, 0.05);
+            --bg-btn: rgba(255, 255, 255, 0.03);
+            --border-btn: rgba(255, 255, 255, 0.08);
+            --text-btn: rgba(160, 165, 176, 0.6);
+            /* Cores das bordas dos cards (Mantidas no dark) */
+            --orange-card: rgba(255, 255, 255, 0.05);
+            --yellow-card: rgba(255, 255, 255, 0.05);
+            --purple-card: rgba(255, 255, 255, 0.05);
+            --pink-card: rgba(255, 255, 255, 0.05);
+        }
+
+        body.light-mode {
+            /* Sobrescrita de Variáveis (Modo Claro) */
+            --bg-body: #f5f7f9;
+            --bg-splash: #f5f7f9;
+            --bg-mask: #f5f7f9;
+            --bg-overlay: rgba(255, 255, 255, 0.85);
+            --text-title: #1e222d;
+            --text-subtitle: #6b7280;
+            --text-label: #1e222d;
+            --border-header: rgba(0, 0, 0, 0.1);
+            --bg-status: rgba(0, 0, 0, 0.05);
+            --bg-card: #ffffff;
+            --border-card: rgba(0, 0, 0, 0.05);
+            --bg-btn: #ffffff;
+            --border-btn: rgba(0, 0, 0, 0.1);
+            --text-btn: #6b7280;
+            /* Cores vivas para as bordas no Modo Claro */
+            --orange-card: rgba(255, 81, 0, 0.4);
+            --yellow-card: rgba(255, 204, 0, 0.4);
+            --purple-card: rgba(163, 0, 255, 0.4);
+            --pink-card: rgba(255, 0, 128, 0.4);
+        }
+
         body {
-            background-color: #1b1e27;
+            background-color: var(--bg-body);
             margin: 0;
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -31,7 +77,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #1b1e27;
+            background-color: var(--bg-splash);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -57,7 +103,6 @@
         }
 
         .splash-logo-img {
-            filter: brightness(1.2);
             max-width: 130px;
             max-height: 35px;
             width: 100%;
@@ -68,7 +113,7 @@
             transition: filter 0.3s ease;
         }
         
-        body.light-mode .splash-logo-img, body.light-mode .brand-logo-img { filter: none !important; }
+        body:not(.light-mode) .splash-logo-img, body:not(.light-mode) .brand-logo-img { filter: brightness(1.2); }
 
         .loading-bar-container {
             position: relative;
@@ -90,7 +135,7 @@
             left: 0;
             height: 100%;
             width: 100%;
-            background-color: #1b1e27;
+            background-color: var(--bg-mask);
             animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
             transition: background-color 0.3s ease;
         }
@@ -103,7 +148,7 @@
         .splash-slogan {
             font-size: 11px;
             text-transform: uppercase;
-            color: #a0a5b0;
+            color: var(--text-subtitle);
             letter-spacing: 1.2px;
             font-weight: 600;
             margin-top: 25px;
@@ -136,8 +181,26 @@
            ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
            ========================================================================== */
         .vote-card {
+            background-color: var(--bg-card); 
+            border: 1.5px solid var(--border-card); 
+            border-radius: 20px; 
+            padding: 36px 12px; 
+            min-height: 200px; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: space-evenly; 
+            text-decoration: none;
             transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
         }
+        
+        body.light-mode .vote-card { box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        
+        /* Aplicação dinâmica de cores nas bordas via CSS variables */
+        .border-orange { border-color: var(--orange-card); }
+        .border-yellow { border-color: var(--yellow-card); }
+        .border-purple { border-color: var(--purple-card); }
+        .border-pink { border-color: var(--pink-card); }
 
         .vote-card:active {
             transform: scale(0.95);
@@ -146,6 +209,11 @@
         .vote-card:hover {
             box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15);
             transform: translateY(-5px);
+        }
+        
+        .card-label {
+            font-size: 13px; font-weight: 700; color: var(--text-label); 
+            text-align: center; display: block; padding-top: 4px; text-transform: uppercase;
         }
 
         .totem-app-canvas {
@@ -158,13 +226,13 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(6, 8, 12, 0.75);
+            background-color: var(--bg-overlay);
             backdrop-filter: blur(0px); 
             -webkit-backdrop-filter: blur(0px);
             opacity: 0;
             visibility: hidden;
             z-index: 99990;
-            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease;
+            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease, background-color 0.3s ease;
         }
 
         #cinematic-overlay.active {
@@ -176,12 +244,12 @@
         
         /* STATUS ONLINE DISCRETO - Corrigido para Verde */
         .pulse-dot-verde {
-            width: 6px !important;
-            height: 6px !important;
-            background-color: #4bb543 !important; 
-            border-radius: 50% !important;
-            display: inline-block !important;
-            animation: pulseVerde 1.5s infinite !important;
+            width: 6px;
+            height: 6px;
+            background-color: #4bb543; 
+            border-radius: 50%;
+            display: inline-block;
+            animation: pulseVerde 1.5s infinite;
         }
 
         @keyframes pulseVerde {
@@ -191,12 +259,14 @@
         }
 
         /* ==========================================================================
-           BOTÃO DE ENCERRAR COLETA (ÁREA RESTRITA)
+           RODAPÉ (AÇÕES)
            ========================================================================== */
-        .btn-encerrar-coleta {
-            background-color: rgba(255, 255, 255, 0.03);
-            color: rgba(160, 165, 176, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+        .footer-actions { margin-top: 65vh; margin-bottom: 40px; display: flex; justify-content: center; gap: 15px; width: 100%; }
+        
+        .btn-action-footer {
+            background-color: var(--bg-btn);
+            color: var(--text-btn);
+            border: 1px solid var(--border-btn);
             padding: 10px 20px;
             border-radius: 8px;
             font-size: 11px;
@@ -211,7 +281,7 @@
             transition: all 0.2s ease;
         }
 
-        .btn-encerrar-coleta:hover {
+        .btn-action-footer:hover {
             background-color: rgba(255, 81, 0, 0.1);
             color: #ff5100;
             border-color: rgba(255, 81, 0, 0.3);
@@ -222,8 +292,10 @@
 
     <script>
         const themeParams = new URLSearchParams(window.location.search);
-        const isLight = themeParams.get('theme') === 'light' || localStorage.getItem('theme') === 'light';
-        if(isLight) {
+        if (themeParams.has('theme')) {
+            localStorage.setItem('theme', themeParams.get('theme'));
+        }
+        if(localStorage.getItem('theme') === 'light') {
             document.body.classList.add('light-mode');
         }
     </script>
@@ -234,8 +306,8 @@
         <div class="splash-content">
             <div class="splash-glow"></div>
             <img src="logo-arcelormittal.png" class="splash-logo-img" id="splashLogo" alt="Logo ArcelorMittal" onerror="this.style.display='none'">
-            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
-            <h1 style="font-size: 28px; font-weight: 800; color: white; margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
+            <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-subtitle); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Você está na</span>
+            <h1 style="font-size: 28px; font-weight: 800; color: var(--text-title); margin: 5px 0 0 0; letter-spacing: 0.5px;">PESQUISA DE<br>SENTIMENTO</h1>
             <div class="loading-bar-container">
                 <img src="simbolo-app.png" alt="Carregando..." class="loading-bar-img" onerror="this.style.display='none'">
                 <div class="loading-mask"></div>
@@ -245,80 +317,85 @@
     </div>
 
     <script>
-        if(isLight) {
+        if(document.body.classList.contains('light-mode')) {
             document.getElementById('splashLogo').src = 'logo-arcelormittal-padrao.png';
         }
     </script>
 
     <div class="totem-app-canvas" id="main-interface" style="width: 100%; max-width: 600px;">
-      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
+      <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-header); padding-bottom: 12px; margin-bottom: 24px; height: 50px; transition: border-color 0.3s ease;">
         <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
-            <img src="logo-arcelormittal.png" id="brandLogo" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" onerror="this.style.display='none'"/>
+            <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" id="brandLogo" class="brand-logo-img" style="max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" onerror="this.style.display='none'"/>
         </div>
         <div class="header-right-text" style="display: flex;">
-            <span class="brand-subtext" style="font-size: 11px; color: rgb(160, 165, 176); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
+            <span class="brand-subtext" style="font-size: 11px; color: var(--text-subtitle); text-transform: uppercase; letter-spacing: 1.2px; font-weight: 600;">PESQUISA DE SENTIMENTO - AMP</span>
         </div>
       </div>
       
       <script>
-          if(isLight) {
+          if(document.body.classList.contains('light-mode')) {
               document.getElementById('brandLogo').src = 'logo-arcelormittal-padrao.png';
           }
       </script>
       
       <div class="title-section" style="text-align: center; margin-bottom: 28px; display: flex; flex-direction: column; align-items: center;">
-        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: rgb(160, 165, 176); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
+        <span class="campaign-mini-label" style="font-size: 11px; text-transform: uppercase; color: var(--text-subtitle); letter-spacing: 2px; font-weight: 700; margin-bottom: 2px;">Campanha Ativa</span>
         
         <h3 id="nome-campanha-ativa" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
         
-        <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
-          <span id="pergunta-principal-txt" style="font-weight: normal; color: white;">O que você <b>SENTIU </b>no evento ou ação de hoje?</span>
+        <h5 style="text-align: center; font-size: 15px; color: var(--text-subtitle); font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
+          <span id="pergunta-principal-txt" style="font-weight: normal; color: var(--text-title);">O que você <b style="color: var(--text-title);">SENTIU </b>no evento ou ação de hoje?</span>
         </h5>
         
-        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
-            <span class="pulse-dot-verde" style="width: 6px; height: 6px; background-color: #4bb543; border-radius: 50%; box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); animation: pulseVerde 1.5s infinite;"></span>
-            <span class="status-text" style="font-size: 10px; color: rgb(160, 165, 176); font-weight: 600;">Conexão Totem Virtual</span>
+        <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: var(--bg-status); padding: 4px 10px; border-radius: 12px; transition: background-color 0.3s ease;">
+            <span class="pulse-dot-verde"></span>
+            <span class="status-text" style="font-size: 10px; color: var(--text-subtitle); font-weight: 600;">Conexão Totem Virtual</span>
         </div>
       </div>
 
       <div class="voting-grid" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; width: 100%;">
         
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 1, this)" class="vote-card border-orange" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 1, this)" class="vote-card border-orange">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img id="gif-s1" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span id="label-s1" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">APRENDI<br>ALGO NOVO</span>
+          <span id="label-s1" class="card-label">APRENDI<br>ALGO NOVO</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 2, this)" class="vote-card border-yellow" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 2, this)" class="vote-card border-yellow">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img id="gif-s2" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f601/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span id="label-s2" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">FIQUEI<br>FELIZ</span>
+          <span id="label-s2" class="card-label">FIQUEI<br>FELIZ</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 3, this)" class="vote-card border-purple" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 3, this)" class="vote-card border-purple">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img id="gif-s3" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f9d0/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span id="label-s3" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">QUERO<br>SABER MAIS</span>
+          <span id="label-s3" class="card-label">QUERO<br>SABER MAIS</span>
         </a>
 
-        <a href="javascript:void(0)" onclick="escolherSentimento(event, 4, this)" class="vote-card border-pink" style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 36px 12px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: space-evenly; text-decoration: none;">
+        <a href="javascript:void(0)" onclick="escolherSentimento(event, 4, this)" class="vote-card border-pink">
           <div class="emoji-container" style="width: 80px; height: 80px; margin-bottom: 16px; display: flex; align-items: center; justify-content: center;">
             <img id="gif-s4" src="https://fonts.gstatic.com/s/e/notoemoji/latest/1f614/512.gif" class="emoji-img" style="width: 100%; height: 100%; object-fit: contain;" />
           </div>
-          <span id="label-s4" class="card-label" style="font-size: 13px; font-weight: 700; color: rgb(255, 255, 255); text-align: center; display: block; padding-top: 4px; text-transform: uppercase;">PODERIA<br>SER MELHOR</span>
+          <span id="label-s4" class="card-label">PODERIA<br>SER MELHOR</span>
         </a>
       </div>
 
-      <div style="margin-top: 65vh; margin-bottom: 40px; text-align: center; width: 100%;">
-          <button onclick="voltarParaAdmin()" class="btn-encerrar-coleta">
+      <div class="footer-actions">
+          <button onclick="voltarParaAdmin()" class="btn-action-footer">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                   <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
               </svg>
-              <span>ENCERRAR COLETA</span>
+              <span>ENCERRAR</span>
+          </button>
+          
+          <button onclick="alternarTemaTotem()" class="btn-action-footer">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+              <span>TEMA</span>
           </button>
       </div>
 
@@ -350,11 +427,21 @@
             }, 4500);
         });
 
-        // 🔥 FUNÇÃO NOVA: Preenche a tela com os dados
+        function alternarTemaTotem() {
+            document.body.classList.toggle('light-mode');
+            const isLightNow = document.body.classList.contains('light-mode');
+            localStorage.setItem('theme', isLightNow ? 'light' : 'dark');
+            
+            const splashLogo = document.getElementById('splashLogo');
+            const brandLogo = document.getElementById('brandLogo');
+            if(splashLogo) splashLogo.src = isLightNow ? 'logo-arcelormittal-padrao.png' : 'logo-arcelormittal.png';
+            if(brandLogo) brandLogo.src = isLightNow ? 'logo-arcelormittal-padrao.png' : 'logo-arcelormittal.png';
+        }
+
         function aplicarTemplateNaTela(t, nomeCampanha) {
             document.getElementById('nome-campanha-ativa').innerText = nomeCampanha;
             
-            if (t.pergunta) document.getElementById('pergunta-principal-txt').innerText = t.pergunta;
+            if (t.pergunta) document.getElementById('pergunta-principal-txt').innerHTML = t.pergunta.replace("SENTIU", "<b style='color: var(--text-title);'>SENTIU</b>");
             
             if (t.s1_texto) { sentimentosAtivos[1].texto = t.s1_texto; document.getElementById('label-s1').innerText = t.s1_texto; }
             if (t.s1_gif) { sentimentosAtivos[1].gif = t.s1_gif; document.getElementById('gif-s1').src = t.s1_gif; }
@@ -371,8 +458,6 @@
 
         async function buscarEventoAtivo() { 
             if (idEventoAtual) { 
-
-                // 🔥 1. SISTEMA DE CACHE: Tenta carregar os dados instantaneamente da memória do navegador 🔥
                 const cacheMemoria = localStorage.getItem('cache_evento_' + idEventoAtual);
                 if (cacheMemoria) {
                     const dadosCacheados = JSON.parse(cacheMemoria);
@@ -383,27 +468,19 @@
                     }
                 }
 
-                // 🔥 2. BUSCA NO SERVIDOR: Vai no Google silenciosamente atualizar a memória
                 try { 
                     const antiCache = Date.now(); 
                     const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
                     const dados = await res.json(); 
                     
                     if (dados.sucesso) { 
-                        // Atualiza a memória para o próximo ciclo
                         localStorage.setItem('cache_evento_' + idEventoAtual, JSON.stringify(dados));
-                        
                         nomeRealDaCampanha = dados.nome; 
                         setorAtual = dados.setor || setorAtual; 
-                        
                         if (dados.template) {
                             const t = dados.template;
                             aplicarTemplateNaTela(t, nomeRealDaCampanha);
-                            
-                            // 🔥 SALVA O TEXTO DE AGRADECIMENTO PARA A ÚLTIMA TELA LER 🔥
-                            if (t.agradecimento) {
-                                localStorage.setItem('agradecimento_' + idEventoAtual, t.agradecimento);
-                            }
+                            if (t.agradecimento) localStorage.setItem('agradecimento_' + idEventoAtual, t.agradecimento);
                         }
                     } else { 
                         document.getElementById('nome-campanha-ativa').innerText = "Campanha Inativa";
@@ -452,6 +529,16 @@
             clone.style.zIndex = '99995'; 
             clone.style.transform = 'translate(0px, 0px) scale(1)'; 
             clone.style.transition = 'all 0.7s cubic-bezier(0.16, 1, 0.3, 1)'; 
+            
+            // Garantir que o clone herde corretamente a borda no modo claro, se estiver ativo
+            if(document.body.classList.contains('light-mode')) {
+                clone.style.backgroundColor = '#ffffff';
+                if (elementoClicado.classList.contains('border-orange')) clone.style.borderColor = 'rgba(255, 81, 0, 0.4)';
+                if (elementoClicado.classList.contains('border-yellow')) clone.style.borderColor = 'rgba(255, 204, 0, 0.4)';
+                if (elementoClicado.classList.contains('border-purple')) clone.style.borderColor = 'rgba(163, 0, 255, 0.4)';
+                if (elementoClicado.classList.contains('border-pink')) clone.style.borderColor = 'rgba(255, 0, 128, 0.4)';
+            }
+            
             document.body.appendChild(clone); 
             
             if (overlayCinematico) overlayCinematico.classList.add('active'); 
@@ -466,7 +553,7 @@
             requestAnimationFrame(() => { 
                 clone.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.4)`; 
                 clone.style.boxShadow = `0 30px 80px rgba(0, 0, 0, 0.9), 0 0 50px ${glowColor}`; 
-                clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
+                if(!document.body.classList.contains('light-mode')) clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
             // Passa o parâmetro theme=light adiante se o modo claro estiver ativo
@@ -478,9 +565,6 @@
             }, 1500);
         }
 
-        // =======================================================
-        // FUNÇÃO PARA VOLTAR AO PAINEL ADMINISTRATIVO
-        // =======================================================
         function voltarParaAdmin() {
             if (confirm("🔐 Acesso Restrito: Deseja encerrar a coleta e retornar ao Painel de Controle?")) {
                 window.location.href = "admin.html";
