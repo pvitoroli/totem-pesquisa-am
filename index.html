@@ -23,166 +23,113 @@
         }
 
         /* ==========================================================================
-           ESTILOS DA SPLASH SCREEN
+           MODO CLARO - OVERRIDES FORÇADOS PARA O TOTEM NÃO FICAR ESCURO
+           ========================================================================== */
+        body.light-mode { background-color: #f5f7f9 !important; color: #1e222d !important; }
+        body.light-mode #splash-screen { background-color: #f5f7f9 !important; }
+        body.light-mode .loading-mask { background-color: #f5f7f9 !important; }
+        
+        body.light-mode .vote-card { 
+            background-color: #ffffff !important; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important; 
+        }
+        
+        /* Cores Restauradas para as Bordas no Modo Claro */
+        body.light-mode .vote-card.border-orange { border-color: rgba(255, 81, 0, 0.4) !important; }
+        body.light-mode .vote-card.border-yellow { border-color: rgba(255, 204, 0, 0.4) !important; }
+        body.light-mode .vote-card.border-purple { border-color: rgba(163, 0, 255, 0.4) !important; }
+        body.light-mode .vote-card.border-pink { border-color: rgba(255, 0, 128, 0.4) !important; }
+
+        body.light-mode .card-label,
+        body.light-mode #pergunta-principal-txt b,
+        body.light-mode #pergunta-principal-txt,
+        body.light-mode h1, 
+        body.light-mode h5 { color: #1e222d !important; }
+        
+        body.light-mode .status-online-area { background-color: rgba(0,0,0,0.05) !important; }
+        body.light-mode .status-text { color: #6b7280 !important; }
+        
+        body.light-mode .btn-encerrar-coleta { 
+            background-color: #ffffff !important; 
+            color: #6b7280 !important; 
+            border-color: rgba(0,0,0,0.1) !important; 
+        }
+        body.light-mode .btn-encerrar-coleta:hover { 
+            background-color: rgba(255, 81, 0, 0.1) !important; 
+            color: #ff5100 !important; 
+            border-color: rgba(255, 81, 0, 0.3) !important; 
+        }
+        body.light-mode .campaign-mini-label, 
+        body.light-mode .splash-slogan,
+        body.light-mode .brand-subtext { color: #6b7280 !important; }
+        body.light-mode .totem-header { border-bottom-color: rgba(0,0,0,0.1) !important; }
+        body.light-mode .splash-logo-img, 
+        body.light-mode .brand-logo-img { filter: none !important; }
+        
+        /* Overlay cinematográfico fica branco no modo claro */
+        body.light-mode #cinematic-overlay { background-color: rgba(255, 255, 255, 0.75) !important; }
+
+        /* ==========================================================================
+           ESTILOS DA SPLASH SCREEN (PADRÃO ESCURO)
            ========================================================================== */
         #splash-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: #1b1e27;
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            box-sizing: border-box;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: #1b1e27; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 20px; box-sizing: border-box;
             transition: opacity 0.5s ease, visibility 0.5s ease, background-color 0.3s ease;
         }
 
-        #splash-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-        }
-
-        .splash-content {
-            text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 400px;
-            width: 100%;
-        }
+        #splash-screen.hidden { opacity: 0; visibility: hidden; }
+        .splash-content { text-align: center; display: flex; flex-direction: column; align-items: center; max-width: 400px; width: 100%; }
 
         .splash-logo-img {
-            filter: brightness(1.2);
-            max-width: 130px;
-            max-height: 35px;
-            width: 100%;
-            height: auto;
-            object-fit: contain;
-            margin-top: -40px; 
-            margin-bottom: 24px; 
-            transition: filter 0.3s ease;
-        }
-        
-        body.light-mode .splash-logo-img, body.light-mode .brand-logo-img { filter: none !important; }
-
-        .loading-bar-container {
-            position: relative;
-            width: 220px;
-            height: auto;
-            margin-top: 35px;
-            overflow: hidden;
+            filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto;
+            object-fit: contain; margin-top: -40px; margin-bottom: 24px; transition: filter 0.3s ease;
         }
 
-        .loading-bar-img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+        .loading-bar-container { position: relative; width: 220px; height: auto; margin-top: 35px; overflow: hidden; }
+        .loading-bar-img { width: 100%; height: auto; display: block; }
 
         .loading-mask {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 100%;
-            background-color: #1b1e27;
-            animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-            transition: background-color 0.3s ease;
+            position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #1b1e27;
+            animation: revealRight 4.5s cubic-bezier(0.4, 0, 0.2, 1) forwards; transition: background-color 0.3s ease;
         }
 
-        @keyframes revealRight {
-            0% { left: 0%; }
-            100% { left: 100%; }
-        }
+        @keyframes revealRight { 0% { left: 0%; } 100% { left: 100%; } }
 
         .splash-slogan {
-            font-size: 11px;
-            text-transform: uppercase;
-            color: #a0a5b0;
-            letter-spacing: 1.2px;
-            font-weight: 600;
-            margin-top: 25px;
-            opacity: 0;
-            animation: fadeInSlogan 1.5s ease forwards;
-            animation-delay: 1.2s; 
+            font-size: 11px; text-transform: uppercase; color: #a0a5b0; letter-spacing: 1.2px; font-weight: 600;
+            margin-top: 25px; opacity: 0; animation: fadeInSlogan 1.5s ease forwards; animation-delay: 1.2s; 
         }
 
-        @keyframes fadeInSlogan {
-            to { opacity: 1; }
-        }
+        @keyframes fadeInSlogan { to { opacity: 1; } }
 
         .splash-glow {
-            position: absolute;
-            width: 160px;
-            height: 160px;
-            background: rgba(255, 81, 0, 0.12);
-            border-radius: 50%;
-            filter: blur(40px);
-            z-index: -1;
-            animation: pulseGlow 1.5s alternate infinite ease-in-out;
+            position: absolute; width: 160px; height: 160px; background: rgba(255, 81, 0, 0.12);
+            border-radius: 50%; filter: blur(40px); z-index: -1; animation: pulseGlow 1.5s alternate infinite ease-in-out;
         }
 
-        @keyframes pulseGlow {
-            from { transform: scale(0.9); opacity: 0.5; }
-            to { transform: scale(1.1); opacity: 1; }
-        }
+        @keyframes pulseGlow { from { transform: scale(0.9); opacity: 0.5; } to { transform: scale(1.1); opacity: 1; } }
 
         /* ==========================================================================
            ANIMAÇÕES DOS BOTÕES E OVERLAY DE CINEMA
            ========================================================================== */
-        .vote-card {
-            transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        .vote-card:active {
-            transform: scale(0.95);
-        }
-
-        .vote-card:hover {
-            box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15);
-            transform: translateY(-5px);
-        }
-
-        .totem-app-canvas {
-            transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease;
-        }
+        .vote-card { transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease, background-color 0.3s ease, border-color 0.3s ease; }
+        .vote-card:active { transform: scale(0.95); }
+        .vote-card:hover { box-shadow: 0 10px 25px rgba(255, 81, 0, 0.15); transform: translateY(-5px); }
+        .totem-app-canvas { transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s ease, opacity 0.7s ease; }
 
         #cinematic-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(6, 8, 12, 0.75);
-            backdrop-filter: blur(0px); 
-            -webkit-backdrop-filter: blur(0px);
-            opacity: 0;
-            visibility: hidden;
-            z-index: 99990;
-            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(6, 8, 12, 0.75); backdrop-filter: blur(0px); -webkit-backdrop-filter: blur(0px);
+            opacity: 0; visibility: hidden; z-index: 99990;
+            transition: opacity 0.6s ease, visibility 0.6s ease, backdrop-filter 0.6s ease, -webkit-backdrop-filter 0.6s ease, background-color 0.3s ease;
         }
 
-        #cinematic-overlay.active {
-            opacity: 1;
-            visibility: visible;
-            backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px);
-        }
+        #cinematic-overlay.active { opacity: 1; visibility: visible; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
         
-        /* STATUS ONLINE DISCRETO - Corrigido para Verde */
-        .pulse-dot-verde {
-            width: 6px !important;
-            height: 6px !important;
-            background-color: #4bb543 !important; 
-            border-radius: 50% !important;
-            display: inline-block !important;
-            animation: pulseVerde 1.5s infinite !important;
-        }
+        .pulse-dot-verde { width: 6px !important; height: 6px !important; background-color: #4bb543 !important; border-radius: 50% !important; display: inline-block !important; animation: pulseVerde 1.5s infinite !important; }
 
         @keyframes pulseVerde {
             0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0.7); }
@@ -190,40 +137,26 @@
             100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(75, 181, 67, 0); }
         }
 
-        /* ==========================================================================
-           BOTÃO DE ENCERRAR COLETA (ÁREA RESTRITA)
-           ========================================================================== */
         .btn-encerrar-coleta {
-            background-color: rgba(255, 255, 255, 0.03);
-            color: rgba(160, 165, 176, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 11px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            background-color: rgba(255, 255, 255, 0.03); color: rgba(160, 165, 176, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08); padding: 10px 20px; border-radius: 8px;
+            font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease;
         }
-
-        .btn-encerrar-coleta:hover {
-            background-color: rgba(255, 81, 0, 0.1);
-            color: #ff5100;
-            border-color: rgba(255, 81, 0, 0.3);
-        }
+        .btn-encerrar-coleta:hover { background-color: rgba(255, 81, 0, 0.1); color: #ff5100; border-color: rgba(255, 81, 0, 0.3); }
     </style>
 </head>
 <body>
 
     <script>
         const themeParams = new URLSearchParams(window.location.search);
-        const isLight = themeParams.get('theme') === 'light' || localStorage.getItem('theme') === 'light';
+        // Salva na memória se a URL mandar. Se não tiver na URL, usa a memória.
+        if (themeParams.has('theme')) {
+            localStorage.setItem('theme', themeParams.get('theme'));
+        }
+        const isLight = localStorage.getItem('theme') === 'light';
         if(isLight) {
+            document.documentElement.classList.add('light-mode');
             document.body.classList.add('light-mode');
         }
     </script>
@@ -372,7 +305,7 @@
         async function buscarEventoAtivo() { 
             if (idEventoAtual) { 
 
-                // 🔥 1. SISTEMA DE CACHE: Tenta carregar os dados instantaneamente da memória do navegador 🔥
+                // 🔥 1. CACHE: Tenta carregar dados instantaneamente
                 const cacheMemoria = localStorage.getItem('cache_evento_' + idEventoAtual);
                 if (cacheMemoria) {
                     const dadosCacheados = JSON.parse(cacheMemoria);
@@ -383,16 +316,14 @@
                     }
                 }
 
-                // 🔥 2. BUSCA NO SERVIDOR: Vai no Google silenciosamente atualizar a memória
+                // 🔥 2. SERVIDOR: Atualiza em background
                 try { 
                     const antiCache = Date.now(); 
                     const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
                     const dados = await res.json(); 
                     
                     if (dados.sucesso) { 
-                        // Atualiza a memória para o próximo ciclo
                         localStorage.setItem('cache_evento_' + idEventoAtual, JSON.stringify(dados));
-                        
                         nomeRealDaCampanha = dados.nome; 
                         setorAtual = dados.setor || setorAtual; 
                         
@@ -400,7 +331,7 @@
                             const t = dados.template;
                             aplicarTemplateNaTela(t, nomeRealDaCampanha);
                             
-                            // 🔥 SALVA O TEXTO DE AGRADECIMENTO PARA A ÚLTIMA TELA LER 🔥
+                            // 🔥 SALVA TEXTO DE AGRADECIMENTO
                             if (t.agradecimento) {
                                 localStorage.setItem('agradecimento_' + idEventoAtual, t.agradecimento);
                             }
@@ -469,9 +400,8 @@
                 clone.style.borderColor = 'rgba(255, 255, 255, 0.3)'; 
             }); 
             
-            // Passa o parâmetro theme=light adiante se o modo claro estiver ativo
+            // Passa o parâmetro para a próxima tela garantindo que o tema não se perca
             let linkProximaTela = `avaliacao.html?evento=${encodeURIComponent(nomeRealDaCampanha)}&id=${idEventoAtual}&sentimento=${encodeURIComponent(sentimentoEscolhido)}&gif=${encodeURIComponent(gifEscolhido)}&setor=${encodeURIComponent(setorAtual)}`;
-            if(document.body.classList.contains('light-mode')) linkProximaTela += "&theme=light";
 
             setTimeout(() => { 
                 window.location.href = linkProximaTela; 
