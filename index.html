@@ -23,39 +23,6 @@
         }
 
         /* ==========================================================================
-           MODO CLARO (INJEÇÃO PARA O TOTEM)
-           ========================================================================== */
-        body.light-mode { background-color: #f5f7f9 !important; color: #1e222d !important; }
-        body.light-mode #splash-screen { background-color: #f5f7f9 !important; }
-        body.light-mode .loading-mask { background-color: #f5f7f9 !important; }
-        body.light-mode .vote-card { 
-            background-color: #ffffff !important; 
-            border-color: rgba(0,0,0,0.1) !important; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05) !important; 
-        }
-        body.light-mode .card-label,
-        body.light-mode #pergunta-principal-txt,
-        body.light-mode h1, 
-        body.light-mode h3, 
-        body.light-mode h5 { color: #1e222d !important; }
-        body.light-mode .status-online-area { background-color: rgba(0,0,0,0.05) !important; }
-        body.light-mode .status-text { color: #6b7280 !important; }
-        body.light-mode .btn-encerrar-coleta { 
-            background-color: #ffffff !important; 
-            color: #6b7280 !important; 
-            border-color: rgba(0,0,0,0.1) !important; 
-        }
-        body.light-mode .btn-encerrar-coleta:hover { 
-            background-color: rgba(255, 81, 0, 0.1) !important; 
-            color: #ff5100 !important; 
-            border-color: rgba(255, 81, 0, 0.3) !important; 
-        }
-        body.light-mode .campaign-mini-label, 
-        body.light-mode .splash-slogan,
-        body.light-mode .brand-subtext { color: #6b7280 !important; }
-        body.light-mode .totem-header { border-bottom-color: rgba(0,0,0,0.1) !important; }
-
-        /* ==========================================================================
            ESTILOS DA SPLASH SCREEN
            ========================================================================== */
         #splash-screen {
@@ -100,7 +67,7 @@
             margin-bottom: 24px; 
             transition: filter 0.3s ease;
         }
-        /* No modo claro tira o filtro de brilho excessivo */
+        
         body.light-mode .splash-logo-img, body.light-mode .brand-logo-img { filter: none !important; }
 
         .loading-bar-container {
@@ -211,7 +178,7 @@
         .pulse-dot-verde {
             width: 6px !important;
             height: 6px !important;
-            background-color: #4bb543 !important; /* Verde exato */
+            background-color: #4bb543 !important; 
             border-radius: 50% !important;
             display: inline-block !important;
             animation: pulseVerde 1.5s infinite !important;
@@ -416,7 +383,7 @@
                     }
                 }
 
-                // 🔥 2. BUSCA NO SERVIDOR: Vai no Google silenciosamente atualizar a memória (caso o admin tenha alterado algo) 🔥
+                // 🔥 2. BUSCA NO SERVIDOR: Vai no Google silenciosamente atualizar a memória
                 try { 
                     const antiCache = Date.now(); 
                     const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
