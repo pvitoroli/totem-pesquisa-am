@@ -108,7 +108,8 @@
         body.light-mode h5,
         body.light-mode .brand-subtext,
         body.light-mode .campaign-mini-label,
-        body.light-mode .status-text {
+        body.light-mode .status-text,
+        body.light-mode .preview-text-label {
             color: #6b7280 !important;
         }
 
@@ -118,14 +119,6 @@
         }
         body.light-mode .status-online-area {
             background-color: rgba(0, 0, 0, 0.05) !important;
-        }
-
-        /* 🔥 CONTAINER DO SENTIMENTO SELECIONADO (MODO CLARO) 
-           Removidos os parâmetros de layout para o seu arquivo externo comandar! */
-        body.light-mode .selected-sentiment-preview {
-            background-color: #ffffff !important;
-            border-color: rgba(0, 0, 0, 0.08) !important;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
         }
 
         /* Botão Voltar */
@@ -198,9 +191,7 @@
       </div>
       
       <div class="selected-sentiment-preview">
-          <span class="preview-label" style="display: block; font-size: 11px; text-transform: lowercase; color: #ff5100; font-weight: 700; margin-bottom: 12px; letter-spacing: 1px;">sentimento selecionado</span>
-          
-          <img id="emoji-preview" src="" alt="Emoji" class="emoji-preview-img" style="display: none; margin: 0 auto 12px auto;">
+          <img id="emoji-preview" src="" alt="Emoji" class="emoji-preview-img" style="display: none;">
           <span id="label-sentimento-escolhido" class="preview-text-label">Carregando voto...</span>
       </div>
       
