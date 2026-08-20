@@ -212,14 +212,6 @@
             border-color: rgba(255, 81, 0, 0.3);
         }
     </style>
-<script>
-    // Se a URL mandar o comando "&theme=light" ou se o navegador já tiver a preferência salva localmente
-    const urlParamsTheme = new URLSearchParams(window.location.search);
-    if(urlParamsTheme.get('theme') === 'light' || localStorage.getItem('theme') === 'light') {
-        document.documentElement.classList.add('light-mode');
-        document.body.classList.add('light-mode');
-    }
-</script>
 </head>
 <body>
 
