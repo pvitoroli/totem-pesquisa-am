@@ -20,9 +20,15 @@
             color: #1e222d !important;
         }
 
+        /* 🔥 A MÁGICA AQUI: Quebrando a caixa preta do Canvas principal */
+        body.light-mode .totem-app-canvas {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+
         /* 2. TEXTOS (TÍTULOS E CORPO) */
         body.light-mode h1, 
-        body.light-mode h3, 
+        /* h3 foi removido de propósito para manter o Laranja ArcelorMittal no Nome da Campanha */
         body.light-mode h5, 
         body.light-mode p,
         body.light-mode span.card-label,
