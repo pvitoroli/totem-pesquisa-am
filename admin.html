@@ -500,7 +500,7 @@
                 </div>
             </div>
             <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
-                <!-- Carregado via JS (Apenas ativas) -->
+                <!-- Carregado via JS -->
             </div>
         </section>
 
@@ -730,16 +730,9 @@
                     <div class="dash-kpi-card"><div class="dash-kpi-label">Índice de Aprovação</div><div class="dash-kpi-value" id="dashMedia">0.0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Média (0 a 10)</div></div>
                     <div class="dash-kpi-card"><div class="dash-kpi-label">Volume de Dados</div><div class="dash-kpi-value" id="dashMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Extraídos</div></div>
                 </div>
-                <div class="chart-section">
-                    <div class="chart-card">
-                        <h3 style="font-size: 14px; color: var(--text); margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Distribuição de Percepções</h3>
-                        <div class="chart-container-inner"><canvas id="sentimentoChart"></canvas></div>
-                    </div>
-                    <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 14px; color: var(--text); margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Analítico</h3>
-                        <div class="report-text" id="dashAnaliseTexto"></div>
-                    </div>
-                </div>
+                
+                <!-- 🔥 AQUI OS GRÁFICOS DINÂMICOS SÃO INJETADOS 🔥 -->
+                <div id="dynamicChartsContainerInd"></div>
             </div>
         </div>
     </div>
@@ -771,19 +764,11 @@
                     <div class="dash-kpi-card"><div class="dash-kpi-label">Massa de Dados</div><div class="dash-kpi-value" id="dashGlobalMicrodados">0</div><div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Data Points Processados</div></div>
                 </div>
 
-                <div class="chart-section">
-                    <div class="chart-card">
-                        <h3 style="font-size: 14px; color: var(--text); margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Ecossistema de Percepção Global</h3>
-                        <div class="chart-container-inner"><canvas id="sentimentoGlobalChart"></canvas></div>
-                    </div>
-                    <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                        <h3 style="font-size: 14px; color: var(--text); margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Estratégico</h3>
-                        <div class="report-text" id="dashGlobalAnaliseTexto"></div>
-                    </div>
-                </div>
+                <!-- 🔥 AQUI OS GRÁFICOS DINÂMICOS GLOBAIS SÃO INJETADOS 🔥 -->
+                <div id="dynamicChartsContainerGlobal"></div>
 
                 <div class="lista-detalhada">
-                    <h3 style="font-size: 15px; color: var(--text); margin-bottom: 15px; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Detalhamento por Campanha</h3>
+                    <h3 style="font-size: 15px; color: var(--text); margin-bottom: 15px; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Detalhamento de Qualidade por Campanha</h3>
                     <div id="listaDetalhamentoCampanhas"></div>
                 </div>
             </div>
@@ -838,8 +823,7 @@
             document.getElementById('themeToggleText').innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
             
             applyThemeLogos();
-            if(meuGrafico) meuGrafico.update();
-            if(window.meuGraficoGlobal) window.meuGraficoGlobal.update();
+            // Re-renderizar gráficos existentes se for necessário mudar cor de fonte, etc. (Opcional, DataLabels já são brancas)
         }
 
         Chart.register(ChartDataLabels);
@@ -852,27 +836,20 @@
         let stateFiltroStatus = 'todas';
         let campSelecionada = null;
         
-        // Dados para PDF
-        let dadosParaPDF = {}; 
-        let dadosAgrupadosParaPDF = []; 
-        let dadosGlobaisParaPDF = {};
+        // Dados para PDF Dinâmicos
+        let dadosParaPDF = { templates: [] }; 
+        let dadosGlobaisParaPDF = { detalhamento: [], templates: [] };
 
-        // Paleta Global
-        const PALETA_MESTRE = ['#ffbd59', '#ff5100', '#a300ff', '#ff0080', '#2ecc71', '#f1c40f', '#00d2ff', '#ff0000', '#00ff88'];
-        let colorMapMestre = {};
-        let colorIndexMestre = 0;
-
-        function obterCorDoSentimento(sentimento) {
-            if (!colorMapMestre[sentimento]) {
-                colorMapMestre[sentimento] = PALETA_MESTRE[colorIndexMestre % PALETA_MESTRE.length];
-                colorIndexMestre++;
-            }
-            return colorMapMestre[sentimento];
+        // 🔥 MOTOR DE GRÁFICOS DINÂMICOS E PALETA ENGESSADA 🔥
+        window.instanciasGraficos = []; 
+        
+        function limparGraficos() {
+            window.instanciasGraficos.forEach(obj => obj.chart.destroy());
+            window.instanciasGraficos = [];
         }
 
         // 🔥 MOTOR ROBUSTO DE EXTRAÇÃO DE DATA (Resolve o erro de BI em relatórios mensais e anuais) 🔥
         function extrairDataDoVoto(voto) {
-            // Busca agressiva por qualquer chave do Google Sheets que represente data do voto
             const chavesBusca = ["data", "hora", "timestamp", "carimbo", "criado"];
             let dataCrua = null;
 
@@ -886,11 +863,9 @@
 
             if (!dataCrua) return null;
 
-            // Se for um formato ISO que o JS reconhece nativamente
             let d = new Date(dataCrua);
             if (!isNaN(d.getTime())) return d;
 
-            // Se for string no padrão Brasileiro (DD/MM/YYYY)
             if (typeof dataCrua === 'string') {
                 let partes = dataCrua.split(/[\sT]/)[0].split(/[\/\-]/);
                 if (partes.length === 3) {
@@ -1290,9 +1265,136 @@
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => alert("Link copiado para a área de transferência!")); }
 
         /* =======================================================
+           MOTOR DE GERAÇÃO DINÂMICA (POR TEMPLATE)
+           ======================================================= */
+        // Gera o HTML do gráfico + texto agrupado por template e retorna os dados para o PDF
+        function extrairGraficosPorTemplate(votos, containerId, prefixId) {
+            let templatesData = {};
+            votos.forEach(v => {
+                let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
+                let tmpl = camp ? (camp.template || 'Padrão') : 'Padrão';
+                if(!templatesData[tmpl]) templatesData[tmpl] = { votos: [], somaNotas: 0, agrupamento: {} };
+                
+                templatesData[tmpl].votos.push(v);
+                templatesData[tmpl].somaNotas += v.nota;
+                templatesData[tmpl].agrupamento[v.sentimento] = (templatesData[tmpl].agrupamento[v.sentimento] || 0) + 1;
+            });
+
+            let html = '';
+            let chartDataQueue = [];
+            let templateListForPDF = [];
+            let tIndex = 0;
+
+            // Paleta Estrita (Laranja, Amarelo, Roxo, Rosa)
+            const FIX_COLORS = ['#ff5100', '#ffcc00', '#a300ff', '#ff0080', '#2ecc71', '#00d2ff'];
+            // Mapa Padrão para garantir a cor exata nos sentimentos clássicos, independente de ordem de voto
+            const STD_MAP = {
+                "Aprendi algo novo": "#ff5100",
+                "Fiquei feliz": "#ffcc00",
+                "Quero saber mais": "#a300ff",
+                "Poderia ser melhor": "#ff0080"
+            };
+
+            // Para cada template encontrado nos filtros
+            for (let tmpl in templatesData) {
+                let data = templatesData[tmpl];
+                let totalVotosTmpl = data.votos.length;
+                let mediaTmpl = (data.somaNotas / totalVotosTmpl).toFixed(1);
+
+                // Ordenamos por quantidade de votos (do maior para o menor)
+                let sortedLabels = Object.keys(data.agrupamento).sort((a,b) => data.agrupamento[b] - data.agrupamento[a]);
+                let sortedCounts = sortedLabels.map(l => data.agrupamento[l]);
+                
+                // Aplica a cor mapeada ou usa a paleta engessada fixa (1º = Laranja, 2º = Amarelo...)
+                let coresTmpl = sortedLabels.map((l, idx) => STD_MAP[l] || FIX_COLORS[idx % FIX_COLORS.length]);
+
+                let listaHTML = "";
+                let sintesePDF = [];
+                sortedLabels.forEach((sentimento, index) => {
+                    let count = data.agrupamento[sentimento];
+                    let p = Math.round((count / totalVotosTmpl) * 100);
+                    let corStr = coresTmpl[index];
+                    let r = parseInt(corStr.slice(1,3), 16); let g = parseInt(corStr.slice(3,5), 16); let b = parseInt(corStr.slice(5,7), 16);
+                    
+                    sintesePDF.push({ sentimento, p, count, r, g, b });
+                    listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: var(--text);"><span class="dot" style="background:${corStr}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <span><strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</span></li>`;
+                });
+
+                let recoHTML = ""; let recoPDFLimpa = "";
+                if(mediaTmpl >= 8) {
+                    recoHTML = `<p style="color: var(--text); font-weight: 400;">O engajamento demonstra um índice <strong style="color: #2ecc71; font-weight: 500;">Altamente Satisfatório (Média ${mediaTmpl})</strong>. A comunicação corporativa apresentou clareza e gerou excelente receptividade.</p>`;
+                    recoPDFLimpa = `O engajamento demonstra um índice Altamente Satisfatório (Média ${mediaTmpl}). A comunicação corporativa apresentou clareza e gerou excelente receptividade.`;
+                } else if (mediaTmpl >= 6) {
+                    recoHTML = `<p style="color: var(--text); font-weight: 400;">A ação obteve um impacto <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${mediaTmpl})</strong>. Recomendável estabelecer acompanhamento focado na escuta contínua.</p>`;
+                    recoPDFLimpa = `A ação corporativa obteve um impacto qualitativo Moderado (Média ${mediaTmpl}). É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as pautas.`;
+                } else {
+                    recoHTML = `<p style="color: var(--text); font-weight: 400;">Constata-se uma <strong style="color: #ff0080; font-weight: 500;">Atenção Requerida (Média ${mediaTmpl})</strong>. Nível de insatisfação superou a percepção positiva. Recomendamos revisão da mensagem.</p>`;
+                    recoPDFLimpa = `Constata-se uma Atenção Requerida (Média ${mediaTmpl}). O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística ou clareza da mensagem abordada.`;
+                }
+
+                let canvasId = `${prefixId}_chart_${tIndex}`;
+                chartDataQueue.push({ id: canvasId, labels: sortedLabels, counts: sortedCounts, colors: coresTmpl });
+
+                html += `
+                <div style="margin-bottom: 40px; background: var(--bg-transparent); border: 1px solid var(--border); border-radius: 16px; padding: 25px;">
+                    <h2 style="font-size: 14px; color: var(--primary); margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 10px; text-transform: uppercase; letter-spacing: 1px;">TEMPLATE UTILIZADO: ${tmpl}</h2>
+                    <div class="chart-section">
+                        <div class="chart-card" style="min-height: 380px;">
+                            <h3 style="font-size: 14px; color: var(--text); margin-bottom: 15px; width: 100%; text-align: center; text-transform: uppercase; font-weight: 500;">Gráfico de Sentimentos</h3>
+                            <div class="chart-container-inner" style="min-height: 220px;"><canvas id="${canvasId}"></canvas></div>
+                        </div>
+                        <div class="chart-card" style="align-items: flex-start; justify-content: flex-start; min-height: 380px;">
+                            <h3 style="font-size: 14px; color: var(--text); margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Analítico (${tmpl})</h3>
+                            <div class="report-text" style="width: 100%;">
+                                <p style="color: var(--text); font-weight: 400; margin-top: 10px;">Foram processadas <strong>${totalVotosTmpl} colaborações</strong> diretas neste formato. Índice de aprovação: <strong>${mediaTmpl} (0 a 10)</strong>.</p>
+                                <h4 style="color: var(--primary);">Mapeamento:</h4>
+                                <ul style="list-style: none; padding: 0;">${listaHTML}</ul>
+                                <h4 style="color: var(--primary);">Conclusão Executiva:</h4>
+                                ${recoHTML}
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+
+                templateListForPDF.push({
+                    nome: tmpl,
+                    totalVotos: totalVotosTmpl,
+                    media: mediaTmpl,
+                    sintese: sintesePDF,
+                    recoPDFLimpa: recoPDFLimpa,
+                    canvasId: canvasId
+                });
+                tIndex++;
+            }
+
+            document.getElementById(containerId).innerHTML = html;
+            setTimeout(() => {
+                chartDataQueue.forEach(c => {
+                    const ctx = document.getElementById(c.id);
+                    if(ctx) {
+                        let novoGrafico = new Chart(ctx.getContext('2d'), {
+                            type: 'doughnut',
+                            data: { labels: c.labels, datasets: [{ data: c.counts, backgroundColor: c.colors, borderWidth: 0 }] },
+                            options: {
+                                responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, animation: { duration: 0 },
+                                plugins: {
+                                    legend: { display: false },
+                                    datalabels: { color: '#ffffff', font: { family: "'Segoe UI', Arial, sans-serif", weight: 'bold', size: 14 }, formatter: (value, context) => { if(value === 0) return ''; let total = context.chart._metasets[context.datasetIndex].total; return Math.round((value / total) * 100) + '%'; } }
+                                }
+                            }
+                        });
+                        window.instanciasGraficos.push({id: c.id, chart: novoGrafico});
+                    }
+                });
+            }, 100);
+
+            return templateListForPDF;
+        }
+
+
+        /* =======================================================
            MOTOR DASHBOARD ANALÍTICO INDIVIDUAL
            ======================================================= */
-        let meuGrafico = null; 
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
             document.getElementById('modalJornada').style.display = 'none'; document.getElementById('dashboardTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
@@ -1320,69 +1422,26 @@
 
         function processarEstatisticas(votos) {
             const totalVotos = votos.length; document.getElementById('dashTotalVotos').innerText = totalVotos; document.getElementById('dashMicrodados').innerText = totalVotos * PONTOS_DADOS_POR_VOTO;
+            
+            limparGraficos();
+
             if(totalVotos === 0) {
-                document.getElementById('dashMedia').innerText = "0.0"; renderizarGrafico([], [], [], 'sentimentoChart');
-                document.getElementById('dashAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>"; return;
+                document.getElementById('dashMedia').innerText = "0.0"; 
+                document.getElementById('dynamicChartsContainerInd').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado para esta campanha corporativa até o momento.</em>"; 
+                return;
             }
-            let somaNotas = 0; let agrupamento = {};
-            votos.forEach(v => { somaNotas += v.nota; if(!agrupamento[v.sentimento]) agrupamento[v.sentimento] = 0; agrupamento[v.sentimento]++; });
             
-            const media = (somaNotas / totalVotos).toFixed(1); document.getElementById('dashMedia').innerText = media;
-            let sortedLabels = Object.keys(agrupamento).sort((a,b) => agrupamento[b] - agrupamento[a]);
-            let sortedCounts = sortedLabels.map(l => agrupamento[l]);
+            let somaNotas = 0;
+            votos.forEach(v => somaNotas += v.nota);
+            const media = (somaNotas / totalVotos).toFixed(1); 
+            document.getElementById('dashMedia').innerText = media;
 
-            let coresIndividuais = sortedLabels.map(l => obterCorDoSentimento(l));
-            renderizarGrafico(sortedLabels, sortedCounts, coresIndividuais, 'sentimentoChart');
-
-            let listaHTML = ""; let listaPDF = ""; dadosAgrupadosParaPDF = []; 
-            sortedLabels.forEach((sentimento, index) => {
-                let count = agrupamento[sentimento]; let p = Math.round((count / totalVotos) * 100);
-                let corStr = coresIndividuais[index];
-                let r = parseInt(corStr.slice(1,3), 16); let g = parseInt(corStr.slice(3,5), 16); let b = parseInt(corStr.slice(5,7), 16);
-                dadosAgrupadosParaPDF.push({ sentimento, p, count, r, g, b });
-                listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: var(--text);"><span class="dot" style="background:${corStr}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <span><strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</span></li>`;
-                listaPDF += `<li style="margin-bottom: 12px; font-size: 13px; color: #333; display: flex; align-items: center;"><span style="background:${corStr}; width: 12px; height: 12px; display: inline-block; border-radius: 50%; margin-right: 10px; flex-shrink: 0;"></span> <span><strong style="color: #000;">${sentimento}:</strong> ${p}% (${count} votos)</span></li>`;
-            });
-
-            let recoHTML = ""; let recoPDFLimpa = "";
-            if(media >= 8) {
-                recoHTML = `<p style="color: var(--text); font-weight: 400;">O engajamento demonstra um índice <strong style="color: #2ecc71; font-weight: 500;">Altamente Satisfatório (Média ${media})</strong>. A comunicação corporativa apresentou clareza e gerou excelente receptividade. Recomenda-se manter o formato atual.</p>`;
-                recoPDFLimpa = `O engajamento demonstra um índice Altamente Satisfatório (Média ${media}). A comunicação corporativa apresentou clareza e gerou excelente receptividade. Recomenda-se manter e documentar o formato atual como padrão.`;
-            } else if (media >= 6) {
-                recoHTML = `<p style="color: var(--text); font-weight: 400;">A ação obteve um impacto <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${media})</strong>. Recomendável estabelecer acompanhamento focado na escuta contínua para calibrar as próximas pautas.</p>`;
-                recoPDFLimpa = `A ação corporativa obteve um impacto qualitativo Moderado (Média ${media}). É recomendável estabelecer um acompanhamento focado na escuta contínua para calibrar as próximas pautas.`;
-            } else {
-                recoHTML = `<p style="color: var(--text); font-weight: 400;">Constata-se uma <strong style="color: #ff0080; font-weight: 500;">Atenção Requerida (Média ${media})</strong>. Nível de insatisfação superou a percepção positiva. Recomendamos revisão da mensagem.</p>`;
-                recoPDFLimpa = `Constata-se uma Atenção Requerida (Média ${media}). O nível de insatisfação superou a percepção positiva. Recomendamos uma revisão imediata da logística do evento ou clareza da mensagem abordada.`;
-            }
-            dadosParaPDF = { totalVotos, volumeDados: totalVotos * PONTOS_DADOS_POR_VOTO, media, recoPDFLimpa };
-            document.getElementById('dashAnaliseTexto').innerHTML = `<p style="color: var(--text); font-weight: 400;">A iniciativa processou <strong>${totalVotos} colaborações</strong> diretas. Índice de aprovação: <strong>${media} (0 a 10)</strong>.</p><h4 style="color: var(--primary);">Mapeamento:</h4><ul style="list-style: none; padding: 0;">${listaHTML}</ul><h4 style="color: var(--primary);">Conclusão:</h4>${recoHTML}`;
+            dadosParaPDF.totalVotos = totalVotos;
+            dadosParaPDF.volumeDados = totalVotos * PONTOS_DADOS_POR_VOTO;
+            dadosParaPDF.media = media;
+            dadosParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerInd', 'ind');
         }
 
-        function renderizarGrafico(labelsArray, dataArray, colorsArray, canvasId) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            let isGlobal = canvasId === 'sentimentoGlobalChart';
-            let chartInstance = isGlobal ? window.meuGraficoGlobal : meuGrafico;
-            
-            if (chartInstance) { chartInstance.destroy(); }
-            
-            let novoGrafico = new Chart(ctx, {
-                type: 'doughnut',
-                data: { labels: labelsArray, datasets: [{ data: dataArray, backgroundColor: colorsArray, borderWidth: 0 }] },
-                options: {
-                    responsive: true, maintainAspectRatio: false, layout: { padding: 10 }, animation: { duration: 0 },
-                    plugins: {
-                        legend: { display: false },
-                        datalabels: { color: '#ffffff', font: { family: "'Segoe UI', Arial, sans-serif", weight: 'bold', size: 14 }, formatter: (value, context) => { if(value === 0) return ''; let total = context.chart._metasets[context.datasetIndex].total; return Math.round((value / total) * 100) + '%'; } }
-                    }
-                }
-            });
-            if (isGlobal) window.meuGraficoGlobal = novoGrafico; else meuGrafico = novoGrafico;
-        }
-
-        // =========================================================================
-        // PDF INDIVIDUAL (CAMPANHA ÚNICA)
-        // =========================================================================
         function baixarPDFDocumento() {
             const btn = document.getElementById('btnExportPDF'); const txtOriginal = btn.innerHTML; btn.innerHTML = "⏳ A compilar...";
             const dataExtracao = new Date().toLocaleDateString('pt-BR'); let textoTempo = ""; let dataCriacao = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
@@ -1422,31 +1481,38 @@
             doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("2. RESUMO ANALÍTICO", 15, y);
-            y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
-            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
-            
-            const textoResumo = `A iniciativa processou com sucesso um volume de ${dadosParaPDF.totalVotos} colaborações diretas. O índice de aprovação firmou-se em ${dadosParaPDF.media} (em escala de 0 a 10).`;
-            const linhasResumo = doc.splitTextToSize(textoResumo, 180); doc.text(linhasResumo, 15, y);
-            
-            y += (linhasResumo.length * 5) + 8; doc.setFont("helvetica", "bold"); doc.text("Mapeamento Analítico da Percepção:", 15, y); y += 8;
-            
-            let startY = y; let listY = y + 5;
-            dadosAgrupadosParaPDF.forEach(item => {
-                doc.setFillColor(item.r, item.g, item.b); doc.circle(17, listY - 1.2, 1.5, "F");
-                doc.setFont("helvetica", "bold"); doc.text(`${item.sentimento}:`, 21, listY);
-                let w = doc.getTextWidth(`${item.sentimento}: `);
-                doc.setFont("helvetica", "normal"); doc.text(`${item.p}% (${item.count} votos)`, 21 + w, listY);
-                listY += 8;
-            });
+            // 🔥 LOOP POR TEMPLATES NO PDF INDIVIDUAL 🔥
+            dadosParaPDF.templates.forEach((tmplData, index) => {
+                if (y > 230) { doc.addPage(); y = 20; } else { y += 12; }
 
-            const chartBase64 = meuGrafico ? meuGrafico.toBase64Image() : null;
-            if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 75, 75); }
-            y = Math.max(listY, startY + 70) + 10;
-            
-            if (y > 250) { doc.addPage(); y = 20; } else { y += 4; }
-            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão:", 15, y); y += 6;
-            doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosParaPDF.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
+                doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0);
+                doc.text(`ANÁLISE DE TEMPLATE: ${tmplData.nome.toUpperCase()}`, 15, y);
+                y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
+                
+                y += 8; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                doc.text("Gráfico de Sentimentos e Mapeamento:", 15, y); y += 8;
+                
+                let startY = y; let listY = y + 2;
+                tmplData.sintese.forEach(item => {
+                    doc.setFillColor(item.r, item.g, item.b); doc.circle(17, listY - 1.2, 1.5, "F");
+                    doc.setFont("helvetica", "bold"); doc.text(`${item.sentimento}:`, 21, listY);
+                    let w = doc.getTextWidth(`${item.sentimento}: `);
+                    doc.setFont("helvetica", "normal"); doc.text(`${item.p}% (${item.count} votos)`, 21 + w, listY);
+                    listY += 8;
+                });
+
+                let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
+                if (chartObj) { 
+                    try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 110, startY - 5, 60, 60); } catch(e){}
+                }
+                
+                y = Math.max(listY, startY + 60) + 8;
+                
+                doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica:", 15, y); y += 6;
+                doc.setFont("helvetica", "normal"); 
+                const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
+                y += (linhasConclusao.length * 5) + 5;
+            });
             
             const pageCount = doc.internal.getNumberOfPages();
             for (let i = 1; i <= pageCount; i++) {
@@ -1460,9 +1526,8 @@
         function fecharDashboard() { document.getElementById('dashboardTela').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         /* =========================================================================
-           🔥 CENTRAL DE RELATÓRIOS (MENSAL E ANUAL) 🔥
+           🔥 MODAL DE FILTRO E MOTOR DASHBOARD GLOBAL (RELATÓRIOS MENSAL/ANUAL) 🔥
            ========================================================================= */
-        window.meuGraficoGlobal = null;
         let relatorioTipoAtual = 'MENSAL';
 
         function mudarTipoRelatorio(tipo) {
@@ -1497,13 +1562,12 @@
             nomesMeses.forEach((nome, i) => { selectMes.innerHTML += `<option value="${i+1}">${nome}</option>`; });
             selectMes.value = (new Date().getMonth() + 1).toString();
 
-            mudarTipoRelatorio('MENSAL'); // Reset para padrão
+            mudarTipoRelatorio('MENSAL');
             document.getElementById('modalRelatorios').style.display = 'flex';
         }
 
         async function processarFiltroEabrirDashboard() {
             const anoSelecionado = document.getElementById('selectFiltroAno').value;
-            // Se for Anual, força o mês para TODOS automaticamente
             const mesSelecionado = relatorioTipoAtual === 'ANUAL' ? 'TODOS' : document.getElementById('selectFiltroMes').value;
             const mesNome = document.getElementById('selectFiltroMes').options[document.getElementById('selectFiltroMes').selectedIndex].text;
             
@@ -1524,7 +1588,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
                 if(dados && dados.sucesso) { 
-                    // 🔥 FILTRO ABSOLUTO DE VOTOS (CORREÇÃO DA DATA) 🔥
+                    // 🔥 FILTRO ABSOLUTO DE VOTOS 🔥
                     let votosFiltrados = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp) return false;
@@ -1532,7 +1596,6 @@
                         
                         if(anoSelecionado !== 'TODOS' || mesSelecionado !== 'TODOS') {
                             let dataDoVoto = extrairDataDoVoto(v) || new Date(camp.data_inicio);
-                            
                             let votoMes = (dataDoVoto.getMonth() + 1).toString();
                             let votoAno = dataDoVoto.getFullYear().toString();
                             
@@ -1549,11 +1612,14 @@
         }
 
         function processarEstatisticasGlobais(votos, tituloDinamico) {
-            let totalVotosGlobais = votos.length; let somaNotasGlobais = 0; let agrupamentoGlobal = {}; let campanhasMap = {}; 
-            dadosGlobaisParaPDF = { detalhamento: [], tituloDinamico: tituloDinamico || "RELATÓRIO MENSAL CONSOLIDADO" };
+            let totalVotosGlobais = votos.length; let somaNotasGlobais = 0; let campanhasMap = {}; 
+            
+            limparGraficos();
+
+            dadosGlobaisParaPDF = { detalhamento: [], tituloDinamico: tituloDinamico || "RELATÓRIO CONSOLIDADO" };
 
             votos.forEach(v => {
-                somaNotasGlobais += v.nota; if(!agrupamentoGlobal[v.sentimento]) agrupamentoGlobal[v.sentimento] = 0; agrupamentoGlobal[v.sentimento]++;
+                somaNotasGlobais += v.nota;
                 if (!campanhasMap[v.campanha]) campanhasMap[v.campanha] = { total: 0, somaNotas: 0, agrupamento: {} };
                 campanhasMap[v.campanha].total++; campanhasMap[v.campanha].somaNotas += v.nota;
                 if (!campanhasMap[v.campanha].agrupamento[v.sentimento]) campanhasMap[v.campanha].agrupamento[v.sentimento] = 0;
@@ -1561,43 +1627,27 @@
             });
 
             let totalCampanhasGlobais = Object.keys(campanhasMap).length;
-            document.getElementById('dashGlobalCampanhas').innerText = totalCampanhasGlobais; document.getElementById('dashGlobalTotalVotos').innerText = totalVotosGlobais; document.getElementById('dashGlobalMicrodados').innerText = totalVotosGlobais * PONTOS_DADOS_POR_VOTO;
+            document.getElementById('dashGlobalCampanhas').innerText = totalCampanhasGlobais; 
+            document.getElementById('dashGlobalTotalVotos').innerText = totalVotosGlobais; 
+            document.getElementById('dashGlobalMicrodados').innerText = totalVotosGlobais * PONTOS_DADOS_POR_VOTO;
 
             if(totalVotosGlobais === 0) {
-                document.getElementById('dashGlobalMedia').innerText = "0.0"; renderizarGrafico([], [], [], 'sentimentoGlobalChart');
-                document.getElementById('dashGlobalAnaliseTexto').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado no período especificado.</em>"; document.getElementById('listaDetalhamentoCampanhas').innerHTML = ""; return;
+                document.getElementById('dashGlobalMedia').innerText = "0.0"; 
+                document.getElementById('dynamicChartsContainerGlobal').innerHTML = "<em style='color: var(--text-muted); font-weight:400;'>Nenhum dado consolidado no período especificado.</em>"; 
+                document.getElementById('listaDetalhamentoCampanhas').innerHTML = ""; return;
             }
 
-            const mediaGlobal = (somaNotasGlobais / totalVotosGlobais).toFixed(1); document.getElementById('dashGlobalMedia').innerText = mediaGlobal;
-            let sortedLabelsGlobal = Object.keys(agrupamentoGlobal).sort((a,b) => agrupamentoGlobal[b] - agrupamentoGlobal[a]);
-            let sortedCountsGlobal = sortedLabelsGlobal.map(l => agrupamentoGlobal[l]); let coresGlobais = sortedLabelsGlobal.map(l => obterCorDoSentimento(l));
-            renderizarGrafico(sortedLabelsGlobal, sortedCountsGlobal, coresGlobais, 'sentimentoGlobalChart');
+            const mediaGlobal = (somaNotasGlobais / totalVotosGlobais).toFixed(1); 
+            document.getElementById('dashGlobalMedia').innerText = mediaGlobal;
 
-            let listaHTMLGlobal = ""; let arraySinteseGlobalPDF = [];
-            sortedLabelsGlobal.forEach((sentimento, index) => {
-                let count = agrupamentoGlobal[sentimento]; let p = Math.round((count / totalVotosGlobais) * 100); let corStr = coresGlobais[index];
-                let r = parseInt(corStr.slice(1,3), 16); let g = parseInt(corStr.slice(3,5), 16); let b = parseInt(corStr.slice(5,7), 16);
-                arraySinteseGlobalPDF.push({ sentimento, p, count, r, g, b });
-                listaHTMLGlobal += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: var(--text);"><span class="dot" style="background:${corStr}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <span><strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} votos)</span></li>`;
-            });
+            dadosGlobaisParaPDF.totalVotos = totalVotosGlobais; 
+            dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
+            dadosGlobaisParaPDF.media = mediaGlobal;
+            
+            // 🔥 GERA GRÁFICOS DINÂMICOS POR TEMPLATE (PARA O CONSOLIDADO) 🔥
+            dadosGlobaisParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerGlobal', 'glob');
 
-            let recoHTMLGlobal = ""; let recoPDFGlobalLimpa = "";
-            if(mediaGlobal >= 8) {
-                recoHTMLGlobal = `<p style="color: var(--text); font-weight: 400;">A percepção corporativa geral é <strong style="color: #2ecc71; font-weight: 500;">Altamente Satisfatória (Média ${mediaGlobal})</strong>. As campanhas recentes demonstram forte aderência. Recomendamos expandir essas metodologias.</p>`;
-                recoPDFGlobalLimpa = `A percepção corporativa geral do período consolidado é Altamente Satisfatória (Média ${mediaGlobal}). As ações executadas demonstram forte aderência e engajamento das equipas. Recomenda-se escalar essas metodologias para as próximas etapas institucionais.`;
-            } else if (mediaGlobal >= 6) {
-                recoHTMLGlobal = `<p style="color: var(--text); font-weight: 400;">O cenário atual revela um engajamento <strong style="color: #f39c12; font-weight: 500;">Moderado (Média ${mediaGlobal})</strong>. Recomenda-se analisar o detalhamento abaixo para atuar em pautas de menor aprovação.</p>`;
-                recoPDFGlobalLimpa = `O cenário atual revela um engajamento qualitativo Moderado (Média ${mediaGlobal}). É estrategicamente recomendado analisar o detalhamento das campanhas abaixo para identificar e corrigir pautas com taxas expressivas de baixo engajamento.`;
-            } else {
-                recoHTMLGlobal = `<p style="color: var(--text); font-weight: 400;">Atenção Crítica: O índice global está <strong style="color: #ff0080; font-weight: 500;">Abaixo da Meta (Média ${mediaGlobal})</strong>. O volume de avaliações negativas nas campanhas exige reestruturação imediata da comunicação.</p>`;
-                recoPDFGlobalLimpa = `Atenção Crítica: O índice de satisfação global encontra-se Abaixo da Meta estipulada (Média ${mediaGlobal}). O volume substancial de avaliações de melhoria ou negativas nas ações correntes exige uma reestruturação imediata da abordagem comunicacional da unidade.`;
-            }
-
-            dadosGlobaisParaPDF.totalVotos = totalVotosGlobais; dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
-            dadosGlobaisParaPDF.media = mediaGlobal; dadosGlobaisParaPDF.sintese = arraySinteseGlobalPDF; dadosGlobaisParaPDF.conclusao = recoPDFGlobalLimpa;
-
-            document.getElementById('dashGlobalAnaliseTexto').innerHTML = `<h4 style="color: var(--primary); margin-top: 0;">Mapeamento Consolidado:</h4><ul style="list-style: none; padding: 0;">${listaHTMLGlobal}</ul><h4 style="color: var(--primary);">Conclusão Executiva:</h4>${recoHTMLGlobal}`;
-
+            // Detalhamento por Campanha Inferior
             let containerListaHTML = ""; let arrNomesCampanhas = Object.keys(campanhasMap).sort();
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp]; let mediaCamp = (info.somaNotas / info.total).toFixed(1);
@@ -1605,10 +1655,11 @@
                 let linhaItemHTML = ""; let itemPDFArr = [];
 
                 sortedSentimentos.forEach(s => {
-                    let cCount = info.agrupamento[s]; let cP = Math.round((cCount / info.total) * 100); let sCor = obterCorDoSentimento(s);
-                    let r = parseInt(sCor.slice(1,3), 16); let g = parseInt(sCor.slice(3,5), 16); let b = parseInt(sCor.slice(5,7), 16);
-                    itemPDFArr.push({ nome: s, p: cP, count: cCount, r, g, b });
-                    linhaItemHTML += `<li style="font-size: 13px; margin-bottom: 5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><span style="background:${sCor}; width: 8px; height: 8px; border-radius: 50%; display: inline-block;"></span> <span>${s}: ${cP}% (${cCount})</span></li>`;
+                    let cCount = info.agrupamento[s]; let cP = Math.round((cCount / info.total) * 100); 
+                    // Tenta manter a cor fixa, senao cor genérica cinza só pra lista (no grafico ta lindo)
+                    let sCor = "#9aa0a6"; 
+                    itemPDFArr.push({ nome: s, p: cP, count: cCount, r: 154, g: 160, b: 166 });
+                    linhaItemHTML += `<li style="font-size: 13px; margin-bottom: 5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><span>${s}: ${cP}% (${cCount})</span></li>`;
                 });
 
                 dadosGlobaisParaPDF.detalhamento.push({ nome: nomeCamp, total: info.total, media: mediaCamp, sentimentos: itemPDFArr });
@@ -1620,7 +1671,7 @@
         function fecharDashboardGlobal() { document.getElementById('dashboardGlobalTela').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         // =========================================================================
-        // PDF GLOBAL MENSAL
+        // PDF GLOBAL (CONSOLIDADO - LOOP POR TEMPLATES)
         // =========================================================================
         function baixarPDFGlobal() {
             const btn = document.getElementById('btnExportGlobalPDF'); const txtOriginal = btn.innerHTML; btn.innerHTML = "⏳ Gerando Documento...";
@@ -1656,45 +1707,49 @@
             doc.text(`• Total de Votos Consolidados: ${dadosGlobaisParaPDF.totalVotos} interações.`, 15, y); y += 6;
             doc.text(`• Índice Geral de Aprovação: ${dadosGlobaisParaPDF.media} / 10.`, 15, y); y += 6;
 
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("2. MAPA DE SENTIMENTOS", 15, y);
-            y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
-            y += 8; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text("Percentuais dos votos:", 15, y); y += 8;
-            
-            let startY = y; let listY = y + 2;
-            dadosGlobaisParaPDF.sintese.forEach(item => {
-                doc.setFillColor(item.r, item.g, item.b); doc.circle(17, listY - 1.2, 1.5, "F");
-                doc.setFont("helvetica", "bold"); doc.text(`${item.sentimento}:`, 21, listY);
-                let w = doc.getTextWidth(`${item.sentimento}: `);
-                doc.setFont("helvetica", "normal"); doc.text(`${item.p}%`, 21 + w, listY);
-                listY += 8;
+            // 🔥 LOOP DE TEMPLATES PARA O PDF GLOBAL 🔥
+            dadosGlobaisParaPDF.templates.forEach((tmplData, index) => {
+                if (y > 230) { doc.addPage(); y = 20; } else { y += 12; }
+
+                doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0);
+                doc.text(`ANÁLISE DE TEMPLATE: ${tmplData.nome.toUpperCase()}`, 15, y);
+                y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y);
+                
+                y += 8; doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                doc.text("Gráfico de Sentimentos e Mapeamento:", 15, y); y += 8;
+                
+                let startY = y; let listY = y + 2;
+                tmplData.sintese.forEach(item => {
+                    doc.setFillColor(item.r, item.g, item.b); doc.circle(17, listY - 1.2, 1.5, "F");
+                    doc.setFont("helvetica", "bold"); doc.text(`${item.sentimento}:`, 21, listY);
+                    let w = doc.getTextWidth(`${item.sentimento}: `);
+                    doc.setFont("helvetica", "normal"); doc.text(`${item.p}% (${item.count} votos)`, 21 + w, listY);
+                    listY += 8;
+                });
+
+                let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
+                if (chartObj) { 
+                    try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 110, startY - 5, 60, 60); } catch(e){}
+                }
+                
+                y = Math.max(listY, startY + 60) + 8;
+                
+                doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Executiva:", 15, y); y += 6;
+                doc.setFont("helvetica", "normal"); 
+                const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
+                y += (linhasConclusao.length * 5) + 5;
             });
 
-            const chartBase64 = window.meuGraficoGlobal ? window.meuGraficoGlobal.toBase64Image() : null;
-            if (chartBase64) { doc.addImage(chartBase64, 'PNG', 110, startY - 5, 70, 70); }
-            y = Math.max(listY, startY + 60) + 12;
-            
-            doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica do Período:", 15, y); y += 6;
-            doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(dadosGlobaisParaPDF.conclusao, 180); doc.text(linhasConclusao, 15, y);
-            y += (linhasConclusao.length * 5) + 15;
-
+            if (y > 250) { doc.addPage(); y = 20; } else { y += 15; }
             doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("3. LISTA DE CAMPANHAS", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y); y += 8;
 
             dadosGlobaisParaPDF.detalhamento.forEach(camp => {
-                if (y > 260) { doc.addPage(); y = 25; }
+                if (y > 270) { doc.addPage(); y = 25; }
                 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
                 doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
-                
-                camp.sentimentos.forEach(s => {
-                    if (y > 275) { doc.addPage(); y = 25; }
-                    doc.setFillColor(s.r, s.g, s.b); doc.circle(17, y - 1.2, 1.2, "F");
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(50, 50, 50); doc.text(`${s.nome}:`, 20, y);
-                    let w = doc.getTextWidth(`${s.nome}: `);
-                    doc.setFont("helvetica", "normal"); doc.text(`${s.p}% (${s.count})`, 20 + w, y);
-                    y += 5;
-                });
-                y += 6; 
+                y += 4; 
             });
 
             const pageCount = doc.internal.getNumberOfPages();
@@ -1702,11 +1757,10 @@
                 doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
                 doc.text(`Página ${i} de ${pageCount}  -  ArcelorMittal Interno`, 105, 285, { align: "center" });
             }
-            doc.save(`Relatório Executivo (${dataExtracao.replace(/\//g, '-')}).pdf`);
+            doc.save(`Relatório Consolidade (${dataExtracao.replace(/\//g, '-')}).pdf`);
             btn.innerHTML = txtOriginal;
         }
 
-        // Garante que o applyThemeLogos rode e carregue a logo correta após a página carregar
         window.addEventListener('DOMContentLoaded', () => {
             applyThemeLogos();
         });
