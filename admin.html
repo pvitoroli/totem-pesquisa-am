@@ -190,6 +190,12 @@
         .filter-pill.active { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
         .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; }
 
+        /* Alternador de Relatório (Mensal / Anual) */
+        .segmented-control { display: flex; background: var(--bg-transparent); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .segmented-btn { flex: 1; padding: 12px; text-align: center; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 8px; transition: 0.3s; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
+        .segmented-btn:hover { color: var(--text); }
+        .segmented-btn.active { background: var(--surface); color: var(--primary); box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 1px solid var(--border); }
+
         .list-container { max-height: 500px; overflow-y: auto; transition: max-height 0.4s ease; padding-right: 5px; }
         .list-container.expanded { max-height: none; overflow: visible; }
         
@@ -422,9 +428,9 @@
                 </div>
             </div>
 
-            <button class="btn-menu-lateral" onclick="abrirModalFiltroMensal(); toggleMenuLateral();">
+            <button class="btn-menu-lateral" onclick="abrirModalRelatorios(); toggleMenuLateral();">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-                Relatório Mensal
+                Relatórios
             </button>
 
             <button id="btnGestaoUsuariosLateral" class="btn-menu-lateral" style="display: none;" onclick="abrirModalUsuarios(); toggleMenuLateral();">
@@ -494,7 +500,7 @@
                 </div>
             </div>
             <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
-                <!-- Carregado via JS -->
+                <!-- Carregado via JS (Apenas ativas) -->
             </div>
         </section>
 
@@ -589,26 +595,31 @@
         </div>
     </div>
 
-    <!-- MODAL DE FILTRO RELATÓRIO MENSAL -->
-    <div class="modal-overlay" id="modalFiltroMensal" onclick="if(event.target.id === 'modalFiltroMensal') this.style.display='none'">
-        <div class="modal" style="max-width: 400px; padding: 30px;">
-            <button class="btn-close-icon" onclick="document.getElementById('modalFiltroMensal').style.display='none'">✕</button>
+    <!-- 🔥 MODAL: CENTRAL DE RELATÓRIOS (MENSAL E ANUAL) 🔥 -->
+    <div class="modal-overlay" id="modalRelatorios" onclick="if(event.target.id === 'modalRelatorios') this.style.display='none'">
+        <div class="modal" style="max-width: 450px; padding: 30px;">
+            <button class="btn-close-icon" onclick="document.getElementById('modalRelatorios').style.display='none'">✕</button>
             <div class="modal-header-section" style="margin-bottom: 20px; padding-bottom: 15px; padding-right: 30px;">
-                <h3 style="font-size: 18px; margin-bottom: 2px;">Filtro de Relatório</h3>
-                <p style="font-size: 11px;">Selecione o período para gerar o documento executivo</p>
+                <h3 style="font-size: 18px; margin-bottom: 2px;">Central de Relatórios</h3>
+                <p style="font-size: 11px;">Gere documentos analíticos da sua unidade</p>
+            </div>
+            
+            <div class="segmented-control">
+                <div class="segmented-btn active" id="btnTipoMensal" onclick="mudarTipoRelatorio('MENSAL')">Mensal</div>
+                <div class="segmented-btn" id="btnTipoAnual" onclick="mudarTipoRelatorio('ANUAL')">Anual</div>
             </div>
             
             <div class="input-labeled-group" style="margin-bottom: 15px;">
                 <label class="input-label">Ano de Referência</label>
                 <select id="selectFiltroAno" style="cursor: pointer;"></select>
             </div>
-            <div class="input-labeled-group" style="margin-bottom: 25px;">
+            <div class="input-labeled-group" id="grupoFiltroMes" style="margin-bottom: 25px;">
                 <label class="input-label">Mês de Referência</label>
                 <select id="selectFiltroMes" style="cursor: pointer;"></select>
             </div>
             
             <button class="btn btn-primary btn-full" onclick="processarFiltroEabrirDashboard()">
-                GERAR RELATÓRIO MENSAL
+                GERAR RELATÓRIO
             </button>
         </div>
     </div>
@@ -733,13 +744,13 @@
         </div>
     </div>
 
-    <!-- DASHBOARD GLOBAL (RELATÓRIO MENSAL) -->
+    <!-- DASHBOARD GLOBAL (RELATÓRIOS MENSAIS E ANUAIS) -->
     <div class="dash-overlay" id="dashboardGlobalTela">
         <div class="container" style="max-width: 1100px; margin: 0 auto;">
             <div class="dash-header">
                 <div>
                     <span style="font-size: 11px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; font-weight: 500;">Visão Executiva de Inteligência</span>
-                    <h1 id="dashGlobalTitle" style="margin-top: 5px; color: var(--primary);">RELATÓRIO MENSAL CONSOLIDADO</h1>
+                    <h1 id="dashGlobalTitle" style="margin-top: 5px; color: var(--primary);">RELATÓRIO CONSOLIDADO</h1>
                 </div>
                 <div class="btn-action-group">
                     <button id="btnExportGlobalPDF" class="btn btn-primary" style="margin-right: 10px; padding: 10px 15px;" onclick="baixarPDFGlobal()">Exportar Relatório</button>
@@ -859,7 +870,7 @@
             return colorMapMestre[sentimento];
         }
 
-        // 🔥 MOTOR ROBUSTO DE EXTRAÇÃO DE DATA (Resolve o erro do Dashboard Mensal) 🔥
+        // 🔥 MOTOR ROBUSTO DE EXTRAÇÃO DE DATA (Resolve o erro de BI em relatórios mensais e anuais) 🔥
         function extrairDataDoVoto(voto) {
             // Busca agressiva por qualquer chave do Google Sheets que represente data do voto
             const chavesBusca = ["data", "hora", "timestamp", "carimbo", "criado"];
@@ -1449,11 +1460,19 @@
         function fecharDashboard() { document.getElementById('dashboardTela').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         /* =========================================================================
-           🔥 MODAL DE FILTRO E MOTOR DASHBOARD GLOBAL (RELATÓRIO MENSAL) 🔥
+           🔥 CENTRAL DE RELATÓRIOS (MENSAL E ANUAL) 🔥
            ========================================================================= */
         window.meuGraficoGlobal = null;
+        let relatorioTipoAtual = 'MENSAL';
 
-        function abrirModalFiltroMensal() {
+        function mudarTipoRelatorio(tipo) {
+            relatorioTipoAtual = tipo;
+            document.getElementById('btnTipoMensal').classList.toggle('active', tipo === 'MENSAL');
+            document.getElementById('btnTipoAnual').classList.toggle('active', tipo === 'ANUAL');
+            document.getElementById('grupoFiltroMes').style.display = tipo === 'MENSAL' ? 'flex' : 'none';
+        }
+
+        function abrirModalRelatorios() {
             let anosDisponiveis = new Set();
             dbCampanhas.forEach(c => {
                 if(c.data_inicio && c.status !== 'Excluído') {
@@ -1478,22 +1497,29 @@
             nomesMeses.forEach((nome, i) => { selectMes.innerHTML += `<option value="${i+1}">${nome}</option>`; });
             selectMes.value = (new Date().getMonth() + 1).toString();
 
-            document.getElementById('modalFiltroMensal').style.display = 'flex';
+            mudarTipoRelatorio('MENSAL'); // Reset para padrão
+            document.getElementById('modalRelatorios').style.display = 'flex';
         }
 
         async function processarFiltroEabrirDashboard() {
             const anoSelecionado = document.getElementById('selectFiltroAno').value;
-            const mesSelecionado = document.getElementById('selectFiltroMes').value;
+            // Se for Anual, força o mês para TODOS automaticamente
+            const mesSelecionado = relatorioTipoAtual === 'ANUAL' ? 'TODOS' : document.getElementById('selectFiltroMes').value;
             const mesNome = document.getElementById('selectFiltroMes').options[document.getElementById('selectFiltroMes').selectedIndex].text;
             
-            document.getElementById('modalFiltroMensal').style.display = 'none'; document.getElementById('dashboardGlobalTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
+            document.getElementById('modalRelatorios').style.display = 'none'; document.getElementById('dashboardGlobalTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
             document.getElementById('dashGlobalLoading').style.display = 'flex'; document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
             
             const dashTitle = document.getElementById('dashGlobalTitle');
-            if(mesSelecionado === 'TODOS' && anoSelecionado === 'TODOS') dashTitle.innerText = `RELATÓRIO CONSOLIDADO GERAL`;
-            else if (mesSelecionado !== 'TODOS' && anoSelecionado === 'TODOS') dashTitle.innerText = `RELATÓRIO DE ${mesNome.toUpperCase()} - TODOS OS ANOS`;
-            else if (mesSelecionado === 'TODOS' && anoSelecionado !== 'TODOS') dashTitle.innerText = `RELATÓRIO ANUAL DE ${anoSelecionado}`;
-            else dashTitle.innerText = `RELATÓRIO CONSOLIDADO DE ${mesNome.toUpperCase()}/${anoSelecionado}`;
+            if (relatorioTipoAtual === 'ANUAL') {
+                if (anoSelecionado === 'TODOS') dashTitle.innerText = `RELATÓRIO HISTÓRICO GERAL`;
+                else dashTitle.innerText = `RELATÓRIO ANUAL DE ${anoSelecionado}`;
+            } else {
+                if(mesSelecionado === 'TODOS' && anoSelecionado === 'TODOS') dashTitle.innerText = `RELATÓRIO CONSOLIDADO GERAL`;
+                else if (mesSelecionado !== 'TODOS' && anoSelecionado === 'TODOS') dashTitle.innerText = `RELATÓRIO DE ${mesNome.toUpperCase()} - TODOS OS ANOS`;
+                else if (mesSelecionado === 'TODOS' && anoSelecionado !== 'TODOS') dashTitle.innerText = `RELATÓRIO ANUAL DE ${anoSelecionado}`;
+                else dashTitle.innerText = `RELATÓRIO MENSAL - ${mesNome.toUpperCase()}/${anoSelecionado}`;
+            }
             
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
@@ -1676,7 +1702,7 @@
                 doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
                 doc.text(`Página ${i} de ${pageCount}  -  ArcelorMittal Interno`, 105, 285, { align: "center" });
             }
-            doc.save(`Relatório Mensal (${dataExtracao.replace(/\//g, '-')}).pdf`);
+            doc.save(`Relatório Executivo (${dataExtracao.replace(/\//g, '-')}).pdf`);
             btn.innerHTML = txtOriginal;
         }
 
