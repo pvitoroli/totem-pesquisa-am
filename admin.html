@@ -230,8 +230,9 @@
         .sub-item:hover { background: var(--surface-highlight); }
         .sub-item:last-child { border-bottom: none; }
 
-        /* MODAIS E OVERLAYS GERAIS */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 2000; padding: 2vh 15px; }
+        /* 🔥 MODAIS E OVERLAYS GERAIS COM Z-INDEX CORRIGIDO PARA BUG DO POPUP 🔥 */
+        /* Note: O Z-Index foi elevado para 4000 para que as modais sempre abram POR CIMA do painel de 3000 */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 2vh 15px; }
         .modal { background: var(--surface); width: 100%; max-width: 900px; border-radius: 20px; padding: 40px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes modalPop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
@@ -350,7 +351,7 @@
             .dash-header .btn-action-group { width: 100%; display: grid; grid-template-columns: 1fr; gap: 10px; }
             .dash-header .btn-action-group button { margin: 0; width: 100%; padding: 12px; font-size: 12px; }
             
-            /* Dashboard em Grid 2x2 com caixas perfeitas no celular */
+            /* Dashboard em Grid 2x2 no Celular com fundos visíveis */
             .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .dash-kpi-card { padding: 15px 10px; }
             .dash-kpi-value { font-size: 22px; margin-top: 5px; }
@@ -1267,12 +1268,13 @@
         
         function pegarLinkTotem() { 
             let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
-            if(document.body.classList.contains('light-mode')) url += "&theme=light";
+            // Força a inserção da instrução de visual na URL de inicialização baseada na tela do Admin
+            url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark";
             return url;
         }
         function pegarLinkPublico() { 
             let url = `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
-            if(document.body.classList.contains('light-mode')) url += "&theme=light";
+            url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark";
             return url;
         }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
@@ -1463,7 +1465,7 @@
                     }
                 }
             });
-            anosDisponiveis.add(new Date().getFullYear()); // Garante o ano atual sempre
+            anosDisponiveis.add(new Date().getFullYear());
 
             let selectAno = document.getElementById('selectFiltroAno');
             let selectMes = document.getElementById('selectFiltroMes');
@@ -1505,7 +1507,6 @@
                         if(setorLogado !== "Master" && camp.setor !== setorLogado) return false;
                         
                         if(anoSelecionado !== 'TODOS' || mesSelecionado !== 'TODOS') {
-                            // Extrai a data real do voto, ou usa a da campanha como último recurso
                             let dataDoVoto = extrairDataDoVoto(v) || new Date(camp.data_inicio);
                             
                             let votoMes = (dataDoVoto.getMonth() + 1).toString();
