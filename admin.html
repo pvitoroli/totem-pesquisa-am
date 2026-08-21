@@ -347,7 +347,8 @@
 <body>
     
     <script>
-        if(localStorage.getItem('theme') === 'light') {
+        const currentSector = localStorage.getItem('setorLogado') || 'default';
+        if(localStorage.getItem('theme_' + currentSector) === 'light') {
             document.body.classList.add('light-mode');
         }
     </script>
@@ -457,6 +458,16 @@
             </div>
         </div>
 
+        <section class="card" id="secao-ativas" style="border-left: 4px solid var(--status-ativo); margin-bottom: 24px;">
+            <div class="card-title" style="color: var(--text); border-bottom: none; margin-bottom: 15px;">
+                <div style="display:flex; align-items:center; gap: 10px;">
+                    <span class="pulse-dot-verde"></span> Campanhas Ativas
+                </div>
+            </div>
+            <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
+                </div>
+        </section>
+
         <div class="action-buttons-grid">
             <button class="action-bridge-btn" onclick="abrirModalNovaCampanha()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
@@ -467,16 +478,6 @@
                 Lista de Campanhas
             </button>
         </div>
-
-        <section class="card" id="secao-ativas" style="border-left: 4px solid var(--status-ativo); margin-bottom: 24px;">
-            <div class="card-title" style="color: var(--text); border-bottom: none; margin-bottom: 15px;">
-                <div style="display:flex; align-items:center; gap: 10px;">
-                    <span class="pulse-dot-verde"></span> Campanhas Ao Vivo
-                </div>
-            </div>
-            <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
-                </div>
-        </section>
     </main>
 
     <div class="dash-overlay" id="modalListaCampanhas">
@@ -759,7 +760,7 @@
         function toggleMenuLateral() { document.getElementById('menuLateral').classList.toggle('active'); }
         function fecharMenuClicandoFora(e) { if(e.target.id === 'menuLateral') toggleMenuLateral(); }
 
-        /* MODO CLARO E MODO ESCURO COM TROCA DE LOGO */
+        /* MODO CLARO E MODO ESCURO COM TROCA DE LOGO E SESSÃO VINCULADA */
         function applyThemeLogos() {
             const isLight = document.body.classList.contains('light-mode');
             const splashLogo = document.getElementById('splashLogo');
@@ -777,7 +778,11 @@
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
-            localStorage.setItem('theme', isLight ? 'light' : 'dark');
+            
+            // Grava a configuração especificamente para O SETOR logado
+            const setorAtual = localStorage.getItem('setorLogado') || 'default';
+            localStorage.setItem('theme_' + setorAtual, isLight ? 'light' : 'dark');
+            
             document.getElementById('themeToggleText').innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
             
             applyThemeLogos();
@@ -832,6 +837,11 @@
                 mobRole.innerText = "Setor Logado"; mobName.innerText = setorLogado; mobName.style.color = "var(--primary)";
                 mobAvatar.innerText = setorLogado.charAt(0).toUpperCase();
             }
+
+            // Atualiza o texto do botão de tema ao abrir
+            const isLight = document.body.classList.contains('light-mode');
+            const themeBtnText = document.getElementById('themeToggleText');
+            if (themeBtnText) themeBtnText.innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
 
             document.getElementById('dataCampanha').valueAsDate = new Date();
             buscarSetores(); 
