@@ -230,8 +230,7 @@
         .sub-item:hover { background: var(--surface-highlight); }
         .sub-item:last-child { border-bottom: none; }
 
-        /* 🔥 MODAIS E OVERLAYS GERAIS COM Z-INDEX CORRIGIDO PARA BUG DO POPUP 🔥 */
-        /* Note: O Z-Index foi elevado para 4000 para que as modais sempre abram POR CIMA do painel de 3000 */
+        /* MODAIS E OVERLAYS GERAIS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 4000; padding: 2vh 15px; }
         .modal { background: var(--surface); width: 100%; max-width: 900px; border-radius: 20px; padding: 40px; border: 1px solid var(--border); max-height: 90vh; overflow-y: auto; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); animation: modalPop 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         @keyframes modalPop { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -495,7 +494,7 @@
                 </div>
             </div>
             <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
-                <!-- Carregado via JS (Apenas ativas) -->
+                <!-- Carregado via JS -->
             </div>
         </section>
 
@@ -785,8 +784,8 @@
         const dataLogin = localStorage.getItem('dataLogin');
         const hoje = new Date().toDateString();
         
-        // Multiplicador de BI Exato (7 Pontos de Dados)
-        const PONTOS_DADOS_POR_VOTO = 7;
+        // Multiplicador de BI Exato (8 Pontos de Dados: Campanha, Sentimento, Nota, Data, Hora, Setor, Origem, Template)
+        const PONTOS_DADOS_POR_VOTO = 8;
 
         if (!setorLogado || !dataLogin || dataLogin !== hoje) {
             localStorage.removeItem('setorLogado');
@@ -1268,7 +1267,6 @@
         
         function pegarLinkTotem() { 
             let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
-            // Força a inserção da instrução de visual na URL de inicialização baseada na tela do Admin
             url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark";
             return url;
         }
