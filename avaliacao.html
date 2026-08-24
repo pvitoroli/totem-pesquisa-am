@@ -332,7 +332,16 @@
     const urlParams = new URLSearchParams(window.location.search);
     const evento = urlParams.get('evento') || "";
     const id = urlParams.get('id') || "";
-    const sentimento = urlParams.get('sentimento') || "Geral";
+
+    // 🔥 O FILTRO NORMALIZADOR DE CAPS LOCK 🔥
+    // Transforma "APRENDI ALGO NOVO" em "Aprendi algo novo"
+    function padronizarTexto(texto) {
+        if (!texto || texto === "Geral") return "Geral";
+        texto = texto.toLowerCase(); // Tudo minúsculo
+        return texto.charAt(0).toUpperCase() + texto.slice(1); // Só a primeira fica maiúscula
+    }
+    const sentimento = padronizarTexto(urlParams.get('sentimento'));
+
     const setor = urlParams.get('setor') || "Geral";
     const gif = urlParams.get('gif') || ""; 
     const proposta = urlParams.get('proposta') || "Geral";
@@ -345,9 +354,12 @@
     };
 
     document.getElementById('sub-evento-nome').innerText = evento;
+    
+    // Mostra o sentimento na tela convertido no formato amigável
     document.getElementById('label-sentimento-escolhido').innerText = sentimento;
 
     const imgEmoji = document.getElementById('emoji-preview');
+    // Agora o GIF não quebra, pois o texto padronizado casa perfeitamente com a lista "linksEmojis"
     const urlGifFinal = gif || linksEmojis[sentimento];
     
     if (urlGifFinal) {
