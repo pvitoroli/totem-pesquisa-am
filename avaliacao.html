@@ -161,16 +161,15 @@
             transform: translateY(-2px) translateX(2px);
         }
 
-        /* Botão de Pular com Destaque Ghost Button */
+        /* Botão de Pular Minimalista */
         .btn-skip-text {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: #d1d5db;
+            background: transparent;
+            border: none;
+            color: #a0a5b0;
             font-size: 13px;
             font-weight: 600;
-            margin-top: 20px;
-            padding: 12px 20px;
-            border-radius: 20px;
+            margin-top: 16px;
+            padding: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
@@ -182,9 +181,7 @@
         }
 
         .btn-skip-text:hover {
-            background: rgba(255, 255, 255, 0.1);
             color: white;
-            border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
         }
 
@@ -195,7 +192,7 @@
             margin-top: auto; 
             padding-top: 30px;
             display: flex; 
-            justify-content: center; /* Centraliza o botão */
+            justify-content: center;
             width: 100%;
         }
 
@@ -206,7 +203,7 @@
             font-weight: 600;
             padding: 10px 24px;
             background-color: transparent; 
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Borda vazada fina */
+            border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 24px;
             transition: all 0.2s ease;
             text-transform: uppercase;
@@ -241,8 +238,8 @@
         body.light-mode .btn-smart-send:not(.active) { background-color: #f0f2f5; color: #9ca3af; }
 
         /* Botão Pular e Voltar no Modo Claro */
-        body.light-mode .btn-skip-text { background: rgba(0, 0, 0, 0.03); border-color: rgba(0, 0, 0, 0.1); color: #4b5563; }
-        body.light-mode .btn-skip-text:hover { background: rgba(0, 0, 0, 0.06); color: #1e222d; border-color: rgba(0, 0, 0, 0.2); }
+        body.light-mode .btn-skip-text { background: transparent; border: none; color: #6b7280; }
+        body.light-mode .btn-skip-text:hover { color: #1e222d; }
         
         body.light-mode .btn-back { background-color: transparent !important; color: #6b7280 !important; border: 1px solid rgba(0, 0, 0, 0.2) !important; }
         body.light-mode .btn-back:hover { background-color: rgba(0, 0, 0, 0.04) !important; color: #1e222d !important; border-color: rgba(0, 0, 0, 0.4) !important; }
@@ -310,8 +307,8 @@
               <!-- Textarea que estica (com onblur para murchar se vazio) -->
               <textarea id="campo-comentario" rows="1" placeholder="Quer detalhar o motivo? (Opcional)" oninput="autoExpand(this)" onblur="shrinkSeVazio(this)"></textarea>
               
-              <!-- Botão Icone Embutido (Gatilho false = não é pular) -->
-              <button class="btn-smart-send" id="btn-enviar-icon" onclick="confirmarEnvio(false)" title="Enviar Avaliação">
+              <!-- Botão Icone Embutido -->
+              <button class="btn-smart-send" id="btn-enviar-icon" onclick="confirmarEnvio()" title="Enviar Avaliação">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                       <line x1="22" y1="2" x2="11" y2="13"></line>
                       <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
@@ -319,8 +316,8 @@
               </button>
           </div>
 
-          <!-- Rota de Fricção Zero (Gatilho true = é pular) -->
-          <button class="btn-skip-text" onclick="confirmarEnvio(true)">
+          <!-- Rota de Fricção Zero -->
+          <button class="btn-skip-text" onclick="confirmarEnvio()">
               Pular e registrar apenas a nota 
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
           </button>
@@ -423,8 +420,8 @@
         }
     }
 
-    // 🔥 FUNÇÃO DE CONFIRMAÇÃO COM TRAVA DE ENVIO VAZIO 🔥
-    function confirmarEnvio(isPular) {
+    // 🔥 FUNÇÃO DE CONFIRMAÇÃO COM REDIRECIONAMENTO IMEDIATO 🔥
+    function confirmarEnvio() {
         if (notaSelecionada === null) {
             alert("Por favor, selecione uma nota de 0 a 10 antes de prosseguir!");
             return;
@@ -433,13 +430,7 @@
         const campoTexto = document.getElementById('campo-comentario');
         const comentarioTexto = campoTexto.value.trim();
 
-        // Se o usuário clicou na setinha (Não é pular) E não tem nada escrito:
-        if (!isPular && comentarioTexto.length === 0) {
-            campoTexto.focus(); // Joga o cursor piscando lá dentro chamando a atenção
-            return; // Impede o envio
-        }
-
-        // Se passou, trava os botões visualmente para evitar clique duplo
+        // Trava os botões visualmente para evitar clique duplo
         const btnIcon = document.getElementById('btn-enviar-icon');
         btnIcon.style.pointerEvents = "none";
         btnIcon.style.opacity = "0.5";
