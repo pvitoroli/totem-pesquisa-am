@@ -142,7 +142,7 @@
         window.history.go(1);
     };
 
-    // 1. Captura os dados que chegaram em frações de segundo
+    // 1. Captura os dados que chegaram da URL em frações de segundo
     const urlParams = new URLSearchParams(window.location.search);
     const idCampanha = urlParams.get('id') || "";
     const setorCampanha = urlParams.get('setor') || "Geral";
@@ -150,6 +150,9 @@
     const sentimento = urlParams.get('sentimento');
     const nota = urlParams.get('nota');
     const proposta = urlParams.get('proposta') || "Geral";
+    
+    // 🔥 CORREÇÃO: O LINK PERDIDO AGORA É LIDO AQUI 🔥
+    const comentario = urlParams.get('comentario') || "";
 
     // Pega a frase de agradecimento personalizada salva no cache (se existir)
     const fraseAgradecimentoCache = localStorage.getItem('agradecimento_' + idCampanha);
@@ -173,7 +176,8 @@
                 "nota": parseInt(nota),
                 "setor": setorCampanha,
                 "origem": "Totem Fixo",
-                "proposta": proposta
+                "proposta": proposta,
+                "comentario": comentario // 🔥 E AGORA O COMENTÁRIO VAI EMBARCADO NO PACOTE! 🔥
             };
             
             requisicaoAoGoogle = fetch(URL_BACKEND, {
@@ -183,7 +187,7 @@
             }).catch(e => console.error(e));
         }
 
-        // 🔥 A MÁGICA ACONTECE AQUI 🔥
+        // A mágica acontece em paralelo
         await Promise.all([tempoMinimoLeitura, requisicaoAoGoogle]);
 
         // Tudo finalizado e seguro! Volta a abrir o totem inicial.
