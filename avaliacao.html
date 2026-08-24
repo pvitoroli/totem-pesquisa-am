@@ -87,8 +87,27 @@
         }
 
         /* ==========================================================================
-           NOVA ÁREA DE COMENTÁRIOS E BOTÃO ENVIAR (ESTILOS)
+           PROGRESSIVE DISCLOSURE (ÁREA DE COMENTÁRIOS E ANIMAÇÃO)
            ========================================================================== */
+        .comment-section {
+            display: none; 
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        /* Classe injetada pelo JS para revelar */
+        .comment-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         #campo-comentario:focus {
             border-color: #ff5100 !important;
         }
@@ -234,13 +253,13 @@
         </div>
       </div>
 
-      <!-- NOVA ÁREA DE COMENTÁRIO E ENVIO -->
-      <div class="comment-section" style="display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; width: 100%; padding: 0 10px; box-sizing: border-box;">
+      <!-- NOVA ÁREA DE COMENTÁRIO (Inicia oculta) -->
+      <div class="comment-section">
           <label class="comment-label" style="color: #a0a5b0; font-size: 13px; margin-bottom: 8px; font-weight: 600; width: 100%; max-width: 450px; text-align: left;">Quer detalhar sua experiência? (Opcional)</label>
           <textarea id="campo-comentario" rows="3" placeholder="Deixe um comentário..." style="width: 100%; max-width: 450px; border-radius: 8px; background-color: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 12px; font-family: inherit; resize: none; margin-bottom: 20px; outline: none; transition: border-color 0.2s; box-sizing: border-box;"></textarea>
           
           <button id="btn-enviar-avaliacao" onclick="confirmarEnvio()" class="btn-primary" style="width: 100%; max-width: 450px; background-color: #ff5100; color: white; border: none; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: background-color 0.2s, transform 0.1s; box-shadow: 0 4px 15px rgba(255,81,0,0.2);">
-              Enviar Avaliação
+              Apenas Enviar Nota
           </button>
       </div>
       
@@ -276,13 +295,11 @@
         imgEmoji.style.display = 'block'; 
     }
 
-    // Se estiver no modo claro, troca a imagem da logo para a versão com texto escuro
     if(document.body.classList.contains('light-mode')) {
         const logo = document.querySelector('.brand-logo-img');
         if(logo) logo.src = 'logo-arcelormittal-padrao.png';
     }
 
-    // Configura o link de voltar garantindo que ele não perca o tema
     let linkVoltar = `index.html?evento=${id}&setor=${encodeURIComponent(setor)}`;
     if(document.body.classList.contains('light-mode')) linkVoltar += "&theme=light";
     document.getElementById('link-voltar-dinamico').innerHTML = `<a href="${linkVoltar}" class="btn-back">← Voltar</a>`;
@@ -290,21 +307,40 @@
     // Variável global para guardar a nota escolhida
     let notaSelecionada = null;
 
-    // 🔥 FUNÇÃO DE SELEÇÃO DE NOTA 🔥
+    // 🔥 GATILHO INTELIGENTE DO BOTÃO 🔥
+    document.getElementById('campo-comentario').addEventListener('input', function() {
+        const btn = document.getElementById('btn-enviar-avaliacao');
+        if (this.value.trim().length > 0) {
+            btn.innerText = "Enviar Avaliação Completa";
+        } else {
+            btn.innerText = "Apenas Enviar Nota";
+        }
+    });
+
+    // 🔥 FUNÇÃO DE SELEÇÃO DE NOTA E REVELAÇÃO DA CAIXA 🔥
     function enviarDados(nota) {
         notaSelecionada = nota;
         
-        // Remove a seleção visual de qualquer botão clicado antes
+        // Remove a seleção visual anterior
         document.querySelectorAll('.rating-btn').forEach(b => {
             b.style.removeProperty("background-color");
             b.style.removeProperty("border-color");
             b.style.removeProperty("color");
         });
         
-        // Pinta de laranja o botão atual para feedback visual instântaneo (com blindagem pro Modo Claro)
+        // Pinta de laranja o botão atual (compatível com Modo Claro)
         event.target.style.setProperty("background-color", "#ff5100", "important");
         event.target.style.setProperty("border-color", "#ff5100", "important");
         event.target.style.setProperty("color", "#ffffff", "important");
+
+        // Animação de Revelação Progressiva da Área de Comentário
+        const commentArea = document.querySelector('.comment-section');
+        if (commentArea.style.display !== 'flex') {
+            commentArea.style.display = 'flex';
+            setTimeout(() => {
+                commentArea.classList.add('show');
+            }, 50); // Delay mínimo para o navegador processar o display
+        }
     }
 
     // 🔥 FUNÇÃO DE CONFIRMAÇÃO E ENVIO 🔥
@@ -314,18 +350,14 @@
             return;
         }
 
-        // Trava o botão para não enviar duas vezes
         const btn = document.getElementById('btn-enviar-avaliacao');
         btn.innerText = "Enviando...";
         btn.style.pointerEvents = "none";
 
-        // Captura o que o usuário escreveu
         const comentarioTexto = document.getElementById('campo-comentario').value;
 
-        // Redireciona empacotando TODOS os dados (incluindo o comentário novo) na URL
         let urlDestino = `agradecimento.html?id=${id}&setor=${encodeURIComponent(setor)}&evento=${encodeURIComponent(evento)}&sentimento=${encodeURIComponent(sentimento)}&nota=${notaSelecionada}&proposta=${encodeURIComponent(proposta)}&comentario=${encodeURIComponent(comentarioTexto)}`;
         
-        // Passa o tema claro adiante para a tela de agradecimento (Tela 3)
         if(document.body.classList.contains('light-mode')) urlDestino += "&theme=light";
         
         window.location.href = urlDestino;
