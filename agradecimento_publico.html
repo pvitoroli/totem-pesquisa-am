@@ -8,49 +8,113 @@
     <link rel="stylesheet" href="style-agradecimento.css">
 
     <style>
-        * { box-sizing: border-box; }
-        body { background-color: #1b1e27; margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
-        .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; transform: translateY(30px); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-        .success-check-icon { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.2s; opacity: 0; transform: scale(0); }
-        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .glow-pulse-yellow { box-shadow: 0 0 15px rgba(243, 156, 18, 0.3); animation: pulseGlowYellow 2s infinite alternate; background-color: rgba(243, 156, 18, 0.1); }
-        @keyframes pulseGlowYellow { from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); } to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); } }
-        .btn-fechar { background: rgba(255, 255, 255, 0.05); color: #a0a5b0; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; margin-top: 15px; width: 100%; }
-        .btn-fechar:hover { background: rgba(255, 255, 255, 0.1); color: white; }
-        .success-box { width: 100%; max-width: 450px; padding: 0 10px; }
+        /* 🔥 Correção: Aplica box-sizing a todos os elementos para evitar vazamento de bordas 🔥 */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1b1e27;
+            margin: 0;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden; 
+        }
+        
+        .animate-fade-in-up {
+            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-check-icon {
+            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation-delay: 0.2s;
+            opacity: 0;
+            transform: scale(0);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .glow-pulse-yellow {
+            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
+            animation: pulseGlowYellow 2s infinite alternate;
+            background-color: rgba(243, 156, 18, 0.1);
+        }
+
+        @keyframes pulseGlowYellow {
+            from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); }
+            to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); }
+        }
+
+        .btn-fechar {
+            background: rgba(255, 255, 255, 0.05);
+            color: #a0a5b0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.2s;
+            margin-top: 15px;
+            width: 100%; 
+        }
+        .btn-fechar:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .success-box {
+            width: 100%;
+            max-width: 450px;
+            padding: 0 10px;
+        }
     </style>
 </head>
 <body>
 
     <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
+      
       <div class="success-box">
-        <div class="success-icon-wrapper glow-pulse-yellow" style="width: 90px; height: 90px; margin: 0 auto 24px auto; border-radius: 50%; padding: 15px; display: flex; align-items: center; justify-content: center;">
-          <svg viewBox="0 0 24 24" fill="none" stroke="rgb(243, 156, 18)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
+        <div class="success-icon-wrapper glow-pulse-yellow" style="width: 80px; height: 80px; margin: 0 auto 24px auto; border-radius: 50%; padding: 15px; display: flex; align-items: center; justify-content: center;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="rgb(243, 156, 18)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
             <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
             <polyline points="22 4 12 14.01 9 11.01"></polyline>
           </svg>
         </div>
         
-        <h2 class="success-title" style="font-size: 26px; font-weight: 800; margin-bottom: 8px; color: white;">SENTIMENTO REGISTRADO!</h2>
+        <h2 class="success-title" style="font-size: 24px; font-weight: 600; margin-bottom: 8px; color: white; letter-spacing: 0.5px;">SENTIMENTO REGISTRADO!</h2>
         
-        <h5 id="msg-agradecimento" style="color: #a0a5b0; font-family: Helvetica; font-size: 16px; font-weight: normal; margin-top: 0;">
+        <h5 id="msg-agradecimento" style="color: #a0a5b0; font-family: Helvetica; font-size: 15px; font-weight: normal; margin-top: 0;">
           Muito obrigado por participar.<br>Sua voz molda o nosso futuro!
         </h5>
         
-        <div style="margin-top: 40px; padding: 20px; border-radius: 12px; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
-            <p style="color: rgba(255,255,255,0.6); font-size: 13px; margin: 0 0 15px 0;">
-                Sua resposta foi salva de forma anônima e segura. Você já pode sair desta tela.
+        <div style="margin-top: 40px; padding: 25px; border-radius: 16px; background-color: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05);">
+            <p style="color: #a0a5b0; font-size: 14px; margin: 0 0 20px 0; line-height: 1.6;">
+                Sua resposta foi salva de forma anônima e segura. Você já pode fechar esta tela.
             </p>
             <button class="btn-fechar" onclick="window.close()">Fechar Página</button>
         </div>
       </div>
+
     </div>
 
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
 
-        // 🔥 O FILTRO DEFINITIVO CONTRA CAPS LOCK 🔥
         function padronizarTexto(texto) {
             if (!texto || texto === "Geral") return "Geral";
             texto = texto.toLowerCase().trim(); 
@@ -61,7 +125,6 @@
         const nomeEvento = urlParams.get('evento');
         const idEvento = urlParams.get('id');
         
-        // 🔥 MATA O CAPS LOCK AQUI! 🔥
         const sentimentoRaw = urlParams.get('sentimento');
         const sentimento = padronizarTexto(sentimentoRaw);
         
@@ -72,32 +135,43 @@
 
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
 
-        if (idEvento && localStorage.getItem(chaveBloqueio) === 'sim') {
-            document.body.innerHTML = `
-                <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 450px; padding: 0 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
-                    <div style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 40px 20px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
-                        <div style="width: 80px; height: 80px; margin: 0 auto 24px auto; background-color: rgba(255, 81, 0, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 20px rgba(255, 81, 0, 0.2);">
-                            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ff5100" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
-                                <line x1="12" y1="9" x2="12" y2="13"></line>
-                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
-                            </svg>
+        // 🔥 BLOQUEIO ELEGANTE (SaaS Design) 🔥
+        function checarBloqueio() {
+            if (idEvento && localStorage.getItem(chaveBloqueio) === 'sim') {
+                const isLight = document.body.classList.contains('light-mode');
+                const bgColor = isLight ? '#ffffff' : '#2a2f3a';
+                const textColor = isLight ? '#1e222d' : '#ffffff';
+                const textMuted = isLight ? '#6b7280' : '#9aa0a6';
+                const borderColor = isLight ? 'rgba(0,0,0,0.1)' : 'rgba(255, 255, 255, 0.08)';
+                const btnHoverBg = isLight ? 'rgba(0,0,0,0.05)' : 'rgba(255,255,255,0.05)';
+                
+                document.body.innerHTML = `
+                    <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 450px; padding: 0 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 100vh; margin: 0 auto; box-sizing: border-box;">
+                        <div style="background-color: ${bgColor}; border: 1px solid ${borderColor}; border-radius: 16px; padding: 40px 30px; width: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.15); box-sizing: border-box;">
+                            <div style="width: 60px; height: 60px; margin: 0 auto 24px auto; background-color: rgba(255, 81, 0, 0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 81, 0, 0.15);">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff5100" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+                                    <line x1="12" y1="9" x2="12" y2="13"></line>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                            </div>
+                            <h2 style="color: ${textColor}; margin: 0 0 12px 0; font-weight: 500; font-size: 18px; text-transform: uppercase; letter-spacing: 1px;">Voto Já Registrado</h2>
+                            <p style="color: ${textMuted}; line-height: 1.6; font-size: 14px; margin: 0 0 30px 0; font-weight: 400;">Identificamos que uma participação já foi contabilizada para este dispositivo.</p>
+                            <button onclick="window.close()" style="background: transparent; color: ${textMuted}; border: 1px solid ${borderColor}; padding: 12px 24px; border-radius: 8px; font-weight: 500; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; width: 100%; font-family: inherit; font-size: 12px;" onmouseover="this.style.background='${btnHoverBg}'; this.style.color='${textColor}'" onmouseout="this.style.background='transparent'; this.style.color='${textMuted}'">Fechar Página</button>
                         </div>
-                        <h2 style="color: white; margin: 0 0 12px 0; font-weight: 800; font-size: 22px; text-transform: uppercase; letter-spacing: 0.5px;">Voto Já Registrado</h2>
-                        <p style="color: #a0a5b0; line-height: 1.6; font-size: 14px; margin: 0 0 30px 0;">Identificamos que uma participação já foi contabilizada para este dispositivo.</p>
-                        <button class="btn-fechar" onclick="window.close()" style="margin: 0;">Fechar Página</button>
                     </div>
-                </div>
-            `;
-            throw new Error("Fluxo interrompido: Voto já computado neste dispositivo.");
+                `;
+                throw new Error("Fluxo interrompido: Voto já computado neste dispositivo.");
+            }
         }
+        
+        checarBloqueio();
 
         window.history.replaceState(null, null, window.location.href);
         window.onpopstate = function () { window.history.go(1); };
 
         async function gravarVotoPublico() {
             if (!nomeEvento || !sentimento) return;
-
             if (idEvento) localStorage.setItem(chaveBloqueio, 'sim');
 
             const payload = {
@@ -107,7 +181,7 @@
                 "setor": setor,
                 "origem": "Totem Público (QR Code/Link)", 
                 "proposta": proposta,
-                "comentario": comentario 
+                "comentario": comentario
             };
 
             try {
@@ -116,7 +190,6 @@
                     mode: "no-cors",
                     body: JSON.stringify(payload)
                 });
-                console.log("Voto público integrado com sucesso.");
             } catch (e) {
                 console.error("Voto processado.");
             }
