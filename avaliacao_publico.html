@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Avaliação - Pesquisa de Sentimento</title>
+    <title>Avaliação - Pesquisa de Sentimento (Público)</title>
     
     <link rel="stylesheet" href="style-avaliacao.css">
 
@@ -85,11 +85,128 @@
             transform: scale(0.95);
             box-shadow: 0px 4px 15px rgba(255, 55, 0, 0.5);
         }
+
+        /* ==========================================================================
+           NOVO DESIGN: SMART PROMPT (ESTILO CHAT/AI) E REVELAÇÃO PROGRESSIVA
+           ========================================================================== */
+        .comment-section {
+            display: none; 
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+            padding: 0 10px;
+            box-sizing: border-box;
+        }
+
+        .comment-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* A "Pílula" de texto */
+        .smart-input-container {
+            display: flex;
+            align-items: flex-end;
+            width: 100%;
+            max-width: 450px;
+            background-color: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 24px;
+            padding: 6px 6px 6px 18px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+        }
+
+        .smart-input-container:focus-within {
+            border-color: #ff5100;
+            background-color: rgba(255,255,255,0.05);
+            box-shadow: 0 8px 30px rgba(255, 81, 0, 0.15);
+        }
+
+        #campo-comentario {
+            flex-grow: 1;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 15px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            padding: 10px 0;
+            max-height: 120px;
+            overflow-y: auto;
+            line-height: 1.4;
+            transition: height 0.2s ease;
+        }
+
+        #campo-comentario::placeholder {
+            color: #7b8190;
+        }
+
+        /* O Botão de Seta Embutido */
+        .btn-smart-send {
+            background-color: rgba(255,255,255,0.1);
+            color: #a0a5b0;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        .btn-smart-send.active {
+            background-color: #ff5100;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(255, 81, 0, 0.4);
+        }
+
+        .btn-smart-send svg {
+            transition: transform 0.3s ease;
+        }
+        
+        .btn-smart-send.active:hover svg {
+            transform: translateY(-2px) translateX(2px);
+        }
+
+        /* Botão de Pular Minimalista */
+        .btn-skip-text {
+            background: transparent;
+            border: none;
+            color: #a0a5b0;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 16px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .btn-skip-text:hover {
+            color: white;
+            transform: translateY(-2px);
+        }
     </style>
 </head>
 <body>
 
-    <div class="totem-app-canvas" style="width: 100%; max-width: 600px;">
+    <div class="totem-app-canvas" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; min-height: 90vh;">
       <div class="totem-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255, 255, 255, 0.08); padding-bottom: 12px; margin-bottom: 24px; height: 50px;">
        <div class="company-logo-area" style="display: flex; align-items: center; max-width: 140px; height: 100%;">
             <img src="logo-arcelormittal.png" alt="Logo ArcelorMittal" class="brand-logo-img" style="filter: brightness(1.2); max-width: 130px; max-height: 35px; width: 100%; height: auto; object-fit: contain;" />
@@ -136,6 +253,28 @@
             <button onclick="enviarDados(10)" class="rating-btn">10</button>
         </div>
       </div>
+
+      <!-- NOVA ÁREA DE COMENTÁRIO: SMART PROMPT (Inicia oculta) -->
+      <div class="comment-section">
+          <div class="smart-input-container">
+              <!-- Textarea que estica (com onblur para murchar se vazio) -->
+              <textarea id="campo-comentario" rows="1" placeholder="Quer detalhar o motivo? (Opcional)" oninput="autoExpand(this)" onblur="shrinkSeVazio(this)"></textarea>
+              
+              <!-- Botão Icone Embutido -->
+              <button class="btn-smart-send" id="btn-enviar-icon" onclick="confirmarEnvio()" title="Enviar Avaliação">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="22" y1="2" x2="11" y2="13"></line>
+                      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                  </svg>
+              </button>
+          </div>
+
+          <!-- Rota de Fricção Zero -->
+          <button class="btn-skip-text" onclick="confirmarEnvio()">
+              Pular e registrar apenas a nota 
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </button>
+      </div>
       
       <div class="action-footer" style="margin-top: auto; display: flex; justify-content: flex-start;">
           <span id="link-voltar-dinamico"></span>
@@ -148,7 +287,7 @@
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
         const sentimento = urlParams.get('sentimento') || "Geral";
-        const gif = urlParams.get('gif') || ""; // 🔥 CAPTURA O GIF VINDO DA URL
+        const gif = urlParams.get('gif') || ""; 
         const setor = urlParams.get('setor') || "Geral";
         const proposta = urlParams.get('proposta') || "Geral";
         
@@ -193,16 +332,83 @@
             imgEmoji.style.display = 'block'; 
         }
 
-        // 5. FUNÇÃO DE ENVIO - SEM FETCH! (Apenas roteamento)
-        function enviarDados(nota) {
-            document.querySelectorAll('.rating-btn').forEach(b => b.style.pointerEvents = 'none');
-            
-            event.target.innerText = "...";
-            event.target.style.backgroundColor = "#ff3700";
-            event.target.style.borderColor = "#ff3700";
-            event.target.style.color = "white";
+        // Variável global para guardar a nota escolhida
+        let notaSelecionada = null;
 
-            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${nota}&proposta=${encodeURIComponent(proposta)}`;
+        // 🔥 AUTO-EXPANSÃO DA CAIXA E ANIMAÇÃO DO BOTÃO 🔥
+        function autoExpand(field) {
+            field.style.height = 'inherit';
+            const computed = window.getComputedStyle(field);
+            const height = parseInt(computed.getPropertyValue('border-top-width'), 10)
+                         + parseInt(computed.getPropertyValue('padding-top'), 10)
+                         + field.scrollHeight
+                         + parseInt(computed.getPropertyValue('padding-bottom'), 10)
+                         + parseInt(computed.getPropertyValue('border-bottom-width'), 10);
+            
+            field.style.height = height + 'px';
+
+            const btnSend = document.getElementById('btn-enviar-icon');
+            if (field.value.trim().length > 0) {
+                btnSend.classList.add('active');
+            } else {
+                btnSend.classList.remove('active');
+            }
+        }
+
+        // 🔥 EFEITO "MURCHAR" SE CLICAR FORA E ESTIVER VAZIO 🔥
+        function shrinkSeVazio(field) {
+            if (field.value.trim() === '') {
+                field.value = ''; // Remove espaços em branco perdidos
+                field.style.removeProperty('height'); // Murcha de volta pro row="1"
+                document.getElementById('btn-enviar-icon').classList.remove('active');
+            }
+        }
+
+        // 5. FUNÇÃO DE SELEÇÃO E REVELAÇÃO DO CAMPO DE COMENTÁRIOS
+        function enviarDados(nota) {
+            notaSelecionada = nota;
+            
+            // Restaura o design original dos botões do Totem Público
+            document.querySelectorAll('.rating-btn').forEach(b => {
+                b.style.removeProperty("background-color");
+                b.style.removeProperty("border-color");
+                b.style.removeProperty("color");
+                b.style.removeProperty("box-shadow");
+                b.style.removeProperty("transform");
+            });
+            
+            // Aplica a cor laranja padrão do Totem Público (#ff3700) na nota selecionada
+            event.target.style.setProperty("background-color", "#ff3700", "important");
+            event.target.style.setProperty("border-color", "#ff3700", "important");
+            event.target.style.setProperty("color", "#ffffff", "important");
+
+            // Revela a seção de comentário
+            const commentArea = document.querySelector('.comment-section');
+            if (commentArea.style.display !== 'flex') {
+                commentArea.style.display = 'flex';
+                setTimeout(() => {
+                    commentArea.classList.add('show');
+                }, 50);
+            }
+        }
+
+        // 🔥 FUNÇÃO DE CONFIRMAÇÃO E ENVIO DE DADOS 🔥
+        function confirmarEnvio() {
+            if (notaSelecionada === null) {
+                alert("Por favor, selecione uma nota de 0 a 10 antes de prosseguir!");
+                return;
+            }
+
+            const campoTexto = document.getElementById('campo-comentario');
+            const comentarioTexto = campoTexto.value.trim();
+
+            // Trava os botões visualmente para evitar clique duplo
+            const btnIcon = document.getElementById('btn-enviar-icon');
+            btnIcon.style.pointerEvents = "none";
+            btnIcon.style.opacity = "0.5";
+
+            // Roteamento seguro do Totem Público (Usando replace para não gerar histórico de navegação)
+            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${notaSelecionada}&proposta=${encodeURIComponent(proposta)}&comentario=${encodeURIComponent(comentarioTexto)}`;
             
             window.location.replace(linkDestino);
         }
