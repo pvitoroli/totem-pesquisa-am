@@ -8,91 +8,22 @@
     <link rel="stylesheet" href="style-agradecimento.css">
 
     <style>
-        /* 🔥 Correção: Aplica box-sizing a todos os elementos para evitar vazamento de bordas 🔥 */
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: #1b1e27;
-            margin: 0;
-            padding: 20px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow: hidden; /* Evita rolagens indesejadas no celular */
-        }
-        
-        /* 1. Animação de entrada suave da caixa toda (Fade In Up) */
-        .animate-fade-in-up {
-            animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* 2. Animação de pop do ícone */
-        .success-check-icon {
-            animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-            animation-delay: 0.2s;
-            opacity: 0;
-            transform: scale(0);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* 3. Efeito Glow (Neon pulsante AMARELO) no círculo */
-        .glow-pulse-yellow {
-            box-shadow: 0 0 15px rgba(243, 156, 18, 0.3);
-            animation: pulseGlowYellow 2s infinite alternate;
-            background-color: rgba(243, 156, 18, 0.1);
-        }
-
-        @keyframes pulseGlowYellow {
-            from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); }
-            to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); }
-        }
-
-        /* Estilo do botão fechar */
-        .btn-fechar {
-            background: rgba(255, 255, 255, 0.05);
-            color: #a0a5b0;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 12px 24px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: 0.2s;
-            margin-top: 15px;
-            width: 100%; /* Botão ocupa toda a largura no celular */
-        }
-        .btn-fechar:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        /* Caixa de sucesso ajustada para não colar nas bordas */
-        .success-box {
-            width: 100%;
-            max-width: 450px;
-            padding: 0 10px;
-        }
+        * { box-sizing: border-box; }
+        body { background-color: #1b1e27; margin: 0; padding: 20px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        .animate-fade-in-up { animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; opacity: 0; transform: translateY(30px); }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+        .success-check-icon { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; animation-delay: 0.2s; opacity: 0; transform: scale(0); }
+        @keyframes popIn { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .glow-pulse-yellow { box-shadow: 0 0 15px rgba(243, 156, 18, 0.3); animation: pulseGlowYellow 2s infinite alternate; background-color: rgba(243, 156, 18, 0.1); }
+        @keyframes pulseGlowYellow { from { box-shadow: 0 0 15px rgba(243, 156, 18, 0.2); } to { box-shadow: 0 0 35px rgba(243, 156, 18, 0.6); } }
+        .btn-fechar { background: rgba(255, 255, 255, 0.05); color: #a0a5b0; border: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: 0.2s; margin-top: 15px; width: 100%; }
+        .btn-fechar:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+        .success-box { width: 100%; max-width: 450px; padding: 0 10px; }
     </style>
 </head>
 <body>
 
     <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; height: 70vh;">
-      
       <div class="success-box">
         <div class="success-icon-wrapper glow-pulse-yellow" style="width: 90px; height: 90px; margin: 0 auto 24px auto; border-radius: 50%; padding: 15px; display: flex; align-items: center; justify-content: center;">
           <svg viewBox="0 0 24 24" fill="none" stroke="rgb(243, 156, 18)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="success-check-icon" style="width: 100%; height: 100%;">
@@ -114,29 +45,34 @@
             <button class="btn-fechar" onclick="window.close()">Fechar Página</button>
         </div>
       </div>
-
     </div>
 
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
 
-        // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida e o comentário)
+        // 🔥 O FILTRO DEFINITIVO CONTRA CAPS LOCK 🔥
+        function padronizarTexto(texto) {
+            if (!texto || texto === "Geral") return "Geral";
+            texto = texto.toLowerCase().trim(); 
+            return texto.charAt(0).toUpperCase() + texto.slice(1);
+        }
+
         const urlParams = new URLSearchParams(window.location.search);
         const nomeEvento = urlParams.get('evento');
         const idEvento = urlParams.get('id');
-        const sentimento = urlParams.get('sentimento');
+        
+        // 🔥 MATA O CAPS LOCK AQUI! 🔥
+        const sentimentoRaw = urlParams.get('sentimento');
+        const sentimento = padronizarTexto(sentimentoRaw);
+        
         const setor = urlParams.get('setor') || "Geral";
         const notaReal = urlParams.get('nota') || "10"; 
         const proposta = urlParams.get('proposta') || "Geral";
-        
-        // 🔥 A MÁGICA AQUI: O novo campo qualitativo 🔥
         const comentario = urlParams.get('comentario') || "";
 
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
 
-        // 2. BLOQUEIO IMEDIATO SE JÁ SE PASSOU POR AQUI (Anti-F5 / Anti-Reload)
         if (idEvento && localStorage.getItem(chaveBloqueio) === 'sim') {
-            // 🔥 VISUAL PREMIUM COM ADAPTAÇÃO MOBILE PERFEITA (BOX-SIZING) 🔥
             document.body.innerHTML = `
                 <div class="totem-app-canvas animate-fade-in-up" style="width: 100%; max-width: 450px; padding: 0 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;">
                     <div style="background-color: #2a2f3a; border: 1.5px solid rgba(255, 255, 255, 0.05); border-radius: 24px; padding: 40px 20px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.4);">
@@ -156,36 +92,28 @@
             throw new Error("Fluxo interrompido: Voto já computado neste dispositivo.");
         }
 
-        // 3. TRAVA DO BOTÃO VOLTAR DO NAVEGADOR
         window.history.replaceState(null, null, window.location.href);
-        window.onpopstate = function () {
-            window.history.go(1);
-        };
+        window.onpopstate = function () { window.history.go(1); };
 
-        // 4. REGISTRO DO VOTO REAL NA PLANILHA
         async function gravarVotoPublico() {
             if (!nomeEvento || !sentimento) return;
 
-            // "Tatuagem" dinâmica com o ID do Monday (bloqueia apenas esta proposta específica)
-            if (idEvento) {
-                localStorage.setItem(chaveBloqueio, 'sim');
-            }
+            if (idEvento) localStorage.setItem(chaveBloqueio, 'sim');
 
-            // Envia exatamente os eixos auditáveis coletados no Totem Público + Comentário
             const payload = {
                 "evento": nomeEvento,
                 "sentimento": sentimento,
                 "nota": parseInt(notaReal),
                 "setor": setor,
-                "origem": "Totem Público (QR Code/Link)", // 🔥 Origem atualizada
+                "origem": "Totem Público (QR Code/Link)", 
                 "proposta": proposta,
-                "comentario": comentario // 🔥 COMENTÁRIO INJETADO NO PACOTE
+                "comentario": comentario 
             };
 
             try {
                 await fetch(URL_BACKEND, {
                     method: "POST",
-                    mode: "no-cors", // Garante o envio silencioso pelo mobile sem conflito de CORS
+                    mode: "no-cors",
                     body: JSON.stringify(payload)
                 });
                 console.log("Voto público integrado com sucesso.");
@@ -194,7 +122,6 @@
             }
         }
 
-        // Dispara ao carregar a página
         window.onload = gravarVotoPublico;
     </script>
 </body>
