@@ -143,7 +143,7 @@
         .btn:active { transform: scale(0.96); }
         .btn-primary { background: var(--primary); color: white; box-shadow: 0 4px 15px rgba(255, 81, 0, 0.2); }
         .btn-primary:hover { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255, 81, 0, 0.4); color: white; }
-        .btn-outline { background: transparent; border: 1px solid var(--text-muted); color: var(--text-muted); }
+        .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text-muted); }
         .btn-outline:hover { background: var(--surface-highlight); color: var(--text); border-color: var(--text-muted); }
 
         .filters-bar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; align-items: center; background: var(--bg-transparent); padding: 10px; border-radius: 12px; border: 1px solid var(--border); }
@@ -252,15 +252,16 @@
         .dash-kpi-card:hover { transform: translateY(-4px); border-color: var(--primary); box-shadow: 0 8px 25px rgba(255, 81, 0, 0.15); }
         .dash-kpi-value { font-size: 26px; font-weight: 400; color: var(--text); margin: 10px 0 5px 0; transition: color 0.3s ease; }
         
+        /* 🔥 CLASSE DE TEXTO ADAPTATIVA PARA O STATUS 🔥 */
         .dash-kpi-value.text-val { font-size: 16px !important; font-weight: 600; min-height: 38px; display: flex; align-items: center; justify-content: center; text-transform: uppercase; }
         .dash-kpi-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; font-weight: 500; }
         
-        /* CHART SECTION CENTRALIZADA E RESPONSIVA */
+        /* 🔥 CHART SECTION CENTRALIZADA E RESPONSIVA 🔥 */
         .chart-section { display: grid; grid-template-columns: 1fr 1.5fr; gap: 20px; width: 100%;}
         .chart-card { background: var(--surface); padding: 30px; border-radius: 16px; border: 1px solid var(--border); display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-height: 420px; transition: box-shadow 0.3s ease; width: 100%; box-sizing: border-box;}
         .chart-card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .chart-container-inner { position: relative; width: 100%; max-width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; margin: 0 auto; padding: 10px 0;}
-        .chart-container-inner canvas { max-width: 100%; max-height: 100%; }
+        .chart-container-inner canvas { max-width: 100%; max-height: 100%; margin: 0 auto; }
         
         .report-text { color: var(--text); font-size: 14px; line-height: 1.8; overflow-y: auto; padding-right: 10px; text-align: left; width: 100%; }
         .report-text h4 { color: var(--primary); margin-top: 20px; margin-bottom: 12px; font-size: 14px; border-bottom: 1px solid var(--border); padding-bottom: 5px; text-transform: uppercase; font-weight: 500; }
@@ -290,11 +291,12 @@
         .drawer-body { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 20px; }
         .drawer-footer { padding: 20px 25px; border-top: 1px solid var(--border); }
         
+        /* O Card de Feedback Moderno (Estilo Review SaaS) */
         .feedback-card { display: flex; flex-direction: column; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 20px; }
         .feedback-card:last-child { border-bottom: none; padding-bottom: 0; }
         .feedback-meta { display: flex; justify-content: space-between; align-items: center; }
         .feedback-badge { display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; text-transform: uppercase; color: var(--text-muted); }
-        .feedback-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+        .feedback-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block;}
         .feedback-date { font-size: 11px; color: var(--text-muted); }
         .feedback-text { font-size: 14px; color: var(--text); line-height: 1.6; }
 
@@ -302,19 +304,25 @@
            🔥 TOAST NOTIFICATION (NOVA CAMPANHA) 🔥
            ========================================================================== */
         #toast-container { position: fixed; bottom: 30px; right: 30px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
-        .toast-notification { background: rgba(30, 34, 45, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; color: white; display: flex; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        body.light-mode .toast-notification { background: rgba(255, 255, 255, 0.95); color: #1e222d; }
+        .toast-notification { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; color: var(--text); display: flex; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         .toast-notification.show { transform: translateX(0); opacity: 1; }
         .btn-toast-action { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s; white-space: nowrap; }
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - DESIGN CAÓTICO E AGLUTINADO 🔥
            ========================================================================== */
-        .word-cloud-modal .modal { background: var(--surface); border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        .word-cloud-area { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 15px; min-height: 250px; padding: 30px; width: 100%;}
-        .word-item { display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 700; opacity: 0; transform: scale(0.1); cursor: default; transition: transform 0.2s, color 0.2s; animation: buildWord 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .word-item:hover { transform: scale(1.1) !important; filter: brightness(1.2); }
+        .word-cloud-modal .modal { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); overflow: hidden; padding: 40px;}
+        .word-cloud-area { 
+            display: flex; flex-wrap: wrap; justify-content: center; align-items: center; align-content: center; 
+            gap: 4px 10px; min-height: 350px; width: 100%; line-height: 0.85; 
+        }
+        .word-item { 
+            display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
+            opacity: 0; transform: scale(0.1); cursor: default; transition: transform 0.2s, filter 0.2s; 
+            animation: buildWord 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; 
+        }
+        .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
         @keyframes buildWord { 
             0% { opacity: 0; transform: scale(0.1) translateY(20px); } 
             60% { transform: scale(1.1) translateY(-5px); } 
@@ -326,20 +334,14 @@
             .chart-section { grid-template-columns: 1fr; }
         }
         
-        /* 🔥 AJUSTES MOBILE EXATOS 🔥 */
+        /* 🔥 GRID E ADAPTAÇÃO MOBILE 🔥 */
         @media(max-width: 600px) {
-            .navbar { padding: 15px 15px; gap: 8px; }
-            .nav-brand { flex: 1; gap: 8px; }
-            .nav-logo { max-width: 85px; } 
-            .nav-divider { margin: 0; }
-            .nav-title { font-size: 11px; display: block !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 0; }
-
+            .navbar { padding: 15px 20px; }
             .welcome-banner h1 { font-size: 22px; }
             .welcome-banner { flex-direction: column; align-items: flex-start; }
             .form-grid { grid-template-columns: 1fr; }
             
-            .sector-results-container { margin-top: 35px; margin-bottom: 35px; }
-            .kpi-clean-grid { grid-template-columns: 1fr 1fr; gap: 25px 15px; }
+            #miniDashboardSetor { grid-template-columns: 1fr 1fr; gap: 12px; }
             .kpi-clean-item { padding: 5px 10px; }
             .kpi-clean-value { font-size: 26px; }
             .kpi-clean-value.text-val { font-size: 13px; min-height: 26px; line-height: 1.2; }
@@ -358,20 +360,21 @@
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; }
             .dash-header .btn-action-group { width: 100%; display: flex; flex-direction: row; gap: 10px; flex-wrap: nowrap; align-items: center; }
             .dash-header .btn-action-group .btn { flex: 1; padding: 12px; font-size: 11px; white-space: nowrap; margin: 0; }
-            .dash-header .btn-action-group .btn-close-icon { flex: 0 0 36px; width: 36px; height: 36px; margin: 0; }
+            .dash-header .btn-action-group .btn-close-icon { flex: 0 0 36px; width: 36px; height: 36px; margin: 0; position: static;}
             
             .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .dash-kpi-card { padding: 15px 10px; }
             .dash-kpi-value { font-size: 22px; margin-top: 5px; }
-            .dash-kpi-value.text-val { font-size: 13px !important; min-height: 28px; line-height: 1.2; word-break: break-word; padding: 0 5px; }
+            .dash-kpi-value.text-val { font-size: 12px !important; min-height: 28px; line-height: 1.2; word-break: break-word; padding: 0 5px; }
             .dash-kpi-label { font-size: 9px; }
 
             /* Centralizando a Chart Section no mobile */
             .chart-section { width: 100%; gap: 15px; }
             .chart-card { padding: 20px 15px; width: 100%; box-sizing: border-box; }
-            .chart-container-inner { min-height: 220px; }
+            .chart-container-inner { min-height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center;}
             
             .modal { padding: 30px 20px; }
+            .modal > .btn-close-icon { top: 15px; right: 15px; }
             .nav-user { display: none !important; }
             .nav-title { display: none !important; }
             .mobile-menu-btn { display: block; }
@@ -428,6 +431,7 @@
             if(str.includes('quero') || str.includes('saber')) return '#a300ff'; // 3º Roxo
             if(str.includes('melhor')) return '#ff0080'; // 4º Rosa
             
+            // Backup por hash se for um texto muito diferente (evita quebrar)
             let hash = 0; for(let i=0; i<str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
             const FIX = ['#ff5100', '#ffcc00', '#a300ff', '#ff0080'];
             return FIX[Math.abs(hash) % FIX.length];
@@ -543,7 +547,7 @@
         </div>
 
         <!-- 🔥 SEÇÃO ATIVAS CLEAN (SEM BORDAS COLORIDAS) 🔥 -->
-        <section class="card" id="secao-ativas" style="margin-bottom: 24px;">
+        <section class="card" id="secao-ativas" style="margin-bottom: 24px; box-shadow: none;">
             <div class="card-title" style="border-bottom: 1px solid var(--border); margin-bottom: 24px; padding-bottom: 15px;">
                 <div style="display:flex; align-items:center; gap: 10px;">
                     <span class="pulse-dot-verde"></span> 
@@ -758,9 +762,9 @@
 
     <!-- 🔥 MODAL: NUVEM DE PALAVRAS 🔥 -->
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
-        <div class="modal" style="max-width: 800px; text-align: center; overflow: hidden; padding: 40px 20px;">
+        <div class="modal" style="max-width: 800px; text-align: center; overflow: hidden; padding: 40px 20px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);">
             <button class="btn-close-icon" onclick="fecharNuvemPalavras()">✕</button>
-            <h3 style="font-size: 20px; font-weight: 500; color: var(--text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Nuvem de Palavras</h3>
+            <h3 style="font-size: 20px; font-weight: 500; color: var(--text); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">Nuvem de Palavras</h3>
             <p style="font-size: 13px; color: var(--text-muted); margin: 0 auto 25px auto; line-height: 1.5; max-width: 500px;">
                 Esta ferramenta destaca os termos qualitativos mais recorrentes na base de dados. Quanto maior a palavra, mais os colaboradores enfatizaram este contexto.
             </p>
@@ -775,7 +779,7 @@
         <div class="comments-drawer" id="gavetaComentarios">
             <div class="drawer-header">
                 <h3>Feed de Comentários</h3>
-                <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta">✕</button>
+                <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta" style="position: static;">✕</button>
             </div>
             <div class="drawer-body" id="listaComentariosArea">
                 <!-- Comentários via JS -->
@@ -1343,7 +1347,8 @@
                 });
             });
 
-            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 30);
+            // Maior densidade
+            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 40);
             if(sortedWords.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Palavras insuficientes para compor o mapa.</p>"; return; }
 
             const maxCount = wordCounts[sortedWords[0]];
@@ -1352,15 +1357,21 @@
                 ? ['#ff5100', '#ffcc00', '#a300ff', '#ff0080', '#6b7280', '#1e222d'] 
                 : ['#ffffff', '#ff5100', '#ffcc00', '#a300ff', '#ff0080', '#9ca3af'];
 
-            let displayWords = [...sortedWords];
-            displayWords.sort(() => Math.random() - 0.5);
+            // Embaralha suavemente jogando as grandes no meio
+            let displayWords = [];
+            sortedWords.forEach((w, i) => { if (i % 2 === 0) displayWords.push(w); else displayWords.unshift(w); });
+
+            const isMobile = window.innerWidth < 600;
+            const baseSize = isMobile ? 12 : 14;
+            const sizeMultiplier = isMobile ? 45 : 100;
 
             let html = "";
-            displayWords.forEach((word) => {
+            displayWords.forEach((word, index) => {
                 let ratio = wordCounts[word] / maxCount;
-                let fontSize = Math.floor(14 + Math.pow(ratio, 1.8) * 70); 
+                // Exponencial para dar contraste EXTREMO entre maior e menor
+                let fontSize = Math.floor(baseSize + Math.pow(ratio, 2.5) * sizeMultiplier); 
                 let color = colors[Math.floor(Math.random() * colors.length)];
-                let delay = (Math.random() * 0.6).toFixed(2);
+                let delay = (Math.random() * 0.5).toFixed(2);
 
                 html += `<span class="word-item" style="font-size: ${fontSize}px; color: ${color}; animation-delay: ${delay}s;">${word}</span>`;
             });
@@ -1412,7 +1423,6 @@
                 let canvasId = `${prefixId}_chart_${tIndex}`;
                 chartDataQueue.push({ id: canvasId, labels: sortedLabels, counts: sortedCounts, colors: coresTmpl });
 
-                // 🔥 INSERÇÃO DO BOTÃO DE FEEDBACK PADRÃO ANTIGO E ELEGANTE ABAIXO DO GRÁFICO 🔥
                 let botoesQualitativosHTML = "";
                 if(data.comentariosPdf.length > 0) {
                     botoesQualitativosHTML = `
@@ -1842,7 +1852,8 @@
                     doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
                     tmplData.comentariosTop.forEach(c => {
                         let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                        doc.text(linhasTxt, 15, y); y += (linhasTxt.length * 5) + 3;
+                        doc.text(linhasTxt, 15, y);
+                        y += (linhasTxt.length * 5) + 3;
                         if(y > 275) { doc.addPage(); y = 20; }
                     });
                 }
@@ -1854,6 +1865,7 @@
 
             dadosGlobaisParaPDF.detalhamento.forEach(camp => {
                 if (y > 270) { doc.addPage(); y = 25; }
+                
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
                 doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
                 y += 4; 
