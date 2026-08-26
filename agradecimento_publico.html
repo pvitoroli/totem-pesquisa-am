@@ -120,7 +120,7 @@
     <script>
         const URL_BACKEND = "https://script.google.com/macros/s/AKfycbwuxwABRXCV3juwoRT1KXZ58gYVSxTueqMuu3Dn1Q9JA2ypyWQv0klh3yCpA3UakU7q/exec";
 
-        // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida)
+        // 1. CAPTURA OS DADOS DA URL (Incluindo a nota numérica escolhida e o comentário)
         const urlParams = new URLSearchParams(window.location.search);
         const nomeEvento = urlParams.get('evento');
         const idEvento = urlParams.get('id');
@@ -128,6 +128,9 @@
         const setor = urlParams.get('setor') || "Geral";
         const notaReal = urlParams.get('nota') || "10"; 
         const proposta = urlParams.get('proposta') || "Geral";
+        
+        // 🔥 A MÁGICA AQUI: O novo campo qualitativo 🔥
+        const comentario = urlParams.get('comentario') || "";
 
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + idEvento + '_' + proposta : 'votou_' + idEvento;
 
@@ -168,19 +171,21 @@
                 localStorage.setItem(chaveBloqueio, 'sim');
             }
 
-            // Envia exatamente os eixos auditáveis coletados no Totem Público + Dados Monday
+            // Envia exatamente os eixos auditáveis coletados no Totem Público + Comentário
             const payload = {
                 "evento": nomeEvento,
                 "sentimento": sentimento,
                 "nota": parseInt(notaReal),
                 "setor": setor,
-                "origem": "Totem Público URL",
-                "proposta": proposta 
+                "origem": "Totem Público (QR Code/Link)", // 🔥 Origem atualizada
+                "proposta": proposta,
+                "comentario": comentario // 🔥 COMENTÁRIO INJETADO NO PACOTE
             };
 
             try {
                 await fetch(URL_BACKEND, {
                     method: "POST",
+                    mode: "no-cors", // Garante o envio silencioso pelo mobile sem conflito de CORS
                     body: JSON.stringify(payload)
                 });
                 console.log("Voto público integrado com sucesso.");
