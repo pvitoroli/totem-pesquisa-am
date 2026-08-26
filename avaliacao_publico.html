@@ -8,15 +8,27 @@
     <link rel="stylesheet" href="style-avaliacao.css">
 
     <style>
-        body {
+        /* 🔥 GARANTE QUE O FUNDO SEJA INFINITO E UNIFORME 🔥 */
+        html, body {
             background-color: #1b1e27;
+            min-height: 100vh;
             margin: 0;
+        }
+
+        body {
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 🔥 REMOVE O "CAIXOTE" DO CSS EXTERNO DEIXANDO A TELA LIMPA 🔥 */
+        .totem-app-canvas {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
     
         /* STATUS ONLINE DISCRETO - RESTAURADO PARA AMARELO (#ffb703) */
@@ -217,6 +229,10 @@
             color: white;
             border-color: rgba(255, 255, 255, 0.4);
         }
+        
+        /* MODO CLARO BLINDADO PARA A TRANSIÇÃO DE TEMA DO TOTEM VIRTUAL */
+        body.light-mode { background-color: #f5f7f9 !important; }
+        body.light-mode .totem-app-canvas { background-color: transparent !important; box-shadow: none !important; }
     </style>
 </head>
 <body>
@@ -237,7 +253,7 @@
         <h3 id="sub-evento-nome" style="text-align: center; color: rgb(255, 81, 0); font-weight: bold; position: relative; margin-top: 5px; margin-bottom: 5px;">CARREGANDO...</h3>
         
         <h5 style="text-align: center; font-size: 15px; color: #a0a5b0; font-family: Helvetica; margin-top: 25px; margin-bottom: 15px;">
-          ​​<span style="font-weight: normal; color: white;">Deixe aqui sua <b>NOTA GERAL</b> para a campanha!</span>
+          <span style="font-weight: normal; color: white;">Deixe aqui sua <b>NOTA GERAL</b> para a campanha!</span>
         </h5>
         
         <div class="status-online-area" style="display: inline-flex; align-items: center; gap: 6px; background-color: rgba(255, 255, 255, 0.03); padding: 4px 10px; border-radius: 12px;">
@@ -297,7 +313,7 @@
     </div>
 
     <script>
-        // 1. CAPTURA DOS PARÂMETROS DA URL
+        // 1. CAPTURA DOS PARÂMETROS DA URL E APLICAÇÃO DE MODO CLARO SE NECESSÁRIO
         const urlParams = new URLSearchParams(window.location.search);
         const evento = urlParams.get('evento') || "";
         const id = urlParams.get('id') || "";
@@ -305,6 +321,13 @@
         const gif = urlParams.get('gif') || ""; 
         const setor = urlParams.get('setor') || "Geral";
         const proposta = urlParams.get('proposta') || "Geral";
+        const theme = urlParams.get('theme') || "";
+        
+        if (theme === 'light') {
+            document.body.classList.add('light-mode');
+            const logo = document.querySelector('.brand-logo-img');
+            if(logo) logo.src = 'logo-arcelormittal-padrao.png';
+        }
         
         const chaveBloqueio = proposta !== "Geral" ? 'votou_' + id + '_' + proposta : 'votou_' + id;
 
@@ -336,7 +359,10 @@
         document.getElementById('sub-evento-nome').innerText = evento;
         document.getElementById('label-sentimento-escolhido').innerText = sentimento;
         
-        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}&proposta=${encodeURIComponent(proposta)}" class="btn-back">← Voltar</a>`;
+        let linkVoltarApp = `publico.html?evento=${encodeURIComponent(id)}&setor=${encodeURIComponent(setor)}&proposta=${encodeURIComponent(proposta)}`;
+        if(theme === 'light') linkVoltarApp += "&theme=light";
+        
+        document.getElementById('link-voltar-dinamico').innerHTML = `<a href="${linkVoltarApp}" class="btn-back">← Voltar</a>`;
 
         const imgEmoji = document.getElementById('emoji-preview');
         
@@ -423,7 +449,9 @@
             btnIcon.style.opacity = "0.5";
 
             // Roteamento seguro do Totem Público (Usando replace para não gerar histórico de navegação)
-            const linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${notaSelecionada}&proposta=${encodeURIComponent(proposta)}&comentario=${encodeURIComponent(comentarioTexto)}`;
+            let linkDestino = `agradecimento_publico.html?evento=${encodeURIComponent(evento)}&id=${encodeURIComponent(id)}&sentimento=${encodeURIComponent(sentimento)}&setor=${encodeURIComponent(setor)}&nota=${notaSelecionada}&proposta=${encodeURIComponent(proposta)}&comentario=${encodeURIComponent(comentarioTexto)}`;
+            
+            if(theme === 'light') linkDestino += "&theme=light";
             
             window.location.replace(linkDestino);
         }
