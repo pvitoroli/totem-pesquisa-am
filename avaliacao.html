@@ -8,15 +8,27 @@
     <link rel="stylesheet" href="style-avaliacao.css">
 
     <style>
-        body {
+        /* 🔥 GARANTE QUE O FUNDO SEJA INFINITO E UNIFORME 🔥 */
+        html, body {
             background-color: #1b1e27;
+            min-height: 100vh;
             margin: 0;
+        }
+
+        body {
             padding: 20px;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        /* 🔥 REMOVE O "CAIXOTE" DO CSS EXTERNO DEIXANDO A TELA LIMPA 🔥 */
+        .totem-app-canvas {
+            background-color: transparent !important;
+            box-shadow: none !important;
+            border: none !important;
         }
         
         /* STATUS ONLINE DISCRETO - Corrigido para Verde */
