@@ -106,7 +106,7 @@
         .btn-menu-lateral:hover { background: var(--surface-highlight); color: var(--text); border-color: var(--text-muted); }
 
         /* ==========================================================================
-           3. ESTRUTURA PRINCIPAL E COMPONENTES
+           3. ESTRUTURA PRINCIPAL (DESKTOP PREMIUM COM RESPIRO)
            ========================================================================== */
         .main-wrapper { max-width: 1280px; margin: 0 auto; padding: 80px 40px; }
         .welcome-banner { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; }
@@ -160,7 +160,7 @@
         .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 400; cursor: pointer; transition: 0.2s; }
         .filter-pill:hover { color: var(--text); }
         .filter-pill.active { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; }
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; color: var(--text-muted); }
 
         .segmented-control { display: flex; background: var(--bg-transparent); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
         .segmented-btn { flex: 1; padding: 12px; text-align: center; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 8px; transition: 0.3s; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
@@ -319,7 +319,7 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - REFINADO E ZIGUE-ZAGUE 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - OTIMIZADA PARA FORMATO DE NUVEM 🔥
            ========================================================================== */
         .word-cloud-modal .modal { 
             background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
@@ -339,17 +339,16 @@
         .cloud-wrapper {
             display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
             width: 100%; max-width: 650px;
-            gap: 2px 8px; 
+            gap: 10px 18px; 
             padding: 20px;
         }
 
         .word-item { 
             display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
-            line-height: 0.9; 
+            line-height: 1.1; 
             white-space: nowrap; cursor: default;
-            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
-            transition: transform 0.2s, filter 0.2s; 
-            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+            opacity: 0; transform: scale(0.1); transition: transform 0.2s, filter 0.2s; 
+            animation: buildWord 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; 
         }
         
         .word-item.main-word {
@@ -361,8 +360,9 @@
 
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
         @keyframes buildWord { 
-            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+            0% { opacity: 0; transform: scale(0.1); } 
+            60% { transform: scale(1.1); } 
+            100% { opacity: 1; transform: scale(1); } 
         }
 
         @media(max-width: 800px) { 
@@ -486,17 +486,23 @@
             }, 6000);
         }
 
+        /* 🔥 LÓGICA DE CORES: SISTEMA DE MEMÓRIA PARA OUTROS TEMPLATES 🔥 */
+        const memoryColors = {};
+        const FIX_COLORS = ['#ff5100', '#ffcc00', '#a300ff', '#ff0080', '#00b894', '#0984e3', '#e17055', '#d63031'];
+        let colorCounter = 0;
+
         function getCorSentimento(s) {
             if(!s) return '#9aa0a6';
             let str = s.toLowerCase().trim();
-            if(str.includes('aprendi') || str.includes('novo')) return '#ff5100'; 
-            if(str.includes('feliz')) return '#ffcc00'; 
-            if(str.includes('quero') || str.includes('saber')) return '#a300ff'; 
-            if(str.includes('melhor')) return '#ff0080'; 
+            if(str === 'aprendi algo novo') return '#ff5100'; 
+            if(str === 'fiquei feliz') return '#ffcc00'; 
+            if(str === 'quero saber mais') return '#a300ff'; 
+            if(str === 'poderia ser melhor') return '#ff0080'; 
             
-            let hash = 0; for(let i=0; i<str.length; i++) hash = str.charCodeAt(i) + ((hash << 5) - hash);
-            const FIX = ['#ff5100', '#ffcc00', '#a300ff', '#ff0080'];
-            return FIX[Math.abs(hash) % FIX.length];
+            if(memoryColors[str]) return memoryColors[str];
+            memoryColors[str] = FIX_COLORS[colorCounter % FIX_COLORS.length];
+            colorCounter++;
+            return memoryColors[str];
         }
     </script>
 
@@ -608,7 +614,6 @@
             </div>
         </div>
 
-        <!-- 🔥 SEÇÃO ATIVAS CLEAN 🔥 -->
         <section class="card" id="secao-ativas" style="box-shadow: none;">
             <div class="card-title" style="border-bottom: 1px solid var(--border); padding-bottom: 15px;">
                 <div style="display:flex; align-items:center; gap: 10px;">
@@ -650,7 +655,7 @@
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Encerradas</div>
-                    <input type="date" class="filter-date" id="filtroData" onchange="renderizarLista()">
+                    <input type="text" class="filter-date" id="filtroData" placeholder="Seleciona uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
                 </div>
 
                 <div class="list-container expanded" id="containerHistorico" style="max-height: 60vh; overflow-y: auto;">
@@ -814,7 +819,7 @@
         </div>
     </div>
 
-    <!-- 🔥 MODAL: NUVEM DE PALAVRAS (NOVO FORMATO) 🔥 -->
+    <!-- 🔥 MODAL: NUVEM DE PALAVRAS 🔥 -->
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
         <div class="modal">
             <div class="modal-header-cloud">
@@ -981,7 +986,6 @@
         let dadosParaPDF = { templates: [] }; 
         let dadosGlobaisParaPDF = { detalhamento: [], templates: [] };
 
-        // Variável de Apoio para Nuvem e Feedbacks
         window.currentDashboardVotos = [];
         window.templateAtualModal = 'TODOS';
 
@@ -1203,7 +1207,7 @@
                         abrirModalListaCampanhas();
                     });
                 }
-            } catch (e) { alert("Erro de conexão."); }
+            } catch (e) { alert("Erro de connection."); }
             btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = ''; document.getElementById('pastaCampanha').value = '';
             document.getElementById('setorCampanha').selectedIndex = 0; document.getElementById('templateCampanha').selectedIndex = 0;
@@ -1321,8 +1325,16 @@
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
         
-        function pegarLinkTotem() { let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; if(document.body.classList.contains('light-mode')) url += "&theme=light"; return url; }
-        function pegarLinkPublico() { let url = `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; if(document.body.classList.contains('light-mode')) url += "&theme=light"; return url; }
+        function pegarLinkTotem() { 
+            let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
+            url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark"; 
+            return url; 
+        }
+        function pegarLinkPublico() { 
+            let url = `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
+            url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark"; 
+            return url; 
+        }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => mostrarToastNotificacao("Totem Público", "Link copiado para a área de transferência.")); }
 
@@ -1390,7 +1402,7 @@
 
         function fecharNuvemPalavras() { document.getElementById('modalWordCloud').style.display = 'none'; }
 
-        // 🔥 EXTRAÇÃO DA TOP 10 PALAVRAS PARA O PDF 🔥
+        // 🔥 FUNÇÃO DE EXTRAÇÃO DO TOP 10 DE PALAVRAS PARA OS PDFs 🔥
         function extrairTopPalavras(votos, limite = 10) {
             const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let counts = {};
@@ -1405,7 +1417,19 @@
             return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => `${w.toUpperCase()} (${counts[w]})`);
         }
 
-        // 🔥 O NOVO GERADOR DE NUVEM DE PALAVRAS (MODELO CALIBRADO E SEGURO) 🔥
+        // 🔥 FUNÇÃO HEX PARA RGB 🔥 (Para garantir a sincronia exata de cores no PDF)
+        function hexToRgb(hex) {
+            let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+            hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
+            let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : { r: 154, g: 160, b: 166 };
+        }
+
+        // 🔥 O NOVO GERADOR DE NUVEM DE PALAVRAS (MODELO CLOUD) 🔥
         function gerarNuvemPalavras(votos) {
             const area = document.getElementById('wordCloudArea');
             if(votos.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px; text-align:center;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; return; }
@@ -1508,8 +1532,8 @@
                 let listaHTML = ""; let sintesePDF = [];
                 sortedLabels.forEach((sentimento, index) => {
                     let count = data.agrupamento[sentimento]; let p = Math.round((count / totalVotosTmpl) * 100);
-                    let corStr = coresTmpl[index]; let r = parseInt(corStr.slice(1,3), 16) || 154; let g = parseInt(corStr.slice(3,5), 16) || 160; let b = parseInt(corStr.slice(5,7), 16) || 166;
-                    sintesePDF.push({ sentimento, p, count, r, g, b });
+                    let corStr = coresTmpl[index]; let rgb = hexToRgb(corStr);
+                    sintesePDF.push({ sentimento, p, count, r: rgb.r, g: rgb.g, b: rgb.b });
                     listaHTML += `<li style="margin-bottom: 8px; display: flex; align-items: center; gap: 10px; color: var(--text);"><span class="dot" style="background:${corStr}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span> <span><strong style="font-weight: 500;">${sentimento}:</strong> ${p}% (${count} registros)</span></li>`;
                 });
 
@@ -1691,28 +1715,39 @@
                 doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
                 y += (linhasConclusao.length * 5) + 5;
 
-                // 🔥 NOVA SEÇÃO: TOP 10 PALAVRAS 🔥
-                if(tmplData.topWords && tmplData.topWords.length > 0) {
-                    if (y > 260) { doc.addPage(); y = 20; }
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(255, 81, 0); doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
-                    doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                    let txtPalavras = tmplData.topWords.join("  •  ");
-                    let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
-                    doc.text(linhasPalavras, 15, y);
-                    y += (linhasPalavras.length * 5) + 5;
-                }
+                // 🔥 NOVA SEÇÃO UNIFICADA DE FEEDBACKS 🔥
+                if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
+                    if (y > 230) { doc.addPage(); y = 20; }
+                    
+                    doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); 
+                    doc.text("FEEDBACKS E INSIGHTS QUALITATIVOS", 15, y); y += 6;
+                    
+                    doc.setFont("helvetica", "italic"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
+                    doc.text("Baseado nos comentários e relatos espontâneos deixados nos totens de pesquisa.", 15, y); y += 8;
 
-                // 🔥 IMPRESSÃO DOS COMENTÁRIOS NO PDF 🔥
-                if(tmplData.comentariosTop && tmplData.comentariosTop.length > 0) {
-                    if (y > 250) { doc.addPage(); y = 20; }
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(255, 81, 0); doc.text("Amostragem de Feedbacks Qualitativos:", 15, y); y += 6;
-                    doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                    tmplData.comentariosTop.forEach(c => {
-                        let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                        doc.text(linhasTxt, 15, y);
-                        y += (linhasTxt.length * 5) + 3;
-                        if(y > 275) { doc.addPage(); y = 20; }
-                    });
+                    if(tmplData.topWords.length > 0) {
+                        if (y > 270) { doc.addPage(); y = 20; }
+                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                        doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
+                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
+                        let txtPalavras = tmplData.topWords.join("  •  ");
+                        let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
+                        doc.text(linhasPalavras, 15, y);
+                        y += (linhasPalavras.length * 5) + 6;
+                    }
+
+                    if(tmplData.comentariosTop.length > 0) {
+                        if (y > 260) { doc.addPage(); y = 20; }
+                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                        doc.text("Amostragem de Comentários:", 15, y); y += 6;
+                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
+                        tmplData.comentariosTop.forEach(c => {
+                            let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
+                            if(y + (linhasTxt.length * 5) > 275) { doc.addPage(); y = 20; }
+                            doc.text(linhasTxt, 15, y);
+                            y += (linhasTxt.length * 5) + 3;
+                        });
+                    }
                 }
             });
             
@@ -1765,7 +1800,7 @@
             if(anosDisponiveis.has(anoAtual)) selectAno.value = anoAtual.toString();
 
             const nomesMeses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
-            selectMes.innerHTML = '<option value="TODOS">Todos os Meses</option>';
+            selectMes.innerHTML = '';
             nomesMeses.forEach((nome, i) => { selectMes.innerHTML += `<option value="${i+1}">${nome}</option>`; });
             selectMes.value = (new Date().getMonth() + 1).toString();
 
@@ -1956,27 +1991,39 @@
                 doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
                 y += (linhasConclusao.length * 5) + 5;
 
-                // 🔥 NOVA SEÇÃO: TOP 10 PALAVRAS 🔥
-                if(tmplData.topWords && tmplData.topWords.length > 0) {
-                    if (y > 260) { doc.addPage(); y = 20; }
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(255, 81, 0); doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
-                    doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                    let txtPalavras = tmplData.topWords.join("  •  ");
-                    let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
-                    doc.text(linhasPalavras, 15, y);
-                    y += (linhasPalavras.length * 5) + 5;
-                }
+                // 🔥 NOVA SEÇÃO UNIFICADA DE FEEDBACKS 🔥
+                if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
+                    if (y > 230) { doc.addPage(); y = 20; }
+                    
+                    doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); 
+                    doc.text("FEEDBACKS E INSIGHTS QUALITATIVOS", 15, y); y += 6;
+                    
+                    doc.setFont("helvetica", "italic"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
+                    doc.text("Baseado nos comentários e relatos espontâneos deixados nos totens de pesquisa.", 15, y); y += 8;
 
-                // 🔥 IMPRESSÃO DOS COMENTÁRIOS NO PDF 🔥
-                if(tmplData.comentariosTop && tmplData.comentariosTop.length > 0) {
-                    if (y > 250) { doc.addPage(); y = 20; }
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(255, 81, 0); doc.text("Amostragem de Feedbacks Qualitativos:", 15, y); y += 6;
-                    doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                    tmplData.comentariosTop.forEach(c => {
-                        let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                        doc.text(linhasTxt, 15, y); y += (linhasTxt.length * 5) + 3;
-                        if(y > 275) { doc.addPage(); y = 20; }
-                    });
+                    if(tmplData.topWords.length > 0) {
+                        if (y > 270) { doc.addPage(); y = 20; }
+                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                        doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
+                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
+                        let txtPalavras = tmplData.topWords.join("  •  ");
+                        let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
+                        doc.text(linhasPalavras, 15, y);
+                        y += (linhasPalavras.length * 5) + 6;
+                    }
+
+                    if(tmplData.comentariosTop.length > 0) {
+                        if (y > 260) { doc.addPage(); y = 20; }
+                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
+                        doc.text("Amostragem de Comentários:", 15, y); y += 6;
+                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
+                        tmplData.comentariosTop.forEach(c => {
+                            let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
+                            if(y + (linhasTxt.length * 5) > 275) { doc.addPage(); y = 20; }
+                            doc.text(linhasTxt, 15, y);
+                            y += (linhasTxt.length * 5) + 3;
+                        });
+                    }
                 }
             });
 
