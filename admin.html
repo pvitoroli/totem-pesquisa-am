@@ -371,8 +371,67 @@
             100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
         }
 
-        /* Adaptação Mobile */
+        /* ==========================================================================
+           📱 ADAPTAÇÃO MOBILE (RESPONSIVIDADE GERAL RECUPERADA) 📱
+           ========================================================================== */
+        @media(max-width: 800px) {
+            .chart-section { grid-template-columns: 1fr; }
+            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; }
+            .kpi-clean-grid { grid-template-columns: 1fr 1fr; gap: 20px 15px; }
+            .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
+        }
+
         @media(max-width: 600px) {
+            /* Navbar e Wrapper */
+            .main-wrapper { padding: 40px 20px; }
+            .navbar { padding: 15px 20px; }
+            .nav-title, .nav-user { display: none !important; }
+            .mobile-menu-btn { display: block; }
+
+            /* Boas vindas */
+            .welcome-banner { flex-direction: column; align-items: flex-start; }
+            .welcome-banner h1 { font-size: 24px; }
+
+            /* KPIs e Home */
+            .sector-results-container { margin-top: 30px; margin-bottom: 40px; }
+            .kpi-clean-item { padding: 5px 10px; }
+            .kpi-clean-value { font-size: 26px; }
+            .kpi-clean-value.text-val { font-size: 13px; min-height: 26px; line-height: 1.2; }
+
+            /* Botões Principais */
+            .action-buttons-grid { grid-template-columns: 1fr; gap: 15px; }
+            .action-bridge-btn { padding: 15px; font-size: 12px; }
+
+            /* Formulários e Cards */
+            .card { padding: 25px 20px; }
+            .form-grid { grid-template-columns: 1fr; }
+
+            /* Filtros e Lista */
+            .filters-bar { padding: 15px 10px; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
+            .filter-pill { flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px 5px; font-size: 11px; white-space: nowrap; }
+            .filter-date { width: 100% !important; margin-left: 0 !important; margin-top: 5px; height: 42px; font-size: 14px; text-align: center; }
+            .item-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+
+            /* Painel Analítico / Dashboard */
+            .dash-overlay { padding: 15px 10px; }
+            .dash-header { flex-direction: column; align-items: flex-start; gap: 12px; padding-right: 30px; }
+            .dash-header h1 { font-size: 18px; line-height: 1.2; }
+            .btn-action-group { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+            .btn-action-group button { width: 100%; margin: 0; padding: 12px; font-size: 11px; }
+
+            /* Dashboard Cards Internos */
+            .dash-kpi-card { padding: 15px 10px; }
+            .dash-kpi-value { font-size: 22px; margin-top: 5px; }
+            .dash-kpi-label { font-size: 9px; }
+
+            /* Gráficos */
+            .chart-card { padding: 20px 15px; min-height: 280px; }
+            .chart-container-inner { min-height: 220px; }
+
+            /* Modais e Nuvem de Palavras */
+            .modal { padding: 30px 20px; }
+            .btn-close-icon { top: 15px !important; right: 15px !important; width: 30px; height: 30px; font-size: 12px; }
+
             .word-cloud-modal .modal { padding: 0; }
             .word-cloud-modal .modal > .modal-header-cloud { padding: 20px 15px; padding-right: 50px; }
             .word-cloud-modal .modal > .modal-header-cloud p { font-size: 11px; max-width: 100%; margin-top: 5px; }
