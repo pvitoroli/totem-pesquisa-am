@@ -87,6 +87,7 @@
         .menu-lateral-overlay.active .menu-lateral-content { right: 0; }
         .menu-lateral-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 30px; font-size: 12px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
         
+        /* 🔥 BOTÃO FECHAR REDONDO ABSOLUTO 🔥 */
         .btn-close-icon { 
             position: absolute !important; top: 25px !important; right: 25px !important;
             background: var(--surface-highlight); border: 1px solid var(--border); color: var(--text-muted); 
@@ -160,7 +161,10 @@
         .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 400; cursor: pointer; transition: 0.2s; }
         .filter-pill:hover { color: var(--text); }
         .filter-pill.active { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; color: var(--text-muted); }
+        
+        /* 🔥 Correção do Campo de Data com Placeholder 🔥 */
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: 140px; border-radius: 8px; color: var(--text-muted); cursor: pointer; text-align: center;}
+        .filter-date:focus, .filter-date:valid { color: var(--text); text-align: left; }
 
         .segmented-control { display: flex; background: var(--bg-transparent); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
         .segmented-btn { flex: 1; padding: 12px; text-align: center; font-size: 12px; font-weight: 500; cursor: pointer; border-radius: 8px; transition: 0.3s; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;}
@@ -486,23 +490,34 @@
             }, 6000);
         }
 
-        /* 🔥 LÓGICA DE CORES: SISTEMA DE MEMÓRIA PARA OUTROS TEMPLATES 🔥 */
-        const memoryColors = {};
-        const FIX_COLORS = ['#ff5100', '#ffcc00', '#a300ff', '#ff0080', '#00b894', '#0984e3', '#e17055', '#d63031'];
-        let colorCounter = 0;
+        /* 🔥 REGISTRO GLOBAL DE CORES BLINDADO 🔥 */
+        const CORE_COLORS = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2']; 
+        const colorPalette = [...CORE_COLORS, '#00b894', '#0984e3', '#e17055', '#d63031'];
+        
+        let globalColorMap = {
+            "aprendi algo novo": "#ff5100",
+            "fiquei feliz": "#ffcc00",
+            "quero saber mais": "#a300ff",
+            "poderia ser melhor": "#ff66b2"
+        };
+        let nextColorIdx = 4;
+        
+        function registrarCoresDosVotos(votos) {
+            let unicos = [...new Set(votos.map(v => v.sentimento ? v.sentimento.trim() : ""))].filter(Boolean);
+            unicos.sort(); 
+            unicos.forEach(s => {
+                let key = s.toLowerCase();
+                if (!globalColorMap[key]) {
+                    globalColorMap[key] = colorPalette[nextColorIdx % colorPalette.length];
+                    nextColorIdx++;
+                }
+            });
+        }
 
         function getCorSentimento(s) {
             if(!s) return '#9aa0a6';
-            let str = s.toLowerCase().trim();
-            if(str === 'aprendi algo novo') return '#ff5100'; 
-            if(str === 'fiquei feliz') return '#ffcc00'; 
-            if(str === 'quero saber mais') return '#a300ff'; 
-            if(str === 'poderia ser melhor') return '#ff0080'; 
-            
-            if(memoryColors[str]) return memoryColors[str];
-            memoryColors[str] = FIX_COLORS[colorCounter % FIX_COLORS.length];
-            colorCounter++;
-            return memoryColors[str];
+            let key = s.toLowerCase().trim();
+            return globalColorMap[key] || '#9aa0a6';
         }
     </script>
 
@@ -614,6 +629,7 @@
             </div>
         </div>
 
+        <!-- 🔥 SEÇÃO ATIVAS CLEAN 🔥 -->
         <section class="card" id="secao-ativas" style="box-shadow: none;">
             <div class="card-title" style="border-bottom: 1px solid var(--border); padding-bottom: 15px;">
                 <div style="display:flex; align-items:center; gap: 10px;">
@@ -655,7 +671,7 @@
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Encerradas</div>
-                    <input type="text" class="filter-date" id="filtroData" placeholder="Seleciona uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
+                    <input type="text" class="filter-date" id="filtroData" placeholder="Selecione uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
                 </div>
 
                 <div class="list-container expanded" id="containerHistorico" style="max-height: 60vh; overflow-y: auto;">
@@ -819,7 +835,7 @@
         </div>
     </div>
 
-    <!-- 🔥 MODAL: NUVEM DE PALAVRAS 🔥 -->
+    <!-- 🔥 MODAL: NUVEM DE PALAVRAS (NOVO FORMATO) 🔥 -->
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
         <div class="modal">
             <div class="modal-header-cloud">
@@ -1207,7 +1223,7 @@
                         abrirModalListaCampanhas();
                     });
                 }
-            } catch (e) { alert("Erro de connection."); }
+            } catch (e) { alert("Erro de conexão."); }
             btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
             document.getElementById('nomeCampanha').value = ''; document.getElementById('pastaCampanha').value = '';
             document.getElementById('setorCampanha').selectedIndex = 0; document.getElementById('templateCampanha').selectedIndex = 0;
@@ -1325,6 +1341,7 @@
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
         
+        // 🔥 CORREÇÃO: Força o envio do tema escolhido no Admin para os totens 🔥
         function pegarLinkTotem() { 
             let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
             url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark"; 
@@ -1414,19 +1431,15 @@
                     if(t.length > 2 && !stopwords.includes(t)) { counts[t] = (counts[t] || 0) + 1; }
                 });
             });
-            return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => `${w.toUpperCase()} (${counts[w]})`);
+            return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => ({ palavra: w.toUpperCase(), contagem: counts[w] }));
         }
 
-        // 🔥 FUNÇÃO HEX PARA RGB 🔥 (Para garantir a sincronia exata de cores no PDF)
+        // FUNÇÃO HEX PARA RGB (Para os gráficos no PDF)
         function hexToRgb(hex) {
             let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
             let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-            return result ? {
-                r: parseInt(result[1], 16),
-                g: parseInt(result[2], 16),
-                b: parseInt(result[3], 16)
-            } : { r: 154, g: 160, b: 166 };
+            return result ? { r: parseInt(result[1], 16), g: parseInt(result[2], 16), b: parseInt(result[3], 16) } : { r: 154, g: 160, b: 166 };
         }
 
         // 🔥 O NOVO GERADOR DE NUVEM DE PALAVRAS (MODELO CLOUD) 🔥
@@ -1456,11 +1469,10 @@
                 ? ['#ffcc00', '#a300ff', '#ff0080', '#6b7280', '#1e222d', '#4b5563'] 
                 : ['#ffffff', '#ffcc00', '#a300ff', '#ff0080', '#9ca3af', '#d1d5db'];
 
-            // Intercalação em Zigue-Zague para garantir que palavras pequenas fiquem entre as grandes
+            // Intercalação em Zigue-Zague
             let restWords = sortedWords.slice(1);
             let interleaved = [];
-            let left = 0;
-            let right = restWords.length - 1;
+            let left = 0; let right = restWords.length - 1;
             while(left <= right) {
                 if(left === right) { interleaved.push(restWords[left]); break; }
                 interleaved.push(restWords[left]);
@@ -1472,7 +1484,6 @@
             let displayWords = interleaved;
 
             const isMobile = window.innerWidth < 600;
-            
             const baseSize = isMobile ? 12 : 16;       
             const sizeMultiplier = isMobile ? 35 : 50; 
             const maxFontSize = isMobile ? 55 : 95; 
@@ -1486,12 +1497,9 @@
                 
                 if (isMain) fontSize = maxFontSize; 
                 
-                // Ciclo de cores forçado (garante que vizinhos não tenham a mesma cor)
                 let color = isMain ? 'var(--primary)' : colors[index % colors.length];
                 let delay = (Math.random() * 0.4).toFixed(2);
                 let mainClass = isMain ? "main-word" : "";
-                
-                // Alinhamento alternado para preencher espaços verticais
                 let align = index % 2 === 0 ? 'baseline' : 'text-bottom';
 
                 html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; animation-delay: ${delay}s; vertical-align: ${align};">${word}</span>`;
@@ -1625,8 +1633,11 @@
 
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
-                if(dados.sucesso) { processarEstatisticas(dados.votos); document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; } 
-                else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
+                if(dados.sucesso) { 
+                    registrarCoresDosVotos(dados.votos); // Mapeia cores antes de gerar graficos
+                    processarEstatisticas(dados.votos); 
+                    document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; 
+                } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
             } catch (e) { alert("Falha ao carregar dashboard."); fecharDashboard(); }
         }
 
@@ -1646,6 +1657,15 @@
 
             dadosParaPDF.totalVotos = totalVotos; dadosParaPDF.volumeDados = totalVotos * PONTOS_DADOS_POR_VOTO; dadosParaPDF.media = media;
             dadosParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerInd', 'ind');
+        }
+
+        /* 🔥 GERADOR DE PDF: QUEBRA DE PÁGINA SEGURA 🔥 */
+        function checkPageBreak(doc, y, requiredSpace) {
+            if (y + requiredSpace > 275) { 
+                doc.addPage();
+                return 20; 
+            }
+            return y;
         }
 
         function baixarPDFDocumento() {
@@ -1688,7 +1708,7 @@
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
             dadosParaPDF.templates.forEach((tmplData) => {
-                if (y > 230) { doc.addPage(); y = 20; } else { y += 12; }
+                y = checkPageBreak(doc, y, 80);
 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0);
                 doc.text(`ANÁLISE DE TEMPLATE: ${tmplData.nome.toUpperCase()}`, 15, y);
@@ -1711,13 +1731,14 @@
                 
                 y = Math.max(listY, startY + 60) + 8;
                 
+                y = checkPageBreak(doc, y, 30);
                 doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Analítica:", 15, y); y += 6;
                 doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
                 y += (linhasConclusao.length * 5) + 5;
 
-                // 🔥 NOVA SEÇÃO UNIFICADA DE FEEDBACKS 🔥
+                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
-                    if (y > 230) { doc.addPage(); y = 20; }
+                    y = checkPageBreak(doc, y, 30);
                     
                     doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); 
                     doc.text("FEEDBACKS E INSIGHTS QUALITATIVOS", 15, y); y += 6;
@@ -1726,24 +1747,27 @@
                     doc.text("Baseado nos comentários e relatos espontâneos deixados nos totens de pesquisa.", 15, y); y += 8;
 
                     if(tmplData.topWords.length > 0) {
-                        if (y > 270) { doc.addPage(); y = 20; }
+                        y = checkPageBreak(doc, y, 20);
                         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
                         doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
                         doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                        let txtPalavras = tmplData.topWords.join("  •  ");
-                        let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
-                        doc.text(linhasPalavras, 15, y);
-                        y += (linhasPalavras.length * 5) + 6;
+                        
+                        tmplData.topWords.forEach((wordObj, i) => {
+                            y = checkPageBreak(doc, y, 6);
+                            doc.text(`${i + 1}. ${wordObj.palavra} (${wordObj.contagem} menções)`, 15, y);
+                            y += 5;
+                        });
+                        y += 5;
                     }
 
                     if(tmplData.comentariosTop.length > 0) {
-                        if (y > 260) { doc.addPage(); y = 20; }
+                        y = checkPageBreak(doc, y, 20);
                         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
                         doc.text("Amostragem de Comentários:", 15, y); y += 6;
                         doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
                         tmplData.comentariosTop.forEach(c => {
                             let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                            if(y + (linhasTxt.length * 5) > 275) { doc.addPage(); y = 20; }
+                            y = checkPageBreak(doc, y, (linhasTxt.length * 5) + 5);
                             doc.text(linhasTxt, 15, y);
                             y += (linhasTxt.length * 5) + 3;
                         });
@@ -1845,6 +1869,7 @@
                         }
                         return true;
                     });
+                    registrarCoresDosVotos(votosFiltrados); // Registra na memória global
                     processarEstatisticasGlobais(votosFiltrados, dashTitle.innerText); 
                     document.getElementById('dashGlobalLoading').style.display = 'none'; 
                     document.getElementById('conteudoDashGlobalInterface').style.display = 'block'; 
@@ -1853,7 +1878,7 @@
         }
 
         function processarEstatisticasGlobais(votos, tituloDinamico) {
-            window.currentDashboardVotos = votos; // Guarda p/ gaveta global
+            window.currentDashboardVotos = votos; 
             let totalVotosGlobais = votos.length; let somaNotasGlobais = 0; let campanhasMap = {}; 
             
             limparGraficos();
@@ -1889,10 +1914,8 @@
             dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
             dadosGlobaisParaPDF.media = mediaGlobal;
             
-            // 🔥 GERA GRÁFICOS DINÂMICOS POR TEMPLATE (PARA O CONSOLIDADO) 🔥
             dadosGlobaisParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerGlobal', 'glob');
 
-            // Detalhamento por Campanha Inferior
             let containerListaHTML = ""; let arrNomesCampanhas = Object.keys(campanhasMap).sort();
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp]; let mediaCamp = (info.somaNotas / info.total).toFixed(1);
@@ -1906,7 +1929,6 @@
                     linhaItemHTML += `<li style="font-size: 13px; margin-bottom: 5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><span class="dot" style="background:${cor}; width:8px; height:8px;"></span><span>${s}: ${cP}% (${cCount})</span></li>`;
                 });
 
-                // 🔥 EMBUTE OS COMENTÁRIOS NO CARD DO RELATÓRIO GLOBAL (Design Clean) 🔥
                 let blocoComentariosHTML = "";
                 if(info.comentariosLista.length > 0) {
                     blocoComentariosHTML = `<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
@@ -1964,7 +1986,7 @@
             doc.text(`• Índice Geral de Aprovação: ${dadosGlobaisParaPDF.media} / 10.`, 15, y); y += 6;
 
             dadosGlobaisParaPDF.templates.forEach((tmplData) => {
-                if (y > 230) { doc.addPage(); y = 20; } else { y += 12; }
+                y = checkPageBreak(doc, y, 80);
 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0);
                 doc.text(`ANÁLISE DE TEMPLATE: ${tmplData.nome.toUpperCase()}`, 15, y);
@@ -1987,13 +2009,14 @@
                 
                 y = Math.max(listY, startY + 60) + 8;
                 
+                y = checkPageBreak(doc, y, 30);
                 doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text("Conclusão Executiva:", 15, y); y += 6;
                 doc.setFont("helvetica", "normal"); const linhasConclusao = doc.splitTextToSize(tmplData.recoPDFLimpa, 180); doc.text(linhasConclusao, 15, y);
                 y += (linhasConclusao.length * 5) + 5;
 
-                // 🔥 NOVA SEÇÃO UNIFICADA DE FEEDBACKS 🔥
+                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
-                    if (y > 230) { doc.addPage(); y = 20; }
+                    y = checkPageBreak(doc, y, 30);
                     
                     doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); 
                     doc.text("FEEDBACKS E INSIGHTS QUALITATIVOS", 15, y); y += 6;
@@ -2002,24 +2025,27 @@
                     doc.text("Baseado nos comentários e relatos espontâneos deixados nos totens de pesquisa.", 15, y); y += 8;
 
                     if(tmplData.topWords.length > 0) {
-                        if (y > 270) { doc.addPage(); y = 20; }
+                        y = checkPageBreak(doc, y, 20);
                         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
                         doc.text("Termos Frequentes (Top 10):", 15, y); y += 6;
                         doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                        let txtPalavras = tmplData.topWords.join("  •  ");
-                        let linhasPalavras = doc.splitTextToSize(txtPalavras, 180);
-                        doc.text(linhasPalavras, 15, y);
-                        y += (linhasPalavras.length * 5) + 6;
+                        
+                        tmplData.topWords.forEach((wordObj, i) => {
+                            y = checkPageBreak(doc, y, 6);
+                            doc.text(`${i + 1}. ${wordObj.palavra} (${wordObj.contagem} menções)`, 15, y);
+                            y += 5;
+                        });
+                        y += 5;
                     }
 
                     if(tmplData.comentariosTop.length > 0) {
-                        if (y > 260) { doc.addPage(); y = 20; }
+                        y = checkPageBreak(doc, y, 20);
                         doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
                         doc.text("Amostragem de Comentários:", 15, y); y += 6;
                         doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
                         tmplData.comentariosTop.forEach(c => {
                             let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                            if(y + (linhasTxt.length * 5) > 275) { doc.addPage(); y = 20; }
+                            y = checkPageBreak(doc, y, (linhasTxt.length * 5) + 5);
                             doc.text(linhasTxt, 15, y);
                             y += (linhasTxt.length * 5) + 3;
                         });
@@ -2027,19 +2053,18 @@
                 }
             });
 
-            if (y > 250) { doc.addPage(); y = 20; } else { y += 15; }
+            y = checkPageBreak(doc, y, 40);
             doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("3. LISTA DE CAMPANHAS", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y); y += 8;
 
             dadosGlobaisParaPDF.detalhamento.forEach(camp => {
-                if (y > 270) { doc.addPage(); y = 25; }
+                y = checkPageBreak(doc, y, 30);
                 
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
                 doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
                 
-                // 🔥 Quebra dos sentimentos com cores exatas no PDF Global 🔥
                 camp.sentimentos.forEach(item => {
-                    if (y > 280) { doc.addPage(); y = 20; }
+                    y = checkPageBreak(doc, y, 6);
                     doc.setFillColor(item.r, item.g, item.b); doc.circle(17, y - 1.2, 1.2, "F");
                     doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text(`${item.nome}:`, 21, y);
                     let w = doc.getTextWidth(`${item.nome}: `);
