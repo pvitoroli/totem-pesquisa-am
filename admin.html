@@ -106,7 +106,7 @@
         .btn-menu-lateral:hover { background: var(--surface-highlight); color: var(--text); border-color: var(--text-muted); }
 
         /* ==========================================================================
-           3. ESTRUTURA PRINCIPAL E COMPONENTES
+           3. ESTRUTURA PRINCIPAL (DESKTOP PREMIUM COM RESPIRO)
            ========================================================================== */
         .main-wrapper { max-width: 1280px; margin: 0 auto; padding: 80px 40px; }
         .welcome-banner { margin-bottom: 40px; display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 20px; }
@@ -286,7 +286,9 @@
         .campanha-detalhe-title { font-size: 16px; font-weight: 500; color: var(--text); text-transform: uppercase;}
         .campanha-detalhe-kpis { font-size: 13px; color: var(--text-muted); }
 
-        /* GAVETA DE COMENTÁRIOS E FEED QUALITATIVO */
+        /* ==========================================================================
+           🔥 GAVETA DE COMENTÁRIOS E FEED QUALITATIVO 🔥
+           ========================================================================== */
         .comments-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 9000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .comments-overlay.open { opacity: 1; visibility: visible; }
         
@@ -307,7 +309,9 @@
         .feedback-date { font-size: 11px; color: var(--text-muted); }
         .feedback-text { font-size: 14px; color: var(--text); line-height: 1.6; }
 
-        /* TOAST NOTIFICATION */
+        /* ==========================================================================
+           🔥 TOAST NOTIFICATION (NOVA CAMPANHA) 🔥
+           ========================================================================== */
         #toast-container { position: fixed; top: 25px; right: 30px; bottom: auto; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
         .toast-notification { background: rgba(30, 34, 45, 0.95); backdrop-filter: blur(10px); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; color: white; display: flex; align-items: center; gap: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); transform: translateX(120%); opacity: 0; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
         body.light-mode .toast-notification { background: rgba(255, 255, 255, 0.95); color: #1e222d; }
@@ -316,56 +320,17 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - REFINADO E ZIGUE-ZAGUE 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
            ========================================================================== */
         .modal-overlay.word-cloud-modal { z-index: 9999 !important; }
-        
-        .word-cloud-modal .modal { 
-            background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
-            padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px;
-        }
-        
-        .modal-header-cloud {
-            flex-shrink: 0; z-index: 10; position: relative;
-            padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center;
-            padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .word-cloud-area { 
-            flex: 1; display: flex; align-items: center; justify-content: center; 
-            padding: 40px 20px; position: relative; background: var(--bg-transparent);
-            overflow-y: auto; max-height: 60vh;
-        }
-        
-        .cloud-wrapper {
-            display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
-            width: 100%; max-width: 650px;
-            gap: 2px 8px; 
-            padding: 20px;
-        }
-
-        .word-item { 
-            display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
-            line-height: 0.9; 
-            white-space: nowrap; cursor: default;
-            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
-            transition: transform 0.2s, filter 0.2s; 
-            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-        }
-        
-        .word-item.main-word {
-            color: var(--primary) !important;
-            text-transform: uppercase;
-            text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4);
-            z-index: 5;
-        }
-
+        .word-cloud-modal .modal { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px; }
+        .modal-header-cloud { flex-shrink: 0; z-index: 10; position: relative; padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center; padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .word-cloud-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; background: var(--bg-transparent); overflow-y: auto; max-height: 60vh; }
+        .cloud-wrapper { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; width: 100%; max-width: 650px; gap: 2px 14px; padding: 20px; }
+        .word-item { display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; line-height: 0.9; white-space: nowrap; cursor: default; opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); transition: transform 0.2s, filter 0.2s; animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .word-item.main-word { color: var(--primary) !important; text-transform: uppercase; text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4); z-index: 5; }
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
-        
-        @keyframes buildWord { 
-            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
-        }
+        @keyframes buildWord { 0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
 
         @media(max-width: 800px) { .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } .chart-section { grid-template-columns: 1fr; } }
         
@@ -411,7 +376,6 @@
             #toast-container { top: 15px; right: 10px; left: 10px; bottom: auto; }
             .toast-notification { flex-direction: column; text-align: center; }
             .toast-notification .btn-toast-action { width: 100%; }
-
             .word-cloud-modal .modal { padding: 0; }
             .word-cloud-modal .modal > .modal-header-cloud { padding: 20px 15px; padding-right: 50px; }
             .word-cloud-modal .modal > .modal-header-cloud p { font-size: 11px; max-width: 100%; margin-top: 5px; }
@@ -919,6 +883,7 @@
         const setorLogado = localStorage.getItem('setorLogado');
         const dataLogin = localStorage.getItem('dataLogin');
         const hoje = new Date().toDateString();
+        
         const PONTOS_DADOS_POR_VOTO = 9;
 
         if (!setorLogado || !dataLogin || dataLogin !== hoje) {
@@ -953,8 +918,10 @@
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
+            
             const setorAtual = localStorage.getItem('setorLogado') || 'default';
             localStorage.setItem('theme_' + setorAtual, isLight ? 'light' : 'dark');
+            
             document.getElementById('themeToggleText').innerText = isLight ? 'Modo Escuro' : 'Modo Claro';
             applyThemeLogos();
         }
@@ -975,7 +942,7 @@
         window.currentDashboardVotos = [];
         window.templateAtualModal = 'TODOS';
         window.instanciasGraficos = []; 
-        window.mapaCoresDinamico = {}; // 🔥 DICIONÁRIO BIDIMENSIONAL RECEBIDO DA API 🔥
+        window.mapaCoresDinamico = {}; // Recebe da API
         
         function limparGraficos() {
             window.instanciasGraficos.forEach(obj => obj.chart.destroy());
@@ -1042,80 +1009,14 @@
             }, 3000);
         };
 
-        function mostrarToastNotificacao(titulo, mensagem, acaoTexto, acaoCallback) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = 'toast-notification';
-            toast.innerHTML = `
-                <div style="flex:1; display:flex; flex-direction:column; gap:4px; text-align: left;">
-                    <strong style="font-size:13px;">${titulo}</strong>
-                    <span style="font-size:11px; opacity:0.8;">${mensagem}</span>
-                </div>
-                ${acaoTexto ? `<button class="btn-toast-action">${acaoTexto}</button>` : ''}
-            `;
-            if (acaoTexto && acaoCallback) {
-                toast.querySelector('button').onclick = () => { acaoCallback(); toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); };
-            }
-            container.appendChild(toast);
-            setTimeout(() => { toast.classList.add('show'); }, 10);
-            setTimeout(() => { if(toast.parentElement) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); } }, 6000);
-        }
-
-        // 🔥 O MOTOR DE CORES AGORA É BIDIMENSIONAL 🔥
-        const MAPA_SENTIMENTOS_PADRAO = {
-            "aprendi algo novo": "#ff5100", "fiquei feliz": "#ffcc00", "quero saber mais": "#a300ff", "poderia ser melhor": "#ff66b2",
-            "muito satisfeito": "#ff5100", "satisfeito": "#ffcc00", "neutro": "#a300ff", "insatisfeito": "#ff66b2"
-        };
-
-        function getCorSentimento(s, nomeTemplate) {
-            if(!s) return '#9aa0a6';
-            let termo = s.toLowerCase().trim();
-            
-            if (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()] && window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo]) {
-                return window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo];
-            }
-
-            let hash = 0; for(let i=0; i<termo.length; i++) hash = termo.charCodeAt(i) + ((hash << 5) - hash);
-            const fallbackColors = ['#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
-            return fallbackColors[Math.abs(hash) % fallbackColors.length];
-        }
-
-        function getCoresParaGrafico(labels, nomeTemplate) {
-             const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c'];
-             let cores = [];
-             let used = new Set();
-             
-             let mapaDesteTemplate = (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()]) ? window.mapaCoresDinamico[nomeTemplate.toLowerCase()] : {};
-             
-             labels.forEach((l) => {
-                 let termo = l.toLowerCase().trim();
-                 if (mapaDesteTemplate[termo]) {
-                     cores.push(mapaDesteTemplate[termo]);
-                     used.add(mapaDesteTemplate[termo]);
-                 } else if (MAPA_SENTIMENTOS_PADRAO[termo]) {
-                     cores.push(MAPA_SENTIMENTOS_PADRAO[termo]);
-                     used.add(MAPA_SENTIMENTOS_PADRAO[termo]);
-                 } else {
-                     cores.push(null);
-                 }
-             });
-             
-             let pIdx = 0;
-             for (let i = 0; i < cores.length; i++) {
-                 if (cores[i] === null) {
-                     while (used.has(palette[pIdx]) && pIdx < palette.length) { pIdx++; }
-                     let cor = palette[pIdx % palette.length] || '#9aa0a6';
-                     cores[i] = cor;
-                     used.add(cor);
-                     pIdx++;
-                 }
-             }
-             return cores;
-        }
-
         function abrirModalNovaCampanha() { document.getElementById('modalNovaCampanha').style.display = 'block'; document.body.style.overflow = 'hidden'; }
         function fecharModalNovaCampanha() { document.getElementById('modalNovaCampanha').style.display = 'none'; document.body.style.overflow = 'auto'; }
-        function abrirModalListaCampanhas() { document.getElementById('modalListaCampanhas').style.display = 'block'; document.body.style.overflow = 'hidden'; renderizarLista(); }
+        
+        function abrirModalListaCampanhas() {
+            document.getElementById('modalListaCampanhas').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            renderizarLista();
+        }
         function fecharModalListaCampanhas() { document.getElementById('modalListaCampanhas').style.display = 'none'; document.body.style.overflow = 'auto'; }
 
         async function carregarMiniDashboardSetor() {
@@ -1123,8 +1024,7 @@
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`);
                 const dados = await res.json();
                 if(dados && dados.sucesso) {
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário
-                    
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     let votosSetor = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -1443,14 +1343,8 @@
             area.innerHTML = html;
         }
 
-        // ==========================================================================
-        // 🔥 LÓGICA E MOTOR DA NUVEM DE PALAVRAS 🔥
-        // ==========================================================================
-
         function abrirNuvemPalavrasModal() {
             let filtrados = window.currentDashboardVotos.filter(v => v.comentario && v.comentario.trim() !== "");
-            
-            // Filtra os comentários baseando-se no Template que está sendo visualizado
             if(window.templateAtualModal && window.templateAtualModal !== 'TODOS') {
                 filtrados = filtrados.filter(v => {
                     let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
@@ -1458,92 +1352,51 @@
                     return vTmpl === window.templateAtualModal;
                 });
             }
-            
             gerarNuvemPalavras(filtrados);
             document.getElementById('modalWordCloud').style.display = 'flex';
         }
 
-        function fecharNuvemPalavras() { 
-            document.getElementById('modalWordCloud').style.display = 'none'; 
-        }
+        function fecharNuvemPalavras() { document.getElementById('modalWordCloud').style.display = 'none'; }
 
+        // 🔥 O MOTOR DA NUVEM DE PALAVRAS RESTAURADO EXATAMENTE COMO APROVADO ANTES 🔥
         function gerarNuvemPalavras(votos) {
             const area = document.getElementById('wordCloudArea');
-            if(votos.length === 0) { 
-                area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px; text-align:center;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; 
-                return; 
-            }
-            
-            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
+            if(votos.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; return; }
+
+            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter"];
             let wordCounts = {};
 
             votos.forEach(v => {
                 if(!v.comentario) return;
-                let cleanText = v.comentario.replace(/[^\w\sà-úÀ-Ú]/gi, "").toLowerCase();
-                let tokens = cleanText.split(/\s+/);
+                let tokens = v.comentario.toLowerCase().replace(/[.,!?;:()"]/g, "").split(/\s+/);
                 tokens.forEach(t => {
                     if(t.length > 2 && !stopwords.includes(t)) { wordCounts[t] = (wordCounts[t] || 0) + 1; }
                 });
             });
 
-            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 40);
-            
-            if(sortedWords.length === 0) { 
-                area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px; text-align:center;'>Palavras insuficientes para compor o mapa.</p>"; 
-                return; 
-            }
+            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 30);
+            if(sortedWords.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Palavras insuficientes para compor o mapa.</p>"; return; }
 
             const maxCount = wordCounts[sortedWords[0]];
-            const minCount = wordCounts[sortedWords[sortedWords.length - 1]];
-
             const isLight = document.body.classList.contains('light-mode');
-            const colors = isLight 
-                ? ['#ffcc00', '#a300ff', '#ff0080', '#6b7280', '#1e222d', '#4b5563'] 
-                : ['#ffffff', '#ffcc00', '#a300ff', '#ff0080', '#9ca3af', '#d1d5db'];
-
-            let restWords = sortedWords.slice(1);
-            let interleaved = [];
-            let left = 0;
-            let right = restWords.length - 1;
-            while(left <= right) {
-                if(left === right) { interleaved.push(restWords[left]); break; }
-                interleaved.push(restWords[left]);
-                interleaved.push(restWords[right]);
-                left++; right--;
-            }
-            const mid = Math.floor(interleaved.length / 2);
-            interleaved.splice(mid, 0, sortedWords[0]);
-            let displayWords = interleaved;
-
-            const isMobile = window.innerWidth < 600;
-            
-            const baseSize = isMobile ? 12 : 16;       
-            const sizeMultiplier = isMobile ? 35 : 50; 
-            const maxFontSize = isMobile ? 55 : 95; 
+            const colors = isLight ? ['#111827', '#4b5563', '#6b7280', '#ff5100'] : ['#ffffff', '#e2e8f0', '#9ca3af', '#ff5100'];
 
             let html = "<div class='cloud-wrapper'>";
-            displayWords.forEach((word, index) => {
-                let count = wordCounts[word];
-                let isMain = (word === sortedWords[0]);
-                
-                let ratio = (maxCount === minCount) ? 1 : Math.pow((count - minCount) / (maxCount - minCount), 1.5);
-                let fontSize = Math.floor(baseSize + ratio * sizeMultiplier); 
-                
-                if (isMain) fontSize = maxFontSize; 
-                
-                let color = isMain ? 'var(--primary)' : colors[index % colors.length];
-                let delay = (Math.random() * 0.4).toFixed(2);
-                let mainClass = isMain ? "main-word" : "";
-                
-                let align = index % 2 === 0 ? 'baseline' : 'text-bottom';
+            sortedWords.forEach((word, index) => {
+                let ratio = wordCounts[word] / maxCount;
+                let fontSize = 14 + (ratio * 36);
+                let opacity = 0.6 + (ratio * 0.4);
+                let color = index === 0 ? "var(--primary)" : colors[Math.floor(Math.random() * colors.length)];
+                let delay = index * 0.05;
+                let mainClass = index === 0 ? "main-word" : "";
 
-                html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; animation-delay: ${delay}s; vertical-align: ${align};">${word}</span>`;
+                html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; opacity: ${opacity}; animation-delay: ${delay}s;">${word}</span>`;
             });
             html += "</div>";
-            
             area.innerHTML = html;
         }
 
+        // Função de extração do Top 10 para os PDFs
         function extrairTopPalavras(votos, limite = 10) {
             const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let counts = {};
@@ -1558,6 +1411,7 @@
             return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => ({ palavra: w.toUpperCase(), contagem: counts[w] }));
         }
 
+        // Função Hex para RGB
         function hexToRgb(hex) {
             let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
@@ -1594,6 +1448,7 @@
                 let sortedLabels = Object.keys(data.agrupamento).sort((a,b) => data.agrupamento[b] - data.agrupamento[a]);
                 let sortedCounts = sortedLabels.map(l => data.agrupamento[l]);
                 
+                // 🔥 O FISCAL DE CORES GARANTINDO ORDEM E UNICIDADE 🔥
                 let coresTmpl = getCoresParaGrafico(sortedLabels, tmpl);
 
                 let listaHTML = ""; let sintesePDF = [];
@@ -1693,7 +1548,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
                 if(dados.sucesso) { 
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; 
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     processarEstatisticas(dados.votos); 
                     document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; 
                 } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
@@ -1718,6 +1573,7 @@
             dadosParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerInd', 'ind');
         }
 
+        /* 🔥 GERADOR DE PDF: QUEBRA DE PÁGINA SEGURA 🔥 */
         function checkPageBreak(doc, y, requiredSpace) {
             if (y + requiredSpace > 275) { 
                 doc.addPage();
@@ -1755,6 +1611,7 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); 
             let linhasTitulo = doc.splitTextToSize(campSelecionada.nome_campanha.toUpperCase(), 180);
             doc.text(linhasTitulo, 15, y);
@@ -1773,7 +1630,7 @@
             doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            y += 15; 
+            y += 15; // Respiro maior
 
             dadosParaPDF.templates.forEach((tmplData) => {
                 y = checkPageBreak(doc, y, 80);
@@ -1785,6 +1642,7 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { 
                     try { 
@@ -1794,6 +1652,7 @@
                         let finalHeight = 50;
                         let finalWidth = finalHeight * ratio;
                         
+                        // Trava de segurança para a largura não cobrir o texto
                         if (finalWidth > 55) { finalWidth = 55; finalHeight = finalWidth / ratio; }
                         let yOffset = startY + (50 - finalHeight) / 2;
 
@@ -1801,6 +1660,7 @@
                     } catch(e){} 
                 }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -1814,6 +1674,7 @@
                     listY += 6;
                 });
 
+                // Síntese logo abaixo do mapeamento
                 listY += 4;
                 doc.setFont("helvetica", "bold"); doc.text("Síntese:", rightX, listY);
                 listY += 5;
@@ -1823,6 +1684,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -1941,7 +1803,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
                 if(dados && dados.sucesso) { 
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; 
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     let votosFiltrados = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -2002,8 +1864,10 @@
             dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
             dadosGlobaisParaPDF.media = mediaGlobal;
             
+            // 🔥 GERA GRÁFICOS DINÂMICOS POR TEMPLATE (PARA O CONSOLIDADO) 🔥
             dadosGlobaisParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerGlobal', 'glob');
 
+            // Detalhamento por Campanha Inferior
             let containerListaHTML = ""; let arrNomesCampanhas = Object.keys(campanhasMap).sort();
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp]; let mediaCamp = (info.somaNotas / info.total).toFixed(1);
@@ -2071,6 +1935,7 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF GLOBAL 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); 
             let linhasTitGlob = doc.splitTextToSize(tituloDinamico, 180);
             doc.text(linhasTitGlob, 15, y);
@@ -2100,6 +1965,7 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { 
                     try { 
@@ -2116,6 +1982,7 @@
                     } catch(e){} 
                 }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -2138,6 +2005,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // FEEDBACKS
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
