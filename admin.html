@@ -320,53 +320,19 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - DESIGN HORIZONTALIZADO RESTAURADO 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
            ========================================================================== */
         .modal-overlay.word-cloud-modal { z-index: 9999 !important; }
-        .word-cloud-modal .modal { 
-            background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
-            padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px;
-        }
-        .modal-header-cloud {
-            flex-shrink: 0; z-index: 10; position: relative;
-            padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center;
-            padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .word-cloud-area { 
-            flex: 1; display: flex; align-items: center; justify-content: center; 
-            padding: 40px 20px; position: relative; background: var(--bg-transparent);
-            overflow-y: auto; max-height: 60vh;
-        }
-        .cloud-wrapper {
-            display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
-            width: 100%; max-width: 650px;
-            gap: 2px 14px; 
-            padding: 20px;
-        }
-        .word-item { 
-            display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
-            line-height: 0.9; 
-            white-space: nowrap; cursor: default;
-            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
-            transition: transform 0.2s, filter 0.2s; 
-            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
-        }
-        .word-item.main-word {
-            color: var(--primary) !important;
-            text-transform: uppercase;
-            text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4);
-            z-index: 5;
-        }
+        .word-cloud-modal .modal { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px; }
+        .modal-header-cloud { flex-shrink: 0; z-index: 10; position: relative; padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center; padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .word-cloud-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; background: var(--bg-transparent); overflow-y: auto; max-height: 60vh; }
+        .cloud-wrapper { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; width: 100%; max-width: 650px; gap: 2px 14px; padding: 20px; }
+        .word-item { display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; line-height: 0.9; white-space: nowrap; cursor: default; opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); transition: transform 0.2s, filter 0.2s; animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .word-item.main-word { color: var(--primary) !important; text-transform: uppercase; text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4); z-index: 5; }
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
-        @keyframes buildWord { 
-            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
-            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
-        }
+        @keyframes buildWord { 0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
 
-        @media(max-width: 800px) { 
-            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } 
-            .chart-section { grid-template-columns: 1fr; }
-        }
+        @media(max-width: 800px) { .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } .chart-section { grid-template-columns: 1fr; } }
         
         /* 🔥 GRID E ADAPTAÇÃO MOBILE 🔥 */
         @media(max-width: 600px) {
@@ -374,73 +340,45 @@
             .welcome-banner h1 { font-size: 22px; }
             .welcome-banner { flex-direction: column; align-items: flex-start; }
             .form-grid { grid-template-columns: 1fr; }
-            
             #miniDashboardSetor { grid-template-columns: 1fr 1fr; gap: 12px; }
             .kpi-clean-item { padding: 5px 10px; }
             .kpi-clean-value { font-size: 26px; }
-            
             .nav-logo { max-width: 75px; }
-
             .action-buttons-grid { gap: 10px; margin-bottom: 20px; }
             .action-bridge-btn { padding: 15px 10px; font-size: 11px; flex-direction: column; text-align: center; gap: 8px; border-radius: 12px; }
             .action-bridge-btn svg { width: 22px; height: 22px; }
-
             .filters-bar { padding: 15px; gap: 10px; justify-content: space-between; flex-direction: row; margin-bottom: 25px; }
             .filter-pill { flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px 5px; font-size: 11px; white-space: nowrap; }
             .filter-date { width: 100% !important; margin-left: 0 !important; margin-top: 5px; height: 42px; font-size: 14px; text-align: center; }
-
             .item-header { flex-direction: column; align-items: flex-start; }
-            
             .main-wrapper { padding: 30px 15px; }
             .card { padding: 25px 15px; margin-bottom: 25px; border-radius: 16px; }
             .sector-results-container { margin-top: 35px; margin-bottom: 35px; padding: 0 5px; }
-            
             .dash-overlay { padding: 15px 10px; }
             .dash-overlay .container { padding-top: 30px; }
-            
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; padding-right: 55px; padding-bottom: 20px; margin-bottom: 30px; }
-            
-            .dash-header h1 {
-                font-size: 20px !important; 
-                line-height: 1.3 !important; 
-                white-space: normal !important;
-                display: -webkit-box !important;
-                -webkit-line-clamp: 2 !important;
-                -webkit-box-orient: vertical !important;
-                overflow: hidden !important;
-                margin-top: 8px;
-                width: 100%;
-            }
-            
+            .dash-header h1 { font-size: 20px !important; line-height: 1.3 !important; white-space: normal !important; display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; margin-top: 8px; width: 100%; }
             .dash-header .btn-action-group { width: 100%; display: flex; justify-content: center; margin-top: 10px; }
             .dash-header .btn-action-group button { width: 100%; max-width: none; justify-content: center; }
-            
             .btn-close-icon { top: 15px !important; right: 15px !important; }
-            
             .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
             .dash-kpi-card { padding: 15px 10px; }
             .dash-kpi-value { font-size: 22px; margin-top: 5px; }
-            
             .dash-kpi-value.text-val { font-size: 11px !important; min-height: 28px; line-height: 1.1; word-break: break-word; padding: 0; letter-spacing: 0; }
             .dash-kpi-label { font-size: 9px; }
-
             .chart-section { width: 100%; gap: 15px; }
             .chart-card { padding: 20px 15px; width: 100%; box-sizing: border-box; min-height: 380px; }
             .chart-container-inner { min-height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center;}
-            
             .modal { padding: 30px 20px; }
             .nav-user { display: none !important; }
             .nav-title { display: none !important; }
             .mobile-menu-btn { display: block; }
-            
             #toast-container { top: 15px; right: 10px; left: 10px; bottom: auto; }
             .toast-notification { flex-direction: column; text-align: center; }
             .toast-notification .btn-toast-action { width: 100%; }
-
             .word-cloud-modal .modal { padding: 0; }
             .word-cloud-modal .modal > .modal-header-cloud { padding: 20px 15px; padding-right: 50px; }
             .word-cloud-modal .modal > .modal-header-cloud p { font-size: 11px; max-width: 100%; margin-top: 5px; }
-            
             .word-cloud-area { padding: 15px 10px; min-height: 250px; max-height: 40vh; }
             .cloud-wrapper { gap: 4px 8px; }
         }
@@ -452,9 +390,7 @@
 
     <script>
         const currentSectorInit = localStorage.getItem('setorLogado') || 'default';
-        if(localStorage.getItem('theme_' + currentSectorInit) === 'light') {
-            document.body.classList.add('light-mode');
-        }
+        if(localStorage.getItem('theme_' + currentSectorInit) === 'light') { document.body.classList.add('light-mode'); }
 
         function mostrarToastNotificacao(titulo, mensagem, acaoTexto, acaoCallback) {
             const container = document.getElementById('toast-container');
@@ -468,83 +404,58 @@
                 ${acaoTexto ? `<button class="btn-toast-action">${acaoTexto}</button>` : ''}
             `;
             if (acaoTexto && acaoCallback) {
-                toast.querySelector('button').onclick = () => { 
-                    acaoCallback(); 
-                    toast.classList.remove('show'); 
-                    setTimeout(() => toast.remove(), 400); 
-                };
+                toast.querySelector('button').onclick = () => { acaoCallback(); toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); };
             }
             container.appendChild(toast);
             setTimeout(() => { toast.classList.add('show'); }, 10);
-            setTimeout(() => { 
-                if(toast.parentElement) {
-                    toast.classList.remove('show'); 
-                    setTimeout(() => toast.remove(), 400); 
-                }
-            }, 6000);
+            setTimeout(() => { if(toast.parentElement) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 400); } }, 6000);
         }
 
-        /* ==========================================================================
-           🔥 INTELIGÊNCIA DE CORES E HIERARQUIA FIXA 🔥
-           Aqui você dita exatamente que sentimento recebe qual cor
-           ========================================================================== */
+        /* 🔥 NOVA VARIÁVEL GLOBAL PARA RECEBER O MAPA DA API 🔥 */
+        window.mapaCoresDinamico = {};
         
-        const CORES_PADRAO = {
-            S1: '#ff5100', // Laranja (Mais Forte / Principal)
-            S2: '#ffcc00', // Amarelo
-            S3: '#a300ff', // Roxo
-            S4: '#ff66b2', // Rosa Claro
-            S5: '#2ecc71', // Verde
-            S6: '#00d2ff'  // Azul
+        // Padrão de segurança Global
+        const MAPA_SENTIMENTOS_PADRAO = {
+            "aprendi algo novo": "#ff5100", "fiquei feliz": "#ffcc00", "quero saber mais": "#a300ff", "poderia ser melhor": "#ff66b2",
+            "muito satisfeito": "#ff5100", "satisfeito": "#ffcc00", "neutro": "#a300ff", "insatisfeito": "#ff66b2"
         };
 
-        const MAPA_SENTIMENTOS = {
-            // TEMPLATE PADRÃO
-            "aprendi algo novo": CORES_PADRAO.S1,
-            "fiquei feliz": CORES_PADRAO.S2,
-            "quero saber mais": CORES_PADRAO.S3,
-            "poderia ser melhor": CORES_PADRAO.S4,
-            
-            // AVALIAÇÃO DE DEMANDAS COM. (Exemplo Mapeado)
-            "muito boa": CORES_PADRAO.S2,
-            "fluiu perfeitamente": CORES_PADRAO.S1,
-            
-            // OUTROS / PADRÕES
-            "muito satisfeito": CORES_PADRAO.S1,
-            "satisfeito": CORES_PADRAO.S2,
-            "neutro": CORES_PADRAO.S3,
-            "insatisfeito": CORES_PADRAO.S4
-        };
-
-        // Função de fallback para o histórico de comentários (Cores Individuais)
-        function getCorSentimento(s) {
+        // Função que descobre a cor verificando o Template
+        function getCorSentimento(s, nomeTemplate) {
             if(!s) return '#9aa0a6';
             let termo = s.toLowerCase().trim();
-            if(MAPA_SENTIMENTOS[termo]) return MAPA_SENTIMENTOS[termo];
+            
+            // Tenta achar a cor exata no mapa do template específico (recebido da API)
+            if (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()] && window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo]) {
+                return window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo];
+            }
 
             let hash = 0; for(let i=0; i<termo.length; i++) hash = termo.charCodeAt(i) + ((hash << 5) - hash);
             const fallbackColors = ['#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
             return fallbackColors[Math.abs(hash) % fallbackColors.length];
         }
 
-        // 🔥 NOVO FISCAL DE CORES: Garante a ordem e proíbe repetições nos gráficos PDF 🔥
-        function getCoresParaGrafico(labels) {
+        // Função Fiscal para Gráficos
+        function getCoresParaGrafico(labels, nomeTemplate) {
              const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c'];
              let cores = [];
              let used = new Set();
              
-             // 1ª Etapa: Mapeia as cores garantidas na matriz
+             let mapaDesteTemplate = (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()]) ? window.mapaCoresDinamico[nomeTemplate.toLowerCase()] : {};
+             
              labels.forEach((l) => {
                  let termo = l.toLowerCase().trim();
-                 if (MAPA_SENTIMENTOS[termo]) {
-                     cores.push(MAPA_SENTIMENTOS[termo]);
-                     used.add(MAPA_SENTIMENTOS[termo]);
+                 if (mapaDesteTemplate[termo]) {
+                     cores.push(mapaDesteTemplate[termo]);
+                     used.add(mapaDesteTemplate[termo]);
+                 } else if (MAPA_SENTIMENTOS_PADRAO[termo]) {
+                     cores.push(MAPA_SENTIMENTOS_PADRAO[termo]);
+                     used.add(MAPA_SENTIMENTOS_PADRAO[termo]);
                  } else {
                      cores.push(null);
                  }
              });
              
-             // 2ª Etapa: Preenche o que sobrou sem repetir cor no gráfico
              let pIdx = 0;
              for (let i = 0; i < cores.length; i++) {
                  if (cores[i] === null) {
@@ -675,9 +586,7 @@
                     <span class="badge" id="badgeCountAtivas" style="background: var(--surface-highlight); color: var(--text-muted); border: 1px solid var(--border); font-size: 12px; padding: 2px 8px; box-shadow: none;">0</span>
                 </div>
             </div>
-            <div class="list-container expanded" id="containerAtivas" style="max-height: none;">
-                <!-- Carregado via JS -->
-            </div>
+            <div class="list-container expanded" id="containerAtivas" style="max-height: none;"></div>
         </section>
 
         <div class="action-buttons-grid">
@@ -711,9 +620,7 @@
                     <input type="text" class="filter-date" id="filtroData" placeholder="Selecionar uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
                 </div>
 
-                <div class="list-container expanded" id="containerHistorico" style="max-height: 60vh; overflow-y: auto;">
-                    <!-- Carregado via JS -->
-                </div>
+                <div class="list-container expanded" id="containerHistorico" style="max-height: 60vh; overflow-y: auto;"></div>
             </div>
         </div>
     </div>
@@ -740,15 +647,11 @@
                     </div>
                     <div class="input-labeled-group">
                         <label class="input-label" for="setorCampanha">Setor Responsável</label>
-                        <select id="setorCampanha">
-                            <option value="" disabled selected>Carregando...</option>
-                        </select>
+                        <select id="setorCampanha"><option value="" disabled selected>Carregando...</option></select>
                     </div>
                     <div class="input-labeled-group">
                         <label class="input-label" for="templateCampanha">Template</label>
-                        <select id="templateCampanha">
-                            <option value="Padrão" selected>Padrão</option>
-                        </select>
+                        <select id="templateCampanha"><option value="Padrão" selected>Padrão</option></select>
                     </div>
                     <div class="input-labeled-group">
                         <label class="input-label" for="dataCampanha">Data da Coleta</label>
@@ -764,7 +667,7 @@
         </div>
     </div>
 
-    <!-- 🔥 MODAL: CENTRAL DE RELATÓRIOS (MENSAL E ANUAL) 🔥 -->
+    <!-- 🔥 MODAL CENTRAL DE RELATÓRIOS 🔥 -->
     <div class="modal-overlay" id="modalRelatorios" onclick="if(event.target.id === 'modalRelatorios') this.style.display='none'">
         <div class="modal" style="max-width: 450px;">
             <button class="btn-close-icon" onclick="document.getElementById('modalRelatorios').style.display='none'">✕</button>
@@ -787,12 +690,11 @@
                 <select id="selectFiltroMes" style="cursor: pointer;"></select>
             </div>
             
-            <button class="btn btn-primary btn-full" onclick="processarFiltroEabrirDashboard()">
-                GERAR RELATÓRIO
-            </button>
+            <button class="btn btn-primary btn-full" onclick="processarFiltroEabrirDashboard()">GERAR RELATÓRIO</button>
         </div>
     </div>
 
+    <!-- MODAL JORNADA DA CAMPANHA -->
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
         <div class="modal">
             <button class="btn-close-icon" onclick="document.getElementById('modalJornada').style.display='none'">✕</button>
@@ -803,9 +705,7 @@
             <div class="modal-body-grid" id="modalBodyGrid">
                 <div class="modal-column">
                     <h4 class="column-title">Gestão da Coleta</h4>
-                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">
-                        PAINEL ANALÍTICO
-                    </button>
+                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">PAINEL ANALÍTICO</button>
                     <div id="configCampanhaAtiva">
                         <div class="modal-card-module" id="moduloTemplateAdmin" style="margin-top: 15px;">
                             <h4 class="modal-section-title">Template Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
@@ -890,7 +790,7 @@
         </div>
     </div>
 
-    <!-- 🔥 NUVEM DE PALAVRAS (MODELO RESTAURADO E COM Z-INDEX SUPERIOR) 🔥 -->
+    <!-- 🔥 NUVEM DE PALAVRAS RESTAURADA 🔥 -->
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
         <div class="modal">
             <div class="modal-header-cloud">
@@ -1042,6 +942,7 @@
         window.currentDashboardVotos = [];
         window.templateAtualModal = 'TODOS';
         window.instanciasGraficos = []; 
+        window.mapaCoresDinamico = {}; // Recebe da API
         
         function limparGraficos() {
             window.instanciasGraficos.forEach(obj => obj.chart.destroy());
@@ -1123,6 +1024,7 @@
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`);
                 const dados = await res.json();
                 if(dados && dados.sucesso) {
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     let votosSetor = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -1419,7 +1321,9 @@
 
             let html = "";
             votos.slice().reverse().forEach(v => {
-                let cor = getCorSentimento(v.sentimento);
+                let campData = dbCampanhas.find(c => c.nome_campanha === v.campanha);
+                let tmplDaCampanha = campData ? (campData.template || 'Padrão') : 'Padrão';
+                let cor = getCorSentimento(v.sentimento, tmplDaCampanha);
                 let dataLocal = new Date(v.dataHora).toLocaleDateString('pt-BR');
                 html += `
                 <div class="feedback-card">
@@ -1545,7 +1449,7 @@
                 let sortedCounts = sortedLabels.map(l => data.agrupamento[l]);
                 
                 // 🔥 O FISCAL DE CORES GARANTINDO ORDEM E UNICIDADE 🔥
-                let coresTmpl = getCoresParaGrafico(sortedLabels);
+                let coresTmpl = getCoresParaGrafico(sortedLabels, tmpl);
 
                 let listaHTML = ""; let sintesePDF = [];
                 sortedLabels.forEach((sentimento, index) => {
@@ -1644,6 +1548,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
                 if(dados.sucesso) { 
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     processarEstatisticas(dados.votos); 
                     document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; 
                 } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
@@ -1779,7 +1684,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
-                // FEEDBACKS
+                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -1898,6 +1803,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
                 if(dados && dados.sucesso) { 
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
                     let votosFiltrados = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -1968,7 +1874,9 @@
                 let sortedSentimentos = Object.keys(info.agrupamento).sort((a,b) => info.agrupamento[b] - info.agrupamento[a]);
                 let linhaItemHTML = ""; let itemPDFArr = [];
 
-                let coresChartGlobal = getCoresParaGrafico(sortedSentimentos);
+                let campData = dbCampanhas.find(c => c.nome_campanha === nomeCamp);
+                let tmplDaCampanha = campData ? (campData.template || 'Padrão') : 'Padrão';
+                let coresChartGlobal = getCoresParaGrafico(sortedSentimentos, tmplDaCampanha);
 
                 sortedSentimentos.forEach((s, idx) => {
                     let cCount = info.agrupamento[s]; let cP = Math.round((cCount / info.total) * 100); 
