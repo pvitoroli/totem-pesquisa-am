@@ -320,8 +320,9 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - DESIGN HORIZONTALIZADO RESTAURADO 🔥
            ========================================================================== */
+        .modal-overlay.word-cloud-modal { z-index: 9999 !important; }
         .word-cloud-modal .modal { 
             background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
             padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px;
@@ -336,14 +337,12 @@
             padding: 40px 20px; position: relative; background: var(--bg-transparent);
             overflow-y: auto; max-height: 60vh;
         }
-        
         .cloud-wrapper {
             display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
             width: 100%; max-width: 650px;
             gap: 2px 14px; 
             padding: 20px;
         }
-
         .word-item { 
             display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
             line-height: 0.9; 
@@ -352,14 +351,12 @@
             transition: transform 0.2s, filter 0.2s; 
             animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
-        
         .word-item.main-word {
             color: var(--primary) !important;
             text-transform: uppercase;
             text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4);
             z-index: 5;
         }
-
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
         @keyframes buildWord { 
             0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
@@ -489,13 +486,16 @@
 
         /* ==========================================================================
            🔥 INTELIGÊNCIA DE CORES E HIERARQUIA FIXA 🔥
+           Aqui você dita exatamente que sentimento recebe qual cor
            ========================================================================== */
         
         const CORES_PADRAO = {
-            S1: '#ff5100', // Laranja
+            S1: '#ff5100', // Laranja (Mais Forte / Principal)
             S2: '#ffcc00', // Amarelo
             S3: '#a300ff', // Roxo
-            S4: '#ff66b2'  // Rosa Claro
+            S4: '#ff66b2', // Rosa Claro
+            S5: '#2ecc71', // Verde
+            S6: '#00d2ff'  // Azul
         };
 
         const MAPA_SENTIMENTOS = {
@@ -505,16 +505,18 @@
             "quero saber mais": CORES_PADRAO.S3,
             "poderia ser melhor": CORES_PADRAO.S4,
             
-            // SUBSTITUA AQUI PELOS TEXTOS DO SEU TEMPLATE CASO QUEIRA CRAVAR A COR EXATA
+            // AVALIAÇÃO DE DEMANDAS COM. (Exemplo Mapeado)
+            "muito boa": CORES_PADRAO.S2,
+            "fluiu perfeitamente": CORES_PADRAO.S1,
+            
+            // OUTROS / PADRÕES
             "muito satisfeito": CORES_PADRAO.S1,
             "satisfeito": CORES_PADRAO.S2,
             "neutro": CORES_PADRAO.S3,
-            "insatisfeito": CORES_PADRAO.S4,
-            "muito boa": CORES_PADRAO.S1,
-            "fluiu perfeitamente": CORES_PADRAO.S4
+            "insatisfeito": CORES_PADRAO.S4
         };
 
-        // Função de cor simples (usada apenas nos pontinhos de feedback individual)
+        // Função de fallback para o histórico de comentários (Cores Individuais)
         function getCorSentimento(s) {
             if(!s) return '#9aa0a6';
             let termo = s.toLowerCase().trim();
@@ -525,12 +527,13 @@
             return fallbackColors[Math.abs(hash) % fallbackColors.length];
         }
 
-        // 🔥 NOVO FISCAL DE CORES: Garante que os gráficos nunca repitam cores! 🔥
+        // 🔥 NOVO FISCAL DE CORES: Garante a ordem e proíbe repetições nos gráficos PDF 🔥
         function getCoresParaGrafico(labels) {
-             const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
+             const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c'];
              let cores = [];
              let used = new Set();
              
+             // 1ª Etapa: Mapeia as cores garantidas na matriz
              labels.forEach((l) => {
                  let termo = l.toLowerCase().trim();
                  if (MAPA_SENTIMENTOS[termo]) {
@@ -541,11 +544,12 @@
                  }
              });
              
+             // 2ª Etapa: Preenche o que sobrou sem repetir cor no gráfico
              let pIdx = 0;
              for (let i = 0; i < cores.length; i++) {
                  if (cores[i] === null) {
                      while (used.has(palette[pIdx]) && pIdx < palette.length) { pIdx++; }
-                     let cor = palette[pIdx % palette.length];
+                     let cor = palette[pIdx % palette.length] || '#9aa0a6';
                      cores[i] = cor;
                      used.add(cor);
                      pIdx++;
@@ -868,7 +872,7 @@
         </div>
     </div>
 
-    <!-- 🔥 GAVETA E NUVEM DE PALAVRAS 🔥 -->
+    <!-- 🔥 GAVETA DE COMENTÁRIOS 🔥 -->
     <div class="comments-overlay" id="overlayComentarios" onclick="fecharGavetaComentarios()"></div>
     <div class="comments-drawer" id="gavetaComentarios">
         <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta" style="position: absolute !important;">✕</button>
@@ -886,6 +890,7 @@
         </div>
     </div>
 
+    <!-- 🔥 NUVEM DE PALAVRAS (MODELO RESTAURADO E COM Z-INDEX SUPERIOR) 🔥 -->
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
         <div class="modal">
             <div class="modal-header-cloud">
@@ -1449,15 +1454,16 @@
 
         function fecharNuvemPalavras() { document.getElementById('modalWordCloud').style.display = 'none'; }
 
-        // 🔥 O MOTOR DA NUVEM DE PALAVRAS RESTAURADO 🔥
+        // 🔥 O MOTOR DA NUVEM DE PALAVRAS RESTAURADO EXATAMENTE COMO APROVADO ANTES 🔥
         function gerarNuvemPalavras(votos) {
             const area = document.getElementById('wordCloudArea');
             if(votos.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; return; }
-            
-            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
+
+            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter"];
             let wordCounts = {};
 
             votos.forEach(v => {
+                if(!v.comentario) return;
                 let tokens = v.comentario.toLowerCase().replace(/[.,!?;:()"]/g, "").split(/\s+/);
                 tokens.forEach(t => {
                     if(t.length > 2 && !stopwords.includes(t)) { wordCounts[t] = (wordCounts[t] || 0) + 1; }
@@ -1474,7 +1480,7 @@
             let html = "<div class='cloud-wrapper'>";
             sortedWords.forEach((word, index) => {
                 let ratio = wordCounts[word] / maxCount;
-                let fontSize = 14 + (ratio * 36); 
+                let fontSize = 14 + (ratio * 36);
                 let opacity = 0.6 + (ratio * 0.4);
                 let color = index === 0 ? "var(--primary)" : colors[Math.floor(Math.random() * colors.length)];
                 let delay = index * 0.05;
@@ -1486,6 +1492,7 @@
             area.innerHTML = html;
         }
 
+        // Função de extração do Top 10 para os PDFs
         function extrairTopPalavras(votos, limite = 10) {
             const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let counts = {};
@@ -1500,6 +1507,7 @@
             return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => ({ palavra: w.toUpperCase(), contagem: counts[w] }));
         }
 
+        // Função Hex para RGB
         function hexToRgb(hex) {
             let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
@@ -1617,7 +1625,7 @@
         }
 
         /* =======================================================
-           MOTOR DASHBOARD ANALÍTICO INDIVIDUAL
+           MOTOR DASHBOARD ANALÍTICO INDIVIDUAL E GERADOR PDF
            ======================================================= */
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
@@ -1698,17 +1706,17 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            // 🔥 CORREÇÃO 1: PROTEÇÃO DAS MARGENS DOS TÍTULOS E SUBTÍTULOS 🔥
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); 
-            let quebraTitulo = doc.splitTextToSize(campSelecionada.nome_campanha.toUpperCase(), 180);
-            doc.text(quebraTitulo, 15, y);
-            y += (quebraTitulo.length * 5) + 3;
+            let linhasTitulo = doc.splitTextToSize(campSelecionada.nome_campanha.toUpperCase(), 180);
+            doc.text(linhasTitulo, 15, y);
+            y += (linhasTitulo.length * 5) + 3;
 
-            doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); 
-            let subtitulo = `Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`;
-            let quebraSubtitulo = doc.splitTextToSize(subtitulo, 180);
-            doc.text(quebraSubtitulo, 15, y);
-            y += (quebraSubtitulo.length * 5) + 11;
+            doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(80, 80, 80); 
+            let txtSub = `Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`;
+            let linhasSub = doc.splitTextToSize(txtSub, 180);
+            doc.text(linhasSub, 15, y);
+            y += (linhasSub.length * 5) + 8;
             
             doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. SÍNTESE QUANTITATIVA", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
@@ -1717,7 +1725,7 @@
             doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            y += 15;
+            y += 15; // Respiro maior
 
             dadosParaPDF.templates.forEach((tmplData) => {
                 y = checkPageBreak(doc, y, 80);
@@ -1729,9 +1737,25 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
-                if (chartObj) { try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, startY, 50, 50); } catch(e){} }
+                if (chartObj) { 
+                    try { 
+                        let w = chartObj.chart.width;
+                        let h = chartObj.chart.height;
+                        let ratio = w / h;
+                        let finalHeight = 50;
+                        let finalWidth = finalHeight * ratio;
+                        
+                        // Trava de segurança para a largura não cobrir o texto
+                        if (finalWidth > 55) { finalWidth = 55; finalHeight = finalWidth / ratio; }
+                        let yOffset = startY + (50 - finalHeight) / 2;
+
+                        doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, yOffset, finalWidth, finalHeight); 
+                    } catch(e){} 
+                }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -1745,6 +1769,7 @@
                     listY += 6;
                 });
 
+                // Síntese logo abaixo do mapeamento
                 listY += 4;
                 doc.setFont("helvetica", "bold"); doc.text("Síntese:", rightX, listY);
                 listY += 5;
@@ -1754,6 +1779,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // FEEDBACKS
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -1932,15 +1958,16 @@
             dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
             dadosGlobaisParaPDF.media = mediaGlobal;
             
+            // 🔥 GERA GRÁFICOS DINÂMICOS POR TEMPLATE (PARA O CONSOLIDADO) 🔥
             dadosGlobaisParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerGlobal', 'glob');
 
+            // Detalhamento por Campanha Inferior
             let containerListaHTML = ""; let arrNomesCampanhas = Object.keys(campanhasMap).sort();
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp]; let mediaCamp = (info.somaNotas / info.total).toFixed(1);
                 let sortedSentimentos = Object.keys(info.agrupamento).sort((a,b) => info.agrupamento[b] - info.agrupamento[a]);
                 let linhaItemHTML = ""; let itemPDFArr = [];
 
-                // 🔥 O FISCAL AQUI IMPEDE QUE AS CORES ESTOUREM NO MENSAL 🔥
                 let coresChartGlobal = getCoresParaGrafico(sortedSentimentos);
 
                 sortedSentimentos.forEach((s, idx) => {
@@ -2000,17 +2027,17 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            // 🔥 CORREÇÃO DA QUEBRA NA ÁREA GLOBAL 🔥
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF GLOBAL 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); 
-            let quebraTit = doc.splitTextToSize(tituloDinamico, 180);
-            doc.text(quebraTit, 15, y);
-            y += (quebraTit.length * 5) + 3;
+            let linhasTitGlob = doc.splitTextToSize(tituloDinamico, 180);
+            doc.text(linhasTitGlob, 15, y);
+            y += (linhasTitGlob.length * 5) + 3;
 
-            doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); 
-            let descSub = `Extraído em: ${dataExtracao}   |   Total de Campanhas Focadas: ${dadosGlobaisParaPDF.totalCampanhas}`;
-            let quebraSub = doc.splitTextToSize(descSub, 180);
-            doc.text(quebraSub, 15, y);
-            y += (quebraSub.length * 5) + 11;
+            doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(80, 80, 80); 
+            let descSubGlob = `Extraído em: ${dataExtracao}   |   Total de Campanhas Focadas: ${dadosGlobaisParaPDF.totalCampanhas}`;
+            let linhasSubGlob = doc.splitTextToSize(descSubGlob, 180);
+            doc.text(linhasSubGlob, 15, y);
+            y += (linhasSubGlob.length * 5) + 8;
             
             doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. RESUMO GERAL", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
@@ -2030,9 +2057,24 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
-                if (chartObj) { try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, startY, 50, 50); } catch(e){} }
+                if (chartObj) { 
+                    try { 
+                        let w = chartObj.chart.width;
+                        let h = chartObj.chart.height;
+                        let ratio = w / h;
+                        let finalHeight = 50;
+                        let finalWidth = finalHeight * ratio;
+                        
+                        if (finalWidth > 55) { finalWidth = 55; finalHeight = finalWidth / ratio; }
+                        let yOffset = startY + (50 - finalHeight) / 2;
+
+                        doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, yOffset, finalWidth, finalHeight); 
+                    } catch(e){} 
+                }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -2055,6 +2097,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // FEEDBACKS
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
