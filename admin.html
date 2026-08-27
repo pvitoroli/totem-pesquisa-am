@@ -287,7 +287,7 @@
         .campanha-detalhe-kpis { font-size: 13px; color: var(--text-muted); }
 
         /* ==========================================================================
-           🔥 GAVETA DE COMENTÁRIOS E FEED QUALITATIVO (AGORA NA RAIZ) 🔥
+           🔥 GAVETA DE COMENTÁRIOS E FEED QUALITATIVO 🔥
            ========================================================================== */
         .comments-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 9000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .comments-overlay.open { opacity: 1; visibility: visible; }
@@ -489,10 +489,8 @@
 
         /* ==========================================================================
            🔥 INTELIGÊNCIA DE CORES E HIERARQUIA FIXA 🔥
-           Aqui nós substituímos o adivinho pelas configurações cravadas!
            ========================================================================== */
         
-        // As 4 cores primárias de hierarquia (O Rosa foi clareado para contraste)
         const CORES_PADRAO = {
             S1: '#ff5100', // Laranja
             S2: '#ffcc00', // Amarelo
@@ -507,25 +505,53 @@
             "quero saber mais": CORES_PADRAO.S3,
             "poderia ser melhor": CORES_PADRAO.S4,
             
-            // 🚨 SUBSTITUA AQUI PELOS 4 TEXTOS DO SEU TEMPLATE DE COMUNICAÇÃO 🚨
+            // SUBSTITUA AQUI PELOS TEXTOS DO SEU TEMPLATE CASO QUEIRA CRAVAR A COR EXATA
             "muito satisfeito": CORES_PADRAO.S1,
             "satisfeito": CORES_PADRAO.S2,
             "neutro": CORES_PADRAO.S3,
-            "insatisfeito": CORES_PADRAO.S4
+            "insatisfeito": CORES_PADRAO.S4,
+            "muito boa": CORES_PADRAO.S1,
+            "fluiu perfeitamente": CORES_PADRAO.S4
         };
 
+        // Função de cor simples (usada apenas nos pontinhos de feedback individual)
         function getCorSentimento(s) {
             if(!s) return '#9aa0a6';
             let termo = s.toLowerCase().trim();
-            
-            if(MAPA_SENTIMENTOS[termo]) {
-                return MAPA_SENTIMENTOS[termo];
-            }
+            if(MAPA_SENTIMENTOS[termo]) return MAPA_SENTIMENTOS[termo];
 
-            // Fallback Genérico (Impede que o sistema quebre se você esquecer de cadastrar)
             let hash = 0; for(let i=0; i<termo.length; i++) hash = termo.charCodeAt(i) + ((hash << 5) - hash);
-            const fallbackColors = [CORES_PADRAO.S1, CORES_PADRAO.S2, CORES_PADRAO.S3, CORES_PADRAO.S4];
+            const fallbackColors = ['#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
             return fallbackColors[Math.abs(hash) % fallbackColors.length];
+        }
+
+        // 🔥 NOVO FISCAL DE CORES: Garante que os gráficos nunca repitam cores! 🔥
+        function getCoresParaGrafico(labels) {
+             const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
+             let cores = [];
+             let used = new Set();
+             
+             labels.forEach((l) => {
+                 let termo = l.toLowerCase().trim();
+                 if (MAPA_SENTIMENTOS[termo]) {
+                     cores.push(MAPA_SENTIMENTOS[termo]);
+                     used.add(MAPA_SENTIMENTOS[termo]);
+                 } else {
+                     cores.push(null);
+                 }
+             });
+             
+             let pIdx = 0;
+             for (let i = 0; i < cores.length; i++) {
+                 if (cores[i] === null) {
+                     while (used.has(palette[pIdx]) && pIdx < palette.length) { pIdx++; }
+                     let cor = palette[pIdx % palette.length];
+                     cores[i] = cor;
+                     used.add(cor);
+                     pIdx++;
+                 }
+             }
+             return cores;
         }
     </script>
 
@@ -678,7 +704,6 @@
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Encerradas</div>
-                    <!-- 🔥 Placeholder no filtro de Data 🔥 -->
                     <input type="text" class="filter-date" id="filtroData" placeholder="Selecionar uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
                 </div>
 
@@ -843,7 +868,7 @@
         </div>
     </div>
 
-    <!-- 🔥 A GAVETA DE COMENTÁRIOS E A NUVEM AGORA ESTÃO NA RAIZ (LIVRES DE BUGS) 🔥 -->
+    <!-- 🔥 GAVETA E NUVEM DE PALAVRAS 🔥 -->
     <div class="comments-overlay" id="overlayComentarios" onclick="fecharGavetaComentarios()"></div>
     <div class="comments-drawer" id="gavetaComentarios">
         <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta" style="position: absolute !important;">✕</button>
@@ -1347,7 +1372,6 @@
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
         
-        // 🔥 CORREÇÃO: Força o envio do tema escolhido no Admin para os totens 🔥
         function pegarLinkTotem() { 
             let url = `${URL_SITE_BASE}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
             url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark"; 
@@ -1425,7 +1449,43 @@
 
         function fecharNuvemPalavras() { document.getElementById('modalWordCloud').style.display = 'none'; }
 
-        // 🔥 FUNÇÃO DE EXTRAÇÃO DO TOP 10 DE PALAVRAS PARA OS PDFs 🔥
+        // 🔥 O MOTOR DA NUVEM DE PALAVRAS RESTAURADO 🔥
+        function gerarNuvemPalavras(votos) {
+            const area = document.getElementById('wordCloudArea');
+            if(votos.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; return; }
+            
+            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
+            let wordCounts = {};
+
+            votos.forEach(v => {
+                let tokens = v.comentario.toLowerCase().replace(/[.,!?;:()"]/g, "").split(/\s+/);
+                tokens.forEach(t => {
+                    if(t.length > 2 && !stopwords.includes(t)) { wordCounts[t] = (wordCounts[t] || 0) + 1; }
+                });
+            });
+
+            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 30);
+            if(sortedWords.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Palavras insuficientes para compor o mapa.</p>"; return; }
+
+            const maxCount = wordCounts[sortedWords[0]];
+            const isLight = document.body.classList.contains('light-mode');
+            const colors = isLight ? ['#111827', '#4b5563', '#6b7280', '#ff5100'] : ['#ffffff', '#e2e8f0', '#9ca3af', '#ff5100'];
+
+            let html = "<div class='cloud-wrapper'>";
+            sortedWords.forEach((word, index) => {
+                let ratio = wordCounts[word] / maxCount;
+                let fontSize = 14 + (ratio * 36); 
+                let opacity = 0.6 + (ratio * 0.4);
+                let color = index === 0 ? "var(--primary)" : colors[Math.floor(Math.random() * colors.length)];
+                let delay = index * 0.05;
+                let mainClass = index === 0 ? "main-word" : "";
+
+                html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; opacity: ${opacity}; animation-delay: ${delay}s;">${word}</span>`;
+            });
+            html += "</div>";
+            area.innerHTML = html;
+        }
+
         function extrairTopPalavras(votos, limite = 10) {
             const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let counts = {};
@@ -1440,7 +1500,6 @@
             return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => ({ palavra: w.toUpperCase(), contagem: counts[w] }));
         }
 
-        // 🔥 FUNÇÃO HEX PARA RGB 🔥 (Para garantir a sincronia exata de cores no PDF)
         function hexToRgb(hex) {
             let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
@@ -1473,9 +1532,12 @@
 
             for (let tmpl in templatesData) {
                 let data = templatesData[tmpl]; let totalVotosTmpl = data.votos.length; let mediaTmpl = (data.somaNotas / totalVotosTmpl).toFixed(1);
+                
                 let sortedLabels = Object.keys(data.agrupamento).sort((a,b) => data.agrupamento[b] - data.agrupamento[a]);
                 let sortedCounts = sortedLabels.map(l => data.agrupamento[l]);
-                let coresTmpl = sortedLabels.map(l => getCorSentimento(l));
+                
+                // 🔥 O FISCAL DE CORES GARANTINDO ORDEM E UNICIDADE 🔥
+                let coresTmpl = getCoresParaGrafico(sortedLabels);
 
                 let listaHTML = ""; let sintesePDF = [];
                 sortedLabels.forEach((sentimento, index) => {
@@ -1636,17 +1698,26 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); doc.text(campSelecionada.nome_campanha.toUpperCase(), 15, y);
-            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`, 15, y);
+            // 🔥 CORREÇÃO 1: PROTEÇÃO DAS MARGENS DOS TÍTULOS E SUBTÍTULOS 🔥
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); 
+            let quebraTitulo = doc.splitTextToSize(campSelecionada.nome_campanha.toUpperCase(), 180);
+            doc.text(quebraTitulo, 15, y);
+            y += (quebraTitulo.length * 5) + 3;
+
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); 
+            let subtitulo = `Setor Analisado: ${campSelecionada.setor}   |   Status: ${campSelecionada.status.toUpperCase()}   |   Duração Operacional: ${textoTempo}`;
+            let quebraSubtitulo = doc.splitTextToSize(subtitulo, 180);
+            doc.text(quebraSubtitulo, 15, y);
+            y += (quebraSubtitulo.length * 5) + 11;
             
-            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. SÍNTESE QUANTITATIVA", 15, y);
+            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. SÍNTESE QUANTITATIVA", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
             y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
             doc.text(`• Total de Interações Válidas: ${dadosParaPDF.totalVotos} colaborações diretas.`, 15, y); y += 6;
             doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            y += 15; // Respiro maior
+            y += 15;
 
             dadosParaPDF.templates.forEach((tmplData) => {
                 y = checkPageBreak(doc, y, 80);
@@ -1658,11 +1729,9 @@
 
                 let startY = y;
                 
-                // Desenha o gráfico na Esquerda (Coluna 1)
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, startY, 50, 50); } catch(e){} }
                 
-                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -1676,7 +1745,6 @@
                     listY += 6;
                 });
 
-                // Síntese logo abaixo do mapeamento
                 listY += 4;
                 doc.setFont("helvetica", "bold"); doc.text("Síntese:", rightX, listY);
                 listY += 5;
@@ -1686,7 +1754,6 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
-                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -1829,7 +1896,7 @@
         }
 
         function processarEstatisticasGlobais(votos, tituloDinamico) {
-            window.currentDashboardVotos = votos; // Guarda p/ gaveta global
+            window.currentDashboardVotos = votos; 
             let totalVotosGlobais = votos.length; let somaNotasGlobais = 0; let campanhasMap = {}; 
             
             limparGraficos();
@@ -1865,25 +1932,27 @@
             dadosGlobaisParaPDF.totalCampanhas = totalCampanhasGlobais;
             dadosGlobaisParaPDF.media = mediaGlobal;
             
-            // 🔥 GERA GRÁFICOS DINÂMICOS POR TEMPLATE (PARA O CONSOLIDADO) 🔥
             dadosGlobaisParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerGlobal', 'glob');
 
-            // Detalhamento por Campanha Inferior
             let containerListaHTML = ""; let arrNomesCampanhas = Object.keys(campanhasMap).sort();
             arrNomesCampanhas.forEach(nomeCamp => {
                 let info = campanhasMap[nomeCamp]; let mediaCamp = (info.somaNotas / info.total).toFixed(1);
                 let sortedSentimentos = Object.keys(info.agrupamento).sort((a,b) => info.agrupamento[b] - info.agrupamento[a]);
                 let linhaItemHTML = ""; let itemPDFArr = [];
 
-                sortedSentimentos.forEach(s => {
+                // 🔥 O FISCAL AQUI IMPEDE QUE AS CORES ESTOUREM NO MENSAL 🔥
+                let coresChartGlobal = getCoresParaGrafico(sortedSentimentos);
+
+                sortedSentimentos.forEach((s, idx) => {
                     let cCount = info.agrupamento[s]; let cP = Math.round((cCount / info.total) * 100); 
-                    let cor = getCorSentimento(s);
+                    
+                    let cor = coresChartGlobal[idx];
                     let rgb = hexToRgb(cor);
                     itemPDFArr.push({ nome: s, p: cP, count: cCount, r: rgb.r, g: rgb.g, b: rgb.b });
+                    
                     linhaItemHTML += `<li style="font-size: 13px; margin-bottom: 5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><span class="dot" style="background:${cor}; width:8px; height:8px;"></span><span>${s}: ${cP}% (${cCount})</span></li>`;
                 });
 
-                // 🔥 EMBUTE OS COMENTÁRIOS NO CARD DO RELATÓRIO GLOBAL (Design Clean) 🔥
                 let blocoComentariosHTML = "";
                 if(info.comentariosLista.length > 0) {
                     blocoComentariosHTML = `<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
@@ -1931,10 +2000,19 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
-            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); doc.text(tituloDinamico, 15, y);
-            y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); doc.text(`Extraído em: ${dataExtracao}   |   Total de Campanhas Focadas: ${dadosGlobaisParaPDF.totalCampanhas}`, 15, y);
+            // 🔥 CORREÇÃO DA QUEBRA NA ÁREA GLOBAL 🔥
+            y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); 
+            let quebraTit = doc.splitTextToSize(tituloDinamico, 180);
+            doc.text(quebraTit, 15, y);
+            y += (quebraTit.length * 5) + 3;
+
+            doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(80, 80, 80); 
+            let descSub = `Extraído em: ${dataExtracao}   |   Total de Campanhas Focadas: ${dadosGlobaisParaPDF.totalCampanhas}`;
+            let quebraSub = doc.splitTextToSize(descSub, 180);
+            doc.text(quebraSub, 15, y);
+            y += (quebraSub.length * 5) + 11;
             
-            y += 16; doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. RESUMO GERAL", 15, y);
+            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("1. RESUMO GERAL", 15, y);
             y += 3; doc.setDrawColor(230, 230, 230); doc.setLineWidth(0.2); doc.line(15, y, 195, y);
             y += 8; doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(30, 30, 30);
             doc.text(`• Total de Votos Consolidados: ${dadosGlobaisParaPDF.totalVotos} interações.`, 15, y); y += 6;
@@ -1952,11 +2030,9 @@
 
                 let startY = y;
                 
-                // Desenha o gráfico na Esquerda (Coluna 1)
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { try { doc.addImage(chartObj.chart.toBase64Image(), 'PNG', 15, startY, 50, 50); } catch(e){} }
                 
-                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -1979,7 +2055,6 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
-                // 🔥 NOVA SEÇÃO UNIFICADA DE FEEDBACKS 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -2026,10 +2101,10 @@
             dadosGlobaisParaPDF.detalhamento.forEach(camp => {
                 y = checkPageBreak(doc, y, 30);
                 
-                doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
+                let limitNomeCamp = doc.splitTextToSize(camp.nome.toUpperCase(), 180);
+                doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(limitNomeCamp, 15, y); y += (limitNomeCamp.length * 5);
                 doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
                 
-                // 🔥 Quebra dos sentimentos com cores exatas no PDF Global 🔥
                 camp.sentimentos.forEach(item => {
                     y = checkPageBreak(doc, y, 6);
                     doc.setFillColor(item.r, item.g, item.b); doc.circle(17, y - 1.2, 1.2, "F");
