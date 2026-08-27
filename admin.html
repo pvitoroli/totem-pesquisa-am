@@ -319,63 +319,60 @@
         .btn-toast-action { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 8px 16px; border-radius: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; cursor: pointer; transition: 0.2s; white-space: nowrap; }
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
-        /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
+       /* ==========================================================================
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - REFINADO E ZIGUE-ZAGUE 🔥
            ========================================================================== */
         .modal-overlay.word-cloud-modal { z-index: 9999 !important; }
-        .word-cloud-modal .modal { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px; }
-        .modal-header-cloud { flex-shrink: 0; z-index: 10; position: relative; padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center; padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .word-cloud-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; background: var(--bg-transparent); overflow-y: auto; max-height: 60vh; }
-        .cloud-wrapper { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; width: 100%; max-width: 650px; gap: 2px 14px; padding: 20px; }
-        .word-item { display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; line-height: 0.9; white-space: nowrap; cursor: default; opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); transition: transform 0.2s, filter 0.2s; animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .word-item.main-word { color: var(--primary) !important; text-transform: uppercase; text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4); z-index: 5; }
-        .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
-        @keyframes buildWord { 0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
-
-        @media(max-width: 800px) { .modal-body-grid { grid-template-columns: 1fr; gap: 32px; } .chart-section { grid-template-columns: 1fr; } }
         
-        /* 🔥 GRID E ADAPTAÇÃO MOBILE 🔥 */
+        .word-cloud-modal .modal { 
+            background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
+            padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px;
+        }
+        
+        .modal-header-cloud {
+            flex-shrink: 0; z-index: 10; position: relative;
+            padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center;
+            padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .word-cloud-area { 
+            flex: 1; display: flex; align-items: center; justify-content: center; 
+            padding: 40px 20px; position: relative; background: var(--bg-transparent);
+            overflow-y: auto; max-height: 60vh;
+        }
+        
+        .cloud-wrapper {
+            display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
+            width: 100%; max-width: 650px;
+            gap: 2px 8px; 
+            padding: 20px;
+        }
+
+        .word-item { 
+            display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
+            line-height: 0.9; 
+            white-space: nowrap; cursor: default;
+            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
+            transition: transform 0.2s, filter 0.2s; 
+            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+        
+        .word-item.main-word {
+            color: var(--primary) !important;
+            text-transform: uppercase;
+            text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4);
+            z-index: 5;
+        }
+
+        .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
+        
+        @keyframes buildWord { 
+            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+        }
+
+        /* Adaptação Mobile */
         @media(max-width: 600px) {
-            .navbar { padding: 15px 20px; }
-            .welcome-banner h1 { font-size: 22px; }
-            .welcome-banner { flex-direction: column; align-items: flex-start; }
-            .form-grid { grid-template-columns: 1fr; }
-            #miniDashboardSetor { grid-template-columns: 1fr 1fr; gap: 12px; }
-            .kpi-clean-item { padding: 5px 10px; }
-            .kpi-clean-value { font-size: 26px; }
-            .nav-logo { max-width: 75px; }
-            .action-buttons-grid { gap: 10px; margin-bottom: 20px; }
-            .action-bridge-btn { padding: 15px 10px; font-size: 11px; flex-direction: column; text-align: center; gap: 8px; border-radius: 12px; }
-            .action-bridge-btn svg { width: 22px; height: 22px; }
-            .filters-bar { padding: 15px; gap: 10px; justify-content: space-between; flex-direction: row; margin-bottom: 25px; }
-            .filter-pill { flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px 5px; font-size: 11px; white-space: nowrap; }
-            .filter-date { width: 100% !important; margin-left: 0 !important; margin-top: 5px; height: 42px; font-size: 14px; text-align: center; }
-            .item-header { flex-direction: column; align-items: flex-start; }
-            .main-wrapper { padding: 30px 15px; }
-            .card { padding: 25px 15px; margin-bottom: 25px; border-radius: 16px; }
-            .sector-results-container { margin-top: 35px; margin-bottom: 35px; padding: 0 5px; }
-            .dash-overlay { padding: 15px 10px; }
-            .dash-overlay .container { padding-top: 30px; }
-            .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; padding-right: 55px; padding-bottom: 20px; margin-bottom: 30px; }
-            .dash-header h1 { font-size: 20px !important; line-height: 1.3 !important; white-space: normal !important; display: -webkit-box !important; -webkit-line-clamp: 2 !important; -webkit-box-orient: vertical !important; overflow: hidden !important; margin-top: 8px; width: 100%; }
-            .dash-header .btn-action-group { width: 100%; display: flex; justify-content: center; margin-top: 10px; }
-            .dash-header .btn-action-group button { width: 100%; max-width: none; justify-content: center; }
-            .btn-close-icon { top: 15px !important; right: 15px !important; }
-            .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
-            .dash-kpi-card { padding: 15px 10px; }
-            .dash-kpi-value { font-size: 22px; margin-top: 5px; }
-            .dash-kpi-value.text-val { font-size: 11px !important; min-height: 28px; line-height: 1.1; word-break: break-word; padding: 0; letter-spacing: 0; }
-            .dash-kpi-label { font-size: 9px; }
-            .chart-section { width: 100%; gap: 15px; }
-            .chart-card { padding: 20px 15px; width: 100%; box-sizing: border-box; min-height: 380px; }
-            .chart-container-inner { min-height: 220px; margin: 0 auto; display: flex; align-items: center; justify-content: center;}
-            .modal { padding: 30px 20px; }
-            .nav-user { display: none !important; }
-            .nav-title { display: none !important; }
-            .mobile-menu-btn { display: block; }
-            #toast-container { top: 15px; right: 10px; left: 10px; bottom: auto; }
-            .toast-notification { flex-direction: column; text-align: center; }
-            .toast-notification .btn-toast-action { width: 100%; }
             .word-cloud-modal .modal { padding: 0; }
             .word-cloud-modal .modal > .modal-header-cloud { padding: 20px 15px; padding-right: 50px; }
             .word-cloud-modal .modal > .modal-header-cloud p { font-size: 11px; max-width: 100%; margin-top: 5px; }
@@ -790,19 +787,19 @@
         </div>
     </div>
 
-    <!-- 🔥 NUVEM DE PALAVRAS RESTAURADA 🔥 -->
-    <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
-        <div class="modal">
-            <div class="modal-header-cloud">
-                <button class="btn-close-icon" onclick="fecharNuvemPalavras()">✕</button>
-                <h3 style="font-size: 20px; font-weight: 500; color: var(--text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Nuvem de Palavras</h3>
-                <p style="font-size: 13px; color: var(--text-muted); margin: 0 auto; line-height: 1.5; max-width: 80%;">
-                    Esta ferramenta destaca os termos qualitativos mais recorrentes na base de dados. Quanto maior a palavra, mais os colaboradores enfatizaram este contexto.
-                </p>
-            </div>
-            <div class="word-cloud-area" id="wordCloudArea"></div>
+    <!-- Modal da Nuvem de Palavras (Inserir na raiz do body) -->
+<div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
+    <div class="modal">
+        <div class="modal-header-cloud">
+            <button class="btn-close-icon" onclick="fecharNuvemPalavras()">✕</button>
+            <h3 style="font-size: 20px; font-weight: 500; color: var(--text); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Nuvem de Palavras</h3>
+            <p style="font-size: 13px; color: var(--text-muted); margin: 0 auto; line-height: 1.5; max-width: 80%;">
+                Esta ferramenta destaca os termos qualitativos mais recorrentes na base de dados. Quanto maior a palavra, mais os colaboradores enfatizaram este contexto.
+            </p>
         </div>
+        <div class="word-cloud-area" id="wordCloudArea"></div>
     </div>
+</div>
 
     <!-- DASHBOARD INDIVIDUAL -->
     <div class="dash-overlay" id="dashboardTela">
@@ -1343,8 +1340,14 @@
             area.innerHTML = html;
         }
 
+        // ==========================================================================
+        // 🔥 LÓGICA E MOTOR DA NUVEM DE PALAVRAS 🔥
+        // ==========================================================================
+
         function abrirNuvemPalavrasModal() {
             let filtrados = window.currentDashboardVotos.filter(v => v.comentario && v.comentario.trim() !== "");
+            
+            // Filtra os comentários baseando-se no Template que está sendo visualizado
             if(window.templateAtualModal && window.templateAtualModal !== 'TODOS') {
                 filtrados = filtrados.filter(v => {
                     let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
@@ -1352,47 +1355,95 @@
                     return vTmpl === window.templateAtualModal;
                 });
             }
+            
             gerarNuvemPalavras(filtrados);
             document.getElementById('modalWordCloud').style.display = 'flex';
         }
 
-        function fecharNuvemPalavras() { document.getElementById('modalWordCloud').style.display = 'none'; }
+        function fecharNuvemPalavras() { 
+            document.getElementById('modalWordCloud').style.display = 'none'; 
+        }
 
-        // 🔥 O MOTOR DA NUVEM DE PALAVRAS RESTAURADO EXATAMENTE COMO APROVADO ANTES 🔥
         function gerarNuvemPalavras(votos) {
             const area = document.getElementById('wordCloudArea');
-            if(votos.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; return; }
-
-            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter"];
+            if(votos.length === 0) { 
+                area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px; text-align:center;'>Massa de dados insuficiente para gerar a Nuvem.</p>"; 
+                return; 
+            }
+            
+            const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let wordCounts = {};
 
             votos.forEach(v => {
-                if(!v.comentario) return;
-                let tokens = v.comentario.toLowerCase().replace(/[.,!?;:()"]/g, "").split(/\s+/);
+                let cleanText = v.comentario.replace(/[^\w\sà-úÀ-Ú]/gi, "").toLowerCase();
+                let tokens = cleanText.split(/\s+/);
                 tokens.forEach(t => {
                     if(t.length > 2 && !stopwords.includes(t)) { wordCounts[t] = (wordCounts[t] || 0) + 1; }
                 });
             });
 
-            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 30);
-            if(sortedWords.length === 0) { area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>Palavras insuficientes para compor o mapa.</p>"; return; }
+            // Isola as 40 palavras mais usadas
+            let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 40);
+            
+            if(sortedWords.length === 0) { 
+                area.innerHTML = "<p style='color: var(--text-muted); font-size: 13px; text-align:center;'>Palavras insuficientes para compor o mapa.</p>"; 
+                return; 
+            }
 
             const maxCount = wordCounts[sortedWords[0]];
+            const minCount = wordCounts[sortedWords[sortedWords.length - 1]];
+
+            // Sistema de Cores Inteligente por Tema
             const isLight = document.body.classList.contains('light-mode');
-            const colors = isLight ? ['#111827', '#4b5563', '#6b7280', '#ff5100'] : ['#ffffff', '#e2e8f0', '#9ca3af', '#ff5100'];
+            const colors = isLight 
+                ? ['#ffcc00', '#a300ff', '#ff0080', '#6b7280', '#1e222d', '#4b5563'] 
+                : ['#ffffff', '#ffcc00', '#a300ff', '#ff0080', '#9ca3af', '#d1d5db'];
+
+            // Intercalação em Zigue-Zague para garantir que palavras pequenas preencham as frestas
+            let restWords = sortedWords.slice(1);
+            let interleaved = [];
+            let left = 0;
+            let right = restWords.length - 1;
+            while(left <= right) {
+                if(left === right) { interleaved.push(restWords[left]); break; }
+                interleaved.push(restWords[left]);
+                interleaved.push(restWords[right]);
+                left++; right--;
+            }
+            const mid = Math.floor(interleaved.length / 2);
+            interleaved.splice(mid, 0, sortedWords[0]);
+            let displayWords = interleaved;
+
+            const isMobile = window.innerWidth < 600;
+            
+            // Variáveis do Multiplicador Matemático
+            const baseSize = isMobile ? 12 : 16;       
+            const sizeMultiplier = isMobile ? 35 : 50; 
+            const maxFontSize = isMobile ? 55 : 95; 
 
             let html = "<div class='cloud-wrapper'>";
-            sortedWords.forEach((word, index) => {
-                let ratio = wordCounts[word] / maxCount;
-                let fontSize = 14 + (ratio * 36);
-                let opacity = 0.6 + (ratio * 0.4);
-                let color = index === 0 ? "var(--primary)" : colors[Math.floor(Math.random() * colors.length)];
-                let delay = index * 0.05;
-                let mainClass = index === 0 ? "main-word" : "";
+            displayWords.forEach((word, index) => {
+                let count = wordCounts[word];
+                let isMain = (word === sortedWords[0]);
+                
+                // Cálculo de proporção para forçar discrepância entre as palavras
+                let ratio = (maxCount === minCount) ? 1 : Math.pow((count - minCount) / (maxCount - minCount), 1.5);
+                let fontSize = Math.floor(baseSize + ratio * sizeMultiplier); 
+                
+                if (isMain) fontSize = maxFontSize; 
+                
+                // Ciclo de cores forçado (garante que vizinhos não tenham a mesma cor)
+                let color = isMain ? 'var(--primary)' : colors[index % colors.length];
+                let delay = (Math.random() * 0.4).toFixed(2);
+                let mainClass = isMain ? "main-word" : "";
+                
+                // Alinhamento alternado para preencher espaços verticais perfeitamente
+                let align = index % 2 === 0 ? 'baseline' : 'text-bottom';
 
-                html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; opacity: ${opacity}; animation-delay: ${delay}s;">${word}</span>`;
+                html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; animation-delay: ${delay}s; vertical-align: ${align};">${word}</span>`;
             });
             html += "</div>";
+            
             area.innerHTML = html;
         }
 
