@@ -10,7 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        /* Variáveis do Modo Escuro (Padrão Original) */
+        /* Variáveis do Modo Escuro */
         :root {
             --bg: #0f1115; 
             --surface: #1e222d; 
@@ -48,7 +48,7 @@
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; transition: background-color 0.3s ease, color 0.3s ease; }
         
         /* ==========================================================================
-           1. SPLASH SCREEN
+           SPLASH SCREEN
            ========================================================================== */
         #splash-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: var(--bg); z-index: 99999; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.6s ease, visibility 0.6s ease, background-color 0.3s ease; }
         #splash-screen.hidden { opacity: 0; visibility: hidden; }
@@ -64,7 +64,7 @@
         @keyframes fadeInSlogan { to { opacity: 1; } }
 
         /* ==========================================================================
-           2. NAVBAR E MENU LATERAL
+           NAVBAR E MENU LATERAL
            ========================================================================== */
         .navbar { background-color: var(--nav-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); padding: 15px 40px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 1000; transition: background-color 0.3s ease, border-color 0.3s ease; gap: 15px; }
         .nav-brand { display: flex; align-items: center; gap: 15px; flex: 1; min-width: 0; overflow: hidden; }
@@ -141,7 +141,6 @@
         .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 400; margin-bottom: 8px; margin-left: 4px; }
         input, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 14px 16px; border-radius: 12px; font-size: 14px; outline: none; width: 100%; transition: 0.2s; }
         input:focus, select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(255, 81, 0, 0.1); }
-        
         input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.8); cursor: pointer; }
         body.light-mode input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.2); }
 
@@ -161,7 +160,7 @@
         .filter-pill { background: transparent; border: 1px solid transparent; color: var(--text-muted); padding: 8px 16px; border-radius: 20px; font-size: 13px; font-weight: 400; cursor: pointer; transition: 0.2s; }
         .filter-pill:hover { color: var(--text); }
         .filter-pill.active { background: var(--surface); color: var(--text); border-color: var(--border); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: auto; border-radius: 8px; color: var(--text-muted); cursor: pointer; text-align: center;}
+        .filter-date { padding: 8px 12px; font-size: 12px; height: 35px; margin-left: auto; width: 150px; border-radius: 8px; color: var(--text-muted); cursor: pointer; text-align: center;}
         .filter-date:focus, .filter-date:valid { color: var(--text); text-align: left; }
 
         .segmented-control { display: flex; background: var(--bg-transparent); border-radius: 12px; padding: 4px; margin-bottom: 20px; border: 1px solid var(--border); }
@@ -288,12 +287,12 @@
         .campanha-detalhe-kpis { font-size: 13px; color: var(--text-muted); }
 
         /* ==========================================================================
-           🔥 GAVETA DE COMENTÁRIOS E FEED QUALITATIVO (SaaS CLEAN) 🔥
+           🔥 GAVETA DE COMENTÁRIOS E FEED QUALITATIVO (AGORA NA RAIZ) 🔥
            ========================================================================== */
-        .comments-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 4000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .comments-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); z-index: 9000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
         .comments-overlay.open { opacity: 1; visibility: visible; }
         
-        .comments-drawer { position: fixed; top: 0; right: -450px; width: 400px; max-width: 90%; height: 100%; background: var(--surface); box-shadow: -5px 0 25px rgba(0,0,0,0.2); z-index: 4001; transition: right 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
+        .comments-drawer { position: fixed; top: 0; right: -450px; width: 400px; max-width: 90%; height: 100%; background: var(--surface); box-shadow: -5px 0 25px rgba(0,0,0,0.2); z-index: 9001; transition: right 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); display: flex; flex-direction: column; }
         .comments-drawer.open { right: 0; }
         
         .drawer-header { padding: 25px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; background: var(--bg); position: relative;}
@@ -321,7 +320,7 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
         /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - OTIMIZADA PARA FORMATO DE NUVEM 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
            ========================================================================== */
         .word-cloud-modal .modal { 
             background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
@@ -341,16 +340,17 @@
         .cloud-wrapper {
             display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
             width: 100%; max-width: 650px;
-            gap: 10px 18px; 
+            gap: 2px 14px; 
             padding: 20px;
         }
 
         .word-item { 
             display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
-            line-height: 1.1; 
+            line-height: 0.9; 
             white-space: nowrap; cursor: default;
-            opacity: 0; transform: scale(0.1); transition: transform 0.2s, filter 0.2s; 
-            animation: buildWord 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; 
+            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
+            transition: transform 0.2s, filter 0.2s; 
+            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
         }
         
         .word-item.main-word {
@@ -362,9 +362,8 @@
 
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
         @keyframes buildWord { 
-            0% { opacity: 0; transform: scale(0.1); } 
-            60% { transform: scale(1.1); } 
-            100% { opacity: 1; transform: scale(1); } 
+            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
         }
 
         @media(max-width: 800px) { 
@@ -488,28 +487,45 @@
             }, 6000);
         }
 
-        /* 🔥 REGISTRO GLOBAL E INTELIGENTE DE CORES 🔥 */
-        const CORE_PALETTE = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2']; 
-        let globalColorMap = {};
+        /* ==========================================================================
+           🔥 INTELIGÊNCIA DE CORES E HIERARQUIA FIXA 🔥
+           Aqui nós substituímos o adivinho pelas configurações cravadas!
+           ========================================================================== */
         
-        // Esta função varre a base de dados na extração e garante que as cores nunca mudem
-        function registrarCoresDosVotos(votos) {
-            let unique = [...new Set(votos.map(v => v.sentimento ? v.sentimento.trim() : ""))].filter(Boolean);
-            unique.sort(); // Organização alfabética fixa as cores pra sempre
+        // As 4 cores primárias de hierarquia (O Rosa foi clareado para contraste)
+        const CORES_PADRAO = {
+            S1: '#ff5100', // Laranja
+            S2: '#ffcc00', // Amarelo
+            S3: '#a300ff', // Roxo
+            S4: '#ff66b2'  // Rosa Claro
+        };
+
+        const MAPA_SENTIMENTOS = {
+            // TEMPLATE PADRÃO
+            "aprendi algo novo": CORES_PADRAO.S1,
+            "fiquei feliz": CORES_PADRAO.S2,
+            "quero saber mais": CORES_PADRAO.S3,
+            "poderia ser melhor": CORES_PADRAO.S4,
             
-            let colorIndex = 0;
-            unique.forEach(s => {
-                let key = s.toLowerCase();
-                if (!globalColorMap[key]) {
-                    globalColorMap[key] = CORE_PALETTE[colorIndex % CORE_PALETTE.length];
-                    colorIndex++;
-                }
-            });
-        }
+            // 🚨 SUBSTITUA AQUI PELOS 4 TEXTOS DO SEU TEMPLATE DE COMUNICAÇÃO 🚨
+            "muito satisfeito": CORES_PADRAO.S1,
+            "satisfeito": CORES_PADRAO.S2,
+            "neutro": CORES_PADRAO.S3,
+            "insatisfeito": CORES_PADRAO.S4
+        };
 
         function getCorSentimento(s) {
             if(!s) return '#9aa0a6';
-            return globalColorMap[s.toLowerCase().trim()] || '#9aa0a6';
+            let termo = s.toLowerCase().trim();
+            
+            if(MAPA_SENTIMENTOS[termo]) {
+                return MAPA_SENTIMENTOS[termo];
+            }
+
+            // Fallback Genérico (Impede que o sistema quebre se você esquecer de cadastrar)
+            let hash = 0; for(let i=0; i<termo.length; i++) hash = termo.charCodeAt(i) + ((hash << 5) - hash);
+            const fallbackColors = [CORES_PADRAO.S1, CORES_PADRAO.S2, CORES_PADRAO.S3, CORES_PADRAO.S4];
+            return fallbackColors[Math.abs(hash) % fallbackColors.length];
         }
     </script>
 
@@ -662,7 +678,8 @@
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Ativo', this)">Ativas</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Em Espera', this)">Em Espera</div>
                     <div class="filter-pill" onclick="aplicarFiltroStatus('Finalizado', this)">Encerradas</div>
-                    <input type="text" class="filter-date" id="filtroData" placeholder="Selecione uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
+                    <!-- 🔥 Placeholder no filtro de Data 🔥 -->
+                    <input type="text" class="filter-date" id="filtroData" placeholder="Selecionar uma Data" onfocus="(this.type='date')" onblur="if(!this.value) this.type='text'" onchange="renderizarLista()">
                 </div>
 
                 <div class="list-container expanded" id="containerHistorico" style="max-height: 60vh; overflow-y: auto;">
@@ -826,7 +843,24 @@
         </div>
     </div>
 
-    <!-- 🔥 MODAL: NUVEM DE PALAVRAS (NOVO FORMATO) 🔥 -->
+    <!-- 🔥 A GAVETA DE COMENTÁRIOS E A NUVEM AGORA ESTÃO NA RAIZ (LIVRES DE BUGS) 🔥 -->
+    <div class="comments-overlay" id="overlayComentarios" onclick="fecharGavetaComentarios()"></div>
+    <div class="comments-drawer" id="gavetaComentarios">
+        <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta" style="position: absolute !important;">✕</button>
+        <div class="drawer-header">
+            <h3>Feed de Comentários</h3>
+        </div>
+        <div class="drawer-body" id="listaComentariosArea">
+            <!-- Comentários via JS -->
+        </div>
+        <div class="drawer-footer">
+            <button class="btn-menu-lateral" style="margin-bottom: 0;" onclick="abrirNuvemPalavrasModal()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
+                NUVEM DE PALAVRAS
+            </button>
+        </div>
+    </div>
+
     <div class="modal-overlay word-cloud-modal" id="modalWordCloud" onclick="if(event.target.id === 'modalWordCloud') fecharNuvemPalavras()">
         <div class="modal">
             <div class="modal-header-cloud">
@@ -843,24 +877,6 @@
     <!-- DASHBOARD INDIVIDUAL -->
     <div class="dash-overlay" id="dashboardTela">
         <button class="btn-close-icon" onclick="fecharDashboard()" title="Fechar Painel">✕</button>
-        
-        <div class="comments-overlay" id="overlayComentarios" onclick="fecharGavetaComentarios()"></div>
-        <div class="comments-drawer" id="gavetaComentarios">
-            <button class="btn-close-icon" onclick="fecharGavetaComentarios()" title="Fechar Gaveta" style="position: absolute !important;">✕</button>
-            <div class="drawer-header">
-                <h3>Feed de Comentários</h3>
-            </div>
-            <div class="drawer-body" id="listaComentariosArea">
-                <!-- Comentários via JS -->
-            </div>
-            <div class="drawer-footer">
-                <button class="btn-menu-lateral" style="margin-bottom: 0;" onclick="abrirNuvemPalavrasModal()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path></svg>
-                    NUVEM DE PALAVRAS
-                </button>
-            </div>
-        </div>
-
         <div class="container">
             <div class="dash-header">
                 <div>
@@ -995,7 +1011,6 @@
 
         window.currentDashboardVotos = [];
         window.templateAtualModal = 'TODOS';
-
         window.instanciasGraficos = []; 
         
         function limparGraficos() {
@@ -1078,8 +1093,6 @@
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`);
                 const dados = await res.json();
                 if(dados && dados.sucesso) {
-                    registrarCoresDosVotos(dados.votos); // Mapeia cores globalmente ao carregar
-
                     let votosSetor = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -1502,12 +1515,12 @@
                             ${botoesQualitativosHTML}
                         </div>
                         <div class="chart-card" style="align-items: flex-start; justify-content: flex-start;">
-                            <h3 style="font-size: 14px; color: var(--text); margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Resumo Analítico (${tmpl})</h3>
+                            <h3 style="font-size: 14px; color: var(--text); margin-bottom: 5px; text-transform: uppercase; font-weight: 500;">Síntese (${tmpl})</h3>
                             <div class="report-text" style="width: 100%;">
                                 <p style="color: var(--text); font-weight: 400; margin-top: 10px;">Foram processadas <strong>${totalVotosTmpl} colaborações</strong> diretas neste formato. Índice de aprovação: <strong>${mediaTmpl} (0 a 10)</strong>.</p>
                                 <h4 style="color: var(--primary);">Mapeamento:</h4>
                                 <ul style="list-style: none; padding: 0;">${listaHTML}</ul>
-                                <h4 style="color: var(--primary);">Síntese:</h4>
+                                <h4 style="color: var(--primary);">Conclusão:</h4>
                                 ${recoHTML}
                             </div>
                         </div>
@@ -1560,8 +1573,11 @@
 
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
-                if(dados.sucesso) { processarEstatisticas(dados.votos); document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; } 
-                else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
+                if(dados.sucesso) { 
+                    registrarCoresDosVotos(dados.votos); 
+                    processarEstatisticas(dados.votos); 
+                    document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; 
+                } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
             } catch (e) { alert("Falha ao carregar dashboard."); fecharDashboard(); }
         }
 
@@ -1867,6 +1883,7 @@
                     linhaItemHTML += `<li style="font-size: 13px; margin-bottom: 5px; color: var(--text-muted); display: flex; align-items: center; gap: 8px;"><span class="dot" style="background:${cor}; width:8px; height:8px;"></span><span>${s}: ${cP}% (${cCount})</span></li>`;
                 });
 
+                // 🔥 EMBUTE OS COMENTÁRIOS NO CARD DO RELATÓRIO GLOBAL (Design Clean) 🔥
                 let blocoComentariosHTML = "";
                 if(info.comentariosLista.length > 0) {
                     blocoComentariosHTML = `<div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
@@ -2012,6 +2029,7 @@
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(camp.nome.toUpperCase(), 15, y); y += 5;
                 doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
                 
+                // 🔥 Quebra dos sentimentos com cores exatas no PDF Global 🔥
                 camp.sentimentos.forEach(item => {
                     y = checkPageBreak(doc, y, 6);
                     doc.setFillColor(item.r, item.g, item.b); doc.circle(17, y - 1.2, 1.2, "F");
