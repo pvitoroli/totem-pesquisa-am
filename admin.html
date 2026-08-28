@@ -1412,10 +1412,8 @@
             return url; 
         }
         function pegarLinkPublico() { 
-            let url = `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}`; 
-            url += document.body.classList.contains('light-mode') ? "&theme=light" : "&theme=dark"; 
-            return url; 
-        }
+    return `${URL_SITE_BASE.replace('index.html', 'publico.html')}?evento=${encodeURIComponent(campSelecionada.id)}&setor=${encodeURIComponent(campSelecionada.setor)}&publico=true`; 
+}
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => mostrarToastNotificacao("Totem Público", "Link copiado para a área de transferência.")); }
 
