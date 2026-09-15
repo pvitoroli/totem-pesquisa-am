@@ -855,19 +855,28 @@
                     <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: var(--surface-highlight);">
                         INICIAR TOTEM VIRTUAL (Neste dispositivo)
                     </button>
-                    <div class="qr-access-group">
-                        <h4 class="modal-section-title">COMPARTILHAR TOTEM PÚBLICO (Para outros dispositivos)</h4>
-                        <div id="qrCodeContainer">
-                            <div id="qrCodeLoading">Gerando código...</div>
-                            <img id="qrCodeImg" alt="QR Code">
+                    <div class="qr-access-group" style="padding: 24px;">
+                        <h4 class="modal-section-title" style="margin-bottom: 20px; width: 100%; text-align: left;">COMPARTILHAR TELA PÚBLICA</h4>
+                        <div style="display: flex; gap: 20px; width: 100%; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                            
+                            <!-- Coluna Esquerda: Botões -->
+                            <div style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 200px;">
+                                <button class="btn btn-primary btn-full" onclick="baixarImagemOficial(event)" style="margin: 0; padding: 14px; gap: 10px;">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    BAIXAR SLIDE DE DIVULGAÇÃO
+                                </button>
+                                <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none; margin: 0; padding: 14px;">
+                                    COPIAR LINK DIRETO
+                                </button>
+                            </div>
+
+                            <!-- Coluna Direita: QR Code -->
+                            <div id="qrCodeContainer" style="margin: 0; flex-shrink: 0; background: white; padding: 10px; border-radius: 12px; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                                <div id="qrCodeLoading" style="font-size: 11px; color: #333;">Gerando...</div>
+                                <img id="qrCodeImg" alt="QR Code" style="display: none; width: 100%; height: 100%;">
+                            </div>
                         </div>
-                        <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none;">
-                            COPIAR LINK TOTEM PÚBLICO
-                        </button>
                     </div>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- MODAL DE USUÁRIOS -->
