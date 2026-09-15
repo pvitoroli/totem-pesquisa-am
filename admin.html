@@ -1425,6 +1425,75 @@
         }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => mostrarToastNotificacao("Totem Público", "Link copiado para a área de transferência.")); }
+        }
+        function baixarImagemOficial(event) {
+            const qrImg = document.getElementById('qrCodeImg');
+            if (!qrImg.src || qrImg.style.display === 'none') {
+                alert("Aguarde a geração do QR Code.");
+                return;
+            }
+
+            const btn = event.currentTarget;
+            const txtOriginal = btn.innerHTML;
+            btn.innerHTML = "⏳ PROCESSANDO IMAGEM...";
+            btn.disabled = true;
+
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Carrega o background fornecido por você
+            const bgImg = new Image();
+            bgImg.crossOrigin = "Anonymous";
+            bgImg.src = "QR Code - Pesquisa de Sentimento.png";
+
+            bgImg.onload = () => {
+                // Configura o canvas para ter a resolução exata do background
+                canvas.width = bgImg.width;
+                canvas.height = bgImg.height;
+                ctx.drawImage(bgImg, 0, 0);
+
+                // Carrega o QR code recém gerado
+                const qrLayer = new Image();
+                qrLayer.crossOrigin = "Anonymous";
+                qrLayer.src = qrImg.src;
+                
+                qrLayer.onload = () => {
+                    // --------------------------------------------------------
+                    // ⚙️ CALIBRAGEM DO QR CODE NA IMAGEM
+                    // Eu calculei essas proporções baseadas no layout que você me enviou.
+                    // Caso o QR code fique um pouco desalinhado em relação ao quadrado branco,
+                    // basta aumentar ou diminuir os decimais nessas três variáveis abaixo:
+                    // --------------------------------------------------------
+                    const tamanhoQR = bgImg.width * 0.265; // Tamanho do QR (26.5% da largura da tela)
+                    const posicaoX = bgImg.width * 0.63;   // Distância da esquerda (63% da tela)
+                    const posicaoY = bgImg.height * 0.22;  // Distância do topo (22% da tela)
+
+                    // Desenha o QR Code por cima do background nas coordenadas exatas
+                    ctx.drawImage(qrLayer, posicaoX, posicaoY, tamanhoQR, tamanhoQR);
+
+                    // Baixa o arquivo mesclado
+                    const link = document.createElement('a');
+                    link.download = `Campanha - ${campSelecionada.nome_campanha}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+
+                    btn.innerHTML = txtOriginal;
+                    btn.disabled = false;
+                };
+                
+                qrLayer.onerror = () => { 
+                    alert("Erro ao ler o QR Code gerado."); 
+                    btn.innerHTML = txtOriginal; 
+                    btn.disabled = false; 
+                };
+            };
+
+            bgImg.onerror = () => {
+                alert("⚠️ Erro: Não localizamos o arquivo 'QR Code - Pesquisa de Sentimento.png'.\n\nPor favor, certifique-se de que a imagem de fundo está salva na mesma pasta do seu site com este nome exato.");
+                btn.innerHTML = txtOriginal;
+                btn.disabled = false;
+            };
+        }
 
         /* =======================================================
            🔥 GAVETA DE FEED QUALITATIVO E NUVEM DE PALAVRAS 🔥
