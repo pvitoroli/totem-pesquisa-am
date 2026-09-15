@@ -1425,7 +1425,7 @@
         }
         function iniciarTotem() { window.open(pegarLinkTotem(), '_blank'); }
         function gerarLinkPublico() { navigator.clipboard.writeText(pegarLinkPublico()).then(() => mostrarToastNotificacao("Totem Público", "Link copiado para a área de transferência.")); }
-        }
+        
         function baixarImagemOficial(event) {
             const qrImg = document.getElementById('qrCodeImg');
             if (!qrImg.src || qrImg.style.display === 'none') {
@@ -1435,7 +1435,7 @@
 
             const btn = event.currentTarget;
             const txtOriginal = btn.innerHTML;
-            btn.innerHTML = "⏳ PROCESSANDO IMAGEM...";
+            btn.innerHTML = "PROCESSANDO IMAGEM...";
             btn.disabled = true;
 
             const canvas = document.createElement('canvas');
