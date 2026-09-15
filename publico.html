@@ -353,8 +353,13 @@
                     const res = await fetch(`${URL_BACKEND}?acao=buscarPorId&id=${idEventoAtual}&t=${antiCache}`); 
                     const dados = await res.json(); 
                     
-                    if (dados.sucesso) { 
-                        nomeRealDaCampanha = dados.nome; 
+                   if (dados.sucesso) { 
+                        // 🔥 NOVO: Só atualiza se o nome não veio pela URL
+                        if (!nomeDaUrl) {
+                            nomeRealDaCampanha = dados.nome; 
+                            document.getElementById('nome-campanha-ativa').innerText = nomeRealDaCampanha;
+                        }
+                        
                         setorAtual = dados.setor || setorAtual; 
                         
                         if (dados.template) {
