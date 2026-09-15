@@ -265,15 +265,23 @@
     </div>
 
     <script>
-        // 🚨 1. CERCA ELÉTRICA BLINDADA CONTRA O BOTÃO "VOLTAR" (Bfcache) 🚨
+       // 🚨 1. CERCA ELÉTRICA BLINDADA CONTRA O BOTÃO "VOLTAR" (Bfcache) 🚨
         const urlParams = new URLSearchParams(window.location.search);
         const idEventoAtual = urlParams.get('evento');
         let setorAtual = urlParams.get('setor') || "Geral";
         let propostaAtual = urlParams.get('proposta') || "Geral";
         
+        // 🔥 NOVO: Captura o nome direto do QR Code/URL
+        let nomeDaUrl = urlParams.get('nome');
+        
         const chaveBloqueio = propostaAtual !== "Geral" ? 'votou_' + idEventoAtual + '_' + propostaAtual : 'votou_' + idEventoAtual;
         
-        let nomeRealDaCampanha = "Carregando...";
+        // 🔥 NOVO: Se tem o nome na URL, já aplica. Se não, fica no "Carregando..."
+        let nomeRealDaCampanha = nomeDaUrl ? decodeURIComponent(nomeDaUrl) : "Carregando...";
+
+        // ⚡ INJEÇÃO INSTANTÂNEA NA TELA
+        const tituloTela = document.getElementById('nome-campanha-ativa');
+        if (tituloTela) tituloTela.innerText = nomeRealDaCampanha;
 
         let sentimentosAtivos = {
             1: { texto: "Aprendi algo novo", gif: "https://fonts.gstatic.com/s/e/notoemoji/latest/1f632/512.gif" },
