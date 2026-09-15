@@ -414,11 +414,11 @@
                     nomeRealDaCampanha = "Ação Corporativa"; 
                 } 
             } else { 
-                nomeRealDaCampanha = "Pesquisa Pública"; 
+                if (!nomeDaUrl) nomeRealDaCampanha = "Pesquisa Pública"; 
             } 
             
             const elementoTitulo = document.getElementById('nome-campanha-ativa'); 
-            if (elementoTitulo) elementoTitulo.innerText = nomeRealDaCampanha; 
+            if (elementoTitulo && !nomeDaUrl) elementoTitulo.innerText = nomeRealDaCampanha; 
         } 
         
         window.addEventListener('load', buscarEventoAtivo); 
