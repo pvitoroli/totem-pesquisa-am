@@ -217,6 +217,8 @@
         .modal-header-section h3 { margin-bottom: 6px; color: var(--text); font-weight: 400; font-size: 24px; letter-spacing: 0.5px; }
         .modal-header-section p { color: var(--primary); font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
 
+        .modal-body-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .modal-column { display: flex; flex-direction: column; gap: 24px; }
         .column-title { font-size: 13px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1.5px; font-weight: 500; margin-bottom: 8px; border-bottom: 1px solid var(--surface-highlight); padding-bottom: 10px;}
         .modal-section-title { font-size: 12px; color: var(--text-muted); font-weight: 400; margin-bottom: 12px; }
 
@@ -224,6 +226,13 @@
         .modal-card-module:hover { border-color: var(--text-muted); }
         .config-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
         .modal .btn-template-save { padding: 14px 16px; font-size: 12px; border-radius: 10px; color: var(--text); white-space: nowrap; }
+
+        .qr-access-group { background: var(--bg-transparent); border: 1px solid var(--border); border-radius: 12px; padding: 24px; display: flex; flex-direction: column; align-items: center; text-align: center; transition: border-color 0.3s ease; }
+        .qr-access-group:hover { border-color: var(--text-muted); }
+        #qrCodeContainer { width: 160px; height: 160px; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px auto; background: white; border-radius: 12px; padding: 10px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: transform 0.3s ease; }
+        #qrCodeContainer:hover { transform: scale(1.05); }
+        #qrCodeImg { width: 100%; height: 100%; display: none; }
+        #qrCodeLoading { font-size: 12px; color: #333; text-align: center; font-weight: 400; }
 
         /* GESTÃO DE USUÁRIOS */
         .tabela-usuarios { width: 100%; border-collapse: collapse; margin-top: 10px; }
@@ -292,6 +301,7 @@
         .drawer-body { flex: 1; overflow-y: auto; padding: 25px; display: flex; flex-direction: column; gap: 10px; }
         .drawer-footer { padding: 20px 25px; border-top: 1px solid var(--border); background: var(--surface); }
 
+        /* NOVO DESIGN MAIS SÓBRIO E ELEGANTE DOS CARDS DE FEEDBACK */
         .feedback-card {
             background: var(--surface);
             border: 1px solid var(--border);
@@ -308,15 +318,60 @@
             border-color: var(--text-muted);
             transform: translateY(-2px);
         }
-        body.light-mode .feedback-card { background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
-        body.light-mode .feedback-card:hover { border-color: rgba(0,0,0,0.15); }
-        
-        .feedback-meta { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--surface-highlight); padding-bottom: 16px; }
-        .feedback-badge { display: flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; text-transform: uppercase; padding: 6px 12px; border-radius: 20px; letter-spacing: 0.5px; }
-        .feedback-dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-        .feedback-date { font-size: 10px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
-        .feedback-nota { font-size: 12px; color: var(--text); background: var(--surface-highlight); padding: 4px 8px; border-radius: 6px; border: 1px solid var(--border); display: inline-block; }
-        .feedback-text { font-size: 14px; color: var(--text); line-height: 1.7; font-weight: 400; font-style: italic; }
+        body.light-mode .feedback-card {
+            background: #ffffff;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+        }
+        body.light-mode .feedback-card:hover {
+            border-color: rgba(0,0,0,0.15);
+        }
+        .feedback-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--surface-highlight);
+            padding-bottom: 16px;
+        }
+        .feedback-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
+        .feedback-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .feedback-date {
+            font-size: 10px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+        .feedback-nota {
+            font-size: 12px;
+            color: var(--text);
+            background: var(--surface-highlight);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            display: inline-block;
+        }
+        .feedback-text {
+            font-size: 14px;
+            color: var(--text);
+            line-height: 1.7;
+            font-weight: 400;
+            font-style: italic;
+        }
         .feedback-text::before { content: '"'; color: var(--text-muted); font-size: 18px; margin-right: 4px; }
         .feedback-text::after { content: '"'; color: var(--text-muted); font-size: 18px; margin-left: 4px; }
 
@@ -331,64 +386,123 @@
         .btn-toast-action:hover { background: var(--primary); color: white; transform: scale(1.05); }
 
        /* ==========================================================================
-           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) 🔥
+           🔥 NUVEM DE PALAVRAS (WORD CLOUD MODAL) - REFINADO E ZIGUE-ZAGUE 🔥
            ========================================================================== */
         .modal-overlay.word-cloud-modal { z-index: 9999 !important; }
-        .word-cloud-modal .modal { background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px; }
-        .modal-header-cloud { flex-shrink: 0; z-index: 10; position: relative; padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center; padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
-        .word-cloud-area { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px 20px; position: relative; background: var(--bg-transparent); overflow-y: auto; max-height: 60vh; }
-        .cloud-wrapper { display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center; width: 100%; max-width: 650px; gap: 2px 8px; padding: 20px; }
+        
+        .word-cloud-modal .modal { 
+            background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 40px rgba(0,0,0,0.4); 
+            padding: 0; display: flex; flex-direction: column; overflow: hidden; max-width: 800px;
+        }
+        
+        .modal-header-cloud {
+            flex-shrink: 0; z-index: 10; position: relative;
+            padding: 30px 40px; border-bottom: 1px solid var(--border); background: var(--surface); text-align: center;
+            padding-right: 60px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .word-cloud-area { 
+            flex: 1; display: flex; align-items: center; justify-content: center; 
+            padding: 40px 20px; position: relative; background: var(--bg-transparent);
+            overflow-y: auto; max-height: 60vh;
+        }
+        
+        .cloud-wrapper {
+            display: flex; flex-wrap: wrap; justify-content: center; align-content: center; align-items: center;
+            width: 100%; max-width: 650px;
+            gap: 2px 8px; 
+            padding: 20px;
+        }
 
-        .word-item { display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; line-height: 0.9; white-space: nowrap; cursor: default; opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); transition: transform 0.2s, filter 0.2s; animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-        .word-item.main-word { color: var(--primary) !important; text-transform: uppercase; text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4); z-index: 5; }
+        .word-item { 
+            display: inline-block; font-family: 'Segoe UI', Arial, sans-serif; font-weight: 800; margin: 0; 
+            line-height: 0.9; 
+            white-space: nowrap; cursor: default;
+            opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px);
+            transition: transform 0.2s, filter 0.2s; 
+            animation: buildWord 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; 
+        }
+        
+        .word-item.main-word {
+            color: var(--primary) !important;
+            text-transform: uppercase;
+            text-shadow: 0 5px 20px rgba(255, 81, 0, 0.4);
+            z-index: 5;
+        }
+
         .word-item:hover { transform: scale(1.05) !important; filter: brightness(1.3); z-index: 10; position: relative;}
         
-        @keyframes buildWord { 0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } }
+        @keyframes buildWord { 
+            0% { opacity: 0; transform: scale(0.3) translateY(20px); filter: blur(5px); } 
+            100% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); } 
+        }
 
         /* ==========================================================================
            📱 ADAPTAÇÃO MOBILE (Áreas de Respiro Refinadas e Ajustes Gerais) 📱
            ========================================================================== */
         @media(max-width: 800px) {
             .chart-section { grid-template-columns: 1fr; }
+            .modal-body-grid { grid-template-columns: 1fr; gap: 32px; }
             .kpi-clean-grid { grid-template-columns: 1fr 1fr; gap: 20px 15px; }
             .dash-kpi-grid { grid-template-columns: 1fr 1fr; gap: 15px; }
         }
 
         @media(max-width: 600px) {
+            /* Navbar e Wrapper */
             .main-wrapper { padding: 40px 15px; }
             .navbar { padding: 15px 20px; }
-            .nav-logo { max-width: 75px; }
+            .nav-logo { max-width: 75px; } /* Redução da logo no celular */
             .nav-title, .nav-user { display: none !important; }
             .mobile-menu-btn { display: block; }
+
+            /* Boas vindas */
             .welcome-banner { flex-direction: column; align-items: flex-start; margin-bottom: 30px; }
             .welcome-banner h1 { font-size: 24px; }
+
+            /* KPIs e Home */
             .sector-results-container { margin-top: 30px; margin-bottom: 40px; padding: 0 5px; }
             .kpi-clean-grid { grid-template-columns: 1fr 1fr; gap: 20px 15px; }
             .kpi-clean-item { padding: 5px 10px; }
             .kpi-clean-value { font-size: 26px; }
             .kpi-clean-value.text-val { font-size: 13px; min-height: 26px; line-height: 1.2; }
+
+            /* Botões Principais */
             .action-buttons-grid { grid-template-columns: 1fr; gap: 15px; }
             .action-bridge-btn { padding: 18px; font-size: 13px; border-radius: 16px; }
+
+            /* Formulários e Cards (Mais Respiro) */
             .card { padding: 35px 20px; border-radius: 20px; }
             .form-grid { grid-template-columns: 1fr; gap: 25px; }
+
+            /* Filtros e Lista */
             .filters-bar { padding: 15px 10px; gap: 10px; justify-content: space-between; flex-wrap: wrap; }
             .filter-pill { flex: 1 1 calc(50% - 10px); text-align: center; padding: 10px 5px; font-size: 11px; white-space: nowrap; }
             .filter-date { width: 100% !important; margin-left: 0 !important; margin-top: 5px; height: 42px; font-size: 14px; text-align: center; }
+            
             .list-item { border-radius: 16px; margin-bottom: 16px; }
             .item-header { flex-direction: column; align-items: flex-start; gap: 15px; padding: 20px; }
+
+            /* Painel Analítico / Dashboard (Mais Respiro) */
             .dash-overlay { padding: 25px 15px; }
             .dash-overlay .container { padding-top: 15px; }
             .dash-header { flex-direction: column; align-items: flex-start; gap: 15px; padding-right: 30px; margin-bottom: 30px; }
             .dash-header h1 { font-size: 22px; line-height: 1.3; margin-top: 5px; }
             .btn-action-group { width: 100%; display: flex; flex-direction: column; gap: 10px; }
             .btn-action-group button { width: 100%; margin: 0; padding: 12px; font-size: 11px; }
+
+            /* Dashboard Cards Internos */
             .dash-kpi-card { padding: 20px 15px; border-radius: 16px; }
             .dash-kpi-value { font-size: 24px; margin-top: 8px; }
             .dash-kpi-label { font-size: 9px; }
+
+            /* Gráficos */
             .chart-card { padding: 30px 20px; border-radius: 20px; min-height: auto; }
             .chart-container-inner { min-height: 220px; }
+
+            /* Modais e Nuvem de Palavras (Mais Respiro) */
             .modal { padding: 40px 25px; border-radius: 24px; }
             .btn-close-icon { top: 20px !important; right: 20px !important; width: 30px; height: 30px; font-size: 12px; }
+
             .word-cloud-modal .modal { padding: 0; }
             .word-cloud-modal .modal > .modal-header-cloud { padding: 20px 15px; padding-right: 50px; }
             .word-cloud-modal .modal > .modal-header-cloud p { font-size: 11px; max-width: 100%; margin-top: 5px; }
@@ -433,29 +547,40 @@
             "muito satisfeito": "#ff5100", "satisfeito": "#ffcc00", "neutro": "#a300ff", "insatisfeito": "#ff66b2"
         };
 
+        // Função que descobre a cor verificando o Template
         function getCorSentimento(s, nomeTemplate) {
             if(!s) return '#9aa0a6';
             let termo = s.toLowerCase().trim();
+            
+            // Tenta achar a cor exata no mapa do template específico (recebido da API)
             if (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()] && window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo]) {
                 return window.mapaCoresDinamico[nomeTemplate.toLowerCase()][termo];
             }
+
             let hash = 0; for(let i=0; i<termo.length; i++) hash = termo.charCodeAt(i) + ((hash << 5) - hash);
             const fallbackColors = ['#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c', '#1abc9c'];
             return fallbackColors[Math.abs(hash) % fallbackColors.length];
         }
 
+        // Função Fiscal para Gráficos
         function getCoresParaGrafico(labels, nomeTemplate) {
              const palette = ['#ff5100', '#ffcc00', '#a300ff', '#ff66b2', '#2ecc71', '#00d2ff', '#f39c12', '#9b59b6', '#e74c3c'];
-             let cores = []; let used = new Set();
+             let cores = [];
+             let used = new Set();
+             
              let mapaDesteTemplate = (nomeTemplate && window.mapaCoresDinamico[nomeTemplate.toLowerCase()]) ? window.mapaCoresDinamico[nomeTemplate.toLowerCase()] : {};
              
              labels.forEach((l) => {
                  let termo = l.toLowerCase().trim();
                  if (mapaDesteTemplate[termo]) {
-                     cores.push(mapaDesteTemplate[termo]); used.add(mapaDesteTemplate[termo]);
+                     cores.push(mapaDesteTemplate[termo]);
+                     used.add(mapaDesteTemplate[termo]);
                  } else if (MAPA_SENTIMENTOS_PADRAO[termo]) {
-                     cores.push(MAPA_SENTIMENTOS_PADRAO[termo]); used.add(MAPA_SENTIMENTOS_PADRAO[termo]);
-                 } else { cores.push(null); }
+                     cores.push(MAPA_SENTIMENTOS_PADRAO[termo]);
+                     used.add(MAPA_SENTIMENTOS_PADRAO[termo]);
+                 } else {
+                     cores.push(null);
+                 }
              });
              
              let pIdx = 0;
@@ -463,13 +588,15 @@
                  if (cores[i] === null) {
                      while (used.has(palette[pIdx]) && pIdx < palette.length) { pIdx++; }
                      let cor = palette[pIdx % palette.length] || '#9aa0a6';
-                     cores[i] = cor; used.add(cor); pIdx++;
+                     cores[i] = cor;
+                     used.add(cor);
+                     pIdx++;
                  }
              }
              return cores;
         }
 
-        // 🔥 FUNÇÃO GLOBAL PARA RESOLVER A SOBREPOSIÇÃO E O DUPLO X 🔥
+        // 🔥 FUNÇÃO DE LIMPEZA GERAL DE MODAIS 🔥
         function fecharTodosModais() {
             const modais = ['modalListaCampanhas', 'modalNovaCampanha', 'modalJornada', 'modalRelatorios', 'modalUsuarios', 'dashboardTela', 'dashboardGlobalTela'];
             modais.forEach(id => {
@@ -479,6 +606,18 @@
             document.body.style.overflow = 'auto';
         }
 
+        // 🔥 FUNÇÃO DE TOGGLE (RECOLHER E EXPANDIR ELEMENTOS) 🔥
+        function toggleElemento(idBox, idIcon) {
+            const box = document.getElementById(idBox);
+            const icon = document.getElementById(idIcon);
+            if (box.style.display === 'none') {
+                box.style.display = 'block';
+                if(icon) icon.innerText = icon.innerText.replace('▼', '▲').replace('Expandir', 'Recolher');
+            } else {
+                box.style.display = 'none';
+                if(icon) icon.innerText = icon.innerText.replace('▲', '▼').replace('Recolher', 'Expandir');
+            }
+        }
     </script>
 
     <div id="splash-screen">
@@ -707,88 +846,79 @@
 
     <!-- 🔥 NOVO MODAL JORNADA DA CAMPANHA (REMODELADO) 🔥 -->
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
-        <div class="modal" style="max-width: 850px;">
+        <div class="modal" style="max-width: 650px; padding: 40px;">
             <button class="btn-close-icon" onclick="document.getElementById('modalJornada').style.display='none'">✕</button>
             
-            <div class="modal-header-section" style="margin-bottom: 30px;">
+            <div class="modal-header-section" style="margin-bottom: 25px; padding-bottom: 20px;">
                 <h3 id="modTitle">Nome da Campanha</h3>
                 <p id="modMeta">Meta da campanha</p>
             </div>
             
-            <div style="display: flex; flex-direction: column; gap: 20px;">
+            <!-- 1. ACESSO À COLETA -->
+            <div class="modal-card-module" id="boxAcessoColeta" style="margin-bottom: 15px; padding: 20px;">
+                <h4 class="column-title" style="margin-bottom: 15px; border: none; padding: 0;">Acesso à Coleta</h4>
                 
-                <!-- BLOCO 1: ACESSO À COLETA (TOTENS) -->
-                <div class="modal-card-module" id="colunaTotens" style="margin: 0; padding: 24px;">
-                    <h4 class="column-title">Acesso à Coleta</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-top: 15px;">
-                        
-                        <!-- Totem Virtual -->
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <h4 class="modal-section-title" style="margin:0; font-weight: 600;">Totem Virtual</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px; flex: 1;">Abre a interface de pesquisa de sentimento neste dispositivo para votação imediata das equipes.</p>
-                            <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: var(--surface-highlight); color: var(--primary); border-color: var(--border); transition: all 0.3s ease;">
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
-                                INICIAR TOTEM VIRTUAL
-                            </button>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: var(--surface); color: var(--text); border-color: var(--border);">
+                        💻 Totem Virtual
+                    </button>
+                    <button class="btn btn-outline btn-full" onclick="toggleElemento('boxTotemPublico', 'iconPublico')" style="background: var(--surface); color: var(--text); border-color: var(--border);">
+                        📱 Totem Público <span id="iconPublico" style="margin-left: 5px; font-size: 10px;">▼</span>
+                    </button>
+                </div>
+                
+                <!-- Caixa Expansível do Totem Público -->
+                <div id="boxTotemPublico" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Compartilhe o material da campanha para permitir avaliações a partir de outros dispositivos.</p>
+                    <div style="display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+                        <div id="qrCodeContainer" style="margin: 0; flex-shrink: 0; background: white; padding: 5px; border-radius: 8px; width: 100px; height: 100px; display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+                            <div id="qrCodeLoading" style="font-size: 10px; color: #333;">Gerando...</div>
+                            <img id="qrCodeImg" alt="QR Code" style="display: none; width: 100%; height: 100%;">
                         </div>
-
-                        <!-- Tela Pública (QR) -->
-                        <div style="display: flex; flex-direction: column; gap: 10px;">
-                            <h4 class="modal-section-title" style="margin:0; font-weight: 600;">Tela Pública (QR Code)</h4>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 5px;">Compartilhe o material da campanha para permitir avaliações a partir de outros dispositivos.</p>
-                            <div style="display: flex; gap: 15px; align-items: center; background: var(--bg-transparent); border: 1px solid var(--border); border-radius: 12px; padding: 12px;">
-                                <div id="qrCodeContainer" style="margin: 0; flex-shrink: 0; background: white; padding: 5px; border-radius: 8px; width: 85px; height: 85px; display: flex; justify-content: center; align-items: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-                                    <div id="qrCodeLoading" style="font-size: 10px; color: #333;">Gerando...</div>
-                                    <img id="qrCodeImg" alt="QR Code" style="display: none; width: 100%; height: 100%;">
-                                </div>
-                                <div style="display: flex; flex-direction: column; gap: 8px; flex: 1;">
-                                    <button class="btn btn-primary btn-full" onclick="baixarImagemOficial(event)" style="padding: 10px; font-size: 11px;">
-                                        BAIXAR SLIDE
-                                    </button>
-                                    <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none; padding: 10px; font-size: 11px;">
-                                        COPIAR LINK DIRETO
-                                    </button>
-                                </div>
-                            </div>
+                        <div style="display: flex; flex-direction: column; gap: 10px; flex: 1;">
+                            <button class="btn btn-primary btn-full" onclick="baixarImagemOficial(event)" style="padding: 12px; font-size: 11px;">
+                                BAIXAR SLIDE
+                            </button>
+                            <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none; padding: 12px; font-size: 11px;">
+                                COPIAR LINK
+                            </button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- BLOCO 2: PAINEL ANALÍTICO (SOZINHO) -->
-                <div class="modal-card-module" style="margin: 0; padding: 24px; border-color: var(--primary);">
-                    <h4 class="column-title" style="color: var(--primary);">Inteligência de Dados</h4>
-                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()" style="padding: 20px; font-size: 14px; margin-top: 10px;">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-                        ABRIR PAINEL ANALÍTICO DA CAMPANHA
-                    </button>
+            <!-- 2. CONFIGURAÇÕES COMPACTAS -->
+            <div class="modal-card-module" id="boxConfigGeral" style="margin-bottom: 25px; padding: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="toggleElemento('boxConfiguracoes', 'iconConfig')">
+                    <h4 class="column-title" style="margin: 0; border: none; padding: 0;">⚙️ Configurações</h4>
+                    <span id="iconConfig" style="color: var(--text-muted); font-size: 12px; font-weight: 500;">Expandir ▼</span>
                 </div>
-
-                <!-- BLOCO 3: CONFIGURAÇÕES (TEMPLATE E PASTA) -->
-                <div class="modal-card-module" id="configCampanhaAtiva" style="margin: 0; padding: 24px;">
-                    <h4 class="column-title">Configurações</h4>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-top: 15px;">
-                        
+                
+                <div id="boxConfiguracoes" style="display: none; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
                         <div>
-                            <h4 class="modal-section-title">Template de Coleta: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
+                            <h4 class="modal-section-title">Template de Votação: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                             <div class="config-row">
-                                <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
-                                <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
+                                <select id="modalTemplateSelect" style="flex: 1; background: var(--bg); font-size: 12px; padding: 10px;"></select>
+                                <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)" style="padding: 10px;">Salvar</button>
                             </div>
                         </div>
-
                         <div>
                             <h4 class="modal-section-title">Pasta de Organização: <span id="modPastaBadge" style="color: var(--primary);">Raiz</span></h4>
                             <div class="config-row">
-                                <select id="modalPastaSelect" style="flex: 1; background: var(--bg);"></select>
-                                <button class="btn btn-outline btn-template-save" onclick="abrirPromptNovaPasta()" title="Criar Nova Pasta">+</button>
-                                <button class="btn btn-primary btn-template-save" onclick="atualizarPasta(this)">Mover</button>
+                                <select id="modalPastaSelect" style="flex: 1; background: var(--bg); font-size: 12px; padding: 10px;"></select>
+                                <button class="btn btn-outline btn-template-save" onclick="abrirPromptNovaPasta()" title="Criar Nova Pasta" style="padding: 10px;">+</button>
+                                <button class="btn btn-primary btn-template-save" onclick="atualizarPasta(this)" style="padding: 10px;">Mover</button>
                             </div>
                         </div>
-
                     </div>
                 </div>
-
             </div>
+
+            <!-- 3. PAINEL ANALÍTICO (Fim do popup) -->
+            <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()" style="padding: 16px; font-size: 14px;">
+                📊 ABRIR PAINEL ANALÍTICO
+            </button>
         </div>
     </div>
 
@@ -991,7 +1121,6 @@
         window.currentDashboardVotos = [];
         window.templateAtualModal = 'TODOS';
         window.instanciasGraficos = []; 
-        window.mapaCoresDinamico = {}; // Recebe da API
         
         function limparGraficos() {
             window.instanciasGraficos.forEach(obj => obj.chart.destroy());
@@ -1073,7 +1202,7 @@
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`);
                 const dados = await res.json();
                 if(dados && dados.sucesso) {
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {};
                     let votosSetor = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
@@ -1130,7 +1259,7 @@
             btn.disabled = true; btn.innerHTML = "Processando...";
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=adicionarUsuario&setor=${encodeURIComponent(setor)}&t=${new Date().getTime()}`); const data = await res.json();
-                if(data.sucesso) { alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha.`); input.value = ''; carregarListaUsuariosAdmin(); buscarSetores(); } else alert("⚠️ Erro: " + data.erro);
+                if(data.sucesso) { alert(`✅ SUCESSO!\n\nSetor Criado: ${data.setor}\nSenha Gerada: ${data.senha}\n\nCopie e envie esta senha.`); input.value = ''; carregarListaUsuariosAdmin(); buscarSetores(); } else alert("⚠️️ Erro: " + data.erro);
             } catch (e) { alert("Falha de conexão."); }
             btn.disabled = false; btn.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg> Adicionar e Gerar Senha`;
         }
@@ -1217,16 +1346,7 @@
             buscarDados(); carregarMiniDashboardSetor(); 
         }
 
-        async function atualizarTemplate(btnElement) {
-            const novoTemplate = document.getElementById('modalTemplateSelect').value; if(!campSelecionada || !novoTemplate) return;
-            const txtOriginal = btnElement.innerText; btnElement.innerText = "A Salvar..."; btnElement.disabled = true;
-            try {
-                const res = await fetch(`${URL_BACKEND}?acao=alterarTemplate&id=${campSelecionada.id}&template=${encodeURIComponent(novoTemplate)}&t=${new Date().getTime()}`); const json = await res.json();
-                if(json.sucesso) { campSelecionada.template = novoTemplate; const badge = document.getElementById('modTemplateBadge'); if (badge) badge.innerText = novoTemplate; mostrarToastNotificacao('Atualizado', 'O template da ação foi alterado com sucesso.'); renderizarLista(); } else alert("Falha: " + json.erro);
-            } catch (e) { alert("Erro de rede."); } btnElement.innerText = txtOriginal; btnElement.disabled = false;
-        }
-
-        /* LÓGICA DE PASTAS PARA O MODAL */
+        /* LÓGICA DE PASTAS E TEMPLATE NO POPUP DA CAMPANHA */
         function carregarPastasDisponiveis() {
             let pastas = new Set();
             dbCampanhas.forEach(c => {
@@ -1265,9 +1385,17 @@
             }
         }
 
+        async function atualizarTemplate(btnElement) {
+            const novoTemplate = document.getElementById('modalTemplateSelect').value; if(!campSelecionada || !novoTemplate) return;
+            const txtOriginal = btnElement.innerText; btnElement.innerText = "A Salvar..."; btnElement.disabled = true;
+            try {
+                const res = await fetch(`${URL_BACKEND}?acao=alterarTemplate&id=${campSelecionada.id}&template=${encodeURIComponent(novoTemplate)}&t=${new Date().getTime()}`); const json = await res.json();
+                if(json.sucesso) { campSelecionada.template = novoTemplate; const badge = document.getElementById('modTemplateBadge'); if (badge) badge.innerText = novoTemplate; mostrarToastNotificacao('Atualizado', 'O template da ação foi alterado com sucesso.'); renderizarLista(); } else alert("Falha: " + json.erro);
+            } catch (e) { alert("Erro de rede."); } btnElement.innerText = txtOriginal; btnElement.disabled = false;
+        }
+
         async function atualizarPasta(btnElement) {
-            const novaPasta = document.getElementById('modalPastaSelect').value.trim(); 
-            if(!campSelecionada) return;
+            const novaPasta = document.getElementById('modalPastaSelect').value.trim(); if(!campSelecionada) return;
             const txtOriginal = btnElement.innerText; btnElement.innerText = "..."; btnElement.disabled = true;
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=alterarPasta&id=${campSelecionada.id}&pasta=${encodeURIComponent(novaPasta)}&t=${new Date().getTime()}`); const json = await res.json();
@@ -1279,8 +1407,7 @@
                     carregarPastasDisponiveis(); 
                     mostrarToastNotificacao('Atualizado', 'A campanha foi movida com sucesso.');
                 } else alert("Falha: " + json.erro);
-            } catch (e) { alert("Erro de rede."); } 
-            btnElement.innerText = txtOriginal; btnElement.disabled = false;
+            } catch (e) { alert("Erro de rede."); } btnElement.innerText = txtOriginal; btnElement.disabled = false;
         }
 
         async function alterarStatus(id, novoStatus, btnElement) {
@@ -1367,16 +1494,23 @@
             img.onerror = function() { loading.innerText = "Erro ao gerar QR Code."; };
             img.src = `https://quickchart.io/qr?size=200&margin=1&text=${encodeURIComponent(pegarLinkPublico())}`;
             
-            const colTotens = document.getElementById('colunaTotens'); 
-            const configCampanhaAtiva = document.getElementById('configCampanhaAtiva');
+            const boxAcessoColeta = document.getElementById('boxAcessoColeta'); 
+            const boxConfigGeral = document.getElementById('boxConfigGeral');
 
             if (campSelecionada.status.toLowerCase() === 'finalizado') { 
-                if(colTotens) colTotens.style.display = 'none'; 
-                if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'none'; 
+                if(boxAcessoColeta) boxAcessoColeta.style.display = 'none'; 
+                if(boxConfigGeral) boxConfigGeral.style.display = 'none'; 
             } else { 
-                if(colTotens) colTotens.style.display = 'block'; 
-                if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'block'; 
+                if(boxAcessoColeta) boxAcessoColeta.style.display = 'block'; 
+                if(boxConfigGeral) boxConfigGeral.style.display = 'block'; 
             }
+
+            // Garante que os painéis colapsáveis abram fechados
+            document.getElementById('boxTotemPublico').style.display = 'none';
+            document.getElementById('iconPublico').innerText = '▼';
+            document.getElementById('boxConfiguracoes').style.display = 'none';
+            document.getElementById('iconConfig').innerText = 'Expandir ▼';
+
             document.getElementById('modalJornada').style.display = 'flex';
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
@@ -1508,6 +1642,7 @@
         function abrirNuvemPalavrasModal() {
             let filtrados = window.currentDashboardVotos.filter(v => v.comentario && v.comentario.trim() !== "");
             
+            // Filtra os comentários baseando-se no Template que está sendo visualizado
             if(window.templateAtualModal && window.templateAtualModal !== 'TODOS') {
                 filtrados = filtrados.filter(v => {
                     let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
@@ -1542,6 +1677,7 @@
                 });
             });
 
+            // Isola as 40 palavras mais usadas
             let sortedWords = Object.keys(wordCounts).sort((a,b) => wordCounts[b] - wordCounts[a]).slice(0, 40);
             
             if(sortedWords.length === 0) { 
@@ -1552,11 +1688,13 @@
             const maxCount = wordCounts[sortedWords[0]];
             const minCount = wordCounts[sortedWords[sortedWords.length - 1]];
 
+            // Sistema de Cores Inteligente por Tema
             const isLight = document.body.classList.contains('light-mode');
             const colors = isLight 
                 ? ['#ffcc00', '#a300ff', '#ff0080', '#6b7280', '#1e222d', '#4b5563'] 
                 : ['#ffffff', '#ffcc00', '#a300ff', '#ff0080', '#9ca3af', '#d1d5db'];
 
+            // Intercalação em Zigue-Zague para garantir que palavras pequenas preencham as frestas
             let restWords = sortedWords.slice(1);
             let interleaved = [];
             let left = 0;
@@ -1573,6 +1711,7 @@
 
             const isMobile = window.innerWidth < 600;
             
+            // Variáveis do Multiplicador Matemático
             const baseSize = isMobile ? 12 : 16;       
             const sizeMultiplier = isMobile ? 35 : 50; 
             const maxFontSize = isMobile ? 55 : 95; 
@@ -1582,15 +1721,18 @@
                 let count = wordCounts[word];
                 let isMain = (word === sortedWords[0]);
                 
+                // Cálculo de proporção para forçar discrepância entre as palavras
                 let ratio = (maxCount === minCount) ? 1 : Math.pow((count - minCount) / (maxCount - minCount), 1.5);
                 let fontSize = Math.floor(baseSize + ratio * sizeMultiplier); 
                 
                 if (isMain) fontSize = maxFontSize; 
                 
+                // Ciclo de cores forçado (garante que vizinhos não tenham a mesma cor)
                 let color = isMain ? 'var(--primary)' : colors[index % colors.length];
                 let delay = (Math.random() * 0.4).toFixed(2);
                 let mainClass = isMain ? "main-word" : "";
                 
+                // Alinhamento alternado para preencher espaços verticais perfeitamente
                 let align = index % 2 === 0 ? 'baseline' : 'text-bottom';
 
                 html += `<span class="word-item ${mainClass}" style="font-size: ${fontSize}px; color: ${color}; animation-delay: ${delay}s; vertical-align: ${align};">${word}</span>`;
@@ -1600,6 +1742,7 @@
             area.innerHTML = html;
         }
 
+        // Função de extração do Top 10 para os PDFs
         function extrairTopPalavras(votos, limite = 10) {
             const stopwords = ["o","a","os","as","um","uma","uns","umas","e","de","do","da","dos","das","em","no","na","nos","nas","por","para","com","que","se","nao","não","sim","mas","ou","como","mais","muito","muita","já","foi","isso","este","esse","esta","essa","pra","pro","tem","ter","estava","quando","tudo","fazer"];
             let counts = {};
@@ -1614,6 +1757,7 @@
             return Object.keys(counts).sort((a,b) => counts[b] - counts[a]).slice(0, limite).map(w => ({ palavra: w.toUpperCase(), contagem: counts[w] }));
         }
 
+        // Função Hex para RGB
         function hexToRgb(hex) {
             let shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
             hex = hex.replace(shorthandRegex, function(m, r, g, b) { return r + r + g + g + b + b; });
@@ -1650,6 +1794,7 @@
                 let sortedLabels = Object.keys(data.agrupamento).sort((a,b) => data.agrupamento[b] - data.agrupamento[a]);
                 let sortedCounts = sortedLabels.map(l => data.agrupamento[l]);
                 
+                // 🔥 O FISCAL DE CORES GARANTINDO ORDEM E UNICIDADE 🔥
                 let coresTmpl = getCoresParaGrafico(sortedLabels, tmpl);
 
                 let listaHTML = ""; let sintesePDF = [];
@@ -1735,7 +1880,7 @@
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
             
-            fecharTodosModais(); // Resolve a sobreposição e o X duplo
+            fecharTodosModais(); // Resolve a sobreposição de modais e o "X" duplo
             
             document.getElementById('dashboardTela').style.display = 'block'; 
             document.body.style.overflow = 'hidden'; 
@@ -1780,6 +1925,7 @@
             dadosParaPDF.templates = extrairGraficosPorTemplate(votos, 'dynamicChartsContainerInd', 'ind');
         }
 
+        /* 🔥 GERADOR DE PDF: QUEBRA DE PÁGINA SEGURA 🔥 */
         function checkPageBreak(doc, y, requiredSpace) {
             if (y + requiredSpace > 275) { 
                 doc.addPage();
@@ -1817,6 +1963,7 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(14); doc.setTextColor(0, 0, 0); 
             let linhasTitulo = doc.splitTextToSize(campSelecionada.nome_campanha.toUpperCase(), 180);
             doc.text(linhasTitulo, 15, y);
@@ -1835,7 +1982,7 @@
             doc.text(`• Índice de Aprovação: ${dadosParaPDF.media} / 10.`, 15, y); y += 6;
             doc.text(`• Volume de Microdados Processados: ${dadosParaPDF.volumeDados} pontos de dados estruturados.`, 15, y);
 
-            y += 15; 
+            y += 15; // Respiro maior
 
             dadosParaPDF.templates.forEach((tmplData) => {
                 y = checkPageBreak(doc, y, 80);
@@ -1847,6 +1994,7 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { 
                     try { 
@@ -1856,6 +2004,7 @@
                         let finalHeight = 50;
                         let finalWidth = finalHeight * ratio;
                         
+                        // Trava de segurança para a largura não cobrir o texto
                         if (finalWidth > 55) { finalWidth = 55; finalHeight = finalWidth / ratio; }
                         let yOffset = startY + (50 - finalHeight) / 2;
 
@@ -1863,6 +2012,7 @@
                     } catch(e){} 
                 }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -1876,6 +2026,7 @@
                     listY += 6;
                 });
 
+                // Síntese logo abaixo do mapeamento
                 listY += 4;
                 doc.setFont("helvetica", "bold"); doc.text("Síntese:", rightX, listY);
                 listY += 5;
@@ -1885,6 +2036,7 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // 🔥 NOVA SEÇÃO DE FEEDBACKS (Top 10 Vertical e Comentários) 🔥
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
@@ -1986,7 +2138,7 @@
             const mesSelecionado = relatorioTipoAtual === 'ANUAL' ? 'TODOS' : document.getElementById('selectFiltroMes').value;
             const mesNome = document.getElementById('selectFiltroMes').options[document.getElementById('selectFiltroMes').selectedIndex].text;
             
-            fecharTodosModais(); // Resolve a sobreposição de modais
+            fecharTodosModais(); // Resolve a sobreposição de relatórios
             
             document.getElementById('dashboardGlobalTela').style.display = 'block'; 
             document.body.style.overflow = 'hidden'; 
@@ -2139,6 +2291,7 @@
             
             y = 31; doc.setDrawColor(255, 81, 0); doc.setLineWidth(0.5); doc.line(15, y, 195, y);
             
+            // 🔥 MARGENS RESPONSIVAS E QUEBRA DE LINHA NO TÍTULO/SUBTÍTULO DO PDF GLOBAL 🔥
             y += 12; doc.setFont("helvetica", "bold"); doc.setFontSize(13); doc.setTextColor(0, 0, 0); 
             let linhasTitGlob = doc.splitTextToSize(tituloDinamico, 180);
             doc.text(linhasTitGlob, 15, y);
@@ -2168,6 +2321,7 @@
 
                 let startY = y;
                 
+                // 🔥 GRÁFICOS REDONDOS PERFEITOS (Evitando achatamento) 🔥
                 let chartObj = window.instanciasGraficos.find(c => c.id === tmplData.canvasId);
                 if (chartObj) { 
                     try { 
@@ -2184,6 +2338,7 @@
                     } catch(e){} 
                 }
                 
+                // Mapeamento e Texto na Direita (Coluna 2)
                 let rightX = 75;
                 doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0);
                 doc.text("Distribuição de Sentimentos:", rightX, startY + 5);
@@ -2206,80 +2361,11 @@
                 
                 y = Math.max(startY + 55, listY + (linhasConclusao.length * 5)) + 15;
 
+                // FEEDBACKS
                 if(tmplData.topWords.length > 0 || tmplData.comentariosTop.length > 0) {
                     y = checkPageBreak(doc, y, 30);
                     
                     doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); 
                     doc.text("FEEDBACKS E INSIGHTS QUALITATIVOS", 15, y); y += 6;
                     
-                    doc.setFont("helvetica", "italic"); doc.setFontSize(9); doc.setTextColor(100, 100, 100);
-                    doc.text("Baseado nos comentários e relatos espontâneos deixados nos totens de pesquisa.", 15, y); y += 8;
-
-                    if(tmplData.topWords.length > 0) {
-                        y = checkPageBreak(doc, y, 20);
-                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
-                        doc.text("Termos Frequentes (Top 10):", 15, y); y += 8;
-                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                        
-                        let col1X = 15; let col2X = 105;
-                        for (let i = 0; i < tmplData.topWords.length; i++) {
-                            let rowY = y + (Math.floor(i / 2) * 6);
-                            let posX = (i % 2 === 0) ? col1X : col2X;
-                            doc.text(`${i + 1}. ${tmplData.topWords[i].palavra} (${tmplData.topWords[i].contagem} menções)`, posX, rowY);
-                        }
-                        y += (Math.ceil(tmplData.topWords.length / 2) * 6) + 8;
-                    }
-
-                    if(tmplData.comentariosTop.length > 0) {
-                        y = checkPageBreak(doc, y, 20);
-                        doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); 
-                        doc.text("Amostragem de Comentários:", 15, y); y += 6;
-                        doc.setFont("helvetica", "normal"); doc.setTextColor(50, 50, 50);
-                        tmplData.comentariosTop.forEach(c => {
-                            let linhasTxt = doc.splitTextToSize(`"${c.texto}" (${c.sentimento} - ${c.data} - Nota ${c.nota})`, 180);
-                            y = checkPageBreak(doc, y, (linhasTxt.length * 5) + 5);
-                            doc.text(linhasTxt, 15, y);
-                            y += (linhasTxt.length * 5) + 3;
-                        });
-                    }
-                }
-            });
-
-            y = checkPageBreak(doc, y, 40);
-            doc.setFont("helvetica", "bold"); doc.setFontSize(11); doc.setTextColor(255, 81, 0); doc.text("3. LISTA DE CAMPANHAS", 15, y);
-            y += 3; doc.setDrawColor(230, 230, 230); doc.line(15, y, 195, y); y += 8;
-
-            dadosGlobaisParaPDF.detalhamento.forEach(camp => {
-                y = checkPageBreak(doc, y, 30);
-                
-                let limitNomeCamp = doc.splitTextToSize(camp.nome.toUpperCase(), 180);
-                doc.setFont("helvetica", "bold"); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text(limitNomeCamp, 15, y); y += (limitNomeCamp.length * 5);
-                doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text(`Índice de Aprovação: ${camp.media}  |  Votos: ${camp.total}`, 15, y); y += 6;
-                
-                camp.sentimentos.forEach(item => {
-                    y = checkPageBreak(doc, y, 6);
-                    doc.setFillColor(item.r, item.g, item.b); doc.circle(17, y - 1.2, 1.2, "F");
-                    doc.setFont("helvetica", "bold"); doc.setTextColor(0, 0, 0); doc.text(`${item.nome}:`, 21, y);
-                    let w = doc.getTextWidth(`${item.nome}: `);
-                    doc.setFont("helvetica", "normal"); doc.text(`${item.p}% (${item.count} votos)`, 21 + w, y);
-                    y += 5;
-                });
-                
-                y += 4; 
-            });
-
-            const pageCount = doc.internal.getNumberOfPages();
-            for (let i = 1; i <= pageCount; i++) {
-                doc.setPage(i); doc.setFontSize(8); doc.setTextColor(150, 150, 150);
-                doc.text(`Página ${i} de ${pageCount}  -  ArcelorMittal Interno`, 105, 285, { align: "center" });
-            }
-            doc.save(`Relatório Consolidado (${dataExtracao.replace(/\//g, '-')}).pdf`);
-            btn.innerHTML = txtOriginal;
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            applyThemeLogos();
-        });
-    </script>
-</body>
-</html>
+                    doc.setFont("helvetica", "italic"); doc.setFontSize(9); doc.setTextColor(1
