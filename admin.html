@@ -136,6 +136,51 @@
         .action-bridge-btn svg { color: var(--text-muted); transition: transform 0.3s ease, color 0.3s ease; }
         .action-bridge-btn:hover svg { color: var(--primary); }
 
+        /* ==========================================================================
+           GRID DE AÇÕES RÁPIDAS (MODAL JORNADA)
+           ========================================================================== */
+        .quick-actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .quick-action-card {
+            background: var(--surface-highlight);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        .quick-action-card:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-3px);
+            background: var(--surface);
+            box-shadow: 0 8px 25px rgba(255, 81, 0, 0.15);
+        }
+        .quick-action-card svg {
+            width: 24px;
+            height: 24px;
+            color: var(--text-muted);
+            transition: color 0.3s ease;
+        }
+        .quick-action-card:hover svg {
+            color: var(--primary);
+        }
+
         .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
         .input-labeled-group { display: flex; flex-direction: column; }
         .input-label { font-size: 11px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; font-weight: 400; margin-bottom: 8px; margin-left: 4px; }
@@ -823,25 +868,37 @@
 
     <!-- MODAL JORNADA DA CAMPANHA -->
     <div class="modal-overlay" id="modalJornada" onclick="fecharModal(event)">
-        <div class="modal">
+        <div class="modal" style="max-width: 800px;">
             <button class="btn-close-icon" onclick="document.getElementById('modalJornada').style.display='none'">✕</button>
-            <div class="modal-header-section">
+            <div class="modal-header-section" style="margin-bottom: 25px;">
                 <h3 id="modTitle">Nome da Campanha</h3>
                 <p id="modMeta">Meta da campanha</p>
             </div>
-            <div class="modal-body-grid" id="modalBodyGrid">
-                <div class="modal-column">
-                    <h4 class="column-title">Gestão da Coleta</h4>
-                    <button class="btn btn-primary btn-full" onclick="abrirDashboardAnalytics()">PAINEL ANALÍTICO</button>
-                    <div id="configCampanhaAtiva">
-                        <div class="modal-card-module" id="moduloTemplateAdmin" style="margin-top: 15px;">
+            
+            <!-- Grid de Ações Rápidas -->
+            <div class="quick-actions-grid" id="quickActionsJornada">
+                <div class="quick-action-card" onclick="abrirDashboardAnalytics()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                    Painel Analítico
+                </div>
+                <div class="quick-action-card" id="btnTotemVirtual" onclick="iniciarTotem()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+                    Totem Virtual
+                </div>
+            </div>
+
+            <div class="modal-body-grid" id="modalBodyGrid" style="gap: 30px;">
+                <div class="modal-column" id="configCampanhaAtiva">
+                    <h4 class="column-title">Configurações</h4>
+                    <div style="display:flex; flex-direction:column; gap:15px;">
+                        <div class="modal-card-module" id="moduloTemplateAdmin" style="margin: 0;">
                             <h4 class="modal-section-title">Template Atual: <span id="modTemplateBadge" style="color: var(--primary);">Padrão</span></h4>
                             <div class="config-row">
                                 <select id="modalTemplateSelect" style="flex: 1; background: var(--bg);"></select>
                                 <button class="btn btn-outline btn-template-save" onclick="atualizarTemplate(this)">Salvar</button>
                             </div>
                         </div>
-                        <div class="modal-card-module" id="moduloPastaAdmin" style="margin-top: 15px;">
+                        <div class="modal-card-module" id="moduloPastaAdmin" style="margin: 0;">
                             <h4 class="modal-section-title">Pasta de Organização: <span id="modPastaBadge" style="color: var(--primary);">Automática</span></h4>
                             <div class="config-row">
                                 <input type="text" id="modalPastaInput" style="flex: 1; background: var(--bg);" placeholder="Nome da pasta...">
@@ -851,32 +908,28 @@
                     </div>
                 </div>
                 <div class="modal-column" id="colunaTotens">
-                    <h4 class="column-title">Acesso aos Totens de Coleta</h4>
-                    <button class="btn btn-outline btn-full" onclick="iniciarTotem()" style="background: var(--surface-highlight);">
-                        INICIAR TOTEM VIRTUAL (Neste dispositivo)
-                    </button>
-                    <div class="qr-access-group" style="padding: 24px;">
-                        <h4 class="modal-section-title" style="margin-bottom: 20px; width: 100%; text-align: left;">COMPARTILHAR TELA PÚBLICA</h4>
-                        <div style="display: flex; gap: 20px; width: 100%; align-items: center; justify-content: space-between; flex-wrap: wrap;">
-                            
-                            <!-- Coluna Esquerda: Botões -->
-                            <div style="display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 200px;">
-                                <button class="btn btn-primary btn-full" onclick="baixarImagemOficial(event)" style="margin: 0; padding: 14px; gap: 10px;">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                    BAIXAR SLIDE DE DIVULGAÇÃO
-                                </button>
-                                <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none; margin: 0; padding: 14px;">
-                                    COPIAR LINK DIRETO
-                                </button>
-                            </div>
-
-                            <!-- Coluna Direita: QR Code -->
-                            <div id="qrCodeContainer" style="margin: 0; flex-shrink: 0; background: white; padding: 10px; border-radius: 12px; width: 140px; height: 140px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                    <h4 class="column-title">Compartilhar Acesso</h4>
+                    <div class="qr-access-group" style="padding: 20px;">
+                        <h4 class="modal-section-title" style="margin-bottom: 15px; text-align: left; width: 100%;">TELA PÚBLICA</h4>
+                        <div style="display: flex; gap: 15px; width: 100%; align-items: center; justify-content: space-between; flex-wrap: wrap; flex-direction: row-reverse;">
+                            <div id="qrCodeContainer" style="margin: 0; flex-shrink: 0; background: white; padding: 10px; border-radius: 12px; width: 120px; height: 120px; display: flex; justify-content: center; align-items: center; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
                                 <div id="qrCodeLoading" style="font-size: 11px; color: #333;">Gerando...</div>
                                 <img id="qrCodeImg" alt="QR Code" style="display: none; width: 100%; height: 100%;">
                             </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px; flex: 1; min-width: 140px;">
+                                <button class="btn btn-primary btn-full" onclick="baixarImagemOficial(event)" style="margin: 0; padding: 12px; font-size: 11px; gap: 8px;">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                    BAIXAR SLIDE
+                                </button>
+                                <button class="btn btn-outline btn-full" onclick="gerarLinkPublico()" style="background: var(--text); color: var(--bg); border: none; margin: 0; padding: 12px; font-size: 11px;">
+                                    COPIAR LINK
+                                </button>
+                            </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL DE USUÁRIOS -->
@@ -1104,6 +1157,15 @@
                 }
             }
             return null;
+        }
+        
+        function fecharTodosModais() {
+            const modais = ['modalListaCampanhas', 'modalNovaCampanha', 'modalJornada', 'modalRelatorios', 'modalUsuarios', 'dashboardTela', 'dashboardGlobalTela'];
+            modais.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            document.body.style.overflow = 'auto';
         }
 
         window.onload = async () => {
@@ -1408,9 +1470,19 @@
             const colTotens = document.getElementById('colunaTotens'); 
             const gridBody = document.getElementById('modalBodyGrid');
             const configCampanhaAtiva = document.getElementById('configCampanhaAtiva');
+            const btnTotemVirtual = document.getElementById('btnTotemVirtual');
 
-            if (campSelecionada.status.toLowerCase() === 'finalizado') { colTotens.style.display = 'none'; gridBody.style.gridTemplateColumns = '1fr'; if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'none'; } 
-            else { colTotens.style.display = 'flex'; gridBody.style.gridTemplateColumns = ''; if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'block'; }
+            if (campSelecionada.status.toLowerCase() === 'finalizado') { 
+                colTotens.style.display = 'none'; 
+                gridBody.style.gridTemplateColumns = '1fr'; 
+                if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'none'; 
+                if (btnTotemVirtual) btnTotemVirtual.style.display = 'none';
+            } else { 
+                colTotens.style.display = 'flex'; 
+                gridBody.style.gridTemplateColumns = ''; 
+                if (configCampanhaAtiva) configCampanhaAtiva.style.display = 'block'; 
+                if (btnTotemVirtual) btnTotemVirtual.style.display = 'flex';
+            }
             document.getElementById('modalJornada').style.display = 'flex';
         }
         function fecharModal(e) { if(e.target.id === 'modalJornada') document.getElementById('modalJornada').style.display = 'none'; }
@@ -1459,7 +1531,7 @@
                 
                 qrLayer.onload = () => {
                     // --------------------------------------------------------
-                    // ⚙️ CALIBRAGEM DO QR CODE NA IMAGEM
+                    // ⚙️️ CALIBRAGEM DO QR CODE NA IMAGEM
                     // Eu calculei essas proporções baseadas no layout que você me enviou.
                     // Caso o QR code fique um pouco desalinhado em relação ao quadrado branco,
                     // basta aumentar ou diminuir os decimais nessas três variáveis abaixo:
@@ -1489,7 +1561,7 @@
             };
 
             bgImg.onerror = () => {
-                alert("⚠️ Erro: Não localizamos o arquivo 'QR Code - Pesquisa de Sentimento.png'.\n\nPor favor, certifique-se de que a imagem de fundo está salva na mesma pasta do seu site com este nome exato.");
+                alert("⚠️️ Erro: Não localizamos o arquivo 'QR Code - Pesquisa de Sentimento.png'.\n\nPor favor, certifique-se de que a imagem de fundo está salva na mesma pasta do seu site com este nome exato.");
                 btn.innerHTML = txtOriginal;
                 btn.disabled = false;
             };
@@ -1790,8 +1862,13 @@
            ======================================================= */
         async function abrirDashboardAnalytics() {
             if(!campSelecionada) return;
-            document.getElementById('modalJornada').style.display = 'none'; document.getElementById('dashboardTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
-            document.getElementById('dashLoading').style.display = 'flex'; document.getElementById('conteudoDashInterface').style.display = 'none';
+            
+            fecharTodosModais(); // Resolve a sobreposição de modais e o "X" duplo
+            
+            document.getElementById('dashboardTela').style.display = 'block'; 
+            document.body.style.overflow = 'hidden'; 
+            document.getElementById('dashLoading').style.display = 'flex'; 
+            document.getElementById('conteudoDashInterface').style.display = 'none';
             document.getElementById('dashNomeCampanha').innerText = campSelecionada.nome_campanha;
             
             const dataCriacaoFormato = new Date(campSelecionada.data_inicio).toLocaleDateString('pt-BR', {timeZone: 'UTC'});
@@ -1805,9 +1882,10 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=${encodeURIComponent(campSelecionada.nome_campanha)}`); const dados = await res.json();
                 if(dados.sucesso) { 
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; 
                     processarEstatisticas(dados.votos); 
-                    document.getElementById('dashLoading').style.display = 'none'; document.getElementById('conteudoDashInterface').style.display = 'block'; 
+                    document.getElementById('dashLoading').style.display = 'none'; 
+                    document.getElementById('conteudoDashInterface').style.display = 'block'; 
                 } else { alert("Erro de dados: " + dados.erro); fecharDashboard(); }
             } catch (e) { alert("Falha ao carregar dashboard."); fecharDashboard(); }
         }
@@ -2043,8 +2121,12 @@
             const mesSelecionado = relatorioTipoAtual === 'ANUAL' ? 'TODOS' : document.getElementById('selectFiltroMes').value;
             const mesNome = document.getElementById('selectFiltroMes').options[document.getElementById('selectFiltroMes').selectedIndex].text;
             
-            document.getElementById('modalRelatorios').style.display = 'none'; document.getElementById('dashboardGlobalTela').style.display = 'block'; document.body.style.overflow = 'hidden'; 
-            document.getElementById('dashGlobalLoading').style.display = 'flex'; document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
+            fecharTodosModais(); // Resolve a sobreposição de relatórios
+            
+            document.getElementById('dashboardGlobalTela').style.display = 'block'; 
+            document.body.style.overflow = 'hidden'; 
+            document.getElementById('dashGlobalLoading').style.display = 'flex'; 
+            document.getElementById('conteudoDashGlobalInterface').style.display = 'none';
             
             const dashTitle = document.getElementById('dashGlobalTitle');
             if (relatorioTipoAtual === 'ANUAL') {
@@ -2060,7 +2142,7 @@
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=dashboard&evento=GERAL`); const dados = await res.json();
                 if(dados && dados.sucesso) { 
-                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; // Salva o dicionário bidimensional
+                    window.mapaCoresDinamico = dados.mapaCoresTemplates || {}; 
                     let votosFiltrados = dados.votos.filter(v => {
                         let camp = dbCampanhas.find(c => c.nome_campanha === v.campanha);
                         if(!camp || camp.status === 'Excluído') return false; 
