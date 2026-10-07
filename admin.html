@@ -740,9 +740,14 @@
                         <label class="input-label" for="nomeCampanha">Nome da campanha</label>
                         <input type="text" id="nomeCampanha" placeholder="Ex: DDS Geral - Siderurgia 3" autocomplete="off">
                     </div>
-                    <div class="input-labeled-group">
-                        <label class="input-label" for="pastaCampanha">Pasta / Grupo (Opcional)</label>
-                        <input type="text" id="pastaCampanha" placeholder="Deixe em branco para automático" autocomplete="off">
+                  <div class="input-labeled-group">
+                        <label class="input-label" for="pastaCampanha">Adicionar a Pasta (Opcional)</label>
+                        <div class="config-row">
+                            <select id="pastaCampanha" style="flex: 1; background: var(--bg);">
+                                <option value="">-- Raiz (Sem Pasta) --</option>
+                            </select>
+                            <button type="button" class="btn btn-outline btn-template-save" onclick="abrirPromptNovaPastaCampanha()" title="Criar Nova Pasta" style="padding: 14px 16px;">+</button>
+                        </div>
                     </div>
                     <div class="input-labeled-group">
                         <label class="input-label" for="setorCampanha">Setor Responsável</label>
@@ -1152,7 +1157,46 @@
             }, 3000);
         };
 
-        function abrirModalNovaCampanha() { document.getElementById('modalNovaCampanha').style.display = 'block'; document.body.style.overflow = 'hidden'; }
+        // Atualiza a lista de pastas sempre que abrir o modal
+        function abrirModalNovaCampanha() { 
+            carregarPastasNovaCampanha();
+            document.getElementById('modalNovaCampanha').style.display = 'block'; 
+            document.body.style.overflow = 'hidden'; 
+        }
+
+        // Busca apenas as pastas do usuário logado (ou todas se for Master)
+        function carregarPastasNovaCampanha() {
+            let pastas = new Set();
+            dbCampanhas.forEach(c => {
+                if (c.pasta && c.pasta.trim() !== "" && c.status !== 'Excluído') {
+                    if (setorLogado === 'Master' || c.setor === setorLogado) {
+                        pastas.add(c.pasta.trim());
+                    }
+                }
+            });
+
+            const selectPasta = document.getElementById('pastaCampanha');
+            if (!selectPasta) return;
+
+            selectPasta.innerHTML = '<option value="">-- Raiz (Sem Pasta) --</option>';
+            Array.from(pastas).sort().forEach(p => {
+                selectPasta.innerHTML += `<option value="${p}">${p}</option>`;
+            });
+        }
+
+        // Permite criar uma pasta na hora de cadastrar
+        function abrirPromptNovaPastaCampanha() {
+            let nova = prompt("Digite o nome da nova pasta:");
+            if (nova && nova.trim() !== "") {
+                nova = nova.trim();
+                const selectPasta = document.getElementById('pastaCampanha');
+                let exists = Array.from(selectPasta.options).some(opt => opt.value === nova);
+                if (!exists) {
+                    selectPasta.innerHTML += `<option value="${nova}">${nova}</option>`;
+                }
+                selectPasta.value = nova;
+            }
+        }
         function fecharModalNovaCampanha() { document.getElementById('modalNovaCampanha').style.display = 'none'; document.body.style.overflow = 'auto'; }
         
         function abrirModalListaCampanhas() {
@@ -1256,6 +1300,18 @@
                 const res = await fetch(`${URL_BACKEND}?acao=listarSetores`); const setores = await res.json();
                 selectSetor.innerHTML = '<option value="" disabled selected>Selecione o Setor Responsável</option>';
                 setores.forEach(setor => { selectSetor.innerHTML += `<option value="${setor}">${setor}</option>`; });
+
+                // Trava o setor para o usuário logado (se não for Master)
+                if (setorLogado !== "Master") {
+                    // Força a inserção da option se por acaso houver delay no banco
+                    let exists = Array.from(selectSetor.options).some(opt => opt.value === setorLogado);
+                    if(!exists) selectSetor.innerHTML += `<option value="${setorLogado}">${setorLogado}</option>`;
+                    
+                    selectSetor.value = setorLogado;
+                    selectSetor.disabled = true; // Impede modificação
+                    selectSetor.style.opacity = "0.7"; // Dá um aspecto visual de travado
+                    selectSetor.style.cursor = "not-allowed";
+                }
             } catch (e) { selectSetor.innerHTML = '<option value="" disabled selected>Erro ao carregar setores</option>'; }
         }
         async function buscarTemplates() {
@@ -1288,11 +1344,19 @@
         }
 
         async function salvarCampanha() {
-            const nome = document.getElementById('nomeCampanha').value.trim(); const pasta = document.getElementById('pastaCampanha').value.trim();
-            const setor = document.getElementById('setorCampanha').value; const data = document.getElementById('dataCampanha').value;
-            const template = document.getElementById('templateCampanha').value || 'Padrão'; const btn = document.getElementById('btnSalvar');
+            const nome = document.getElementById('nomeCampanha').value.trim(); 
+            const pasta = document.getElementById('pastaCampanha').value.trim();
+            
+            // Garantia de segurança: Força o setor logado se não for Master
+            const setor = (setorLogado !== "Master") ? setorLogado : document.getElementById('setorCampanha').value; 
+            
+            const data = document.getElementById('dataCampanha').value;
+            const template = document.getElementById('templateCampanha').value || 'Padrão'; 
+            const btn = document.getElementById('btnSalvar');
+            
             if (!nome || !setor || !data) return alert("Por favor, preencha todos os campos obrigatórios!");
             if (dbCampanhas.some(c => c.nome_campanha.toLowerCase() === nome.toLowerCase() && c.status !== 'Excluído')) return alert("Atenção: Campanha existente.");
+            
             btn.innerText = "A Criar..."; btn.disabled = true;
             try {
                 const res = await fetch(`${URL_BACKEND}?acao=criar&nome=${encodeURIComponent(nome)}&pasta=${encodeURIComponent(pasta)}&setor=${encodeURIComponent(setor)}&dataInicio=${encodeURIComponent(data)}&template=${encodeURIComponent(template)}&t=${new Date().getTime()}`);
@@ -1305,9 +1369,12 @@
                     });
                 }
             } catch (e) { alert("Erro de conexão."); }
+            
             btn.innerText = "Cadastrar Campanha"; btn.disabled = false;
-            document.getElementById('nomeCampanha').value = ''; document.getElementById('pastaCampanha').value = '';
-            document.getElementById('setorCampanha').selectedIndex = 0; document.getElementById('templateCampanha').selectedIndex = 0;
+            document.getElementById('nomeCampanha').value = ''; 
+            document.getElementById('pastaCampanha').selectedIndex = 0;
+            if (setorLogado === "Master") document.getElementById('setorCampanha').selectedIndex = 0; 
+            document.getElementById('templateCampanha').selectedIndex = 0;
             buscarDados(); carregarMiniDashboardSetor(); 
         }
 
